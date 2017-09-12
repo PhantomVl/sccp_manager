@@ -1,0 +1,20 @@
+
+
+You can specifying 'useRedialMenu = yes' in the sccp.conf device section and the redial softkey will cause the "placed calls" list instead of immediately calling the last dialed number.
+CallListStateUpdate (java phones)
+
+If you add/enable the 'callLogBlfEnabled' xml entry in SEPXXX.cnf.xml under commonProfile, like so:
+
+<commonProfile>
+   <callLogBlfEnabled>3</callLogBlfEnabled>
+</commonProfile>
+
+and you have added hints for your local extension in your dialplan, like:
+
+exten => _XX.,hint,SCCP/${EXTEN}
+
+Then the placed calls list will include the status of the remote extension, like this:
+
+PlacedCalls
+
+Which does show numbers you can redial, but also include their current device state, so you know when they are currently busy. Note that the other phonebook entries will now also monitor the remove device state and show the current device state.

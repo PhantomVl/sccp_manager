@@ -1,0 +1,39 @@
+<?php
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+// vim: set ai ts=4 sw=4 ft=phtml:
+
+?>
+<div class="fpbx-container container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="display no-border">
+                <h1><?php echo _("Extensions (Line)") ?></h1>
+                <div id="toolbar-sccp-extension">
+                    <a class="btn btn-default" href="config.php?display=extensions&amp;tech_hardware=sccp_custom"><i class="fa fa-plus">&nbsp;</i><?php echo _("Add Extension") ?></a>
+                    <button id="remove-sccp-extension" class="btn btn-danger btn-remove" data-type="extensions" data-section="sccp-extension" disabled>
+                        <i class="glyphicon glyphicon-remove"></i> <span><?php echo _('Delete') ?></span>
+                    </button>
+                </div>
+                <table data-cookie="true" data-cookie-id-table="sccp-extension-table" data-url="ajax.php?module=sccp_manager&amp;command=getExtensionGrid&amp;type=sccp" data-cache="false" data-show-refresh="true" data-toolbar="#toolbar-sip" data-maintain-selected="true" data-show-columns="true" data-show-toggle="true" data-toggle="table" data-pagination="true" data-search="true" class="table table-striped ext-list-sccp" id="table-sccp-extension" data-id="name">
+                    <thead>
+                        <tr>
+<!--                            <th data-checkbox="true"></th> -->
+                            <th data-sortable="true" data-field="name"><?php echo _('Extension') ?></th>
+                            <th data-sortable="true" data-field="label"><?php echo _('Display Name') ?></th>
+                            <th data-field="actions" data-formatter="DispayPhoneActionsKeyFormatter"><?php echo _('Actions') ?></th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function DispayPhoneActionsKeyFormatter(value, row, index) {
+        return  '<a href="config.php?display=extensions&amp;extdisplay=' + row['name'] + '"><i class="fa fa-pencil"></i></a> &nbsp;<a class="clickable delete" data-id="' + row['name'] + '"><i class="fa fa-trash"></i></a>';
+    }
+</script>

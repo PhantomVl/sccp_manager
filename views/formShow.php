@@ -62,7 +62,10 @@ if ($h_show==1) {
 <?php
 }
 foreach ($items as $child) {
-    
+    if (empty($child->help)) {
+        $child->help = 'Help is not available.';
+    }
+
     if ($child['type'] == 'IE') {
         $res_input = '';
         $res_name = '';
@@ -221,8 +224,9 @@ foreach ($items as $child) {
     }    
     
     if ($child['type'] == 'IS') {
-            $res_n =  (string)$child->name;
-            $res_id = $npref.$child->name;
+        $res_n =  (string)$child->name;
+        $res_id = $npref.$child->name;
+            
             echo '<!-- Begin '.$child->label.' -->';
         ?>
         <div class="element-container">
@@ -282,6 +286,7 @@ foreach ($items as $child) {
         if (empty($child->class)) {
            $child->class = 'form-control';
         }
+        
         if ($child['type'] == 'SLD') {
             $select_opt= $day_format;
         }

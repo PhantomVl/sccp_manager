@@ -1614,7 +1614,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         if (!(empty($var_hw_config['nametemplet']))) {
             $xml_templet = $this->sccppath["tftp_templets"] . '/' . $var_hw_config['nametemplet'];
         } else {
-            $xml_templet = $this->sccppath["tftp_templets"] . '/SEP0000000000.cnf.xml_791x_template';
+            $xml_templet = $this->sccppath["tftp_templets"] . '/SEP0000000000.cnf.xml_79df_template';
         }
         $xml_name = $this->sccppath["tftp_path"] . '/' . $dev_id . '.cnf.xml';
         if (file_exists($xml_templet)) {

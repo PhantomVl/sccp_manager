@@ -44,14 +44,14 @@ if (!empty($_REQUEST['id'])) {
     <?php
     if (empty($dev_id)){
         echo '<input type="hidden" name="sccp_deviceid" value="new">';
-        echo $this->ShowGroup('sccp_hw_dev', 1, 'sccp_hw_', $def_val);
+        echo $this->ShowGroup('sccp_hw_dev', 1, 'sccp_hw', $def_val);
     } else {
         echo '<input type="hidden" name="sccp_deviceid" value="'.$dev_id.'">';
-        echo $this->ShowGroup('sccp_hw_dev_edit', 1, 'sccp_hw_', $def_val);       
+        echo $this->ShowGroup('sccp_hw_dev_edit', 1, 'sccp_hw', $def_val);       
     }
-    echo $this->ShowGroup('sccp_hw_dev2', 1, 'sccp_hw_', $def_val);
-    echo $this->ShowGroup('sccp_hw_dev_advance', 1, 'sccp_hw_', $def_val);
-    echo $this->ShowGroup('sccp_hw_dev_conference', 1, 'sccp_hw_', $def_val);
-    echo $this->ShowGroup('sccp_hw_dev_network', 1, 'sccp_hw_', $def_val);
+    echo $this->ShowGroup('sccp_hw_dev2', 1, 'sccp_hw', $def_val);
+    echo $this->ShowGroup('sccp_hw_dev_advance', 1, 'sccp_hw', $def_val);
+    echo $this->ShowGroup('sccp_hw_dev_conference', 1, 'sccp_hw', $def_val);
+    echo $this->ShowGroup('sccp_hw_dev_network', 1, 'sccp_hw', $def_val);
     ?>    
 </form>

@@ -255,7 +255,7 @@ foreach ($items as $child) {
 
                           foreach ($child->xpath('button') as $value) {
                             echo '<input type="radio" name="' . $res_id . '" id="' . $res_id. '_' . $i .'" value="' . $value[@value] . '"' . (strtolower((string)$value[@value]) == strtolower($res_v) ? " checked" : "") . '>';
-                            echo '<label for="' . $res_id. '_' . $i . '">' . $value . '</label>';
+                            echo '<label for="' . $res_id. '_' . $i . '">' . _($value) . '</label>';
                             $i++;
                           }
                         ?>                        

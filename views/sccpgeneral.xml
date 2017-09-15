@@ -92,11 +92,11 @@ and open the template in the editor.
         <input value="none" field="net" nameseparator="/"><options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/></input>
         <input value="none" field="mask"><options placeholder="255.255.255.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/> </input>
         <button>Add Alow network</button>
-        <help>Local network settings. Blank fields will be ignored used Network 0.0.0.0.</help>
+        <help>Alow network settings. Blank fields will be ignored used Network 0.0.0.0.</help>
       </item>
 
       <item type="IED" id="2" seq="0">
-        <label>Deny Networks / Mask </label>
+        <label>Deny Networks / Mask</label>
         <name>deny</name>
         <default>0.0.0.0/0.0.0.0</default>
         <input value="none" field="net" nameseparator="/"><options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/><class></class></input>
@@ -106,13 +106,13 @@ and open the template in the editor.
       </item>
 
       <item type="IED" id="3" seq="0">
-        <label>Local Networks / Mask </label>
+        <label>Local Networks / Mask</label>
         <name>localnet</name>
         <default>0.0.0.0/0.0.0.0</default>
         <input value="none" field="net" nameseparator="/"><options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$" /><class></class></input>
         <input value="none" field="mask"><options placeholder="255.255.255.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/> <class></class></input>
         <button>Add local networks</button>
-        <help>All RFC 1918 addresses are local networks, example '192.168.1.0/255.255.255.0'</help>
+        <help>Local network settings. Blank fields will be ignored used Network 0.0.0.0.</help>
       </item>
 
     </page_group>
@@ -133,7 +133,7 @@ and open the template in the editor.
           <name>devlang</name> 
           <default>Russian_Russia</default>
           <select> </select>
-          <help>The user locale allows the phone to display text (menu items, soft keys etc.) native to the phone's language. </help>
+          <help>The user locale allows the phone to display text (menu items, soft keys etc.) native to the phone's language.</help>
       </item>
         
     </page_group>          
@@ -231,13 +231,13 @@ and open the template in the editor.
           <help>Call Answer Order: Which call should be answered first? The most common choice is "oldestfirst", but other orders are supported.</help>
       </item>
       <item type="IS" id="13"><name>mwilamp</name> <label>Message Lamp</label>
-          <default>on</default>
-          <button value="on">ON</button>
-          <button value="off">OFF</button>
+          <default>On</default>
+          <button value="on">On</button>
+          <button value="off">Off</button>
           <button value="wink">Wink</button>
           <button value="flash">Flash</button>
           <button value="blink">Blink</button>
-          <help> Set the MWI lamp style when MWI active to on, off, wink, flash or blink</help>
+          <help>Set the MWI lamp style when MWI active to on, off, wink, flash or blink</help>
       </item>
       <item type="IS" id="14"><name>mwioncall</name> <label>Message Lamp On Call</label>
           <default>no</default>
@@ -261,7 +261,7 @@ and open the template in the editor.
             <default>pool.ntp.org</default>
             <value>pool.ntp.org</value>
         </input>
-        <help>NTP Server name or IP </help>
+        <help>NTP Server name or IP</help>
       </item>
       <item type="IS" id="3" seq="10"><name>ntp_server_mode</name> <label>Call Answer Order</label>
           <default>unicast</default>
@@ -279,7 +279,7 @@ and open the template in the editor.
           <select>
               <default>D.M.Y</default>
           </select>
-          <help>Date Format: The date format for the on-screen display. Can be one of the following: (D-M-YA, M.D.Y, Y/M/D) where 'D' is Day, 'M' is Month, 'Y' is Year, 'A' is 24-hour, 'a' is 12-hour, and the separators can be '.','-','/'"</help>
+          <help>Date Format: The date format for the on-screen display. Can be one of the following: (D-M-YA, M.D.Y, Y/M/D) where 'D' is Day, 'M' is Month, 'Y' is Year, 'A' is 24-hour, 'a' is 12-hour, and the separators can be '.','-','/'</help>
         </item>
         <item type="SLZN" id="2" seq="95"><label>Time Zone</label>
           <name>ntp_timezone</name> 
@@ -309,7 +309,7 @@ and open the template in the editor.
             <default></default>
             <value></value>
         </input>
-        <help> The above is simply a dummy authentication page.  It literally contains one word: AUTHORIZED (it receives UserId, Password, and devicename in the url - if you truly wish to implement special auth)</help>
+        <help>The above is simply a dummy authentication page.  It literally contains one word: AUTHORIZED (it receives UserId, Password, and devicename in the url - if you truly wish to implement special auth)</help>
       </item>
       <item type="IE" id="3" seq="10"><label>Phone Idle information URL</label>
         <input>
@@ -522,7 +522,7 @@ and open the template in the editor.
           <default>no</default>
           <button value="yes">Yes</button>
           <button value="no">No</button>
-          <help>Say "yes" if you need to create cisco default language directory in tftp path.</help>
+          <help>Say 'yes' if you need to create cisco default language directory in tftp path.</help>
         </item>
     
     </page_group>
@@ -551,7 +551,7 @@ and open the template in the editor.
             <default>none</default>
             <select name="model" dataval="buttons">model</select>
             <class>hw_select sccp-custom</class>
-            <help>Addon:Addons are model specific and only work with certain base phones. This phone model is identified as being a phone that does not accept sidecars. Update devmodel if this is not correct.</help>
+            <help>Addon: Addons are model specific and only work with certain base phones. This phone model is identified as being a phone that does not accept sidecars. Update devmodel if this is not correct.</help>
         </item>
     </page_group>
 
@@ -584,7 +584,7 @@ and open the template in the editor.
                 <class>sccp-custom</class>
                 <options readonly="readonly"></options>
             </input>
-            <help>Addon:Addons are model specific and only work with certain base phones. This phone model is identified as being a phone that does not accept sidecars. Update devmodel if this is not correct.</help>
+            <help>Addon: Addons are model specific and only work with certain base phones. This phone model is identified as being a phone that does not accept sidecars. Update devmodel if this is not correct.</help>
         </item>
     </page_group>
 
@@ -599,7 +599,7 @@ and open the template in the editor.
             </input>
             <help>The information in the upper right corner of the device screen</help>
         </item>
-        <item type="SLK" id="2" seq="99"><label>Soft key set</label>
+        <item type="SLK" id="2" seq="99"><label>Soft Keyset</label>
             <name>softkeyset</name> 
             <default>default</default>
             <select></select>
@@ -609,7 +609,7 @@ and open the template in the editor.
             <name>tzoffset</name> 
             <default>00</default>
             <select></select>
-            <help>Time zone offset</help>
+            <help>Time Zone offset</help>
         </item>
         <item type="SLT" id="4" seq="98"><label>SCCP Network Device Language</label>
             <name>netlang</name> 
@@ -621,7 +621,7 @@ and open the template in the editor.
             <name>devlang</name> 
             <default>Russian_Russia</default>
             <select> </select>
-            <help>The user locale allows the phone to display text (menu items, soft keys etc.) native to the phone's language. </help>
+            <help>The user locale allows the phone to display text (menu items, soft keys etc.) native to the phone's language.</help>
         </item>
         <item type="IE" id="6" seq="99"><label>Background Image</label>
             <input>
@@ -674,7 +674,7 @@ and open the template in the editor.
         </item>
       
         <item type="IS" id="4" seq="99"><name>useRedialMenu</name> 
-            <label>Redial from Menu </label>
+            <label>Redial from Menu</label>
             <default>no</default>
             <button value="yes">On</button>
             <button value="no">Off</button>
@@ -683,7 +683,7 @@ and open the template in the editor.
 
         <item type="IS" id="5" seq="99"><name>dndFeature</name> 
             <label>DND Button on Device</label>
-            <default>on</default>
+            <default>On</default>
             <button value="on">On</button>
             <button value="off">Off</button>
             <help>Do Not Disturb. Default is Off</help>
@@ -700,13 +700,13 @@ and open the template in the editor.
       
         <item type="IS" id="7" seq="99"> <name>mwilamp</name> 
             <label>Message Lamp</label>
-            <default>on</default>
-            <button value="on">ON</button>
-            <button value="off">OFF</button>
+            <default>On</default>
+            <button value="on">On</button>
+            <button value="off">Off</button>
             <button value="wink">Wink</button>
             <button value="flash">Flash</button>
             <button value="blink">Blink</button>
-            <help> Set the MWI lamp style when MWI active to on, off, wink, flash or blink</help>
+            <help>Set the MWI lamp style when MWI active to on, off, wink, flash or blink</help>
         </item>
         <item type="IS" id="8" seq="99"><name>directed_pickup</name> <label>Pickup Exten</label>
             <default>yes</default>
@@ -742,7 +742,7 @@ and open the template in the editor.
         </item>
         <item type="IS" id="2" seq="99">
             <name>conf_play_general_announce</name> 
-            <label>Playback General Announcements </label>
+            <label>Playback General Announcements</label>
             <default>yes</default>
             <button value="yes">Yes</button>
             <button value="no">No</button>
@@ -784,7 +784,7 @@ and open the template in the editor.
 
     <page_group name="sccp_hw_dev_network">
         <label>Device Network Function</label>
-      <item type="IE" id="1" seq="99"> <label>Alow Networks / Mask </label>
+      <item type="IE" id="1" seq="99"> <label>Alow Networks / Mask</label>
           <input>
             <name>permit_net</name> 
             <default>0.0.0.0</default>
@@ -798,7 +798,7 @@ and open the template in the editor.
           <help>Local network settings. Blank fields will be ignored used Network 0.0.0.0.</help>
           <nameseparator> / </nameseparator>
       </item>
-      <item type="IE" id="2" seq="99"> <label>Deny Networks / Mask </label>
+      <item type="IE" id="2" seq="99"> <label>Deny Networks / Mask</label>
           <input>
             <name>deny_net</name> 
             <default>0.0.0.0</default>
@@ -815,18 +815,18 @@ and open the template in the editor.
         <item type="IS" id="3" seq="99">
             <name>nat</name> 
             <label>NAT Device</label>
-            <default>off</default>
-            <button value="off">off</button>
-            <button value="on">on</button>
+            <default>Off</default>
+            <button value="off">Off</button>
+            <button value="on">On</button>
             <help>Device NAT support (default Off)</help>
         </item>
 
         <item type="IS" id="4" seq="99">
             <name>directrtp</name> 
             <label>Directrtp Device</label>
-            <default>off</default>
-            <button value="off">off</button>
-            <button value="on">on</button>
+            <default>Off</default>
+            <button value="off">Off</button>
+            <button value="on">On</button>
             <help>This option allow devices to do direct RTP sessions (default Off)</help>
         </item>
         <item type="IS" id="5" seq="99">

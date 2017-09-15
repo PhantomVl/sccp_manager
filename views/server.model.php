@@ -36,15 +36,15 @@
                    <thead>
                         <tr>
                             <th data-checkbox="true"></th>
-                            <th data-sortable="false" data-formatter="StatusIconFormatter" data-field="enabled"><?php echo _('Eabled') ?></th>
-                            <th data-sortable="true" data-field="model"><?php echo _('Device Model') ?></th>
-                            <th data-sortable="true" data-field="vendor"><?php echo _('Vendor') ?></th>
-                            <th data-sortable="false" data-formatter="DisplayDnsFormatter" data-field="dns"><?php echo _('Expansion Module') ?></th>
-                            <th data-sortable="false" data-field="buttons"><?php echo _('Buttons') ?></th>
-                            <th data-sortable="false" data-field="loadimage"><?php echo _('Loadimage') ?></th>
-                            <th data-sortable="false" data-field="loadinformationid"><?php echo _('Loadinformation ID') ?></th>
-                            <th data-sortable="false" data-field="nametemplet"><?php echo _('Model templet') ?></th>
-                            <th data-field="actions" data-formatter="DispayActionsModelFormatter"><?php echo _('Actions') ?></th>
+                            <th data-sortable="false" data-formatter="StatusIconFormatter" data-field="enabled"><?php echo _('Eabled');?></th>
+                            <th data-sortable="true" data-field="model"><?php echo _('Device Model');?></th>
+                            <th data-sortable="true" data-field="vendor"><?php echo _('Vendor');?></th>
+                            <th data-sortable="false" data-formatter="DisplayDnsFormatter" data-field="dns"><?php echo _('Expansion Module');?></th>
+                            <th data-sortable="false" data-field="buttons"><?php echo _('Buttons');?></th>
+                            <th data-sortable="false" data-field="loadimage"><?php echo _('Loadimage');?></th>
+                            <th data-sortable="false" data-field="loadinformationid"><?php echo _('Loadinformation ID');?></th>
+                            <th data-sortable="false" data-field="nametemplet"><?php echo _('Model templet');?></th>
+                            <th data-field="actions" data-formatter="DispayActionsModelFormatter"><?php echo _('Actions');?></th>
                         </tr>
                     </thead>
 
@@ -60,11 +60,11 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="gridSystemModalLabel">Modal title</h4>
+                <h4 class="modal-title" id="gridSystemModalLabel"><?php echo _('Modal title');?></h4>
             </div>
             <div class="modal-body">
                 <div class="element-container"><div class="row"> <div class="form-group"><div class="col-md-3">
-                        <label class="control-label" for="new_model">Device Model</label>
+                        <label class="control-label" for="new_model"><?php echo _('Device Model');?></label>
                         <i class="fa fa-question-circle fpbx-help-icon" data-for="new_model"></i>
                     </div><div class="col-md-9">
                         <input type="text" class="form-control" id="new_model" name="new_model" value="79XX">
@@ -74,7 +74,7 @@
                 </div></div></div>
 
                 <div class="element-container"><div class="row"> <div class="form-group"><div class="col-md-3">
-                        <label class="control-label" for="new_vendor">Vendor name</label>
+                        <label class="control-label" for="new_vendor"><?php echo _('Vendor name');?></label>
                         <i class="fa fa-question-circle fpbx-help-icon" data-for="new_vendor"></i>
                     </div><div class="col-md-9">
                         <input type="text" class="form-control" id="new_vendor" name="new_vendor" value="CISCO">
@@ -84,7 +84,7 @@
                 </div></div></div>
 
                 <div class="element-container"><div class="row"> <div class="form-group"><div class="col-md-3">
-                        <label class="control-label" for="new_dns">Expansion Module</label>
+                        <label class="control-label" for="new_dns"><?php echo _('Expansion Module');?></label>
                         <i class="fa fa-question-circle fpbx-help-icon" data-for="new_dns"></i>
                     </div><div class="col-md-9">
                 	<select name="new_dns" id="new_dns">
@@ -100,7 +100,7 @@
 
 
                 <div class="element-container"><div class="row"> <div class="form-group"><div class="col-md-3">
-                        <label class="control-label" for="new_buttons">Model Line Buttons</label>
+                        <label class="control-label" for="new_buttons"><?php echo _('Model Line Buttons');?></label>
                         <i class="fa fa-question-circle fpbx-help-icon" data-for="new_buttons"></i>
                     </div><div class="col-md-9">
                         <input type="number" min="1" min="96" class="form-control" id="new_buttons" name="new_buttons" value="1">
@@ -111,7 +111,7 @@
                 
                 
                 <div class="element-container"><div class="row"> <div class="form-group"><div class="col-md-3">
-                        <label class="control-label" for="new_loadimage">Load Image</label>
+                        <label class="control-label" for="new_loadimage"><?php echo _('Load Image');?></label>
                         <i class="fa fa-question-circle fpbx-help-icon" data-for="new_loadimage"></i>
                     </div><div class="col-md-9">
                         <input type="text" class="form-control" id="new_loadimage" name="new_loadimage" value="">
@@ -121,7 +121,7 @@
                 </div></div></div>
 
                 <div class="element-container"><div class="row"> <div class="form-group"><div class="col-md-3">
-                        <label class="control-label" for="new_loadinformationid">Load Information ID</label>
+                        <label class="control-label" for="new_loadinformationid"><?php echo _('Load Information ID');?></label>
                         <i class="fa fa-question-circle fpbx-help-icon" data-for="new_loadinformationid"></i>
                     </div><div class="col-md-9">
                         <input type="text" class="form-control" id="new_loadinformationid" name="new_loadinformationid" value="">
@@ -131,7 +131,7 @@
                 </div></div></div>
                 
                 <div class="element-container"><div class="row"> <div class="form-group"><div class="col-md-3">
-                        <label class="control-label" for="new_nametemplet">Model templet XML</label>
+                        <label class="control-label" for="new_nametemplet"><?php echo _('Model templet XML');?></label>
                         <i class="fa fa-question-circle fpbx-help-icon" data-for="new_nametemplet"></i>
                     </div><div class="col-md-9">
                         <input type="text" class="form-control" id="new_nametemplet" name="new_nametemplet" value="">
@@ -141,8 +141,8 @@
                 </div></div></div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary sccp_update" data-id="model_add" id="add_new_model" data-dismiss="modal">Add New model whithout Enabled</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo _('Close');?></button>
+                <button type="button" class="btn btn-primary sccp_update" data-id="model_add" id="add_new_model" data-dismiss="modal"><?php echo _('Add New model whithout Enabled');?></button>
             </div>            
         </div>
     </div>
@@ -155,12 +155,12 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="gridSystemModalLabel">Modal title</h4>
+                <h4 class="modal-title" id="gridSystemModalLabel"><?php echo _('Modal title');?></h4>
             </div>
             <div class="modal-body">
 
                 <div class="element-container"><div class="row"> <div class="form-group"><div class="col-md-3">
-                        <label class="control-label" for="editd_model">Device Model</label>
+                        <label class="control-label" for="editd_model"><?php echo _('Device Model');?></label>
                         <i class="fa fa-question-circle fpbx-help-icon" data-for="editd_model"></i>
                     </div><div class="col-md-9">
                         <input type="text" class="form-control" id="editd_model" name="editd_model" value="79XX" disabled>
@@ -171,7 +171,7 @@
 
                 
                 <div class="element-container"><div class="row"> <div class="form-group"><div class="col-md-3">
-                        <label class="control-label" for="editd_loadimage">Load Image</label>
+                        <label class="control-label" for="editd_loadimage"><?php echo _('Load Image');?></label>
                         <i class="fa fa-question-circle fpbx-help-icon" data-for="edit_devimage"></i>
                     </div><div class="col-md-9">
                         <input type="text" class="form-control" id="editd_loadimage" name="editd_loadimage" value="">
@@ -181,7 +181,7 @@
                 </div></div></div>
 
                 <div class="element-container"><div class="row"> <div class="form-group"><div class="col-md-3">
-                        <label class="control-label" for="editd_nametemplet">Model templet XML</label>
+                        <label class="control-label" for="editd_nametemplet"><?php echo _('Model templet XML');?></label>
                         <i class="fa fa-question-circle fpbx-help-icon" data-for="editd_nametemplet"></i>
                     </div><div class="col-md-9">
                         <input type="text" class="form-control" id="editd_nametemplet" name="editd_nametemplet" value="">
@@ -193,8 +193,8 @@
                 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary sccp_update" data-id="model_applay" data-dismiss="modal">Applay</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo _('Close');?></button>
+                <button type="button" class="btn btn-primary sccp_update" data-id="model_applay" data-dismiss="modal"><?php echo _('Applay');?></button>
             </div>            
         </div>
     </div>

@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-14 13:48+0300\n"
-"PO-Revision-Date: 2017-09-15 12:55+0300\n"
+"PO-Revision-Date: 2017-09-19 18:10+0300\n"
 "Last-Translator: \n"
 "Language-Team: LANGUAGE Alex\n"
 "Language: ru\n"
@@ -576,12 +576,12 @@ msgid "General Device configuration"
 msgstr "Абонентского устройство"
 
 #: views/sccpgeneral.xml:
-msgid "Device ID SEP.[XXXXXXXXXXXX]=MAC"
-msgstr "Устройство ID SEP : [XXXXXXXXXXXX]=MAC"
+msgid "Device SEP ID.[XXXXXXXXXXXX]=MAC"
+msgstr "Устройство SEP ID : [XXXXXXXXXXXX]=MAC"
 
 #: views/sccpgeneral.xml:
-msgid "The MAC address of the phone"
-msgstr "Прямое подключение"
+msgid "The MAC address of the phone. You must specify 12 characters in the format XXXX.XXXX.XXXX or XX-XX-XX-XX-XX-XX or XXXXXXXXXXXX"
+msgstr "Укажите MAC устройства. 12 знаков MAC в формате XXXX.XXXX.XXXX / XX-XX-XX-XX-XX-XX / XXXXXXXXXXXX"
 
 #: views/sccpgeneral.xml:
 msgid "Type"
@@ -602,6 +602,10 @@ msgstr "Модуль ресширения являются специфичны�
 #: views/sccpgeneral.xml:
 msgid "Device Label"
 msgstr "Название Устройства"
+
+#: views/sccpgeneral.xml:
+msgid "Device SEP ID"
+msgstr "Идентификатор устройства SEP ID"
 
 #: views/sccpgeneral.xml:
 msgid "The information in the upper right corner of the device screen"
@@ -874,3 +878,19 @@ msgstr "Добавить шаблон как неактивный"
 #: views/server.model:
 msgid "Device is enabled"
 msgstr "Устройство включено"
+
+#: views/server.model: ----------------------------
+msgid "Device Descriptions"
+msgstr "Описание"
+
+#: views/server.model:
+msgid "Device type"
+msgstr "Модель"
+
+#: views/server.model:
+msgid "Actions"
+msgstr "Действие"
+
+#: views/server.model:
+msgid "Status"
+msgstr "Статус"

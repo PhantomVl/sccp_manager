@@ -1,5 +1,8 @@
 https://github.com/chan-sccp/chan-sccp/wiki/Adding-custom-background-images
 
+> Real Time !
+http://silver-golem.livejournal.com/431942.html
+
 General Information
 
 Cisco IP Phones support either colored or monochrom background images in various resolutions (depending on model). The background can either be set up in sccp.conf server side or the user can be enabled to select a background image from a defined list of backgrounds. The image has to be a graphic file with .PNG extension. Other requirements apply, depending on phone model (see below).
@@ -40,3 +43,4 @@ The Image file is used for the background of the phone display. An additional th
 </CiscoIPPhoneImageList>
 
 While the resolution is fix, the phones are able to reduce the color depth if the original image uses too many colors.
+

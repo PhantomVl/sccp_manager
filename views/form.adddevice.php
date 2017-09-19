@@ -18,6 +18,7 @@ if (!empty($_REQUEST['id'])) {
                 case 'name':
                     $key = 'mac';
                     $val = str_replace('SEP', '', $val);
+                    $val = implode('.',sscanf($val, '%4s%4s%4s')); // Convert to Cisco display Format 
                     break;
                 case 'hwlang':
                     $tmpar =  explode(":",$val);

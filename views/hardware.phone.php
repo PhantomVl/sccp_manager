@@ -6,7 +6,6 @@
  */
 // vim: set ai ts=4 sw=4 ft=phtml:
 
-
 ?>
 
 <div class="fpbx-container container-fluid">
@@ -26,12 +25,12 @@
                         <i class="glyphicon glyphicon-ok"></i> <span><?php echo _('Reset Device') ?></span>
                     </button>
                 </div>
-                <table data-cookie="true" data-cookie-id-table="sccp-phone" data-url="ajax.php?module=sccp_manager&amp;command=getPhoneGrid&amp;type=sip" data-cache="false" data-show-refresh="true" data-toolbar="#toolbar-sip" data-maintain-selected="true" data-show-columns="true" data-show-toggle="true" data-toggle="table" data-pagination="true" data-search="true" class="table table-striped ext-list" id="table-sip" data-id="mac">
+                <table data-cookie="true" data-cookie-id-table="sccp-phone" data-url="ajax.php?module=sccp_manager&amp;command=getPhoneGrid&amp;type=sccp" data-cache="false" data-show-refresh="true" data-toolbar="#toolbar-sip" data-maintain-selected="true" data-show-columns="true" data-show-toggle="true" data-toggle="table" data-pagination="true" data-search="true" class="table table-striped ext-list" id="table-sip" data-id="mac">
                     <thead>
                         <tr>
                             <th data-checkbox="true"></th>
-                            <th data-sortable="true" data-field="mac"><?php echo _('MAC') ?></th>
-                            <th data-sortable="true" data-field="description"><?php echo _('Device  Descr') ?></th>
+                            <th data-sortable="true" data-field="mac"><?php echo _('Device SEP ID') ?></th>
+                            <th data-sortable="true" data-field="description"><?php echo _('Device  Descriptions') ?></th>
                             <th data-sortable="true" data-field="type"><?php echo _('Device type') ?></th>
                             <th data-sortable="false" data-field="button" data-formatter="LineFormatter"><?php echo _('Line') ?></th>
                             <th data-sortable="false" data-field="status"><?php echo _('Status') ?></th>

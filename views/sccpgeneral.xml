@@ -528,13 +528,13 @@ and open the template in the editor.
     </page_group>
 <!--  Form   add/ edit device -->  
     <page_group name="sccp_hw_dev"><label>General Device configuration</label>
-        <item type="IE" id="1" seq="99"><label>Device ID SEP.[XXXXXXXXXXXX]=MAC</label>
+        <item type="IE" id="1" seq="99"><label>Device SEP ID.[XXXXXXXXXXXX]=MAC</label>
             <input>
                 <name>mac</name> 
                 <default>000000000</default>
                 <class>sccp-custom</class>
             </input>
-            <help>The MAC address of the phone</help>
+            <help>The MAC address of the phone. You must specify 12 characters in the format XXXX.XXXX.XXXX or XX-XX-XX-XX-XX-XX or XXXXXXXXXXXX</help>
         </item>
        
         <item type="SDM" id="2" seq="99">
@@ -557,7 +557,7 @@ and open the template in the editor.
 
     <page_group name="sccp_hw_dev_edit">
         <label>General Device configuration</label>
-        <item type="IE" id="1" seq="99"><label>Device ID SEP.</label>
+        <item type="IE" id="1" seq="99"><label>Device SEP ID</label>
             <input>
                 <name>mac</name> 
                 <default>000000000</default>

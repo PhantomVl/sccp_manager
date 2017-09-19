@@ -15,7 +15,7 @@ if (!empty($_REQUEST['id'])) {
     $db_res = $this->get_db_SccpTableData('get_sccpdevice_byid', array("id" => $dev_id));
     if (!empty($db_res['allow'])) {
         $i = 1;
-        foreach(explode(',', $db_res['allow']) as $c){
+        foreach(explode(';', $db_res['allow']) as $c){
             $codec_list[$c] = $i;
             $i ++;
         }

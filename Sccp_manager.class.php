@@ -8,6 +8,17 @@
 // https://github.com/chan-sccp/chan-sccp/wiki/Conferencing
 // https://github.com/chan-sccp/chan-sccp/wiki/Frequently-Asked-Questions
 // http://chan-sccp-b.sourceforge.net/doc/_howto.xhtml#nf_adhoc_plar
+/* 
+ * ToDo: 
+ *  + Cisco Format Mac 
+ *  + Model Information 
+ *  + Device Right Menu 
+ *  - WiFi Config
+ *  - suport kvstore ?????
+ *  - Shared Line ????
+ *  - bug Fix
+ * 
+ */
 
 namespace FreePBX\modules;
 
@@ -136,7 +147,6 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         }
         if ((array) $this->xml_data) {
             foreach ($this->xml_data->xpath('//page_group[@name="' . $grup_name . '"]') as $item) {
-//                 $htmlret .= print_r($item,1);
                 $htmlret .= load_view(__DIR__ . '/views/formShow.php', array(
                     'itm' => $item, 'h_show' => $heder_show,
                     'form_prefix' => $form_prefix, 'fvalues' => $form_values,
@@ -249,7 +259,13 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                     'submit' => array(
                         'name' => 'ajaxsubmit',
                         'id' => 'ajaxsubmit',
-                        'value' => _("Submit")
+                        'value' => _("Save")
+                    ),
+                    'Save' => array(
+                        'name' => 'ajaxsubmit2',
+                        'id' => 'ajaxsubmit2',
+                        'stayonpage' => 'yes',
+                        'value' => _("Save + Continue")
                     ),
                     'cancel' => array(
                         'name' => 'cancel',
@@ -411,7 +427,12 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
 
         return $this->pagedata;
     }
-
+    public function getRightNav($request) {
+        if(isset($request['tech_hardware']) && ($request['tech_hardware'] == 'cisco')) {
+            return load_view(__DIR__."/views/hardware.rnav.php",array('request' => $request));
+        }            
+    }
+    
     public function ajaxRequest($req, &$setting) {
         switch ($req) {
             case 'savesettings':
@@ -675,8 +696,9 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                     $value = $get_settings[$hdr_prefix . $key . '_net'] . '/' . $get_settings[$hdr_prefix . $key . '_mask'];
                     break;
                 case 'name':
-                    if (!empty($get_settings[$hdr_prefix . 'mac'])) {
-                        $value = 'SEP' . $get_settings[$hdr_prefix . 'mac'];
+                    if (!empty($get_settings[$hdr_prefix . 'mac'])) {                        
+                        $value = $get_settings[$hdr_prefix . 'mac'];
+                        $value = 'SEP' . strtoupper(str_replace(array('.','-',':'),'',$value)); // Delete mac Seporated from string
                         $name_dev = $value;
                     }
                     break;
@@ -1855,9 +1877,10 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
 
     function getSccp_model_information($get = "all", $validate = false, $format_list = "all", $filter = array()) {
         global $db;
-        $file_ext = array('.loads','.sbn','.SBN');
+        $file_ext = array('.loads','.LOADS','.sbn','.SBN','.bin','.BIN');
 
         $dir = $this->sccppath["tftp_path"];
+        $dir_tepl = $this->sccppath["tftp_templets"];
         switch ($format_list) {
             case "model":
                 $sel_inf = "model, vendor, dns, buttons";
@@ -1900,20 +1923,39 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         $i = 0;
         if ($validate) {
             for ($i = 0; $i < count($raw_settings); $i++) {
-                $file = $dir . '/' . $raw_settings[$i]['loadimage'];
-                $raw_settings[$i]['validate'] = 'no';
-                if (strtolower($raw_settings[$i]['vendor']) == 'cisco') {                   
-                    foreach ($file_ext as $value) {
-                        if (file_exists($file.$value)) {
-                            $raw_settings[$i]['validate'] = 'yes';
-                            break; 
+                $raw_settings[$i]['validate'] = '-;-';
+                if (!empty($raw_settings[$i]['loadimage'])) {
+                    $file = $dir . '/' . $raw_settings[$i]['loadimage'];
+                    if (is_dir($file)){
+                        $file .= '/' . $raw_settings[$i]['loadimage'];
+                    }
+                    $raw_settings[$i]['validate'] = 'no;';
+                    if (strtolower($raw_settings[$i]['vendor']) == 'cisco') {                   
+                        foreach ($file_ext as $value) {
+                            if (file_exists($file.$value)) {
+                                $raw_settings[$i]['validate'] = 'yes;';
+                                break; 
+                            }
+                        }
+                    } else {
+                        if (file_exists($file)) {
+                            $raw_settings[$i]['validate'] = 'yes;';
                         }
                     }
                 } else {
-                    if (file_exists($file)) {
-                        $raw_settings[$i]['validate'] = 'yes';
-                    }
+                    $raw_settings[$i]['validate'] = '-;';
                 }
+                if (!empty($raw_settings[$i]['nametemplet'])) {
+                    $file = $dir_tepl . '/' . $raw_settings[$i]['nametemplet'];
+                    if (file_exists($file)) {
+                        $raw_settings[$i]['validate'] .= 'yes';
+                    } else {
+                        $raw_settings[$i]['validate'] .= 'no';
+                    }
+                } else {
+                    $raw_settings[$i]['validate'] .= '-';
+                }
+
             }
         }
         return $raw_settings;

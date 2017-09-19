@@ -668,11 +668,11 @@ msgid "General Device configuration"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid "Device ID SEP.[XXXXXXXXXXXX]=MAC"
+msgid "Device SEP ID.[XXXXXXXXXXXX]=MAC"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid "The MAC address of the phone"
+msgid "The MAC address of the phone. You must specify 12 characters in the format XXXX.XXXX.XXXX or XX-XX-XX-XX-XX-XX or XXXXXXXXXXXX"
 msgstr ""
 
 #: views/sccpgeneral.xml:
@@ -700,6 +700,10 @@ msgstr ""
 
 #: views/sccpgeneral.xml:
 msgid "Device Label"
+msgstr ""
+
+#: views/sccpgeneral.xml:
+msgid "Device SEP ID"
 msgstr ""
 
 #: views/sccpgeneral.xml:
@@ -1007,4 +1011,20 @@ msgstr ""
 
 #: views/server.model:
 msgid "Device is enabled"
+msgstr ""
+
+#: views/server.model: ----------------------------
+msgid "Device Descriptions"
+msgstr ""
+
+#: views/server.model:
+msgid "Device type"
+msgstr ""
+
+#: views/server.model:
+msgid "Actions"
+msgstr ""
+
+#: views/server.model:
+msgid "Status"
 msgstr ""

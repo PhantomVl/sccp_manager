@@ -41,9 +41,9 @@
                             <th data-sortable="true" data-field="vendor"><?php echo _('Vendor');?></th>
                             <th data-sortable="false" data-formatter="DisplayDnsFormatter" data-field="dns"><?php echo _('Expansion Module');?></th>
                             <th data-sortable="false" data-field="buttons"><?php echo _('Buttons');?></th>
-                            <th data-sortable="false" data-field="loadimage"><?php echo _('Loadimage');?></th>
+                            <th data-sortable="false" data-formatter="SetColColorFirm" data-field="loadimage"><?php echo _('Loadimage');?></th>
                             <th data-sortable="false" data-field="loadinformationid"><?php echo _('Loadinformation ID');?></th>
-                            <th data-sortable="false" data-field="nametemplet"><?php echo _('Model templet');?></th>
+                            <th data-sortable="false" data-formatter="SetColColorTempl" data-field="nametemplet"><?php echo _('Model templet');?></th>
                             <th data-field="actions" data-formatter="DispayActionsModelFormatter"><?php echo _('Actions');?></th>
                         </tr>
                     </thead>
@@ -223,13 +223,29 @@
         exp_model += '<a href="#delete_model" onclick="delete_oncliсk(this, &quot;'+row['model']+'&quot;)"><i class="fa fa-trash"></i></a>';
         return  exp_model;
     }
+
+    function SetColColorFirm(value, row, index) {
+        if (row['validate'].split(';')[0] === 'no') {
+            return  'No found '+ value;
+        }
+        return value;
+    }
+    function SetColColorTempl(value, row, index) {
+        if (row['validate'].split(';')[1] === 'no') {
+            return  'No found '  + value ;
+        }
+        return value;
+
+    }
     
     function SetRowColor(row, index) {
         var tclass = "active";
         if (row['enabled'] === 1) {
             tclass = (index % 2 === 0) ? "info" : "info";
         }    
-        if (row['validate'] === 'no') {
+        if ((row['validate'] === 'yes;yes') || (row['validate'] === 'yes;-')) {
+//            tclass = (row['enabled'] === '1') ?  "danger" : "warning";
+        } else {
             tclass = (row['enabled'] === '1') ?  "danger" : "warning";
         }
         return {classes: tclass};

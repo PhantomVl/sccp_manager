@@ -1,0 +1,42 @@
+<?php
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+// vim: set ai ts=4 sw=4 ft=phtml:
+//print_r($this->get_DP_list());
+//print_r($this->get_DialPlant('dialplan'));
+?>
+<div class="fpbx-container container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="display no-border">
+                <h1><?php echo _("Cisco Dial Templet") ?></h1>
+                <div id="toolbar-sccp-dialtemplet">
+                    <a class="btn btn-default" href="config.php?display=sccp_adv&amp;tech_hardware=dialplan&amp;extdisplay=*new*"><i class="fa fa-plus">&nbsp;</i><?php echo _("Add Dialplan") ?></a>
+                    <button id="remove-sccp-dialtemplet" class="btn btn-danger btn-remove" data-type="dialtemplet" data-section="sccp-dialtemplet" disabled>
+                        <i class="glyphicon glyphicon-remove"></i> <span><?php echo _('Delete') ?></span>
+                    </button>
+                </div>
+                <table data-cookie="true" data-cookie-id-table="sccp-dialtemplet-table" data-url="ajax.php?module=sccp_manager&amp;command=getDialTemplete" data-cache="false" data-show-refresh="true" data-toolbar="#toolbar-dialtemplet" data-maintain-selected="true" data-show-columns="true" data-show-toggle="true" data-toggle="table" data-pagination="true" data-search="true" class="table table-striped ext-list-sccp" id="table-sccp-dialtemplet" data-id="id">
+                    <thead>
+                        <tr>
+<!--                            <th data-checkbox="true"></th> -->
+                            <th data-sortable="true" data-field="id"><?php echo _('Templete name') ?></th>
+                            <th data-field="actions" data-formatter="DispayDPActionsKeyFormatter"><?php echo _('Actions') ?></th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function DispayDPActionsKeyFormatter(value, row, index) {
+        var exp_model = '';
+        exp_model += '<a href="?display=sccp_adv&tech_hardware=dialplan&extdisplay=' + row['id'] + '"><i class="fa fa-pencil"></i></a> &nbsp; &nbsp;\n';
+        exp_model += '</a> &nbsp;<a class="btn-item-delete" data-for="dialplan" data-id="' + row['id'] + '"><i class="fa fa-trash"></i></a>';
+        return  exp_model;
+    }
+</script>

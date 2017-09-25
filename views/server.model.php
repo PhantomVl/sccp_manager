@@ -218,9 +218,8 @@
     function DispayActionsModelFormatter(value, row, index) {
         var exp_model = '';
 //        exp_model += '<a href="#edit_model"   class="btn btn-info"   onclick="load_model(this, &quot;'+row['model']+'&quot;)" data-toggle="modal"><i class="fa fa-pencil"></i></a>';
-//        exp_model += '<a href="#delete_model" class="btn btn-danger" onclick="delete_oncliсk(this, &quot;'+row['model']+'&quot;)"><i class="fa fa-trash"></i></a>';
         exp_model += '<a href="#edit_model"   onclick="load_model(this, &quot;'+row['model']+'&quot;)" data-toggle="modal"><i class="fa fa-pencil"></i></a>&nbsp;&nbsp;';
-        exp_model += '<a href="#delete_model" onclick="delete_oncliсk(this, &quot;'+row['model']+'&quot;)"><i class="fa fa-trash"></i></a>';
+        exp_model += '</a> &nbsp;<a class="btn-item-delete" data-for="model" data-id="' + row['model'] + '"><i class="fa fa-trash"></i></a>';
         return  exp_model;
     }
 

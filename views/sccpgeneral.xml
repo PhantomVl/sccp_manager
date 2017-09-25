@@ -453,7 +453,16 @@ and open the template in the editor.
           <class>form-control</class>
           <help>Music Class: Available MOH Classes. These are the MOH classes listed in your current server.</help>
       </item>
-      <item type="IS" id="7" seq="98"><name>autoselectline_enabled</name> <label>Autoselect Line</label>
+      <item type="SLA-disabled" id="6"><label>Default Dial Plan</label>
+          <name>dial_templet</name> 
+          <default>none</default>
+          <select></select>
+          <class>sccp-custom</class>
+          <help>Help.</help>
+      </item>
+      <item type="IS" id="7" seq="98">
+          <name>autoselectline_enabled</name> 
+          <label>Autoselect Line</label>
           <default>no</default>
           <button value="yes">Enabled</button>
           <button value="no">Disabled</button>
@@ -842,5 +851,58 @@ and open the template in the editor.
       
                     
     </page_group>
-    
+    <page_group name="sccp_dp_new_templet">
+        <item type="IE" id="1" seq="99"><label>Templet Name</label>
+            <input>
+                <name>dialtemplete_name</name> 
+                <default></default>
+                <class>form-control</class>
+            </input>
+            <help>Help.</help>
+        </item>
+        
+    </page_group>
+    <page_group name="sccp_dp_templet">
+      <label>Device Templet Function</label>
+      <item type="ITED" id="1" seq="0">
+        <name>dialtemplete</name>
+        <default>*/10/*</default>
+        <element1 type="title" field="title"><options class="form-control control-label"/>title</element1>
+        <element type="input" value="none" field="match" display_prefix="(" display_sufix=")"><options class="form-control dpt-title" placeholder="Pattern to match"/></element>
+        <element type="number" value="none" field="timeout" display_prefix="[" display_sufix="]"><options min="0" max="30" class="form-control dpt-title" placeholder="Time wait" /></element>
+        <element1 type="label" field="label1"><options class="form-control control-label"/>text1</element1>
+        <element type="input" value="none" field="rewrite" display_prefix="(" display_sufix=")"><options class="form-control dpt-title" placeholder="Rewrite the matched"/></element>
+        <element type="select" value="none" field="tone">
+            <options class="form-control dpt-title" /> 
+            <data>empty</data>
+            <data>Bellcore-Alerting</data>
+            <data>Bellcore-Inside</data>
+            <data>Bellcore-Outside</data>
+            <data>Bellcore-Busy</data>
+            <data>Bellcore-BusyVerify</data>
+            <data>Bellcore-Reorder</data>
+            <data>Bellcore-CallWaiting</data>
+            <data>Bellcore-Hold</data>
+            <data>Bellcore-Reminder</data>
+            <data>Bellcore-Confirmation</data>
+            <data>Bellcore-Stutter</data>
+            <data>Bellcore-Permanent</data>
+            <data>Bellcore-None</data>
+            <data>Cisco-Zip</data>
+            <data>Cisco-ZipZip</data>
+            <data>Cisco-BeepBonk</data>
+            <data>Bellcore-dr1</data>
+            <data>Bellcore-dr2</data>
+            <data>Bellcore-dr3</data>
+            <data>Bellcore-dr4</data>
+            <data>Bellcore-dr5</data>
+            <data>Bellcore-dr6</data>
+            <data>CallWaiting-2</data>
+            <data>CallWaiting-3</data>
+            <data>CallWaiting-4</data>
+        </element>
+        <help>Alow network settings. Blank fields will be ignored used Network 0.0.0.0.</help>
+      </item>
+            
+    </page_group>
 </root>

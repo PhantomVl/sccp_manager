@@ -33,6 +33,10 @@ $(document).ready(function () {
         if ($('.fpbx-submit').data('id') == "hw_edit") {
             snd_command = 'save_hardware';
         }
+        if ($('.fpbx-submit').data('id') == "dial_templet") {
+            snd_command = 'save_dp_templet';
+        }
+        
         $.ajax({
             type: 'POST',
             url: 'ajax.php?module=sccp_manager&command=' + snd_command,
@@ -63,6 +67,9 @@ $(document).ready(function () {
         });
         if ($('.fpbx-submit').data('id') == "hw_edit") {
             snd_command = 'save_hardware';
+        }
+        if ($('.fpbx-submit').data('id') == "dial_templet") {
+            snd_command = 'save_dp_templet';
         }
         $.ajax({
             type: 'POST',
@@ -106,6 +113,73 @@ $(document).ready(function () {
     $(".input-js-add").click(function(){
         add_dynamic_input($(this),$(this).data('for'),"","");
     });
+
+    $(".table").on('click','.table-js-add', function (e) {
+        add_dynamic_table($(this),$(this).data('for'),"","");
+    });
+
+    $(".table").on('click','.table-js-del', function (e) {
+        del_dynamic_table($(this),$(this).data('for'));
+    });
+
+
+    $(".table").on('click','.btn-item-delete', function (e) {
+        var dev_cmd = '';
+        var dev_id = $(this).data('id');
+        var dev_for = $(this).data('for');
+        var ext_data = '';
+        if (dev_for =='softkeys') {
+            dev_cmd = 'deleteSoftKey';
+            ext_data = "softkey=" + dev_id;
+        }
+        if (dev_for =='model') {
+            dev_cmd = 'model_delete';
+            ext_data = "model=" + dev_id;
+        }
+        if (dev_for =='dialplan') {
+            dev_cmd = 'delete_dialplan';
+            ext_data = "dialplan=" + dev_id;
+        }
+        if (dev_for =='hardware') {
+            dev_cmd = 'delete_hardware';
+            ext_data = "idn[0]=" + dev_id;
+        }
+//    console.log("delete : " + data);
+        if (dev_cmd != '') {
+            if (confirm(_('Are you sure you wish to delete "' + dev_id.toString().toUpperCase() + '" inormation ?'))) {
+            $.ajax({
+                type: 'POST',
+                url: 'ajax.php?module=sccp_manager&command=' + dev_cmd,
+                command: dev_cmd,
+                data: ext_data,
+                success: function (data) {
+//                console.log(data);
+                    if (data.status === true) {
+                        if (data.message) {
+                        alert(data.message);
+                        }
+                        if (data.table_reload === true) {
+                            $('table').bootstrapTable('refresh');
+                        }
+                        if (data.reload === true) {
+                            location.reload();
+                        }
+                    } else {
+                        if (Array.isArray(data.message)) {
+                            data.message.forEach(function (entry) {
+                                fpbxToast(entry, 'error', 'error');
+                            });
+                        }
+                    }
+                }
+           
+            });
+            }
+        }
+
+    });
+
+
 
 // ----------------------- Server.model.Button.Select----------------
 
@@ -448,11 +522,13 @@ $("table").on('uncheck-all.bs.table', function (rows) {
 });
 
 // 
+// On table  Click !!!!!! 
 $("table").on("post-body.bs.table", function () {
 //    console.log('Table ');
+// delete extension 
     $(this).find(".clickable.delete").click(function () {
         var id = $(this).data("id");
-//        console.log(id);
+        
         if (confirm(_("Are you sure you wish to delete this extension?"))) {
             $.post("ajax.php", {command: "delete", module: "core", extensions: [id], type: "extensions"}, function (data) {
                 if (data.status) {
@@ -469,6 +545,7 @@ $("table").on("post-body.bs.table", function () {
         }
     });
 });
+
 function load_oncliсk(e, data) {
 
 //    console.log('load_oncliсk');
@@ -526,51 +603,7 @@ function load_oncliсk(e, data) {
     }
 }
 
-function delete_oncliсk(e, data) {
-    var dev_cmd = '';
-    var datas = '';
-    if (e.href.indexOf('#delete_softkeys') > 0) {
-        dev_cmd = 'deleteSoftKey';
-        datas = "softkey=" + data;
-    }
-    if (e.href.indexOf('#delete_model') > 0) {
-        dev_cmd = 'model_delete';
-        datas = "model=" + data;
-    }
-    if (e.href.indexOf('#delete_hardware') > 0) {
-        dev_cmd = 'delete_hardware';
-        datas = "idn[0]=" + data;
-    }
-//    console.log("delete : " + data);
-    if (confirm(_('Are you sure you wish to delete "' + data.toUpperCase() + '" inormation ?'))) {
-        $.ajax({
-            type: 'POST',
-            url: 'ajax.php?module=sccp_manager&command=' + dev_cmd,
-            data: datas,
-            success: function (data) {
-//                console.log(data);
-                if (data.status === true) {
-                    if (data.message) {
-                        alert(data.message);
-                    }
-                    if (data.table_reload === true) {
-                        $('table').bootstrapTable('refresh');
-                    }
-                    if (data.reload === true) {
-                        location.reload();
-                    }
-                } else {
-                    if (Array.isArray(data.message)) {
-                        data.message.forEach(function (entry) {
-                            fpbxToast(entry, 'error', 'error');
-                        });
-                    }
-                }
-            }
-        });
-    }
 
-}
 function add_dynamic_input(pe, pclass, vdefault) {
 	// We'd like a new one, please.
         pcls = pe.data('for');
@@ -590,6 +623,80 @@ function add_dynamic_input(pe, pclass, vdefault) {
             html += "<input type='text' name='"+pname+ "["+ourid+"]["+key+"]' class='" + html_calss + "' " + html_opt + " value='" + vdefault+"'> "+ jdata[key]['nameseparator'] + " ";
         }
 	html += "</div>\n";
+
+	last.after(html);
+}
+
+function del_dynamic_table(pe, pclass, vdefault) {
+        pcls = pe.data('for');
+        pname = pe.data('id');
+
+//        pe.preventDefault();
+	var rowCount = $('#dp-table-'+pcls+'>tbody >tr').length;
+        curRow =$('#'+pcls+'-row-'+ pname);
+	var curRow = pe.closest('tr');
+	if(rowCount > 1){
+		curRow.fadeOut("slow", function(){
+			$(this).remove();
+		});
+	}else{
+		curRow.find('input:text').each(function(){$(this).val('')});
+	}    
+}
+
+function add_dynamic_table(pe, pclass, vdefault) {
+	// We'd like a new one, please.
+        pcls = pe.data('for');
+        pname = pe.data('id');
+        jdata = JSON.parse(hex2bin(pe.data('json')));
+        
+	var last = $("."+pcls+":last"),
+			ourid = last.data('nextid'),
+			nextid = ourid + 1;
+	var html = "<tr class = '" + pcls +"' data-nextid="+nextid+">";
+        for (var key in jdata) {
+            html_opt = '';
+            res_ni = pcls + '_' + nextid + '_' + key; 
+            res_n = pcls + '[' + nextid + '][' + key + ']';
+            for (var skey in jdata[key]['options']) {
+                html_opt += ' ' + skey+'="' + jdata[key]['options'][skey] +'"';
+            }
+            var html_rs = '<div class="input-group"> <span class="input-group-addon" id="basep_' + res_ni + '" >' + jdata[key]['display_prefix'] + '</span>';
+            var html_re = '<span class="input-group-addon" id="bases_' + res_ni + '">' + jdata[key]['display_sufix'] + '</span></div>';                                
+
+            html += '<td class="">';
+            switch (jdata[key]['type']) {
+                case "title":
+                    break;
+                case "label":
+                    html +='<label ' + html_opt +' >' + jdata[key]['data'] + '</label>';
+                    break;
+                case "input":
+                    html += html_rs + '<input type="text" name="' + res_n + '" value="' +  '"' + html_opt + '>' +html_re ;
+                    break;
+                case "number":
+                    html += html_rs + '<input type="number" name="' + res_n + '" value="' +  '"' + html_opt + '>' +html_re ;
+                    break;
+                case "date":
+                    html += html_rs + '<input type="date" name="' + res_n + '" value="' +  '"' + html_opt + '>' +html_re ;
+                    break;
+                case "select":
+                    html += html_rs + '<select name="' +  res_n  + '" id="'  + res_n   + '"' + html_opt + ">";
+                    sel_data = jdata[key]['data'].split(';');
+                    for (var dkey in sel_data) {
+                        html += '<option>' + sel_data[dkey] + '</option>';
+                    }
+                    html += '</select>'+ html_re;
+                    break;
+            }
+            html += '</td>';                                
+        }
+        html += '<td><input type="button" id="' + pcls+ nextid + '-btn" data-id="' + nextid + '" data-for="' + pcls + '"data-json="'+ pe.data('json') + '" class="table-js-add" value="+" />';
+        html += '<input type="button" id="'+ pcls+ nextid +'-btndel" data-id="'+ nextid + '" data-for="' + pcls + '" class="table-js-del" value="-" />';
+
+//        html += '<a href="#"  id="routerowdel0"><i class="fa fa-trash"></i></a>';
+
+	html += "</td></tr>\n";
 
 	last.after(html);
 }

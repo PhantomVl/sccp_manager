@@ -2,8 +2,10 @@
 /*
  *                          IE - Text Input 
  *                         IED - Text Input Dynamic
+ *                         ITED- Input Dynamic Table
  *                          IS - Radio box
  *                          SL - Select element 
+ *                         SLA - Select element (from - data )
  *    Input element Select SLD - Date format 
  *                         SLZ - Time Zone 
  *                         SLZN - Time Zone List
@@ -157,7 +159,6 @@ foreach ($items as $child) {
         
         echo '<!-- Begin '.$child->label.' -->';
         ?>
-     	<!--Local Networks-->
 	<div class="element-container">
             <div class="row">
                 <div class="col-md-12">
@@ -345,7 +346,7 @@ foreach ($items as $child) {
  *    Input element Select SLS - System Language 
  */
     
-    if ($child['type'] == 'SLS' || $child['type'] == 'SLT') {
+    if ($child['type'] == 'SLS' || $child['type'] == 'SLT' || $child['type'] == 'SLA') {
 //        $value = $child -> select;
         $res_n =  (string)$child ->name;       
         $res_id = $npref.$res_n;
@@ -355,6 +356,21 @@ foreach ($items as $child) {
         }
         if ($child['type'] == 'SLT') {
             $select_opt= $tftp_lang;
+        }
+
+        if ($child['type'] == 'SLA') {
+            $select_opt ='';
+            if (!empty($fvalues[$res_n])) {
+                if (!empty($fvalues[$res_n]['data'])) {
+                    $res_value = explode(';', $fvalues[$res_n]['data']);
+                }
+                if (empty($res_value)) {
+                    $res_value = array((string) $child->default);
+                }
+                foreach ($res_value as $key) {
+                    $select_opt[$key]= $key;
+                }
+            }
         }
         
         if (empty($child->class)) {
@@ -410,7 +426,6 @@ foreach ($items as $child) {
         echo '<!-- Begin '.$child->label.' -->';
 
         ?>
-        <!--System Language-->
         <div class="element-container">
            <div class="row"> <div class="form-group"> 
  
@@ -445,7 +460,6 @@ foreach ($items as $child) {
                 <span id="<?php echo $res_id;?>-help" class="help-block fpbx-help-block"><?php echo _($child->help);?></span>
             </div></div>
         </div>
-        <!--END System Language-->
         <?php
         echo '<!-- END '.$child->label.' -->';
     }
@@ -517,6 +531,112 @@ foreach ($items as $child) {
         echo '<!-- END '.$child->label.' -->';
         
     }
+        if ($child['type'] == 'ITED') {
+        $res_input = '';
+        $res_name = '';
+        $res_na =  (string)$child->name;
+
+//        $res_value
+        $lnhtm = '';
+        $res_id = $napref.$child->name;
+        $i = 0;
+
+        if (!empty($fvalues[$res_na])) {
+            if (!empty($fvalues[$res_na]['data'])) {
+                $res_value = explode(';', $fvalues[$res_na]['data']);
+            }
+        }
+        if (empty($res_value)) {
+            $res_value = array((string) $child->default);
+//            $res_value = explode('/', (string) $child->default);
+        }
+        
+        echo '<!-- Begin '.$res_id.' -->';
+        ?>
+        <table class="table table-striped" id="dp-table-<?php echo $res_id;?>">
+
+        <?php
+        foreach ($res_value as $dat_v) {
+            echo '<tr data-nextid="'.($i+1).'" class="'.$res_id.'" id="'.$res_id.'-row-'.($i).'"> ';
+            if (!empty($child->label)) {
+                echo '<td class=""> <div class="input-group">'.$child->label.'</div></td>';
+            }
+
+            $res_vf = explode('/', $dat_v);
+            $i2 = 0;
+                            
+            foreach ($child->xpath('element') as $value) {
+                $fields_id = (string)strtolower($value['field']);
+                $res_n  = $res_id.'['.$i.']['.$fields_id.']';
+                $res_ni = $res_id.'_'.$i.'_'.$fields_id;
+
+                $opt_at[$fields_id]['display_prefix']=(string)$value['display_prefix'];
+                $opt_at[$fields_id]['display_sufix']=(string)$value['display_sufix'];
+                                
+                if (empty($value->options->class)) {
+                    $opt_at[$fields_id]['options']['class']='form-control';
+                } 
+                $opt_at[$fields_id]['type']=(string)$value['type'];
+                $res_opt['addon'] ='';
+                if (isset($value->options)){
+                    foreach ($value->options ->attributes() as $optkey =>$optval){
+                        $opt_at[$fields_id]['options'][$optkey]=(string)$optval;
+                        $res_opt['addon'] .=' '.$optkey.'="'.$optval.'"';
+                    }
+                }
+                                
+                echo '<td class="">';
+                $res_opt['inp_st'] = '<div class="input-group"> <span class="input-group-addon" id="basep_'.$res_n.'">'.$opt_at[$fields_id]['display_prefix'].'</span>';
+                $res_opt['inp_end'] = '<span class="input-group-addon" id="bases_'.$res_n.'">'.$opt_at[$fields_id]['display_sufix'].'</span></div>';
+                switch ($value['type']){
+                    case 'date':
+                        echo $res_opt['inp_st'].'<input type="date" name="'. $res_n.'" value="'.$res_vf[$i2].'"'.$res_opt['addon']. '>'.$res_opt['inp_end'];
+                        break;
+                    case 'number':
+                        echo $res_opt['inp_st'].'<input type="number" name="'. $res_n.'" value="'.$res_vf[$i2].'"'.$res_opt['addon']. '>'.$res_opt['inp_end'];
+                        break;
+                    case 'input':
+                        echo $res_opt['inp_st'].'<input type="text" name="'. $res_n.'" value="'.$res_vf[$i2].'"'.$res_opt['addon']. '>'.$res_opt['inp_end'];
+                        break;
+                    case 'title':
+                        if ($i > 0 ) {
+                            break;
+                        }
+                    case 'label':
+                        $opt_at[$fields_id]['data'] = (string)$value;
+                        echo '<label '.$res_opt['addon'].' >'.(string)$value.'</label>';
+                        break;
+                    case 'select':
+                        echo  $res_opt['inp_st'].'<select name="'.$res_n.'" id="' . $res_n . '"'. $res_opt['addon'].'>';
+                        $opt_at[$fields_id]['data']='';
+                        foreach ($value->xpath('data') as $optselect ){
+                            $opt_at[$fields_id]['data'].= (string)$optselect.';';
+                            echo '<option value="' . $optselect. '"';
+                            if (strtolower((string)$optselect) == strtolower((string)$res_vf[$i2])) {
+                                echo ' selected="selected"';
+                            }
+                            echo '>' . (string)$optselect. '</option>';
+                        }
+                        echo  '</select>'.$res_opt['inp_end'];
+                        break;
+                }
+                echo '</td>';                                
+                $i2 ++;
+
+            }
+            echo '<td><input type="button" id="'.$res_id.'-btn" data-id="'.($i).'" data-for="'.$res_id.'" data-json="'.bin2hex(json_encode($opt_at)).'" class="table-js-add" value="+" />';
+            if ($i > 0 ) {
+                echo '<input type="button" id="'.$res_id.'-btndel" data-id="'.($i).'" data-for="'.$res_id.'" class="table-js-del" value="-" />';
+            }
+                            
+            echo '</td></tr>';
+            $i++;
+                            }
+            echo '</table>';
+            echo '<!-- END '.$res_id.' -->';
+        
+    }    
+
     
 }
 ?>

@@ -48,9 +48,9 @@
     function DispayDeviceActionsKeyFormatter(value, row, index) {
         var exp_model = '';
         exp_model += '<a href="?display=sccp_phone&tech_hardware=cisco&id=' + row['name'] + '"><i class="fa fa-pencil"></i></a> &nbsp; &nbsp;\n';
-        exp_model += '<a href="#delete_hardware" onclick="delete_oncliсk(this, &quot;'+row['name']+'&quot;)"><i class="fa fa-trash"></i></a>';
+        exp_model += '</a> &nbsp;<a class="btn-item-delete" data-for="hardware" data-id="' + row['name'] + '"><i class="fa fa-trash"></i></a>';
         return  exp_model;
-    }
+}
 
     function LineFormatter(value, row, index) {
         var data = value.split(";"); 

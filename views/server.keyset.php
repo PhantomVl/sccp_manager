@@ -164,10 +164,8 @@ $keynamearray = array('onhook'    => array(sname => 'ONHOOK', name =>'Display On
     function DispayActionsKeyFormatter(value, row, index) {
         var exp_model = '';
         if (row['softkeys'] !== 'default') {
-//            exp_model += '<a href="#edit_softkeys"   class="btn btn-info"   onclick="load_oncliсk(this, &quot;'+row['softkeys']+'&quot;)" data-toggle="modal" data-target=".edit_new_keyset"><i class="fa fa-pencil"></i></a>';
-//            exp_model += '<a href="#delete_softkeys" class="btn btn-danger" onclick="delete_oncliсk(this,&quot;'+row['softkeys']+'&quot;)"><i class="fa fa-trash"></i></a>';
             exp_model += '<a href="#edit_softkeys"   onclick="load_oncliсk(this, &quot;'+row['softkeys']+'&quot;)" data-toggle="modal" data-target=".edit_new_keyset"><i class="fa fa-pencil"></i></a>&nbsp;';
-            exp_model += '<a href="#delete_softkeys" onclick="delete_oncliсk(this,&quot;'+row['softkeys']+'&quot;)"><i class="fa fa-trash"></i></a>';
+            exp_model += '</a> &nbsp;<a class="btn-item-delete" data-for="softkeys" data-id="' + row['softkeys'] + '"><i class="fa fa-trash"></i></a>';
         }
         return  exp_model;
     }

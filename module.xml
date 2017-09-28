@@ -1,7 +1,7 @@
 <module>
 	<rawname>sccp_manager</rawname>
 	<name>SCCP Manager</name>
-	<version>13.0.0.1</version>
+	<version>13.0.0.2</version>
 	<type>setup</type>
 	<category>SCCP Connectivity</category>
 	<publisher>Alex GP</publisher>
@@ -13,6 +13,7 @@
 	</menuitems>
 	<changelog>
          * Version 13.0.0.1 * - Alfa Release tested on freepbx v.13.0.192.16, v.14.0.1.5
+         * Version 13.0.0.2 * - Release tested 
 	</changelog>
 	<location></location>
 	<supported>

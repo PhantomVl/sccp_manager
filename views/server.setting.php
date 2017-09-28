@@ -7,9 +7,28 @@
 // vim: set ai ts=4 sw=4 ft=phtml:
 
 // $var_hw_config = $this->get_db_SccpTableData("get_sccpdevice_byid", array('id' => 'SEPB8BEBF224790'));
+        global $astman;
+    $ast_out = $astman->Command("sccp show version");
+    if (preg_match("/Release.*\(/", $ast_out['data'] , $matches)) {
+        $ast_out = explode(' ', substr($matches[0],9,-1));
+        $res = 0;
+        if ($ast_out[0] >= '4.3.0'){
+            $res = 1;
+        }
+        if (!empty($ast_out[1]) && $ast_out[1] == 'develop'){           
+            $res = 10;
+            if (!empty($ast_out[3]) && $ast_out[3] >= '702487a'){           
+                $res += 1;
+            }
+        } else {
+           $res = 0;
+        }
+    }
 
-
-
+print_r(base_convert('702487a', 16, 10));
+print_r('<br>');
+print_r($version);
+print_r('<br>');
 ?>
 
 <form autocomplete="off" name="frm_general" id="frm_general" class="fpbx-submit" action="" method="post">

@@ -20,6 +20,8 @@
  *  ? Dial Templates - Hoto IT Include in XML.Config ???????
  *  - Dial Templates in device Configuration ( Enabled / inheret / Disabled ; templet )
  *  - WiFi Config (Bulk Deployment Utility for Cisco 7921, 7925, 7926)?????
+ *  - Change internal use Field to _Field (new fiture support in chan_sccp )
+ *  + Change Installer  ?? (test )
  *  - suport kvstore ?????
  *  - Shared Line ????
  *  - bug Fix
@@ -135,11 +137,12 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         $this->initTftpLang();
 
 
-        // Load Advanced Form Constuctor Data        
+        // Load Advanced Form Constuctor Data 
         if (file_exists(__DIR__ . '/views/sccpgeneral.xml')) {
             $this->xml_data = simplexml_load_file(__DIR__ . '/views/sccpgeneral.xml');
             $this->initVarfromXml(); // Overwrite Exist
-        }
+        } 
+            
     }
 
     /*
@@ -810,7 +813,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                     };
                     $value = implode(";", $save_codec);
                     break;
-                case 'hwlang':
+                case '_hwlang':
                     if (empty($get_settings[$hdr_prefix . 'netlang']) || empty($get_settings[$hdr_prefix . 'devlang'])) {
                         $value = 'null';
                     } else {
@@ -988,6 +991,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
     public function sccp_core_comands($params = array()) {
         global $astman;
         $cmd_list = array('get_softkey' => array('cmd' => "sccp show softkeyssets", 'param' => ''),
+            'get_version' => array('cmd' => "sccp show version", 'param' => ''),
             'get_device' => array('cmd' => "sccp show devices", 'param' => ''),
             'get_hints' => array('cmd' => "core show hints", 'param' => ''),
             'sccp_reload' => array('cmd' => "sccp reload force", 'param' => ''),
@@ -1064,7 +1068,38 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         }
         return $ast_key;
     }
-
+    /*
+     *  Итого res = (0,1,10,11)
+     */
+    public function get_comatable_sccp() {
+        $res = 0;        
+        $ast_out = $this->sccp_version();
+        if ($ast_out[0] >= '4.3.0'){
+            $res = 1;
+        }
+        if (!empty($ast_out[1]) && $ast_out[1] == 'develop'){           
+            $res = 10;
+            if (!empty($ast_out[3])) {
+                if (base_convert($ast_out[3],16,10) >= base_convert('702487a',16,10)){           
+                            $res  += 1;
+                }
+            }
+        }
+        $res = 0;        
+        
+        return $res;
+        
+    }
+    
+    public function sccp_version() {
+        $ast_out = $this->sccp_core_comands(array('cmd' => 'get_version'));
+        if (preg_match("/Release.*\(/", $ast_out['data'] , $matches)) {
+            $ast_out = substr($matches[0],9,-1);
+            return explode(' ', $ast_out);
+        } else {
+            return aray('unknown');
+        }
+    }
     public function sccp_list_keysets() {
         $ast_out = $this->sccp_core_comands(array('cmd' => 'get_softkey'));
 
@@ -1462,7 +1497,8 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
 
     function init_sccp_path() {
         global $db;
-        global $amp_conf;
+        global $amp_conf;        
+        
         $confDir = $amp_conf["ASTETCDIR"];
         if (empty($this->sccppath["asterisk"])) {
             if (strlen($confDir) < 1) {
@@ -1516,17 +1552,37 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 copy($filename, $dst_path . basename($filename));
             }
         }
+        $this->sccpvalues['sccp_comatable'] = $this->get_comatable_sccp();
 
         $dst = $_SERVER['DOCUMENT_ROOT'] . '/admin/modules/core/functions.inc/drivers/Sccp.class.php';
         if (!file_exists($dst)) {
-            $src_path = $_SERVER['DOCUMENT_ROOT'] . '/admin/modules/sccp_manager/conf/' . basename($dst);
-            copy($src_path, $dst);
+            $src_path = $_SERVER['DOCUMENT_ROOT'] . '/admin/modules/sccp_manager/conf/' . basename($dst).'.v'.$this->sccpvalues['sccp_comatable'];
+            if (file_exists($src_path)) {
+                copy($src_path, $dst);
+            } else {
+                $src_path = $_SERVER['DOCUMENT_ROOT'] . '/admin/modules/sccp_manager/conf/' . basename($dst);
+                copy($src_path, $dst);
+            }
         }
 
         if (!file_exists($this->sccppath["sccp_conf"])) { // System re Config 
             $sccpfile = file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/admin/modules/sccp_manager/conf/sccp.conf');
             file_put_contents($this->sccppath["sccp_conf"], $sccpfile);
         }
+
+        $dst = __DIR__ . '/views/sccpgeneral.xml';
+        if (!file_exists($dst)) {
+            $src_path = $_SERVER['DOCUMENT_ROOT'] . '/admin/modules/sccp_manager/conf/' . basename($dst).'.v'.$this->sccpvalues['sccp_comatable'];
+            if (file_exists($src_path)) {
+                // Plz Test directory permission run "amportal chown"
+                copy($src_path, $dst);
+            } else {
+                // Plz Test directory  ermission run "amportal chown"
+                $src_path = $_SERVER['DOCUMENT_ROOT'] . '/admin/modules/sccp_manager/conf/' . basename($dst);
+                copy($src_path, $dst);
+            }
+        } 
+
 
         $this->sccp_conf_init = $this->cnf_read->getConfig('sccp.conf');
 
@@ -1929,8 +1985,8 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                     case 'networkLocaleInfo':
                     case 'networkLocale':
                         $hwlang = '';
-                        if (!empty($var_hw_config["hwlang"])) {
-                            $hwlang = explode(':', $var_hw_config["hwlang"]);
+                        if (!empty($var_hw_config["_hwlang"])) {
+                            $hwlang = explode(':', $var_hw_config["_hwlang"]);
                         }
                         if (($key == 'networkLocaleInfo') || ($key == 'networkLocale')) {
 //                            $lang=$this->sccpvalues['netlang']['data'];

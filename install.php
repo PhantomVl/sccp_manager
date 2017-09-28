@@ -6,11 +6,129 @@ if (!defined('FREEPBX_IS_AUTH')) {
 
 global $db;
 global $amp_conf;
+global $astman;
 global $version;
+
+$db_config_v0 = array('sccpdevmodel' => array('enabled' => array('create' => "INT(2) NULL DEFAULT '0'"),
+                                           'nametemplet' => array('create' => 'VARCHAR(50) NULL DEFAULT NULL'),
+                                           'loadinformationid' => array('create' => "VARCHAR(30) NULL DEFAULT NULL" )
+                                           ),
+                     'sccpdevice' => array(
+                                           '_hwlang' => array('create' => 'varchar(12) NULL DEFAULT NULL'),
+//                                           'useRedialMenu' => array('create' => "VARCHAR(5) NULL DEFAULT 'no' AFTER `_hwlang`"),
+//                                           'dtmfmode' => array('create' => "VARCHAR(10) default 'outofband'", 'modyfy' => "VARCHAR(10)", 'def_modyfy'=> 'outofband'),
+                                           'deny' =>   array('create' => 'VARCHAR(100) NULL DEFAULT NULL','modyfy' => "VARCHAR(100)"),
+                                           'permit' => array('create' => 'VARCHAR(100) NULL DEFAULT NULL','modyfy' => "VARCHAR(100)"),
+                                           'backgroundImage' =>   array('create' => 'VARCHAR(255) NULL DEFAULT NULL','modyfy' => "VARCHAR(255)"),
+                                           'ringtone' => array('create' => 'VARCHAR(255) NULL DEFAULT NULL','modyfy' => "VARCHAR(255)"),
+                         
+                                           'transfer' =>array('def_modyfy' => "on"),
+                                           'cfwdall' =>array('def_modyfy' => "on"),
+                                           'cfwdbusy' =>array('def_modyfy' => "on"),
+                                           'directrtp' =>array('def_modyfy' => "off"),
+                                           'dndFeature' =>array('def_modyfy' => "on"),
+                                           'earlyrtp' =>array('def_modyfy' => "on"),
+                                           'audio_tos'=>array('def_modyfy' => "0xB8"),
+                                           'audio_cos'=>array('def_modyfy' => "6"),
+                                           'video_tos'=>array('def_modyfy' => "0x88"),
+                                           'video_cos'=>array('def_modyfy' => "5"),
+                         
+                                           'mwilamp' =>array('def_modyfy' => "on"),
+                                           'mwioncall' =>array('def_modyfy' => "on"),
+                                           'private' =>array('def_modyfy' => "on"),
+                                           'privacy' =>array('def_modyfy' => "off"),
+                                           'nat' =>array('def_modyfy' => "auto"),
+                                           'softkeyset' =>array('def_modyfy' => "softkeyset")
+                                            ),
+    
+                       'sccpline' => array('namedcallgroup' =>array('create' => "VARCHAR(100) NULL DEFAULT NULL AFTER `setvar`", 'modyfy' => "VARCHAR(100)"),
+                                           'namedpickupgroup' =>array('create' => "VARCHAR(100) NULL DEFAULT NULL AFTER `namedcallgroup`", 'modyfy' => "VARCHAR(100)"),
+                                           'adhocNumber' =>array('create' => "VARCHAR(45) NULL DEFAULT NULL AFTER `namedpickupgroup`"),
+                                           'meetme' =>array('create' => "VARCHAR(5) NULL DEFAULT NULL AFTER `adhocNumber`"),
+                                           'meetmenum' =>array('create' => "VARCHAR(45) NULL DEFAULT NULL AFTER `meetme`"),
+                                           'meetmeopts' =>array('create' => "VARCHAR(45) NULL DEFAULT NULL AFTER `meetmenum`"),
+                                           'regexten' =>array('create' => "VARCHAR(45) NULL DEFAULT NULL AFTER `meetmeopts`"),
+                                           'incominglimit' =>array('def_modyfy' => "2"),
+                                           'transfer' =>array('def_modyfy' => "on"),
+                                           'vmnum' =>array('def_modyfy' => "*97"),
+                                           'musicclass' =>array('def_modyfy' => "default"),
+                                           'echocancel' =>array('def_modyfy' => "on"),
+                                           'silencesuppression' =>array('def_modyfy' => "off"),
+                                           'dndFeature' =>array('create' => 'VARCHAR( 12 ) DEFAULT "on" AFTER `amaflags`', 'modyfy' => "VARCHAR(12)", 'def_modyfy' =>"on"),
+                                           'dnd' =>array('create' => 'VARCHAR( 12 ) DEFAULT "reject" AFTER `amaflags`', 'modyfy' => "VARCHAR(12)", 'def_modyfy' =>"reject")
+                           )
+        );
+
+
+$db_config_v3 = array('sccpdevmodel' => array('enabled' => array('create' => "INT(2) NULL DEFAULT '0'"),
+                                           'nametemplet' => array('create' => 'VARCHAR(50) NULL DEFAULT NULL'),
+                                           'loadinformationid' => array('create' => "VARCHAR(30) NULL DEFAULT NULL" )
+                                           ),
+                     'sccpdevice' => array(
+                                           'pickupexten' =>  array('rename' => "directed_pickup"),
+                                           'directed_pickup' =>  array('create' => "VARCHAR(5) NULL DEFAULT 'yes'"),
+	                                   'pickupcontext' =>  array('rename' => "directed_pickup_context"),
+	                                   'directed_pickup_context' =>  array('create' => "VARCHAR(100) NULL DEFAULT NULL"),
+                                           'pickupmodeanswer' => array('rename' => "directed_pickup_modeanswer"),
+                                           'directed_pickup_modeanswer' => array('create' => "VARCHAR(5) NULL DEFAULT 'yes'"),
+                                           'hwlang' => array('rename' => "_hwlang"),
+                                           '_hwlang' => array('create' => 'varchar(12) NULL DEFAULT NULL'),
+                                           'useRedialMenu' => array('create' => "VARCHAR(5) NULL DEFAULT 'no' AFTER `_hwlang`"),
+                         
+//                                           'dtmfmode' => array('create' => "VARCHAR(10) default 'outofband'", 'modyfy' => "VARCHAR(10)", 'def_modyfy'=> 'outofband'),
+                                           'dtmfmode' => array('drop' => "yes"),
+                         
+                                           'deny' =>   array('create' => 'VARCHAR(100) NULL DEFAULT NULL','modyfy' => "VARCHAR(100)"),
+                                           'permit' => array('create' => 'VARCHAR(100) NULL DEFAULT NULL','modyfy' => "VARCHAR(100)"),
+                                           'backgroundImage' =>   array('create' => 'VARCHAR(255) NULL DEFAULT NULL','modyfy' => "VARCHAR(255)"),
+                                           'ringtone' => array('create' => 'VARCHAR(255) NULL DEFAULT NULL','modyfy' => "VARCHAR(255)"),
+                         
+                                           'transfer' =>array('def_modyfy' => "on"),
+                                           'cfwdall' =>array('def_modyfy' => "on"),
+                                           'cfwdbusy' =>array('def_modyfy' => "on"),
+                                           'directrtp' =>array('def_modyfy' => "off"),
+                                           'dndFeature' =>array('def_modyfy' => "on"),
+                                           'earlyrtp' =>array('def_modyfy' => "on"),
+                                           'audio_tos'=>array('def_modyfy' => "0xB8"),
+                                           'audio_cos'=>array('def_modyfy' => "6"),
+                                           'video_tos'=>array('def_modyfy' => "0x88"),
+                                           'video_cos'=>array('def_modyfy' => "5"),
+                                           'trustphoneip'=>array('drop' => "yes"),
+                         
+                                           'mwilamp' =>array('def_modyfy' => "on"),
+                                           'mwioncall' =>array('def_modyfy' => "on"),
+                                           'private' =>array('def_modyfy' => "on"),
+                                           'privacy' =>array('def_modyfy' => "off"),
+                                           'nat' =>array('def_modyfy' => "auto"),
+                                           'softkeyset' =>array('def_modyfy' => "softkeyset")
+                                            ),
+    
+                       'sccpline' => array('namedcallgroup' =>array('create' => "VARCHAR(100) NULL DEFAULT NULL AFTER `setvar`", 'modyfy' => "VARCHAR(100)"),
+                                           'namedpickupgroup' =>array('create' => "VARCHAR(100) NULL DEFAULT NULL AFTER `namedcallgroup`", 'modyfy' => "VARCHAR(100)"),
+                                           'adhocNumber' =>array('create' => "VARCHAR(45) NULL DEFAULT NULL AFTER `namedpickupgroup`"),
+                                           'meetme' =>array('create' => "VARCHAR(5) NULL DEFAULT NULL AFTER `adhocNumber`"),
+                                           'meetmenum' =>array('create' => "VARCHAR(45) NULL DEFAULT NULL AFTER `meetme`"),
+                                           'meetmeopts' =>array('create' => "VARCHAR(45) NULL DEFAULT NULL AFTER `meetmenum`"),
+                                           'regexten' =>array('create' => "VARCHAR(45) NULL DEFAULT NULL AFTER `meetmeopts`"),
+                                           'rtptos' => array('drop' => "yes"),
+                                           'audio_tos' => array('drop' => "yes"),
+                                           'audio_cos' => array('drop' => "yes"),
+                                           'video_tos' => array('drop' => "yes"),
+                                           'video_cos' => array('drop' => "yes"),
+                                           'incominglimit' =>array('def_modyfy' => "2"),
+                                           'transfer' =>array('def_modyfy' => "on"),
+                                           'vmnum' =>array('def_modyfy' => "*97"),
+                                           'musicclass' =>array('def_modyfy' => "default"),
+                                           'echocancel' =>array('def_modyfy' => "on"),
+                                           'silencesuppression' =>array('def_modyfy' => "off"),
+                                           'dndFeature' =>array('create' => 'VARCHAR( 12 ) DEFAULT "on" AFTER `amaflags`', 'modyfy' => "VARCHAR(12)", 'def_modyfy' =>"on"),
+                                           'dnd' =>array('create' => 'VARCHAR( 12 ) DEFAULT "reject" AFTER `amaflags`', 'modyfy' => "VARCHAR(12)", 'def_modyfy' =>"reject")
+                           )
+        );
 
 $autoincrement = (($amp_conf["AMPDBENGINE"] == "sqlite") || ($amp_conf["AMPDBENGINE"] == "sqlite3")) ? "AUTOINCREMENT" : "AUTO_INCREMENT";
 
-$table_req = array('sccpdevice', 'sccpline', 'buttonconfig', 'sccpdeviceconfig');
+$table_req = array('sccpdevice', 'sccpline', 'buttonconfig');
 
 $sql = <<< END
 	CREATE TABLE IF NOT EXISTS `sccpsettings` (
@@ -31,13 +149,19 @@ foreach ($table_req as $value) {
 //         print_r("none, creating table :". $value);
         out(_("none, Can't fient table: " . $value));
         out(_("none, Plz. Open chai-sccp/conf  directory to create DB scheme"));
-        die(_("none, creating table: " . $value));
+        die("!!!! Instalation error. Can not find required ".$value." table !!!!!!\n");
+//        die_freepbx("!!!! Instalation error. Can not find required ".$value." table !!!!!!\n");
     }
 }
 
 
 $version = FreePBX::Config()->get('ASTVERSION');
 outn(_("checking Version : ").$version);
+
+$dst = $_SERVER['DOCUMENT_ROOT'] . '/admin/modules/sccp_manager/views';
+if (fileowner($_SERVER['DOCUMENT_ROOT']) != fileowner($dst)){
+    die('Plz Test permission run "amportal chown"');
+}
 
 if (!empty($version)) {
     // Woo, we have a version
@@ -47,16 +171,43 @@ if (!empty($version)) {
 } else {
     // Well. I don't know what version of Asterisk I'm running.
     // Assume less than 12.
+
     $ver_compatable = false;
     die('Versin is not comapable');
 }
+    $ast_out = $astman->Command("sccp show version");
+    $db_config = $db_config_v0;
+    if (preg_match("/Release.*\(/", $ast_out['data'] , $matches)) {
+        $ast_out = explode(' ', substr($matches[0],9,-1));
+        $sccp_ver = 0;
+        if ($ast_out[0] >= '4.3.0'){
+            $sccp_ver = 1;
+        }
+        if (!empty($ast_out[1]) && $ast_out[1] == 'develop'){           
+            $sccp_ver = 10;
+            if (!empty($ast_out[3])) {
+                if (base_convert($ast_out[3],16,10) >= base_convert('702487a',16,10)){           
+                    $sccp_ver += 1;
+                    $db_config = $db_config_v3;
+
+                }
+            }
+        } else {
+           $sccp_ver = 0;
+        }
+    }
+
+// test
+//    $sccp_ver = 0;
+//    $db_config = $db_config_v0;
+// test
 
     out(_("none, creating table"));
     $check = $db->query($sql);
-//    sql($sql);
     if (db::IsError($check)) {
         die_freepbx("Can not create sccpdevmodel table\n");
     }
+    outn(_(" Sccp Version : ").$sccp_ver);
 
     $sql = "CREATE TABLE IF NOT EXISTS `sccpdevmodel` (
     `model` varchar(20) NOT NULL DEFAULT '',
@@ -75,69 +226,86 @@ if (!empty($version)) {
     if (db::IsError($check)) {
         die_freepbx("Can not create sccpsettings table\n");
     }
-    if ($db->getAll('SHOW COLUMNS FROM sccpdevice WHERE FIELD = "pickupexten"')) {
-        out(_("none, modify table from old scheme"));
-        $sql = "ALTER TABLE `sccpdevice`
-    	    CHANGE COLUMN `pickupexten` `directed_pickup` VARCHAR(5) NULL DEFAULT 'yes',
-	    CHANGE COLUMN `pickupcontext` `directed_pickup_context` VARCHAR(100) NULL DEFAULT '' ,
-	    CHANGE COLUMN `pickupmodeanswer` `directed_pickup_modeanswer` VARCHAR(5) NULL DEFAULT 'yes'";
-        $check = $db->query($sql);
-        if (DB::IsError($check)) {
-            die_freepbx("Can not add loadinformationid into sccpdevmodel table\n");
-        }
-    }
-
+    out(_("none, Modify DB schama"));
     
-    if (!$db->getAll('SHOW COLUMNS FROM sccpdevmodel WHERE FIELD = "loadinformationid"')) {
-        out(_("none, modify table from old scheme"));
-        $sql = "ALTER TABLE `sccpdevmodel` ADD `loadinformationid` varchar(30);";
-        $check = $db->query($sql);
-        if (DB::IsError($check)) {
-            die_freepbx("Can not add loadinformationid into sccpdevmodel table\n");
+    foreach ($db_config as $tabl_name => &$tab_modify) {
+// 0 - name 1-type  4- default
+        $sql = "DESCRIBE ".$tabl_name."";
+        $db_result= $db->getAll($sql);
+        if (DB::IsError($db_result)) {
+            die_freepbx("Can not add get informations from ".$tabl_name." table\n");
+        }
+        foreach ($db_result as $tabl_data){
+            $fld_id = $tabl_data[0];
+            if (!empty($tab_modify[$fld_id])) {
+                $db_config[$tabl_name][$fld_id]['status']  = 'yes';
+                if (!empty($tab_modify[$fld_id]['def_modyfy'])) {
+                    if (strtoupper($tab_modify[$fld_id]['def_modyfy']) ==  strtoupper($tabl_data[4])) {
+                        $db_config[$tabl_name][$fld_id]['def_mod_stat']  = 'no';
+                    }
+                    if ( strtoupper ($tab_modify[$fld_id]['modyfy']) ==  strtoupper($tabl_data[1])) {
+                        $db_config[$tabl_name][$fld_id]['mod_stat']  = 'no';
+                    }
+                }
+                if (!empty($tab_modify[$fld_id]['rename'])) {
+                    $fld_id_source = $tab_modify[$fld_id]['rename'];
+                    $db_config[$tabl_name][$fld_id_source]['status']  = 'yes';
+                    $db_config[$tabl_name][$fld_id]['create']  = $db_config[$tabl_name][$fld_id_source]['create'];
+                }
+            }
+        }
+        $sql_create =''; 
+        $sql_modify =''; 
+        
+        foreach ($tab_modify as $row_fld => $row_data){
+            if (empty($row_data['status'])) {
+                if (!empty($row_data['create'])) {
+                    $sql_create .='ADD COLUMN `'.$row_fld.'` '. $row_data['create'].', ';
+                }
+            } else {
+                if (!empty($row_data['rename'])) {                    
+                    $sql_modify .= 'CHANGE COLUMN `'.$row_fld.'` `'. $row_data['rename'].'` '.$row_data['create'].', ';
+                    
+                }
+                if (!empty($row_data['modyfy'])) {
+                    if (empty($row_data['mod_stat'])) {
+                        if (!empty($row_data['create'])) {
+                            $sql_modify .=  "CHANGE COLUMN  `".$row_fld."` `".$row_fld."` ".$row_data['create'].", ";
+                        } else {
+                            $sql_modify .=  "CHANGE COLUMN  `".$row_fld."` `".$row_fld."` ".$row_data['modyfy']." DEFAULT '".$row_data['def_modyfy']."', ";
+                        }
+                        $row_data['def_mod_stat'] = 'no';
+                    }
+                }
+                if (!empty($row_data['def_modyfy'])) {
+                    if (empty($row_data['def_mod_stat'])) {
+                        $sql_modify .=  "ALTER COLUMN `".$row_fld."` SET DEFAULT '".$row_data['def_modyfy']."', ";
+                    }
+                }
+                if (!empty($row_data['drop'])) {                    
+                    $sql_create .='DROP COLUMN `'.$row_fld.'`, ';
+                }
+                
+            }
+        }
+        if (!empty($sql_create)) {
+            $sql_create = "ALTER TABLE `".$tabl_name."` ". substr($sql_create,0,-2); 
+            $check = $db->query($sql_create);
+            if (db::IsError($check)) {
+                die_freepbx("Can not create ".$tabl_name." table sql: ".$sql_create."n");
+                die_freepbx("Can not create ".$tabl_name." table\n");
+        }
+            
+        }
+        if (!empty($sql_modify)) {
+            $sql_modify = "ALTER TABLE `".$tabl_name."` ". substr($sql_modify,0,-2); 
+            $check = $db->query($sql_modify);
+            if (db::IsError($check)) {
+                die_freepbx("Can not modify ".$tabl_name." table sql: ".$sql_modify."n");
+                die_freepbx("Can not modify ".$tabl_name." table\n");
+            }
         }
     }
-    if (!$db->getAll('SHOW COLUMNS FROM sccpdevmodel WHERE FIELD = "nametemplet"')) {
-        out(_("none, modify table from old scheme"));
-        $sql = "ALTER TABLE `sccpdevmodel` ADD COLUMN `enabled` INT(2) NULL DEFAULT '0', ADD COLUMN `nametemplet` VARCHAR(50) NULL DEFAULT NULL,";
-        $check = $db->query($sql);
-        if (DB::IsError($check)) {
-            die_freepbx("Can not add loadinformationid into sccpdevmodel table\n");
-        }
-    }
-    if (!$db->getAll('SHOW COLUMNS FROM sccpdevice WHERE FIELD = "hwlang"')) {
-        out(_("none, modify table from old scheme"));
-        $sql = "ALTER TABLE `sccpdevice` ADD COLUMN `hwlang` varchar(12) NULL DEFAULT NULL,
-                ADD COLUMN `useRedialMenu` VARCHAR(5) NULL DEFAULT 'no' AFTER `hwlang`
-                ";
-        $check = $db->query($sql);
-        if (DB::IsError($check)) {
-            die_freepbx("Can not add loadinformationid into sccpdevmodel table\n");
-        }
-    }
-    if (!$db->getAll('SHOW COLUMNS FROM sccpdevice WHERE FIELD = "dtmfmode"')) {
-        out(_("none, modify table from old scheme"));
-        $sql = "ALTER TABLE `sccpdevice` ADD COLUMN `dtmfmode` varchar(10) default NULL";
-        $check = $db->query($sql);
-        if (DB::IsError($check)) {
-            die_freepbx("Can not add loadinformationid into sccpdevmodel table\n");
-        }
-    }
-    if (!$db->getAll('SHOW COLUMNS FROM sccpline WHERE FIELD = "adhocNumber"')) {
-        out(_("none, modify sccpline table from old scheme"));
-        $sql = "ALTER TABLE `sccpline`
-                ADD COLUMN `namedcallgroup` VARCHAR(45) NULL DEFAULT NULL AFTER `setvar`,
-                ADD COLUMN `namedpickupgroup` VARCHAR(45) NULL DEFAULT NULL AFTER `namedcallgroup`,
-                ADD COLUMN `adhocNumber` VARCHAR(45) NULL DEFAULT NULL AFTER `namedpickupgroup`,
-                ADD COLUMN `meetme` VARCHAR(5) NULL DEFAULT NULL AFTER `adhocNumber`,
-                ADD COLUMN `meetmenum` VARCHAR(45) NULL DEFAULT NULL AFTER `meetme`,
-                ADD COLUMN `meetmeopts` VARCHAR(45) NULL DEFAULT NULL AFTER `meetmenum`,
-                ADD COLUMN `regexten` VARCHAR(45) NULL DEFAULT NULL AFTER `meetmeopts`;";
-        $check = $db->query($sql);
-        if (DB::IsError($check)) {
-            die_freepbx("Can not add loadinformationid into sccpdevmodel table\n");
-        }
-    }
-
 
     out(_("none, Uptade Table Info"));
 
@@ -152,41 +320,13 @@ if (!empty($version)) {
     if (DB::IsError($check)) {
         die_freepbx("Can not REPLACE defaults into sccpdevmodel table\n");
     }
-
-    $sql = "ALTER TABLE sccpline
-	 ALTER COLUMN incominglimit SET DEFAULT '2',
-	 ALTER COLUMN transfer SET DEFAULT 'on',
-	 ALTER COLUMN vmnum SET DEFAULT '*97',
-	 ALTER COLUMN musicclass SET DEFAULT 'default',
-	 ALTER COLUMN echocancel SET DEFAULT 'on',
-	 ALTER COLUMN silencesuppression SET DEFAULT 'off',
-	 CHANGE COLUMN `dnd` `dnd` VARCHAR(12) NULL DEFAULT 'off'
-    ";
-
+    
+    $sql = 'UPDATE `sccpdevice` set audio_tos="0xB8",audio_cos="6",video_tos="0x88",video_cos="5" where audio_tos=NULL or audio_tos="";';
     $check = $db->query($sql);
     if (DB::IsError($check)) {
-        die_freepbx("Can not modify sccpline table\n");
+        die_freepbx("Can not REPLACE defaults into sccpdevice table\n");
     }
-
-    $sql = "ALTER TABLE sccpdevice
-	ALTER COLUMN transfer SET DEFAULT 'on',
-	ALTER COLUMN cfwdall SET DEFAULT 'on',
-	ALTER COLUMN cfwdbusy SET DEFAULT 'on',
-	ALTER COLUMN dtmfmode SET DEFAULT 'outofband',
-	ALTER COLUMN dndFeature SET DEFAULT 'on',
-	ALTER COLUMN directrtp SET DEFAULT 'off',
-	ALTER COLUMN earlyrtp SET DEFAULT 'progress',
-	ALTER COLUMN mwilamp SET DEFAULT 'on',
-	ALTER COLUMN mwioncall SET DEFAULT 'on',
-	ALTER COLUMN private SET DEFAULT 'on',
-	ALTER COLUMN privacy SET DEFAULT 'off',
-	ALTER COLUMN nat SET DEFAULT 'off',
-	ALTER COLUMN softkeyset SET DEFAULT 'softkeyset'
-    ";
-    $check = $db->query($sql);
-    if (DB::IsError($check)) {
-        die_freepbx("Can not modify sccpdevice table\n");
-    }
+    
     $sql = "DROP TRIGGER IF EXISTS trg_buttonconfig;
             DELIMITER $$
             CREATE TRIGGER trg_buttonconfig BEFORE INSERT ON buttonconfig
@@ -204,7 +344,7 @@ if (!empty($version)) {
     if (DB::IsError($check)) {
         die_freepbx("Can not modify sccpdevice table\n");
     }
-    $sql = "CREATE OR REPLACE
+    $sql_v3 = "CREATE OR REPLACE
             ALGORITHM = MERGE
             VIEW sccpdeviceconfig AS
             SELECT GROUP_CONCAT( CONCAT_WS( ',', buttonconfig.type, buttonconfig.name, buttonconfig.options )
@@ -213,30 +353,35 @@ if (!empty($version)) {
             FROM sccpdevice
             LEFT JOIN buttonconfig ON ( buttonconfig.device = sccpdevice.name )
             GROUP BY sccpdevice.name;";
+
     
-    $sql = "CREATE OR REPLACE
-            ALGORITHM = MERGE
+    $sql_v0 = "CREATE OR REPLACE
+            ALGORITHM = MERGE            
             VIEW sccpdeviceconfig AS
+            
             SELECT GROUP_CONCAT( CONCAT_WS( ',', buttonconfig.type, buttonconfig.name, buttonconfig.options )
             ORDER BY instance ASC
             SEPARATOR ';' ) AS button,
             `sccpdevice`.`type` AS `type`,`sccpdevice`.`addon` AS `addon`,`sccpdevice`.`description` AS `description`,`sccpdevice`.`tzoffset` AS `tzoffset`,
             `sccpdevice`.`transfer` AS `transfer`,`sccpdevice`.`cfwdall` AS `cfwdall`,`sccpdevice`.`cfwdbusy` AS `cfwdbusy`,`sccpdevice`.`imageversion` AS `imageversion`,
             `sccpdevice`.`deny` AS `deny`,`sccpdevice`.`permit` AS `permit`,`sccpdevice`.`dndFeature` AS `dndFeature`,`sccpdevice`.`directrtp` AS `directrtp`,
-            `sccpdevice`.`earlyrtp` AS `earlyrtp`,`sccpdevice`.`mwilamp` AS `mwilamp`,`sccpdevice`.`mwioncall` AS `mwioncall`,`sccpdevice`.`directed_pickup` AS `directed_pickup`,
-            `sccpdevice`.`directed_pickup_context` AS `directed_pickup_context`,`sccpdevice`.`directed_pickup_modeanswer` AS `directed_pickup_modeanswer`,
-            `sccpdevice`.`private` AS `private`,`sccpdevice`.`privacy` AS `privacy`,`sccpdevice`.`nat` AS `nat`,`sccpdevice`.`softkeyset` AS `softkeyset`,
-            `sccpdevice`.`audio_tos` AS `audio_tos`,`sccpdevice`.`audio_cos` AS `audio_cos`,`sccpdevice`.`video_tos` AS `video_tos`,`sccpdevice`.`video_cos` AS `video_cos`,
-            `sccpdevice`.`conf_allow` AS `conf_allow`,`sccpdevice`.`conf_play_general_announce` AS `conf_play_general_announce`,
-            `sccpdevice`.`conf_play_part_announce` AS `conf_play_part_announce`,`sccpdevice`.`conf_mute_on_entry` AS `conf_mute_on_entry`,
-            `sccpdevice`.`conf_music_on_hold_class` AS `conf_music_on_hold_class`,`sccpdevice`.`conf_show_conflist` AS `conf_show_conflist`,
-            `sccpdevice`.`setvar` AS `setvar`,`sccpdevice`.`disallow` AS `disallow`,`sccpdevice`.`allow` AS `allow`,`sccpdevice`.`backgroundImage` AS `backgroundImage`,
-            `sccpdevice`.`ringtone` AS `ringtone`,`sccpdevice`.`name` AS `name`,`sccpdevice`.`dtmfmode` AS `dtmfmode`,`sccpdevice`.`useRedialMenu` AS `useRedialMenu`
+            `sccpdevice`.`earlyrtp` AS `earlyrtp`,`sccpdevice`.`mwilamp` AS `mwilamp`,`sccpdevice`.`mwioncall` AS `mwioncall`,`sccpdevice`.`pickupexten` AS `pickupexten`,
+            `sccpdevice`.`pickupcontext` AS `pickupcontext`,`sccpdevice`.`pickupmodeanswer` AS `pickupmodeanswer`,`sccpdevice`.`private` AS `private`,
+            `sccpdevice`.`privacy` AS `privacy`,`sccpdevice`.`nat` AS `nat`,`sccpdevice`.`softkeyset` AS `softkeyset`,`sccpdevice`.`audio_tos` AS `audio_tos`,
+            `sccpdevice`.`audio_cos` AS `audio_cos`,`sccpdevice`.`video_tos` AS `video_tos`,`sccpdevice`.`video_cos` AS `video_cos`,`sccpdevice`.`conf_allow` AS `conf_allow`,
+            `sccpdevice`.`conf_play_general_announce` AS `conf_play_general_announce`,`sccpdevice`.`conf_play_part_announce` AS `conf_play_part_announce`,
+            `sccpdevice`.`conf_mute_on_entry` AS `conf_mute_on_entry`,`sccpdevice`.`conf_music_on_hold_class` AS `conf_music_on_hold_class`,
+            `sccpdevice`.`conf_show_conflist` AS `conf_show_conflist`,`sccpdevice`.`setvar` AS `setvar`,`sccpdevice`.`disallow` AS `disallow`,
+            `sccpdevice`.`allow` AS `allow`,`sccpdevice`.`backgroundImage` AS `backgroundImage`,`sccpdevice`.`ringtone` AS `ringtone`,`sccpdevice`.`name` AS `name`
             FROM sccpdevice
             LEFT JOIN buttonconfig ON ( buttonconfig.device = sccpdevice.name )
             GROUP BY sccpdevice.name;";
 
-    $check = $db->query($sql);
+    if ($sccp_ver == 11)  {
+        $check = $db->query($sql_v3);
+    } else {
+        $check = $db->query($sql_v0);
+    }
     if (DB::IsError($check)) {
         die_freepbx("Can not modify sccpdevice table\n");
     }

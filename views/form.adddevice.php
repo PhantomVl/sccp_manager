@@ -20,7 +20,7 @@ if (!empty($_REQUEST['id'])) {
                     $val = str_replace('SEP', '', $val);
                     $val = implode('.',sscanf($val, '%4s%4s%4s')); // Convert to Cisco display Format 
                     break;
-                case 'hwlang':
+                case '_hwlang':
                     $tmpar =  explode(":",$val);
                     $def_val['netlang'] =  array("keyword" => 'netlang', "data" => $tmpar[0], "seq" => "99");
                     $def_val['devlang'] =  array("keyword" => 'devlang', "data" => $tmpar[1], "seq" => "99");

@@ -40,7 +40,7 @@ Make sure you have the following installed on your system:
   - clang >= 3.6  (note: older not supported, higher advised)
 - gnu make
 - pbx:
-  - asterisk >= 1.6.2 (absolute minimum)
+  - asterisk >= 1.8 (absolute minimum & not recomended)
   - asterisk >= 13.7 or asterisk >= 14.0 recommended
 - gui:
   - freepbx >= 13.0.192

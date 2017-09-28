@@ -16,46 +16,45 @@ $db_config_v0 = array('sccpdevmodel' => array('enabled' => array('create' => "IN
                      'sccpdevice' => array(
                                            '_hwlang' => array('create' => 'varchar(12) NULL DEFAULT NULL'),
 //                                           'useRedialMenu' => array('create' => "VARCHAR(5) NULL DEFAULT 'no' AFTER `_hwlang`"),
-//                                           'dtmfmode' => array('create' => "VARCHAR(10) default 'outofband'", 'modyfy' => "VARCHAR(10)", 'def_modyfy'=> 'outofband'),
-                                           'deny' =>   array('create' => 'VARCHAR(100) NULL DEFAULT NULL','modyfy' => "VARCHAR(100)"),
-                                           'permit' => array('create' => 'VARCHAR(100) NULL DEFAULT NULL','modyfy' => "VARCHAR(100)"),
-                                           'backgroundImage' =>   array('create' => 'VARCHAR(255) NULL DEFAULT NULL','modyfy' => "VARCHAR(255)"),
-                                           'ringtone' => array('create' => 'VARCHAR(255) NULL DEFAULT NULL','modyfy' => "VARCHAR(255)"),
+//                                           'dtmfmode' => array('create' => "VARCHAR(10) default 'outofband'", 'modify' => "VARCHAR(10)", 'def_modify'=> 'outofband'),
+                                           'deny' =>   array('create' => 'VARCHAR(100) NULL DEFAULT NULL','modify' => "VARCHAR(100)"),
+                                           'permit' => array('create' => 'VARCHAR(100) NULL DEFAULT NULL','modify' => "VARCHAR(100)"),
+                                           'backgroundImage' =>   array('create' => 'VARCHAR(255) NULL DEFAULT NULL','modify' => "VARCHAR(255)"),
+                                           'ringtone' => array('create' => 'VARCHAR(255) NULL DEFAULT NULL','modify' => "VARCHAR(255)"),
                          
-                                           'transfer' =>array('def_modyfy' => "on"),
-                                           'cfwdall' =>array('def_modyfy' => "on"),
-                                           'cfwdbusy' =>array('def_modyfy' => "on"),
-                                           'directrtp' =>array('def_modyfy' => "off"),
-                                           'dndFeature' =>array('def_modyfy' => "on"),
-                                           'earlyrtp' =>array('def_modyfy' => "on"),
-                                           'audio_tos'=>array('def_modyfy' => "0xB8"),
-                                           'audio_cos'=>array('def_modyfy' => "6"),
-                                           'video_tos'=>array('def_modyfy' => "0x88"),
-                                           'video_cos'=>array('def_modyfy' => "5"),
+                                           'transfer' =>array('def_modify' => "on"),
+                                           'cfwdall' =>array('def_modify' => "on"),
+                                           'cfwdbusy' =>array('def_modify' => "on"),
+                                           'directrtp' =>array('def_modify' => "off"),
+                                           'dndFeature' =>array('def_modify' => "on"),
+                                           'earlyrtp' =>array('def_modify' => "on"),
+                                           'audio_tos'=>array('def_modify' => "0xB8"),
+                                           'audio_cos'=>array('def_modify' => "6"),
+                                           'video_tos'=>array('def_modify' => "0x88"),
+                                           'video_cos'=>array('def_modify' => "5"),
                          
-                                           'mwilamp' =>array('def_modyfy' => "on"),
-                                           'mwioncall' =>array('def_modyfy' => "on"),
-                                           'private' =>array('def_modyfy' => "on"),
-                                           'privacy' =>array('def_modyfy' => "off"),
-                                           'nat' =>array('def_modyfy' => "auto"),
-                                           'softkeyset' =>array('def_modyfy' => "softkeyset")
+                                           'mwilamp' =>array('def_modify' => "on"),
+                                           'mwioncall' =>array('def_modify' => "on"),
+                                           'private' =>array('def_modify' => "on"),
+                                           'privacy' =>array('def_modify' => "off"),
+                                           'nat' =>array('def_modify' => "auto"),
+                                           'softkeyset' =>array('def_modify' => "softkeyset")
                                             ),
     
-                       'sccpline' => array('namedcallgroup' =>array('create' => "VARCHAR(100) NULL DEFAULT NULL AFTER `setvar`", 'modyfy' => "VARCHAR(100)"),
-                                           'namedpickupgroup' =>array('create' => "VARCHAR(100) NULL DEFAULT NULL AFTER `namedcallgroup`", 'modyfy' => "VARCHAR(100)"),
+                       'sccpline' => array('namedcallgroup' =>array('create' => "VARCHAR(100) NULL DEFAULT NULL AFTER `setvar`", 'modify' => "VARCHAR(100)"),
+                                           'namedpickupgroup' =>array('create' => "VARCHAR(100) NULL DEFAULT NULL AFTER `namedcallgroup`", 'modify' => "VARCHAR(100)"),
                                            'adhocNumber' =>array('create' => "VARCHAR(45) NULL DEFAULT NULL AFTER `namedpickupgroup`"),
                                            'meetme' =>array('create' => "VARCHAR(5) NULL DEFAULT NULL AFTER `adhocNumber`"),
                                            'meetmenum' =>array('create' => "VARCHAR(45) NULL DEFAULT NULL AFTER `meetme`"),
                                            'meetmeopts' =>array('create' => "VARCHAR(45) NULL DEFAULT NULL AFTER `meetmenum`"),
                                            'regexten' =>array('create' => "VARCHAR(45) NULL DEFAULT NULL AFTER `meetmeopts`"),
-                                           'incominglimit' =>array('def_modyfy' => "2"),
-                                           'transfer' =>array('def_modyfy' => "on"),
-                                           'vmnum' =>array('def_modyfy' => "*97"),
-                                           'musicclass' =>array('def_modyfy' => "default"),
-                                           'echocancel' =>array('def_modyfy' => "on"),
-                                           'silencesuppression' =>array('def_modyfy' => "off"),
-                                           'dndFeature' =>array('create' => 'VARCHAR( 12 ) DEFAULT "on" AFTER `amaflags`', 'modyfy' => "VARCHAR(12)", 'def_modyfy' =>"on"),
-                                           'dnd' =>array('create' => 'VARCHAR( 12 ) DEFAULT "reject" AFTER `amaflags`', 'modyfy' => "VARCHAR(12)", 'def_modyfy' =>"reject")
+                                           'incominglimit' =>array('def_modify' => "2"),
+                                           'transfer' =>array('def_modify' => "on"),
+                                           'vmnum' =>array('def_modify' => "*97"),
+                                           'musicclass' =>array('def_modify' => "default"),
+                                           'echocancel' =>array('def_modify' => "on"),
+                                           'silencesuppression' =>array('def_modify' => "off"),
+                                           'dnd' =>array('create' => 'VARCHAR( 12 ) DEFAULT "reject" AFTER `amaflags`', 'modify' => "VARCHAR(12)", 'def_modify' =>"reject")
                            )
         );
 
@@ -75,36 +74,35 @@ $db_config_v3 = array('sccpdevmodel' => array('enabled' => array('create' => "IN
                                            '_hwlang' => array('create' => 'varchar(12) NULL DEFAULT NULL'),
                                            'useRedialMenu' => array('create' => "VARCHAR(5) NULL DEFAULT 'no' AFTER `_hwlang`"),
                          
-//                                           'dtmfmode' => array('create' => "VARCHAR(10) default 'outofband'", 'modyfy' => "VARCHAR(10)", 'def_modyfy'=> 'outofband'),
+//                                           'dtmfmode' => array('create' => "VARCHAR(10) default 'outofband'", 'modify' => "VARCHAR(10)", 'def_modify'=> 'outofband'),
                                            'dtmfmode' => array('drop' => "yes"),
                          
-                                           'deny' =>   array('create' => 'VARCHAR(100) NULL DEFAULT NULL','modyfy' => "VARCHAR(100)"),
-                                           'permit' => array('create' => 'VARCHAR(100) NULL DEFAULT NULL','modyfy' => "VARCHAR(100)"),
-                                           'backgroundImage' =>   array('create' => 'VARCHAR(255) NULL DEFAULT NULL','modyfy' => "VARCHAR(255)"),
-                                           'ringtone' => array('create' => 'VARCHAR(255) NULL DEFAULT NULL','modyfy' => "VARCHAR(255)"),
+                                           'deny' =>   array('create' => 'VARCHAR(100) NULL DEFAULT NULL','modify' => "VARCHAR(100)"),
+                                           'permit' => array('create' => 'VARCHAR(100) NULL DEFAULT NULL','modify' => "VARCHAR(100)"),
+                                           'backgroundImage' =>   array('create' => 'VARCHAR(255) NULL DEFAULT NULL','modify' => "VARCHAR(255)"),
+                                           'ringtone' => array('create' => 'VARCHAR(255) NULL DEFAULT NULL','modify' => "VARCHAR(255)"),
                          
-                                           'transfer' =>array('def_modyfy' => "on"),
-                                           'cfwdall' =>array('def_modyfy' => "on"),
-                                           'cfwdbusy' =>array('def_modyfy' => "on"),
-                                           'directrtp' =>array('def_modyfy' => "off"),
-                                           'dndFeature' =>array('def_modyfy' => "on"),
-                                           'earlyrtp' =>array('def_modyfy' => "on"),
-                                           'audio_tos'=>array('def_modyfy' => "0xB8"),
-                                           'audio_cos'=>array('def_modyfy' => "6"),
-                                           'video_tos'=>array('def_modyfy' => "0x88"),
-                                           'video_cos'=>array('def_modyfy' => "5"),
+                                           'transfer' =>array('def_modify' => "on"),
+                                           'cfwdall' =>array('def_modify' => "on"),
+                                           'cfwdbusy' =>array('def_modify' => "on"),
+                                           'directrtp' =>array('def_modify' => "off"),
+                                           'dndFeature' =>array('def_modify' => "on"),
+                                           'earlyrtp' =>array('def_modify' => "on"),
+                                           'audio_tos'=>array('def_modify' => "0xB8"),
+                                           'audio_cos'=>array('def_modify' => "6"),
+                                           'video_tos'=>array('def_modify' => "0x88"),
+                                           'video_cos'=>array('def_modify' => "5"),
                                            'trustphoneip'=>array('drop' => "yes"),
                          
-                                           'mwilamp' =>array('def_modyfy' => "on"),
-                                           'mwioncall' =>array('def_modyfy' => "on"),
-                                           'private' =>array('def_modyfy' => "on"),
-                                           'privacy' =>array('def_modyfy' => "off"),
-                                           'nat' =>array('def_modyfy' => "auto"),
-                                           'softkeyset' =>array('def_modyfy' => "softkeyset")
+                                           'mwilamp' =>array('def_modify' => "on"),
+                                           'mwioncall' =>array('def_modify' => "on"),
+                                           'private' =>array('def_modify' => "on"),
+                                           'privacy' =>array('def_modify' => "off"),
+                                           'nat' =>array('def_modify' => "auto"),
+                                           'softkeyset' =>array('def_modify' => "softkeyset")
                                             ),
-    
-                       'sccpline' => array('namedcallgroup' =>array('create' => "VARCHAR(100) NULL DEFAULT NULL AFTER `setvar`", 'modyfy' => "VARCHAR(100)"),
-                                           'namedpickupgroup' =>array('create' => "VARCHAR(100) NULL DEFAULT NULL AFTER `namedcallgroup`", 'modyfy' => "VARCHAR(100)"),
+                       'sccpline' => array('namedcallgroup' =>array('create' => "VARCHAR(100) NULL DEFAULT NULL AFTER `setvar`", 'modify' => "VARCHAR(100)"),
+                                           'namedpickupgroup' =>array('create' => "VARCHAR(100) NULL DEFAULT NULL AFTER `namedcallgroup`", 'modify' => "VARCHAR(100)"),
                                            'adhocNumber' =>array('create' => "VARCHAR(45) NULL DEFAULT NULL AFTER `namedpickupgroup`"),
                                            'meetme' =>array('create' => "VARCHAR(5) NULL DEFAULT NULL AFTER `adhocNumber`"),
                                            'meetmenum' =>array('create' => "VARCHAR(45) NULL DEFAULT NULL AFTER `meetme`"),
@@ -115,14 +113,13 @@ $db_config_v3 = array('sccpdevmodel' => array('enabled' => array('create' => "IN
                                            'audio_cos' => array('drop' => "yes"),
                                            'video_tos' => array('drop' => "yes"),
                                            'video_cos' => array('drop' => "yes"),
-                                           'incominglimit' =>array('def_modyfy' => "2"),
-                                           'transfer' =>array('def_modyfy' => "on"),
-                                           'vmnum' =>array('def_modyfy' => "*97"),
-                                           'musicclass' =>array('def_modyfy' => "default"),
-                                           'echocancel' =>array('def_modyfy' => "on"),
-                                           'silencesuppression' =>array('def_modyfy' => "off"),
-                                           'dndFeature' =>array('create' => 'VARCHAR( 12 ) DEFAULT "on" AFTER `amaflags`', 'modyfy' => "VARCHAR(12)", 'def_modyfy' =>"on"),
-                                           'dnd' =>array('create' => 'VARCHAR( 12 ) DEFAULT "reject" AFTER `amaflags`', 'modyfy' => "VARCHAR(12)", 'def_modyfy' =>"reject")
+                                           'incominglimit' =>array('def_modify' => "2"),
+                                           'transfer' =>array('def_modify' => "on"),
+                                           'vmnum' =>array('def_modify' => "*97"),
+                                           'musicclass' =>array('def_modify' => "default"),
+                                           'echocancel' =>array('def_modify' => "on"),
+                                           'silencesuppression' =>array('def_modify' => "off"),
+                                           'dnd' =>array('create' => 'VARCHAR( 12 ) DEFAULT "reject" AFTER `amaflags`', 'modify' => "VARCHAR(12)", 'def_modify' =>"reject")
                            )
         );
 
@@ -239,11 +236,11 @@ if (!empty($version)) {
             $fld_id = $tabl_data[0];
             if (!empty($tab_modify[$fld_id])) {
                 $db_config[$tabl_name][$fld_id]['status']  = 'yes';
-                if (!empty($tab_modify[$fld_id]['def_modyfy'])) {
-                    if (strtoupper($tab_modify[$fld_id]['def_modyfy']) ==  strtoupper($tabl_data[4])) {
+                if (!empty($tab_modify[$fld_id]['def_modify'])) {
+                    if (strtoupper($tab_modify[$fld_id]['def_modify']) ==  strtoupper($tabl_data[4])) {
                         $db_config[$tabl_name][$fld_id]['def_mod_stat']  = 'no';
                     }
-                    if ( strtoupper ($tab_modify[$fld_id]['modyfy']) ==  strtoupper($tabl_data[1])) {
+                    if ( strtoupper ($tab_modify[$fld_id]['modify']) ==  strtoupper($tabl_data[1])) {
                         $db_config[$tabl_name][$fld_id]['mod_stat']  = 'no';
                     }
                 }
@@ -267,19 +264,19 @@ if (!empty($version)) {
                     $sql_modify .= 'CHANGE COLUMN `'.$row_fld.'` `'. $row_data['rename'].'` '.$row_data['create'].', ';
                     
                 }
-                if (!empty($row_data['modyfy'])) {
+                if (!empty($row_data['modify'])) {
                     if (empty($row_data['mod_stat'])) {
                         if (!empty($row_data['create'])) {
                             $sql_modify .=  "CHANGE COLUMN  `".$row_fld."` `".$row_fld."` ".$row_data['create'].", ";
                         } else {
-                            $sql_modify .=  "CHANGE COLUMN  `".$row_fld."` `".$row_fld."` ".$row_data['modyfy']." DEFAULT '".$row_data['def_modyfy']."', ";
+                            $sql_modify .=  "CHANGE COLUMN  `".$row_fld."` `".$row_fld."` ".$row_data['modify']." DEFAULT '".$row_data['def_modify']."', ";
                         }
                         $row_data['def_mod_stat'] = 'no';
                     }
                 }
-                if (!empty($row_data['def_modyfy'])) {
+                if (!empty($row_data['def_modify'])) {
                     if (empty($row_data['def_mod_stat'])) {
-                        $sql_modify .=  "ALTER COLUMN `".$row_fld."` SET DEFAULT '".$row_data['def_modyfy']."', ";
+                        $sql_modify .=  "ALTER COLUMN `".$row_fld."` SET DEFAULT '".$row_data['def_modify']."', ";
                     }
                 }
                 if (!empty($row_data['drop'])) {                    

@@ -22,6 +22,7 @@
  *  - WiFi Config (Bulk Deployment Utility for Cisco 7921, 7925, 7926)?????
  *  - Change internal use Field to _Field (new fiture support in chan_sccp )
  *  + Change Installer  ?? (test )
+ *  + DND Mode
  *  - suport kvstore ?????
  *  - Shared Line ????
  *  - bug Fix
@@ -1085,8 +1086,6 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 }
             }
         }
-        $res = 0;        
-        
         return $res;
         
     }

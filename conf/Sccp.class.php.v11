@@ -52,11 +52,23 @@ class Sccp extends \FreePBX\modules\Core\Driver {
                 $sql = 'INSERT INTO sccpline (name, id';
                 $sqlv = 'values ("'.$id.'", "'.$id.'"';
 		foreach($this->data_fld as $key => $val) {
-                    if (!empty($settings[$val]) ) {
-                        if (!empty($settings[$val]['value'])){
+                    switch ($key) {
+                        case 'dnd':
                             $sql .= ', '.$key;
-                            $sqlv .= ", '".$settings[$val]['value']."' ";
-                        }
+                            if (!empty($settings[$val]['value'])){
+                                $sqlv .= ", '".$settings[$val]['value']."' ";
+                            } else {
+                                $sqlv .= ", NULL ";
+                            }
+                            break;
+                        default:
+                            if (!empty($settings[$val]) ) {
+                                if (!empty($settings[$val]['value'])){
+                                    $sql .= ', '.$key;
+                                    $sqlv .= ", '".$settings[$val]['value']."' ";
+                                }
+                            }
+                            break;
                     }
                 }
                 $sql .= ") ".$sqlv.");";              
@@ -137,7 +149,7 @@ class Sccp extends \FreePBX\modules\Core\Driver {
 				"flag" => $flag++
 			),
 			"dnd" => array(
-				"value" => "UserDefined",
+				"value" => "",
 				"flag" => $flag++
 			),
 			"silencesuppression" => array(
@@ -190,9 +202,12 @@ class Sccp extends \FreePBX\modules\Core\Driver {
                 $select[] = array('value' => 'off', 'text' => 'Off');
                 $select[] = array('value' => 'reject', 'text' => 'Reject');
                 $select[] = array('value' => 'silent', 'text' => 'Silent');
-                $select[] = array('value' => 'UserDefined', 'text' => 'UserDefined');
-                $tt = _("Do Not Disturb.");
-                $tmparr['dnd'] = array('prompttext' => _('DND'), 'value' => 'user', 'tt' => $tt, 'select' => $select, 'level' => 1, 'type' => 'radio');
+                $select[] = array('value' => '', 'text' => 'UserDefined');
+                $tt = _("DND: Means how will dnd react when it is set on the device level dnd can have three states: off / busy(reject) / silent / UserDefined").'<br>'.
+                      _("UserDefined - dnd that cycles through all three states off -> reject -> silent -> off (this is the normal behaviour)").'<br>'.
+                      _("Reject - Usesr can only switch off and on (in reject/busy mode)").'<br>'.
+                      _("Silent  - Usesr can only switch off and on (in silent mode)");
+                $tmparr['dnd'] = array('prompttext' => _('DND'), 'value' => '', 'tt' => $tt, 'select' => $select, 'level' => 1, 'type' => 'radio');
 
                 unset($select);
                 $select[] = array('value' => 'yes', 'text' => 'Yes');

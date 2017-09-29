@@ -34,6 +34,7 @@
       <ipAddr3/>
       <port3>2000</port3>
     </srstInfo>
+    <connectionMonitorDuration>120</connectionMonitorDuration>
   </devicePool>
   <loadInformation>SCCP11.8-5-2S</loadInformation>
   <vendorConfig>

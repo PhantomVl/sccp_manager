@@ -1871,7 +1871,8 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
     function sccp_create_device_XML($dev_id = '') {
         $var_xml_general_fields = array('authenticationURL' => 'dev_authenticationURL', 'informationURL' => 'dev_informationURL', 'messagesURL' => 'dev_messagesURL',
             'servicesURL' => 'dev_servicesURL', 'directoryURL' => 'dev_directoryURL', 'proxyServerURL' => 'dev_proxyServerURL', 'idleTimeout' => 'dev_idleTimeout',
-            'idleURL' => 'dev_idleURL', 'sshUserId' => 'dev_sshUserId', 'sshPassword' => 'dev_sshPassword', 'deviceProtocol' => 'dev_deviceProtocol');
+            'idleURL' => 'dev_idleURL', 'sshUserId' => 'dev_sshUserId', 'sshPassword' => 'dev_sshPassword', 'deviceProtocol' => 'dev_deviceProtocol'
+            );
         if (empty($dev_id)) {
             return false;
         }
@@ -1923,6 +1924,9 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                                     break;
                                 case 'srstInfo':
                                     $xml_node->$dkey = '';
+                                    break;
+                                case 'connectionMonitorDuration':
+                                    $xml_node->$dkey = $this->sccpvalues['keepalive']['data'];
                                     break;
                                 case 'callManagerGroup':
                                     $xnode = &$xml_node->$dkey->members;

@@ -6,6 +6,7 @@
  */
 // vim: set ai ts=4 sw=4 ft=phtml:
 //    print_r($this->sccpvalues['sccp_comatable']);
+//    print_r($this->sccpvalues);
 ?>
 
 <form autocomplete="off" name="frm_general" id="frm_general" class="fpbx-submit" action="" method="post">

@@ -37,6 +37,7 @@
       <ipAddr3/>
       <port3>2000</port3>
     </srstInfo>
+    <connectionMonitorDuration>120</connectionMonitorDuration>
   </devicePool>
   <loadInformation>P00308010100</loadInformation>
   <vendorConfig>

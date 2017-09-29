@@ -24,8 +24,8 @@
  *  + Change Installer  ?? (test )
  *  + DND Mode
  *  - suport kvstore ?????
- *  - Shared Line ????
- *  - bug Fix
+ *  + Shared Line 
+ *  - bug Fix ...(K no w bug? no fix)
  * 
  */
 
@@ -888,6 +888,13 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                                 }
                             }
                         }
+                        break;
+                    case 'adv.line':
+                        $btn_t = 'line';
+                        $btn_n = (string) $get_settings['button' . $it . '_line'];
+                        $btn_n .= '@'.(string)$get_settings['button' . $it . '_advline'];
+                        $btn_opt = (string) $get_settings['button' . $it . '_advopt'];
+                        
                         break;
                     case 'line':
                     case 'silent':

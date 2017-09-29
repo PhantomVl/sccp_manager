@@ -11,7 +11,7 @@ $forminfo =array(
     );
 //$buttons_type=  array("empty","line","service","feature","speeddial");
 //   "feature","service" -- Add leter !
-$buttons_type=  array("empty","line","silent","monitor","speeddial","feature");
+$buttons_type=  array("empty","line","silent","monitor","speeddial","feature","adv.line");
 $feature_list=  array('parkinglot'=>'Park Slots','monitor'=> "Record Calls",'devstate'=> "Change Status");
 
 $lines_list = $this->get_db_SccpTableData('SccpExtension');
@@ -76,6 +76,13 @@ if (!empty($_REQUEST['id'])) {
             $show_form_mode = $defaul_tv; 
             $def_hint = '';
             $def_silent = '';
+            $defaul_advline = '';
+            if (strpos($defaul_btn,'@') >0) {
+                $defaul_tv = 'adv.line';
+                $show_form_mode = 'adv.line';
+                $defaul_btn = strtok($defaul_btn,'@');
+                $defaul_advline = strtok('@');
+            }
             if ($line_id == 0) {
                 $show_form_mode = 'line';
             }
@@ -101,6 +108,9 @@ if (!empty($_REQUEST['id'])) {
             
             echo '<!-- Begin button :'.$line_id.' -->';
             echo '<div class="line_button element-container" '.(($line_id < $show_buttons)?"":"hidden ").'data-id="'.$line_id.'">';
+//            echo 'Mode : '.$show_form_mode. ' opt: ';
+//            print_r( $defaul_opt);
+
     ?>    
             <div class="row"> <div class="form-group"> 
                     <div class="col-sm-2">
@@ -133,7 +143,7 @@ if (!empty($_REQUEST['id'])) {
                             ?>
                         </select>
 <!--  if Line Type = line Show SCCP Num -->
-                        <select class ="form-control lineselect_<?php echo $line_id.(($show_form_mode=='line')?'':' hidden');?>" name="<?php echo $forminfo[1]['name'].$line_id.'_line';?>" >
+                        <select class ="form-control lineselect_<?php echo $line_id.(($show_form_mode=='line' || $show_form_mode=='adv.line')?'':' hidden');?>" name="<?php echo $forminfo[1]['name'].$line_id.'_line';?>" >
                         <?php 
                             foreach ($lines_list as $data){
                               $select = (($data['id']==$defaul_btn)?"selected":"");
@@ -179,11 +189,24 @@ if (!empty($_REQUEST['id'])) {
                             </div>
                             <div class="col-xs-5">
                             <?php 
-                                echo '<input class="form-control" type="text" id="'.$forminfo[1]['name'].$line_id.'_fvalue"  name="'.$forminfo[1]['name'].$line_id.'_fvalue" placeholder="code" value="'.$defaul_fcod.'" >';
+                                echo '<input class="form-control" type="text" id="'.$forminfo[1]['name'].$line_id.'_fvalue"  name="'.$forminfo[1]['name'].$line_id.'_fvalue" placeholder="code" value="'.$defaul_opt.'" >';
                             ?>
                             </div>
                         </div>
-                            
+<!--  if Line Type = Advanced Show  Hint line -->
+
+                        <div class="lineadv_<?php echo $line_id.(($show_form_mode=='adv.line')? '':' hidden');?>" name="<?php echo $forminfo[1]['name'].$line_id.'_hint';?>">
+                            <div class="col-xs-5">
+                            <?php 
+                                echo '<input class="form-control" type="text" id="'.$forminfo[1]['name'].$line_id.'_advline"  name="'.$forminfo[1]['name'].$line_id.'_advline" placeholder="[+=][01]:[cidname]" value="'.$defaul_advline.'" >';
+                            ?>
+                            </div>
+                            <div class="col-xs-5">
+                            <?php 
+                                echo '<input class="form-control" type="text" id="'.$forminfo[1]['name'].$line_id.'_advopt"  name="'.$forminfo[1]['name'].$line_id.'_advopt" placeholder="ButtonLabel,Options" value="'.$db_butons[$line_id]['options'].'" >';
+                            ?>
+                            </div>
+                        </div>
 
                     </div>
 

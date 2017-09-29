@@ -330,7 +330,9 @@ if (!empty($version)) {
             FOR EACH ROW
             BEGIN
             IF NEW.`type` = 'line' THEN
-                IF (SELECT COUNT(*) FROM `sccpline` WHERE `sccpline`.`name` = SUBSTRING_INDEX(NEW.`name`,'!',1)) = 0
+		SET @line_x = SUBSTRING_INDEX(NEW.`name`,'!',1);
+		SET @line_x = SUBSTRING_INDEX(@line_x,'@',1);            
+                IF (SELECT COUNT(*) FROM `sccpline` WHERE `sccpline`.`name` = @line_x ) = 0
                 THEN
                         UPDATE `Foreign key contraint violated: line does not exist in sccpline` SET x=1;
                 END IF;

@@ -218,6 +218,7 @@ $(document).ready(function () {
                 case 'silent':
                 case 'monitor':
                 case 'line':
+                case 'adv.line':
                     $(this).removeClass('hidden');
                     break;
                 case 'service':
@@ -238,6 +239,7 @@ $(document).ready(function () {
                 case 'silent':
                 case 'monitor':
                 case 'empty':
+                case 'adv.line':
                 case 'line':
                     $(this).addClass('hidden');
                     break;
@@ -248,6 +250,7 @@ $(document).ready(function () {
                 case 'feature':
                     $(this).removeClass('hidden');
                     break;
+                case 'adv.line':
                 case 'service':
                 case 'speeddial':
                 case 'silent':
@@ -256,6 +259,13 @@ $(document).ready(function () {
                 case 'line':
                     $(this).addClass('hidden');
                     break;
+            }
+        });
+        $('.lineadv_' + kid).each(function () {
+            if (kval == 'adv.line') {
+                $(this).removeClass('hidden');
+            } else {
+                $(this).addClass('hidden');
             }
         });
         $('.linespeed_' + kid).each(function () {

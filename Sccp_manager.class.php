@@ -23,7 +23,10 @@
  *  + Change internal use Field to _Field (new fiture support in chan_sccp )
  *  + Delete phone XML
  *  + Change Installer  ?? (test )
+ *  - Auto Addons!
  *  + DND Mode
+ *  + secondary_dialtone_digits = ""     line config
+ *  + secondary_dialtone_tone = 0x22     line config                                              
  *  - suport kvstore ?????
  *  + Shared Line 
  *  - bug Fix ...(K no w bug? no fix)

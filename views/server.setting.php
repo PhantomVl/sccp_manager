@@ -7,6 +7,10 @@
 // vim: set ai ts=4 sw=4 ft=phtml:
 //    print_r($this->sccpvalues['sccp_comatable']);
 //    print_r($this->sccpvalues);
+//   $id_name = 'SEPB8BEBF224790';
+//   $dev_data = $this->sccp_getdevice_info($id_name);
+//   print_r($dev_data);
+
 ?>
 
 <form autocomplete="off" name="frm_general" id="frm_general" class="fpbx-submit" action="" method="post">

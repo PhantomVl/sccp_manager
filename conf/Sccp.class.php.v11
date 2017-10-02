@@ -11,6 +11,7 @@ class Sccp extends \FreePBX\modules\Core\Driver {
                                  "cid_num" => 'cid_num', "cid_name" => 'label', "mailbox" => 'description',
                                  "musicclass" => 'musicclass',
                                  "dnd" => 'dnd', "silencesuppression" => 'silencesuppression',
+                                 "secondary_dialtone_digits" => 'secondary_dialtone_digits', "secondary_dialtone_tone" => 'secondary_dialtone_tone',
                                  'namedcallgroup'=>'namedcallgroup', 'namedpickupgroup' => 'namedpickupgroup'
                             );
 
@@ -53,6 +54,8 @@ class Sccp extends \FreePBX\modules\Core\Driver {
                 $sqlv = 'values ("'.$id.'", "'.$id.'"';
 		foreach($this->data_fld as $key => $val) {
                     switch ($key) {
+                        case 'secondary_dialtone_digits':
+                        case 'secondary_dialtone_tone':
                         case 'dnd':
                             $sql .= ', '.$key;
                             if (!empty($settings[$val]['value'])){
@@ -156,6 +159,14 @@ class Sccp extends \FreePBX\modules\Core\Driver {
 				"value" => "no",
 				"flag" => $flag++
 			),
+			"secondary_dialtone_digits" => array(
+				"value" => "9",
+				"flag" => $flag++
+			),
+			"secondary_dialtone_tone" => array(
+				"value" => "0x22",
+				"flag" => $flag++
+			),                    
 			"musicclass" => array(
 				"value" => "default",
 				"flag" => $flag++
@@ -185,6 +196,12 @@ class Sccp extends \FreePBX\modules\Core\Driver {
 		$tmparr['namedpickupgroup'] = array('prompttext' => _('Pickup group name'),'value' => '', 'tt' => $tt, 'level' => 1);
 		$tt = _("Sets the named pickup groups this line is a member of (this phone can pickup calls from remote phones which are in this caller group (ast111)");
 		$tmparr['pin'] = array('value' => '', 'tt' => $tt, 'level' => 1);
+                $tt = _("Digits to indicate an external line to user (secondary dialtone) Sample 9 or 8 (max 9 digits)");
+		$tmparr['secondary_dialtone_digits'] = array('prompttext' => _('Secondary dialtone digits'), 'value' => '', 'tt' => $tt, 'level' => 1);
+
+                $tt = _("Outside dialtone frequency (defaul 0x22)");
+		$tmparr['secondary_dialtone_tone'] = array('prompttext' => _('Secondary dialtone tone'), 'value' => '', 'tt' => $tt, 'level' => 1);
+
 
                 unset($select);
                 $select[] = array('value' => 'yes', 'text' => 'Yes');

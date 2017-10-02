@@ -11,6 +11,7 @@ class Sccp extends \FreePBX\modules\Core\Driver {
                                  "cid_num" => 'cid_num', "cid_name" => 'label', "mailbox" => 'description',
                                  "musicclass" => 'musicclass',
                                  "dnd" => 'dnd', "silencesuppression" => 'silencesuppression',
+                                 "secondary_dialtone_digits" => 'secondary_dialtone_digits', "secondary_dialtone_tone" => 'secondary_dialtone_tone',            
                                  'namedcallgroup'=>'namedcallgroup', 'namedpickupgroup' => 'namedpickupgroup'
                             );
 
@@ -144,6 +145,14 @@ class Sccp extends \FreePBX\modules\Core\Driver {
 				"value" => "no",
 				"flag" => $flag++
 			),
+			"secondary_dialtone_digits" => array(
+				"value" => "9",
+				"flag" => $flag++
+			),
+			"secondary_dialtone_tone" => array(
+				"value" => "0x22",
+				"flag" => $flag++
+			),
 			"musicclass" => array(
 				"value" => "default",
 				"flag" => $flag++
@@ -161,18 +170,30 @@ class Sccp extends \FreePBX\modules\Core\Driver {
 		$tmparr = array();
 		$tt = _("The SCCP channel number for this port.");
 		$tmparr['incominglimit'] = array('prompttext' => _('Line incoming limit'), 'value' => '2', 'tt' => $tt, 'level' => 0, 'jsvalidation' => 'isEmpty()', 'failvalidationmsg' => $msgInvalidChannel);
-		$tt = _("Asterisk context this device will send calls to. Only change this is you know what you are doing.");
+
+                $tt = _("Asterisk context this device will send calls to. Only change this is you know what you are doing.");
 		$tmparr['context'] = array('prompttext' => _('Line context'), 'value' => 'from-internal', 'tt' => $tt, 'level' => 1);
-		$tt = _("Phone call group callgroup=1,3-4");
+
+                $tt = _("Phone call group callgroup=1,3-4");
 		$tmparr['callgroup'] = array('prompttext' => _('Call group id'),'value' => '', 'tt' => $tt, 'level' => 1);
-		$tt = _("Phone pickup group pickupgroup=1,3-4");
+
+                $tt = _("Phone pickup group pickupgroup=1,3-4");
 		$tmparr['namedcallgroup'] = array('prompttext' => _('Call group name'),'value' => '', 'tt' => $tt, 'level' => 1);
-		$tt = _("sets the named caller groups this line is a member of (ast111)");
+
+                $tt = _("sets the named caller groups this line is a member of (ast111)");
                 $tmparr['pickupgroup'] = array('prompttext' => _('Pickup group id'),'value' => '', 'tt' => $tt, 'level' => 1);
-		$tt = _("Phone pincode");
+
+                $tt = _("Phone pincode");
 		$tmparr['namedpickupgroup'] = array('prompttext' => _('Pickup group name'),'value' => '', 'tt' => $tt, 'level' => 1);
-		$tt = _("Sets the named pickup groups this line is a member of (this phone can pickup calls from remote phones which are in this caller group (ast111)");
+
+                $tt = _("Sets the named pickup groups this line is a member of (this phone can pickup calls from remote phones which are in this caller group (ast111)");
 		$tmparr['pin'] = array('value' => '', 'tt' => $tt, 'level' => 1);
+
+                $tt = _("Digits to indicate an external line to user (secondary dialtone) Sample 9 or 8 (max 9 digits)");
+		$tmparr['secondary_dialtone_digits'] = array('prompttext' => _('Secondary dialtone digits'), 'value' => '', 'tt' => $tt, 'level' => 1);
+
+                $tt = _("Outside dialtone frequency (defaul 0x22)");
+		$tmparr['secondary_dialtone_tone'] = array('prompttext' => _('Secondary dialtone tone'), 'value' => '', 'tt' => $tt, 'level' => 1);
 
                 unset($select);
                 $select[] = array('value' => 'yes', 'text' => 'Yes');

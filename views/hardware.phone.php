@@ -47,8 +47,13 @@
 <script>
     function DispayDeviceActionsKeyFormatter(value, row, index) {
         var exp_model = '';
-        exp_model += '<a href="?display=sccp_phone&tech_hardware=cisco&id=' + row['name'] + '"><i class="fa fa-pencil"></i></a> &nbsp; &nbsp;\n';
-        exp_model += '</a> &nbsp;<a class="btn-item-delete" data-for="hardware" data-id="' + row['name'] + '"><i class="fa fa-trash"></i></a>';
+        if (row['new_hw'] == "Y") {
+            exp_model += '<a href="?display=sccp_phone&tech_hardware=cisco&new_id=' + row['name'] + '&type='+ row['type']+'"><i class="fa fa-pencil"></i></a> &nbsp; &nbsp;\n';
+            
+        } else {
+            exp_model += '<a href="?display=sccp_phone&tech_hardware=cisco&id=' + row['name'] + '"><i class="fa fa-pencil"></i></a> &nbsp; &nbsp;\n';
+            exp_model += '</a> &nbsp;<a class="btn-item-delete" data-for="hardware" data-id="' + row['name'] + '"><i class="fa fa-trash"></i></a>';
+        }
         return  exp_model;
 }
 

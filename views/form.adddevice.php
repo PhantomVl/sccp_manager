@@ -6,6 +6,17 @@
  */
 $def_val = null;
 $dev_id = null;
+if (!empty($_REQUEST['new_id'])) {
+    $dev_id = $_REQUEST['new_id'];
+    $val = str_replace('SEP', '', $dev_id);
+    $val = implode('.',sscanf($val, '%4s%4s%4s')); // Convert to Cisco display Format 
+    $def_val['mac'] = array("keyword" => 'mac', "data" => $val, "seq" => "99");
+    $val = $_REQUEST['type'];
+    $def_val['type'] = array("keyword" => 'type', "data" => $val, "seq" => "99");
+    
+    
+}
+
 if (!empty($_REQUEST['id'])) {
 //    print_r($_REQUEST);
 //    

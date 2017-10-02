@@ -31,6 +31,15 @@ if (!empty($_REQUEST['id'])) {
     }
     $show_buttons = $max_buttons;
 }
+if (!empty($_REQUEST['new_id'])) {
+   $val = $_REQUEST['type'];
+   $dev_schema =  $this-> getSccp_model_information('byid', false, "all", array('model' =>$val));
+
+//   $db_device = $this->get_db_SccpTableData('get_sccpdevice_byid', array("id" => $val));
+   $max_buttons = $dev_schema[0]['buttons'];
+   $show_buttons = $max_buttons;   
+}
+
 ?>
 
 <form autocomplete="off" name="frm_editbutons" id="frm_editbutons" class="fpbx-submit" action="" method="post" data-id="hw_edit">

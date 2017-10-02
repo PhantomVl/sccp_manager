@@ -20,7 +20,8 @@
  *  ? Dial Templates - Hoto IT Include in XML.Config ???????
  *  - Dial Templates in device Configuration ( Enabled / inheret / Disabled ; templet )
  *  - WiFi Config (Bulk Deployment Utility for Cisco 7921, 7925, 7926)?????
- *  - Change internal use Field to _Field (new fiture support in chan_sccp )
+ *  + Change internal use Field to _Field (new fiture support in chan_sccp )
+ *  + Delete phone XML
  *  + Change Installer  ?? (test )
  *  + DND Mode
  *  - suport kvstore ?????
@@ -581,12 +582,14 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                         if (!(strpos($idv, 'SEP') === false)) {
                             $this->sccp_save_db('sccpdevice', array('name' => $idv), 'delete', "name");
                             $this->sccp_save_db("sccpbuttons", array(), 'delete', '', $idv);
+                            $this->sccp_delete_device_XML($idv); // Концы в вводу !!  
                         }
                     }
                     return array('status' => true, 'table_reload' => true, 'message' => 'HW is Delete ! ');
                 }
                 break;
             case 'create_hw_tftp':
+                $this->sccp_delete_device_XML('all'); // Концы в вводу !!  
                 $this->sccp_create_tftp_XML();
                 $models = $this->get_db_SccpTableData("SccpDevice");
                 foreach ($models as $data) {
@@ -742,12 +745,26 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                             $dev_id['description'] = $staus[$id_name]['descr'];
                             $dev_id['status'] = $staus[$id_name]['status'];
                             $dev_id['address'] = $staus[$id_name]['address'];
+                            $dev_id['new_hw'] = 'N';
+                            $staus[$id_name]['news'] ='N';
                         } else {
                             $dev_id['description'] = '- -';
                             $dev_id['status'] = 'no connect';
                             $dev_id['address'] = '- -';
                         }
                     }
+//                    Array ( [name] => SEP0004F2EDCBFD [mac] => SEP0004F2EDCBFD [type] => 7937 [button] => line,7818,default ) 
+                    foreach ($staus as $dev_ids) {
+                        $id_name = $dev_ids['name'];
+                        if (empty($dev_ids['news'])) {
+                            $dev_data = $this->sccp_getdevice_info($id_name);
+                            $dev_schema =  $this-> getSccp_model_information('byciscoid', false, "all", array('model' =>$dev_data['SCCP_Vendor']['model_id']));
+
+                            $result[] = array('name' => $id_name, 'mac' => $id_name, 'button' => '---', 'type' => $dev_schema[0]['model'],  'new_hw' => 'Y',
+                                'description' => '*NEW* '.$dev_ids['descr'], 'status' => '*NEW* '.$dev_ids['status'], 'address' => $dev_ids['address'] );
+                        }
+                    }
+
                 }
                 return $result;
                 break;
@@ -1001,6 +1018,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         $cmd_list = array('get_softkey' => array('cmd' => "sccp show softkeyssets", 'param' => ''),
             'get_version' => array('cmd' => "sccp show version", 'param' => ''),
             'get_device' => array('cmd' => "sccp show devices", 'param' => ''),
+            'get_dev_info' => array('cmd' => "sccp show device", 'param' => 'name'),
             'get_hints' => array('cmd' => "core show hints", 'param' => ''),
             'sccp_reload' => array('cmd' => "sccp reload force", 'param' => ''),
             'reset_phone' => array('cmd' => "sccp reset ", 'param' => 'name'), // Жесткая перезагрузка 
@@ -1013,7 +1031,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 $id_param = $cmd_list[$id_cmd]['param'];
                 if (!empty($id_param)) {
                     if (!empty($params[$id_param])) {
-                        $result = $astman->Command($cmd_list[$id_cmd]['cmd'] . $params[$id_param]);
+                        $result = $astman->Command($cmd_list[$id_cmd]['cmd'] .' '. $params[$id_param]);
                     }
                 } else {
                     $result = $astman->Command($cmd_list[$id_cmd]['cmd']);
@@ -1052,6 +1070,31 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
      * 
      * 
      */
+    
+    public function sccp_getdevice_info($dev_id) {
+        if (empty($dev_id)) {
+            return array();
+        }
+        $res = $this->sccp_core_comands(array('cmd' => 'get_dev_info', 'name' => $dev_id));
+        $res1 = str_replace(array("\r\n", "\r", "\n"), ';',  strip_tags((string)$res['data'])); 
+        if (strpos($res1,'MAC-Address')) {
+            $res2 = substr($res1,0,strpos($res1,'+--- Buttons '));
+            $res1 = explode(';',substr($res2,strpos($res2,'MAC-Address')));
+            foreach ($res1 as $data ){
+                if (!empty($data)) {
+                    $tmp = explode(':',$data);
+                    $data_key =str_replace(array(" ", "-", "\t"), '_',  trim($tmp[0])); 
+                    $res3[$data_key] =$tmp[1];
+                }
+            }
+            $res1 = $res3['Skinny_Phone_Type'];
+            $res3['SCCP_Vendor']= Array('vendor' => strtok($res1,' '),'model' => strtok('('), 'model_id' => strtok(')'));
+            return $res3;
+        } else {
+            return array();
+        }
+    }
+    
     public function sccp_list_hints() {
         $ast_out = $this->sccp_core_comands(array('cmd' => 'get_hints'));
         $ast_out = preg_split("/[\n]/", $ast_out['data']);
@@ -2035,6 +2078,27 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         return time();
     }
 
+    function sccp_delete_device_XML($dev_id = '') {
+        if (empty($dev_id)) {
+            return false;
+        }
+        if ($dev_id =='all') {
+            $xml_name = $this->sccppath["tftp_path"] . '/SEP*.cnf.xml';
+            array_map("unlink", glob($xml_name));
+        } else {
+            if  (!strpos($dev_id,'SEP')) {
+                return false;
+            }
+            $xml_name = $this->sccppath["tftp_path"] . '/' . $dev_id . '.cnf.xml';
+            if (file_exists($xml_name)) {
+                unlink($xml_name);
+            }
+        }
+    }
+    
+    
+    
+    
     function sccp_create_sccp_init() {
 //     Make sccp.conf data        
 //     [general]
@@ -2051,6 +2115,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                     case "netlang": // Remove Key 
                     case "devlang":
                     case "tftp_path":
+                    case "sccp_comatable":
                         break;
                     default:
                         $this->sccp_conf_init['general'][$key] = $value['data'];
@@ -2154,6 +2219,21 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
             $sel_inf .= ", '0' as 'validate'";
         }
         switch ($get) {
+            case "byciscoid":
+                if (!empty($filter)) {
+                    if (!empty($filter['model'])) {
+                        if (strpos($filter['model'],'loadInformation')) { 
+                            $sql = "SELECT " . $sel_inf . " FROM sccpdevmodel WHERE (`loadinformationid` =" . $filter['model'] . ") ORDER BY model ";
+                        } else  {
+                            $sql = "SELECT " . $sel_inf . " FROM sccpdevmodel WHERE (`loadinformationid` ='loadInformation" . $filter['model'] . "') ORDER BY model ";
+                        }
+                    } else {
+//                          $sql = "SELECT ".$filter['model'];
+                        $sql = "SELECT " . $sel_inf . " FROM sccpdevmodel ORDER BY model ";
+                    }
+                    break;
+                }
+                break;
             case "byid":
                 if (!empty($filter)) {
                     if (!empty($filter['model'])) {

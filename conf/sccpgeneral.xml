@@ -407,6 +407,30 @@ and open the template in the editor. Base Version before all crash :-)
       </item>       
     </page_group>
     <page_group name="sccp_hotline_config"><label>SCCP Line config</label>
+      <item type="HLP" id="2">
+      <name>Help_id2</name><label>HELP SCCP HotLine</label>        
+      <element type='p'>Setting the hotline Feature on a device, will make it connect to a predefined extension as soon as the Receiver 
+                        is picked up or the "New Call" Button is pressed. No number has to be given. This works even on devices which have 
+                        no entry in the config file or realtime database.</element>
+      <element type='h4'>The hotline function can be used in :</element>
+      <element type='table'>
+          <row><col>First time configuration</col><col>This will make it easier to register new devices and assign numbers</col></row>
+          <row><col>At a door</col><col>Where you want people to be able to only call one number</col></row>
+          <row><col>For unprovisioned phones</col><col>To only be able to call the helpdesk to get their phone set up</col></row>
+      </element>
+      <element type='p'> </element>
+      <element type='h3'>Be careful with this function. Especially not to the internet. So i would restring the deny/permit to 'internal' by default in that case. </element>
+      <element type='table'>
+          <row><col>Alow =</col><col>Specify a list of your networks, for example: 192.168.1.0</col></row>
+          <row><col>deny =</col><col>0.0.0.0/0.0.0.0</col></row>
+          <row><col>permit =</col><col>internal</col></row>
+          <row><col>hotline_context =</col><col>sccp</col></row>
+          <row><col>hotline_label = </col><col>hotline</col></row>
+      </element>
+      
+      </item>
+    
+    
       <item type="IS" id="1"><name>hotline_enabled</name> <label>Hotline</label>
           <default>no</default>
           <button value="yes">Enabled</button>
@@ -421,10 +445,18 @@ and open the template in the editor. Base Version before all crash :-)
           </input>
           <help>Hotline Extension: The number that gets called when a hotline is picked up. hint</help>
       </item>
+      <item type="IE" id="2"><label>Hotline Label</label>
+          <input>
+            <name>hotline_label</name> 
+            <default>Hot Line</default>
+            <class>sccp-custom</class>
+          </input>
+          <help>Hotline Label: The label on the device</help>
+      </item>      
       <item type="IE" id="3"><label>Hotline Context</label>
           <input>
             <name>hotline_context</name> 
-            <default>defauly</default>
+            <default>default</default>
             <class>sccp-custom</class>
           </input>
           <help>Hotline Context: This is the context through which the phone will connect. It should probably match your other contest. The default is "from-internal" but "from-internal-xfer" would also make sense by limiting the options for the person using the phone.</help>
@@ -574,6 +606,16 @@ and open the template in the editor. Base Version before all crash :-)
            </input>
             <help>The MAC address of the phone</help>
         </item>      
+        <item type="SDM-remove" id="2" seq="99">
+            <label>Type</label>
+            <name>type</name>
+            <default>7911</default>
+            <select name="model" dataid="dns" dataval="buttons">model</select>
+            <options disabled="true"></options>
+            <class>hw_select sccp-custom</class>
+            <help>The type of phone: 7911, 7940, 7960, etc. Important note: the 'G' models are handled as the base model (e.g., 7962G is handled as 7962). In the Display mode, this field is read-only because the MAC address and the model number are a pair.</help>
+        </item>
+
         <item type="IE" id="2" seq="99">
             <label>Type</label>
             <input>

@@ -15,6 +15,7 @@
  *  * Input element Select SLS - System Language 
  *    Input element Select SDM - Model List 
  *                         SDE - Extension List 
+ *    Help elemen          HLP - Help Element
  */
 
 $npref = $form_prefix.'_';
@@ -494,17 +495,25 @@ foreach ($items as $child) {
                         <i class="fa fa-question-circle fpbx-help-icon" data-for="<?php echo $res_id; ?>"></i>
                     </div>
                     <div class="col-md-9"><div class = "lnet form-group form-inline" data-nextid=1> <?php
-                            echo  '<select name="'.$res_id.'" class="'. $child->class . '" id="' . $res_id . '">';
-                            if (!empty($fvalues[$res_n])) {
-                                if (!empty($fvalues[$res_n]['data'])) {
-                                    $child->value = $fvalues[$res_n]['data'];
+                            echo  '<select name="'.$res_id.'" class="'. $child->class . '" id="' . $res_id . '"';
+                            if (isset($child->options)){
+                                foreach ($child->options->attributes() as $optkey =>$optval){
+                                    echo  ' '.$optkey.'="'.$optval.'"';
                                 }
                             }
+                            echo  '>';
+
                             $fld = (string)$child->select['name'];
                             $flv = (string)$child->select;
                             $flk = (string)$child->select['dataid'];
                             $flkv= (string)$child->select['dataval'];
                             $key = (string)$child->default;
+                            if (!empty($fvalues[$res_n])) {
+                                if (!empty($fvalues[$res_n]['data'])) {
+                                    $child->value = $fvalues[$res_n]['data'];
+                                    $key = $fvalues[$res_n]['data'];
+                                }
+                            }
                             
                             foreach ($select_opt as $data) {
                                 echo '<option value="' . $data[$fld] . '"';
@@ -636,6 +645,53 @@ foreach ($items as $child) {
             echo '<!-- END '.$res_id.' -->';
         
     }    
+    
+    if ($child['type'] == 'HLP' ) {
+        $res_n =  (string)$child ->name;
+        $res_id = $npref.$res_n;
+        if (empty($child->class)) {
+           $child->class = 'form-control';
+        }
+        echo '<!-- Begin '.$child->label.' -->';
+
+        ?>
+            
+        <div class="panel panel-default">
+            <div class="panel-heading"><?php echo _($child->label);?>
+                <a data-toggle="collapse" href="<?php echo '#'.$res_id;?>"><i class="fa fa-plus pull-right"></i></a>
+            </div>
+            <div class="panel-body collapse" id="<?php echo $res_id;?>">
+        <?php
+                foreach ($child->xpath('element') as $value) {
+                    switch ($value['type']){
+                        case 'p':
+                        case 'h1':
+                        case 'h2':
+                        case 'h3':
+                        case 'h4':
+                            echo '<'.$value['type'].'>'._((string)$value).'</'.$value['type'].'>';
+                            break;
+                        case 'table':
+                            echo '<'.$value['type'].' class="table" >';
+                            foreach ($value->xpath('row') as $trow) {
+                                echo '<tr>';
+                                foreach ($trow->xpath('col') as $tcol) {
+                                    echo '<td>'.$tcol.'</td>';
+                                }
+                                echo '</tr>';
+                            }
+                            echo '</'.$value['type'].'>';
+                            break;
+                    }
+                }
+        ?>
+
+            </div>
+        </div>
+        <?php
+        echo '<!-- END '.$child->label.' -->';
+        
+    }
 
     
 }

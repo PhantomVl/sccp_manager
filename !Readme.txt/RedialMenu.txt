@@ -18,3 +18,5 @@ Then the placed calls list will include the status of the remote extension, like
 PlacedCalls
 
 Which does show numbers you can redial, but also include their current device state, so you know when they are currently busy. Note that the other phonebook entries will now also monitor the remove device state and show the current device state.
+
+Note: the hints for the extension need to be in the same context as the device/global context, for callLogBlfEnabled to work

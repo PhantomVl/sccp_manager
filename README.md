@@ -55,7 +55,7 @@ Make sure you have the following installed on your system:
 
 - TFTP Server running under (recomended) /tftpboot/ [See our WIKI] (https://github.com/chan-sccp/chan-sccp/wiki/setup-tftp-service)
   - You will need the phone settings templates. You can use the templates taken from the distribution "chan-sccp" 
-    sample: copy /usr/src/chan-sccp/conf/tftp/*.xml* /tftpboot/templets/
+    sample: copy /usr/src/chan-sccp/conf/tftp/*.xml* /tftpboot/templates/
 
 - cofigure DHCP server [See our WIKI] (https://github.com/chan-sccp/chan-sccp/wiki/setup-dhcp-service)
 

@@ -33,8 +33,8 @@ $(document).ready(function () {
         if ($('.fpbx-submit').data('id') == "hw_edit") {
             snd_command = 'save_hardware';
         }
-        if ($('.fpbx-submit').data('id') == "dial_templet") {
-            snd_command = 'save_dp_templet';
+        if ($('.fpbx-submit').data('id') == "dial_template") {
+            snd_command = 'save_dp_template';
         }
         
         $.ajax({
@@ -68,8 +68,8 @@ $(document).ready(function () {
         if ($('.fpbx-submit').data('id') == "hw_edit") {
             snd_command = 'save_hardware';
         }
-        if ($('.fpbx-submit').data('id') == "dial_templet") {
-            snd_command = 'save_dp_templet';
+        if ($('.fpbx-submit').data('id') == "dial_template") {
+            snd_command = 'save_dp_template';
         }
         $.ajax({
             type: 'POST',
@@ -386,7 +386,7 @@ $(document).ready(function () {
         if ($(this).data('id') === 'model_add') {
             var dev_cmd = 'model_add';
 //            var dev_fld = ["model","vendor","dns","buttons","loadimage","loadinformationid","validate","enabled"];
-            var dev_fld = ["model", "vendor", "dns", "buttons", "loadimage", "loadinformationid", "nametemplet"];
+            var dev_fld = ["model", "vendor", "dns", "buttons", "loadimage", "loadinformationid", "nametemplate"];
             datas = 'enabled=0' + '&';
 
             for (var i = 0; i < dev_fld.length; i++) {
@@ -398,7 +398,7 @@ $(document).ready(function () {
         }
         if ($(this).data('id') === 'model_applay') {
             var dev_cmd = 'model_update';
-            var dev_fld = ["model", "loadimage", "nametemplet"];
+            var dev_fld = ["model", "loadimage", "nametemplate"];
             datas = '';
             for (var i = 0; i < dev_fld.length; i++) {
                 datas = datas + dev_fld[i] + '=' + $('#editd_' + dev_fld[i]).val() + '&';

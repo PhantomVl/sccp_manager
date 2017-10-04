@@ -29,19 +29,19 @@ if ($dev_id != '*new*') {
         $data_s .= ';';
     }
     $data_s = substr($data_s, 0, -1);
-    $def_val['dialtemplete'] =  array("keyword" => 'dialtemplete', "data" => $data_s, "seq" => "99");
+    $def_val['dialtemplatee'] =  array("keyword" => 'dialtemplatee', "data" => $data_s, "seq" => "99");
 }
 
 ?>
 
 
-<form autocomplete="off" name="frm_editdialtemplet" id="frm_editbutons" class="fpbx-submit" action="" method="post" data-id="dial_templet">
+<form autocomplete="off" name="frm_editdialtemplate" id="frm_editbutons" class="fpbx-submit" action="" method="post" data-id="dial_template">
     
-    <input type="hidden" name="idtemplet" value="<?php echo $dev_id;?>">
+    <input type="hidden" name="idtemplate" value="<?php echo $dev_id;?>">
     <input type="hidden" name="Submit" value="Submit">
     <?php  
       if ($dev_id == '*new*') {
-        echo $this->ShowGroup('sccp_dp_new_templet',0,'sccp_dial',$def_val);
+        echo $this->ShowGroup('sccp_dp_new_template',0,'sccp_dial',$def_val);
       }
     ?>    
     
@@ -74,7 +74,7 @@ if ($dev_id != '*new*') {
     
     
 <?php    
-//    echo $this->ShowGroup('sccp_dp_new_templet',0,'sccp_dial',$def_val);
-    echo $this->ShowGroup('sccp_dp_templet',0,'sccp_dial',$def_val);
+//    echo $this->ShowGroup('sccp_dp_new_template',0,'sccp_dial',$def_val);
+    echo $this->ShowGroup('sccp_dp_template',0,'sccp_dial',$def_val);
 ?>    
 </form>

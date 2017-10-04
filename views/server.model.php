@@ -43,7 +43,7 @@
                             <th data-sortable="false" data-field="buttons"><?php echo _('Buttons');?></th>
                             <th data-sortable="false" data-formatter="SetColColorFirm" data-field="loadimage"><?php echo _('Loadimage');?></th>
                             <th data-sortable="false" data-field="loadinformationid"><?php echo _('Loadinformation ID');?></th>
-                            <th data-sortable="false" data-formatter="SetColColorTempl" data-field="nametemplet"><?php echo _('Model templet');?></th>
+                            <th data-sortable="false" data-formatter="SetColColorTempl" data-field="nametemplate"><?php echo _('Model template');?></th>
                             <th data-field="actions" data-formatter="DispayActionsModelFormatter"><?php echo _('Actions');?></th>
                         </tr>
                     </thead>
@@ -131,13 +131,13 @@
                 </div></div></div>
                 
                 <div class="element-container"><div class="row"> <div class="form-group"><div class="col-md-3">
-                        <label class="control-label" for="new_nametemplet"><?php echo _('Model templet XML');?></label>
-                        <i class="fa fa-question-circle fpbx-help-icon" data-for="new_nametemplet"></i>
+                        <label class="control-label" for="new_nametemplate"><?php echo _('Model template XML');?></label>
+                        <i class="fa fa-question-circle fpbx-help-icon" data-for="new_nametemplate"></i>
                     </div><div class="col-md-9">
-                        <input type="text" class="form-control" id="new_nametemplet" name="new_nametemplet" value="">
+                        <input type="text" class="form-control" id="new_nametemplate" name="new_nametemplate" value="">
                     </div> </div></div>
                     <div class="row"><div class="col-md-12">
-                        <span id="new_nametemplet-help" class="help-block fpbx-help-block">Help.</span>
+                        <span id="new_nametemplate-help" class="help-block fpbx-help-block">Help.</span>
                 </div></div></div>
             </div>
             <div class="modal-footer">
@@ -181,13 +181,13 @@
                 </div></div></div>
 
                 <div class="element-container"><div class="row"> <div class="form-group"><div class="col-md-3">
-                        <label class="control-label" for="editd_nametemplet"><?php echo _('Model templet XML');?></label>
-                        <i class="fa fa-question-circle fpbx-help-icon" data-for="editd_nametemplet"></i>
+                        <label class="control-label" for="editd_nametemplate"><?php echo _('Model template XML');?></label>
+                        <i class="fa fa-question-circle fpbx-help-icon" data-for="editd_nametemplate"></i>
                     </div><div class="col-md-9">
-                        <input type="text" class="form-control" id="editd_nametemplet" name="editd_nametemplet" value="">
+                        <input type="text" class="form-control" id="editd_nametemplate" name="editd_nametemplate" value="">
                     </div> </div></div>
                     <div class="row"><div class="col-md-12">
-                        <span id="editd_nametemplet-help" class="help-block fpbx-help-block">Help.</span>
+                        <span id="editd_nametemplate-help" class="help-block fpbx-help-block">Help.</span>
                 </div></div></div>
 
                 
@@ -212,7 +212,7 @@
     }
 
 //    function DispayInputFormatter(value, row, index) {
-//        return  (value == null) ?  '<input class="tabl-edit form-control" name="' + row['model'] + '_templet" type="text" value="">'  : '<input class="tabl-edit form-control" name="' + row['model'] + '_templet" type="text" value="' + value + '">';
+//        return  (value == null) ?  '<input class="tabl-edit form-control" name="' + row['model'] + '_template" type="text" value="">'  : '<input class="tabl-edit form-control" name="' + row['model'] + '_template" type="text" value="' + value + '">';
 //    }
     
     function DispayActionsModelFormatter(value, row, index) {
@@ -258,7 +258,7 @@
         } else {
             document.getElementById("editd_model").value = clr;
             document.getElementById("editd_loadimage").value = drow['loadimage'];
-            document.getElementById("editd_nametemplet").value = drow['nametemplet'];
+            document.getElementById("editd_nametemplate").value = drow['nametemplate'];
         }
     }
 </script>

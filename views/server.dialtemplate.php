@@ -13,13 +13,13 @@
         <div class="col-sm-12">
             <div class="display no-border">
                 <h1><?php echo _("Cisco Dial Templet") ?></h1>
-                <div id="toolbar-sccp-dialtemplet">
+                <div id="toolbar-sccp-dialtemplate">
                     <a class="btn btn-default" href="config.php?display=sccp_adv&amp;tech_hardware=dialplan&amp;extdisplay=*new*"><i class="fa fa-plus">&nbsp;</i><?php echo _("Add Dialplan") ?></a>
-                    <button id="remove-sccp-dialtemplet" class="btn btn-danger btn-remove" data-type="dialtemplet" data-section="sccp-dialtemplet" disabled>
+                    <button id="remove-sccp-dialtemplate" class="btn btn-danger btn-remove" data-type="dialtemplate" data-section="sccp-dialtemplate" disabled>
                         <i class="glyphicon glyphicon-remove"></i> <span><?php echo _('Delete') ?></span>
                     </button>
                 </div>
-                <table data-cookie="true" data-cookie-id-table="sccp-dialtemplet-table" data-url="ajax.php?module=sccp_manager&amp;command=getDialTemplete" data-cache="false" data-show-refresh="true" data-toolbar="#toolbar-dialtemplet" data-maintain-selected="true" data-show-columns="true" data-show-toggle="true" data-toggle="table" data-pagination="true" data-search="true" class="table table-striped ext-list-sccp" id="table-sccp-dialtemplet" data-id="id">
+                <table data-cookie="true" data-cookie-id-table="sccp-dialtemplate-table" data-url="ajax.php?module=sccp_manager&amp;command=getDialTemplete" data-cache="false" data-show-refresh="true" data-toolbar="#toolbar-dialtemplate" data-maintain-selected="true" data-show-columns="true" data-show-toggle="true" data-toggle="table" data-pagination="true" data-search="true" class="table table-striped ext-list-sccp" id="table-sccp-dialtemplate" data-id="id">
                     <thead>
                         <tr>
 <!--                            <th data-checkbox="true"></th> -->

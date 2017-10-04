@@ -7,5 +7,5 @@
 в Sccp_manager.class.php 
 //                        "sccpdialplan" => array(
 //                            "name" => _("SCCP Dial Plan information"),
-//                            "page" => 'views/server.dialtemplet.php'
+//                            "page" => 'views/server.dialtemplate.php'
 //                        )

@@ -5,7 +5,7 @@
 	<type>setup</type>
 	<category>SCCP Connectivity</category>
 	<publisher>Alex GP</publisher>
-	<description>SCCP Phone and Extention Manager</description>
+	<description>SCCP Phone and Extension Manager</description>
 	<menuitems>
 		<sccpsettings sort="1">Server Config</sccpsettings>
 		<sccp_adv  sort="2">System Parameters</sccp_adv>

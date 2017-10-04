@@ -15,22 +15,34 @@
  *  + Cisco Format Mac 
  *  + Model Information 
  *  + Device Right Menu 
+
+<!-- Dial Templates are not really needed for skinny, skinny get's direct feed back from asterisk per digit -->
+<!-- If your dialplan is finite (completely fixed length (depends on your country dialplan) dialplan, then dial templates are not required) -->
+<!-- As far as i know FreePBX does also attempt to build a finite dialplan -->
+<!-- Having to maintain both an asterisk dialplan and these skinny dial templates is annoying -->
+
  *  + Dial Templates + Configuration 
- *  + Dial Templates in Global Configuration ( Enabled / Disabled ; default templet )
- *  ? Dial Templates - Hoto IT Include in XML.Config ???????
- *  - Dial Templates in device Configuration ( Enabled / inheret / Disabled ; templet )
+ *  + Dial Templates in Global Configuration ( Enabled / Disabled ; default template )
+ *  ? Dial Templates - Howto IT Include in XML.Config ???????
+ *  - Dial Templates in device Configuration ( Enabled / inheret / Disabled ; template )
+ 
  *  - WiFi Config (Bulk Deployment Utility for Cisco 7921, 7925, 7926)?????
- *  + Change internal use Field to _Field (new fiture support in chan_sccp )
+ *  + Change internal use Field to _Field (new feature in chan_sccp (added for Sccp_manager))
  *  + Delete phone XML
  *  + Change Installer  ?? (test )
  *  - Auto Addons!
  *  + DND Mode
  *  + secondary_dialtone_digits = ""     line config
  *  + secondary_dialtone_tone = 0x22     line config                                              
- *  - suport kvstore ?????
+ *  - support kv-store ?????
  *  + Shared Line 
  *  - bug Fix ...(K no w bug? no fix)
  * 
+ *  * I think this file should be split in 3 parts (as in Model-View-Controller(MVC))
+ *    * XML/Database Parts -> Model directory
+ *    * Processing parts -> Controller directory
+ *    * Ajax Handler Parts -> Controller directory
+ *    * Result parts -> View directory
  */
 
 namespace FreePBX\modules;
@@ -57,10 +69,12 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
     public $sccp_conf_init = array();
     public $sccpDefaults = array(
         "servername" => 'VPBXSCCP',
-        "bindaddr" => '0.0.0.0', "port" => '2000',
+        "bindaddr" => '0.0.0.0', "port" => '2000',			# chan_sccp also supports ipv6
+                                                                        # bindaddr = "::" will support ipv6 and ipv4 at the same time
         "deny" => '0.0.0.0/0.0.0.0',
-        "permit" => '0.0.0.0/0.0.0.0',
-        "dateformat" => 'D.M.Y',
+        "permit" => '0.0.0.0/0.0.0.0',					# defaults to 'internal' which means:
+                                                                        # permit:127.0.0.0/255.0.0.0,permit:10.0.0.0/255.0.0.0,permit:172.0.0.0/255.224.0.0,permit:192.168.0.0/255.255.0.0"
+        "dateformat" => 'D.M.Y',					# This is the german default format. Should be "D/M/Y" or "D/M/YA" instead
         "disallow" => 'all', "allow" => 'alaw;ulaw',
         "devicetable" => 'sccpdevice',
         "linetable" => 'sccpline',
@@ -131,29 +145,23 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         $this->db = $freepbx->Database;
         $this->cnf_wr = \FreePBX::WriteConfig();
         $this->cnf_read = \FreePBX::LoadConfig();
-
-
         $this->v = new \Respect\Validation\Validator();
-
         $this->getSccpSettingsDB(false); // Overwrite Exist 
 //        $this->getSccpSetingINI(false); // get from sccep.ini
         $this->init_sccp_path();
         $this->initVarfromDefs();
         $this->initTftpLang();
 
-
         // Load Advanced Form Constuctor Data 
         if (file_exists(__DIR__ . '/views/sccpgeneral.xml')) {
             $this->xml_data = simplexml_load_file(__DIR__ . '/views/sccpgeneral.xml');
             $this->initVarfromXml(); // Overwrite Exist
         } 
-            
     }
 
     /*
      *   Generate Input elements in Html Code from sccpgeneral.xml
      */
-
     public function ShowGroup($grup_name, $heder_show, $form_prefix = 'sccp', $form_values = null) {
         $htmlret = "";
         if (empty($form_values)) {
@@ -176,7 +184,6 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
     /*
      *    Load config vars from base array
      */
-
     public function initVarfromDefs() {
         foreach ($this->sccpDefaults as $key => $value) {
             if (empty($this->sccpvalues[$key])) {
@@ -188,7 +195,6 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
     /*
      *    Load config vars from xml
      */
-
     public function initVarfromXml() {
         if ((array) $this->xml_data) {
             foreach ($this->xml_data->xpath('//page_group') as $item) {
@@ -390,7 +396,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                     $this->pagedata = array(
                         "general" => array(
                             "name" => _("SCCP Dial Plan information"),
-                            "page" => 'views/form.dptemplet.php'
+                            "page" => 'views/form.dptemplate.php'
                         )
                     );
                     break;
@@ -406,7 +412,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                         ),
 //                        "sccpdialplan" => array(
 //                            "name" => _("SCCP Dial Plan information"),
-//                            "page" => 'views/server.dialtemplet.php'
+//                            "page" => 'views/server.dialtemplate.php'
 //                        )
                     );
                     break;
@@ -513,7 +519,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         switch ($req) {
             case 'savesettings':
             case "save_hardware":
-            case "save_dp_templet":
+            case "save_dp_template":
             case "delete_hardware":
             case "getPhoneGrid":
             case "getExtensionGrid":
@@ -561,7 +567,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 return $this->save_hw_phone($request);
 
                 break;
-            case "save_dp_templet":
+            case "save_dp_template":
                 $res = $this->save_DialPlant($request);
                 if (empty($res)) {
                     return array('status' => true, 'search' => '?display=sccp_adv', 'hash' => 'sccpdialplan');
@@ -626,11 +632,11 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 break;
             case 'model_add':
                 $save_settings = array();
-                $key_name = array('model', 'vendor', 'dns', 'buttons', 'loadimage', 'loadinformationid', 'nametemplet');
+                $key_name = array('model', 'vendor', 'dns', 'buttons', 'loadimage', 'loadinformationid', 'nametemplate');
                 $upd_mode = 'replace';
             case 'model_update':
                 if ($request['command'] == 'model_update') {
-                    $key_name = array('model', 'loadimage', 'nametemplet');
+                    $key_name = array('model', 'loadimage', 'nametemplate');
                     $upd_mode = 'update';
                 }
                 if (!empty($request['model'])) {
@@ -1577,10 +1583,10 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
             }
         }
         if (!empty($this->sccppath["tftp_path"])) {
-            $this->sccppath["tftp_templets"] = $this->sccppath["tftp_path"] . '/templets';
-            if (!file_exists($this->sccppath["tftp_templets"])) {
-                if (!mkdir($this->sccppath["tftp_templets"], 0777, true)) {
-                    die('Error create templet dir');
+            $this->sccppath["tftp_templates"] = $this->sccppath["tftp_path"] . '/templates';
+            if (!file_exists($this->sccppath["tftp_templates"])) {
+                if (!mkdir($this->sccppath["tftp_templates"], 0777, true)) {
+                    die('Error create template dir');
                 }
             }
         }
@@ -1588,7 +1594,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
             $this->sccppath["tftp_DP"] = $this->sccppath["tftp_path"] . '/Dialplan';
             if (!file_exists($this->sccppath["tftp_DP"])) {
                 if (!mkdir($this->sccppath["tftp_DP"], 0777, true)) {
-                    die('Error create DialPlan templet dir');
+                    die('Error create DialPlan template dir');
                 }
             }
         }
@@ -1597,9 +1603,9 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
             return;
         }
 
-        if (!file_exists($this->sccppath["tftp_templets"] . '/XMLDefault.cnf.xml_template')) {
+        if (!file_exists($this->sccppath["tftp_templates"] . '/XMLDefault.cnf.xml_template')) {
             $src_path = $_SERVER['DOCUMENT_ROOT'] . '/admin/modules/sccp_manager/conf/';
-            $dst_path = $this->sccppath["tftp_templets"] . '/';
+            $dst_path = $this->sccppath["tftp_templates"] . '/';
             foreach (glob($src_path . '*.*_template') as $filename) {
                 copy($filename, $dst_path . basename($filename));
             }
@@ -1693,7 +1699,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         $save_data = array();
         $integer_msg = _("%s must be a non-negative integer");
         $errors = array();
-        foreach ($get_settings[$hdr_arprefix.'dialtemplete'] as $key => $value) {
+        foreach ($get_settings[$hdr_arprefix.'dialtemplatee'] as $key => $value) {
             $xmlstr .=  '<TEMPLATE';
             if (!empty($value['match'])) {
                 foreach ($dialFelds as $fld){
@@ -1712,12 +1718,12 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
             $xmlstr .= "/>\n";
         }
         $xmlstr .= '</DIALTEMPLATE>';
-        if (!empty($get_settings['idtemplet'])) {
-            if ($get_settings['idtemplet'] == '*new*') {
-                if (!empty($get_settings[$hdr_prefix.'dialtemplete_name'])) {
-                    $put_file = (string)$get_settings[$hdr_prefix.'dialtemplete_name'];
+        if (!empty($get_settings['idtemplate'])) {
+            if ($get_settings['idtemplate'] == '*new*') {
+                if (!empty($get_settings[$hdr_prefix.'dialtemplatee_name'])) {
+                    $put_file = (string)$get_settings[$hdr_prefix.'dialtemplatee_name'];
                 } else { $errors = array('Fields Dial Plan Name is requered !!'); }
-            } else $put_file = (string)$get_settings['idtemplet'];
+            } else $put_file = (string)$get_settings['idtemplate'];
         } else { $errors = array('Fields Dial Plan Name is requered !!'); }
 
         if (empty($errors)) {
@@ -1835,10 +1841,10 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         $def_xml_fields = array('authenticationURL', 'informationURL', 'messagesURL', 'servicesURL', 'directoryURL', 'proxyServerURL', 'idleTimeout', 'idleURL');
         $def_xml_locale = array('userLocale', 'networkLocaleInfo', 'networkLocale');
         $xml_name = $this->sccppath["tftp_path"] . '/XMLDefault.cnf.xml';
-        $xml_templet = $this->sccppath["tftp_templets"] . '/XMLDefault.cnf.xml_template';
+        $xml_template = $this->sccppath["tftp_templates"] . '/XMLDefault.cnf.xml_template';
 
-        if (file_exists($xml_templet)) {
-            $xml_work = simplexml_load_file($xml_templet);
+        if (file_exists($xml_template)) {
+            $xml_work = simplexml_load_file($xml_template);
 
 
             $xnode = &$xml_work->callManagerGroup->members;
@@ -1935,14 +1941,14 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
             return false;
         }
 
-        if (!(empty($var_hw_config['nametemplet']))) {
-            $xml_templet = $this->sccppath["tftp_templets"] . '/' . $var_hw_config['nametemplet'];
+        if (!(empty($var_hw_config['nametemplate']))) {
+            $xml_template = $this->sccppath["tftp_templates"] . '/' . $var_hw_config['nametemplate'];
         } else {
-            $xml_templet = $this->sccppath["tftp_templets"] . '/SEP0000000000.cnf.xml_79df_template';
+            $xml_template = $this->sccppath["tftp_templates"] . '/SEP0000000000.cnf.xml_79df_template';
         }
         $xml_name = $this->sccppath["tftp_path"] . '/' . $dev_id . '.cnf.xml';
-        if (file_exists($xml_templet)) {
-            $xml_work = simplexml_load_file($xml_templet);
+        if (file_exists($xml_template)) {
+            $xml_work = simplexml_load_file($xml_template);
             /*
               $node = $xml_work -> certHash;
               if ( !empty($node)) {F
@@ -2076,7 +2082,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
 //            print_r($xml_work);
             $xml_work->asXml($xml_name);  // Save  
         } else {
-            die('Error Hardware templete :' . $xml_templet . ' not found');
+            die('Error Hardware templatee :' . $xml_template . ' not found');
         }
         return time();
     }
@@ -2167,7 +2173,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 $raw_settings = sql($sql, "getAll", DB_FETCHMODE_ASSOC);
                 break;
             case "get_sccpdevice_byid":
-                $sql = 'SELECT t1.*, types.dns,  types.buttons, types.loadimage, types.nametemplet as nametemplet, '
+                $sql = 'SELECT t1.*, types.dns,  types.buttons, types.loadimage, types.nametemplate as nametemplate, '
                         . 'addon.buttons as addon_buttons FROM sccpdevice AS t1 '
                         . 'LEFT JOIN sccpdevmodel as types ON t1.type=types.model '
                         . 'LEFT JOIN sccpdevmodel as addon ON t1.addon=addon.model WHERE name="' . $data['id'] . '";';
@@ -2207,7 +2213,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         $file_ext = array('.loads', '.LOADS', '.sbn', '.SBN', '.bin', '.BIN');
 
         $dir = $this->sccppath["tftp_path"];
-        $dir_tepl = $this->sccppath["tftp_templets"];
+        $dir_tepl = $this->sccppath["tftp_templates"];
         switch ($format_list) {
             case "model":
                 $sel_inf = "model, vendor, dns, buttons";
@@ -2287,8 +2293,8 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 } else {
                     $raw_settings[$i]['validate'] = '-;';
                 }
-                if (!empty($raw_settings[$i]['nametemplet'])) {
-                    $file = $dir_tepl . '/' . $raw_settings[$i]['nametemplet'];
+                if (!empty($raw_settings[$i]['nametemplate'])) {
+                    $file = $dir_tepl . '/' . $raw_settings[$i]['nametemplate'];
                     if (file_exists($file)) {
                         $raw_settings[$i]['validate'] .= 'yes';
                     } else {

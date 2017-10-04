@@ -840,7 +840,7 @@ msgid "Loadinformation ID"
 msgstr "CiscoКод Модели"
 
 #: views/server.model:
-msgid "Model templet"
+msgid "Model template"
 msgstr "Шаблон насторек .xml_XXX_template"
 
 #: views/server.model:
@@ -864,7 +864,7 @@ msgid "Load Information ID"
 msgstr "CiscoКод Модели"
 
 #: views/server.model:
-msgid "Model templet XML"
+msgid "Model template XML"
 msgstr "Шаблон насторек .xml_XXX_template"
 
 #: views/server.model:

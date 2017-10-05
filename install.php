@@ -209,8 +209,8 @@ END;
     if (db::IsError($check)) {
         die_freepbx("Can not create sccpsettings table, error:$check\n");
     }
-
-sql = <<< END
+    
+$sql = <<< END
     CREATE TABLE IF NOT EXISTS `sccpdevmodel` (
         `model` varchar(20) NOT NULL DEFAULT '',
         `vendor` varchar(40) DEFAULT '',
@@ -222,10 +222,10 @@ sql = <<< END
         `nametemplate` VARCHAR(50) NULL DEFAULT NULL,
         PRIMARY KEY (`model`),
         KEY `model` (`model`)
-    ) ENGINE=MyISAM DEFAULT CHARSET=latin1";
+    ) ENGINE=MyISAM DEFAULT CHARSET=latin1
 END;
 
-    $check = $db->query($sql);
+$check = $db->query($sql);
     if (db::IsError($check)) {
         die_freepbx("Can not create sccpdevmodel table, error:$check\n");
     }

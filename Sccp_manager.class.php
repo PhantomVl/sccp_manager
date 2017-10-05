@@ -1964,6 +1964,8 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
             'servicesURL' => 'dev_servicesURL', 'directoryURL' => 'dev_directoryURL', 'proxyServerURL' => 'dev_proxyServerURL', 'idleTimeout' => 'dev_idleTimeout',
             'idleURL' => 'dev_idleURL', 'sshUserId' => 'dev_sshUserId', 'sshPassword' => 'dev_sshPassword', 'deviceProtocol' => 'dev_deviceProtocol'
             );
+        $var_xml_general_vars = array('capfAuthMode' => '0', 'deviceSecurityMode' => '1', 'mobility' => '', 'phoneServices' =>'');
+        
         if (empty($dev_id)) {
             return false;
         }
@@ -1992,6 +1994,10 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
 //              Set System global Values
                 if (!empty($var_xml_general_fields[$key])) {
                     $xml_work->$key = $this->sccpvalues[$var_xml_general_fields[$key]]['data'];
+                } else {
+                    if (!isset($var_xml_general_vars[$key])) {
+                        $xml_work->$key = $var_xml_general_vars[$key];
+                    }
                 }
 //              Set section Values
                 $xml_node = $xml_work->$key;
@@ -2127,15 +2133,13 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                             $this->replaceSimpleXmlNode($xml_work->$key, $xml_node);
                         }
                         break;
-//                    case 'networkLocale':
-//                        $xml_work->$key = $this->sccp_lang[$this->sccpvalues['netlang']['data']]['language'];
-//                        $xml_work->$key = $this->sccp_lang[$this->sccpvalues['netlang']['data']]['language'];
-//                        break;
-                    case 'mobility':
+// Move all set to $var_xml_general_vars
+//                    case 'mobility':
+//                    case 'capfList':
 //                       break;
-                    case 'phoneServices':
+//                    case 'phoneServices':
 //                        break;
-                        $xml_work->$key = '';
+//                        $xml_work->$key = '';
                     default:
                         break;
                 }

@@ -10,7 +10,7 @@ global $astman;
 global $version;
 
 $db_config_v0 = array('sccpdevmodel' => array('enabled' => array('create' => "INT(2) NULL DEFAULT '0'"),
-                                           'nametemplet' => array('create' => 'VARCHAR(50) NULL DEFAULT NULL'),
+                                           'nametemplate' => array('create' => 'VARCHAR(50) NULL DEFAULT NULL'),
                                            'loadinformationid' => array('create' => "VARCHAR(30) NULL DEFAULT NULL" )
                                            ),
                      'sccpdevice' => array(
@@ -60,7 +60,7 @@ $db_config_v0 = array('sccpdevmodel' => array('enabled' => array('create' => "IN
 
 
 $db_config_v3 = array('sccpdevmodel' => array('enabled' => array('create' => "INT(2) NULL DEFAULT '0'"),
-                                           'nametemplet' => array('create' => 'VARCHAR(50) NULL DEFAULT NULL'),
+                                           'nametemplate' => array('create' => 'VARCHAR(50) NULL DEFAULT NULL'),
                                            'loadinformationid' => array('create' => "VARCHAR(30) NULL DEFAULT NULL" )
                                            ),
                      'sccpdevice' => array(
@@ -127,26 +127,16 @@ $autoincrement = (($amp_conf["AMPDBENGINE"] == "sqlite") || ($amp_conf["AMPDBENG
 
 $table_req = array('sccpdevice', 'sccpline', 'buttonconfig');
 
-$sql = <<< END
-	CREATE TABLE IF NOT EXISTS `sccpsettings` (
-		`keyword` VARCHAR (50) NOT NULL default '',
-		`data`    VARCHAR (255) NOT NULL default '',
-		`seq`     TINYINT (1),
-		`type`    TINYINT (1) NOT NULL default '0',
-		PRIMARY KEY (`keyword`,`seq`,`type`)
-	)
-END;
-
 $ss = FreePBX::create()->Sccp_manager;
 
-outn(_("checking for requery Sccp_manager table.."));
+outn(_("checking for Sccp_manager database tables.."));
 foreach ($table_req as $value) {
     $check = $db->getRow("SELECT 1 FROM `$value` LIMIT 0", DB_FETCHMODE_ASSOC);
     if (DB::IsError($check)) {
 //         print_r("none, creating table :". $value);
-        out(_("none, Can't fient table: " . $value));
-        out(_("none, Plz. Open chai-sccp/conf  directory to create DB scheme"));
-        die("!!!! Instalation error. Can not find required ".$value." table !!!!!!\n");
+        out(_("none, Can't find table: " . $value));
+        out(_("none, Please goto the chan-sccp/conf directory and create the DB schema (See wiki)"));
+        die("!!!! Installation error: Can not find required ".$value." table !!!!!!\n");
 //        die_freepbx("!!!! Instalation error. Can not find required ".$value." table !!!!!!\n");
     }
 }
@@ -157,7 +147,7 @@ outn(_("checking Version : ").$version);
 
 $dst = $_SERVER['DOCUMENT_ROOT'] . '/admin/modules/sccp_manager/views';
 if (fileowner($_SERVER['DOCUMENT_ROOT']) != fileowner($dst)){
-    die('Plz Test permission run "amportal chown"');
+    die('Please (re-)check permissions by running "amportal chown"');
 }
 
 if (!empty($version)) {
@@ -172,56 +162,72 @@ if (!empty($version)) {
     $ver_compatable = false;
     die('Versin is not comapable');
 }
-    $ast_out = $astman->Command("sccp show version");
-    $db_config = $db_config_v0;
-    if (preg_match("/Release.*\(/", $ast_out['data'] , $matches)) {
-        $ast_out = explode(' ', substr($matches[0],9,-1));
-        $sccp_ver = 0;
-        if ($ast_out[0] >= '4.3.0'){
-            $sccp_ver = 1;
-        }
-        if (!empty($ast_out[1]) && $ast_out[1] == 'develop'){           
-            $sccp_ver = 10;
-            if (!empty($ast_out[3])) {
-                if (base_convert($ast_out[3],16,10) >= base_convert('702487a',16,10)){           
-                    $sccp_ver += 1;
-                    $db_config = $db_config_v3;
 
-                }
-            }
-        } else {
-           $sccp_ver = 0;
-        }
+// Should be replaced by a function to check the AMI:SCCPConfigMetaData
+// JSON: {"Name":"Chan-sccp-b","Branch":"issues/394_1","Version":"4.3.0","Revision":"8d9d74fM","ConfigRevision":"0","ConfigureEnabled": ["park","pickup","realtime","video","conferenence","dirtrfr","feature_monitor","functions","manager_events","devstate_feature","dynamic_speeddial","dynamic_speeddial_cid","experimental","debug"],"Segments":["general","device","line","softkey"]}
+$ast_out = $astman->Command("sccp show version");
+$db_config = $db_config_v0;
+if (preg_match("/Release.*\(/", $ast_out['data'] , $matches)) {
+    $ast_out = explode(' ', substr($matches[0],9,-1));
+    $sccp_ver = 0;
+    if ($ast_out[0] >= '4.3.0'){
+        $sccp_ver = 1;
     }
+    if (!empty($ast_out[1]) && $ast_out[1] == 'develop'){           
+        $sccp_ver = 10;
+        if (!empty($ast_out[3])) {
+            if (base_convert($ast_out[3],16,10) >= base_convert('702487a',16,10)){           
+                $sccp_ver += 1;
+                $db_config = $db_config_v3;
+            }
+        }
+    } else {
+       $sccp_ver = 0;
+    }
+}
+
+
 
 // test
 //    $sccp_ver = 0;
 //    $db_config = $db_config_v0;
 // test
-
-    out(_("none, creating table"));
-    $check = $db->query($sql);
-    if (db::IsError($check)) {
-        die_freepbx("Can not create sccpdevmodel table\n");
-    }
     outn(_(" Sccp Version : ").$sccp_ver);
 
-    $sql = "CREATE TABLE IF NOT EXISTS `sccpdevmodel` (
-    `model` varchar(20) NOT NULL DEFAULT '',
-    `vendor` varchar(40) DEFAULT '',
-    `dns` int(2) DEFAULT '1',
-    `buttons` int(2) DEFAULT '0',
-    `loadimage` varchar(40) DEFAULT '',
-    `loadinformationid` VARCHAR(30) NULL DEFAULT NULL,
-    `enabled` INT(2) NULL DEFAULT '0',
-    `nametemplet` VARCHAR(50) NULL DEFAULT NULL,
-    PRIMARY KEY (`model`),
-    KEY `model` (`model`)
+$sql = <<< END
+    CREATE TABLE IF NOT EXISTS `sccpsettings` (
+            `keyword` VARCHAR (50) NOT NULL default '',
+            `data`    VARCHAR (255) NOT NULL default '',
+            `seq`     TINYINT (1),
+            `type`    TINYINT (1) NOT NULL default '0',
+            PRIMARY KEY (`keyword`,`seq`,`type`)
+    )
+END;
+
+    out(_("No sccpsettings table, creating table"));
+    $check = $db->query($sql);
+    if (db::IsError($check)) {
+        die_freepbx("Can not create sccpsettings table, error:$check\n");
+    }
+
+sql = <<< END
+    CREATE TABLE IF NOT EXISTS `sccpdevmodel` (
+        `model` varchar(20) NOT NULL DEFAULT '',
+        `vendor` varchar(40) DEFAULT '',
+        `dns` int(2) DEFAULT '1',
+        `buttons` int(2) DEFAULT '0',
+        `loadimage` varchar(40) DEFAULT '',
+        `loadinformationid` VARCHAR(30) NULL DEFAULT NULL,
+        `enabled` INT(2) NULL DEFAULT '0',
+        `nametemplate` VARCHAR(50) NULL DEFAULT NULL,
+        PRIMARY KEY (`model`),
+        KEY `model` (`model`)
     ) ENGINE=MyISAM DEFAULT CHARSET=latin1";
+END;
 
     $check = $db->query($sql);
     if (db::IsError($check)) {
-        die_freepbx("Can not create sccpsettings table\n");
+        die_freepbx("Can not create sccpdevmodel table, error:$check\n");
     }
     out(_("none, Modify DB schama"));
     
@@ -307,7 +313,7 @@ if (!empty($version)) {
     out(_("none, Uptade Table Info"));
 
 //$sql = "REPLACE INTO `sccpdevmodel` VALUES ('7925','CISCO',1,1,'',''),('7902','CISCO',1,1,'CP7902080002SCCP060817A','loadInformation30008'),('7905','CISCO',1,1,'CP7905080003SCCP070409A','loadInformation20000'),('7906','CISCO',1,1,'SCCP11.8-3-1S','loadInformation369'),('7910','CISCO',1,1,'P00405000700','loadInformation6'),('7911','CISCO',1,1,'SCCP11.8-3-1S','loadInformation307'),('7912','CISCO',1,1,'CP7912080003SCCP070409A','loadInformation30007'),('7914','CISCO',0,14,'S00105000300','loadInformation124'),('7920','CISCO',1,1,'cmterm_7920.4.0-03-02','loadInformation30002'),('7921','CISCO',1,1,'CP7921G-1.0.3','loadInformation365'),('7931','CISCO',1,1,'SCCP31.8-3-1S','loadInformation348'),('7936','CISCO',1,1,'cmterm_7936.3-3-13-0','loadInformation30019'),('7937','CISCO',1,1,'','loadInformation431'),('7940','CISCO',1,2,'P00308000500','loadInformation8'),('Digital Access+','CISCO',1,1,'D00303010033','loadInformation42'),('7941','CISCO',1,2,'P00308000500','loadInformation115'),('7941G-GE','CISCO',1,2,'P00308000500','loadInformation309'),('7942','CISCO',1,2,'P00308000500','loadInformation434'),('Digital Access','CISCO',1,1,'D001M022','loadInformation40'),('7945','CISCO',1,2,'P00308000500','loadInformation435'),('7960','CISCO',3,6,'P00308000500','loadInformation7'),('7961','CISCO',3,6,'P00308000500','loadInformation30018'),('7961G-GE','CISCO',3,6,'P00308000500','loadInformation308'),('7962','CISCO',3,6,'P00308000500','loadInformation404'),('7965','CISCO',3,6,'P00308000500','loadInformation436'),('7970','CISCO',3,8,'SCCP70.8-3-1S','loadInformation30006'),('7971','CISCO',3,8,'SCCP70.8-3-1S','loadInformation119'),('7975','CISCO',3,8,'SCCP70.8-3-1S','loadInformation437'),('7985','CISCO',3,8,'cmterm_7985.4-1-4-0','loadInformation302'),('ATA 186','CISCO',1,1,'ATA030203SCCP051201A','loadInformation12'),('IP Communicator','CISCO',1,1,'','loadInformation30016'),('12 SP','CISCO',1,1,'','loadInformation3'),('12 SP+','CISCO',1,1,'','loadInformation2'),('30 SP+','CISCO',1,1,'','loadInformation1'),('30 VIP','CISCO',1,1,'','loadInformation5'),('7914,7914','CISCO',0,28,'S00105000300','loadInformation124'),('7915','CISCO',0,14,'',''),('7916','CISCO',0,14,'',''),('7915,7915','CISCO',0,28,'',''),('7916,7916','CISCO',0,28,'',''),('CN622','MOTOROLA',1,1,'','loadInformation335'),('ICC','NOKIA',1,1,'',''),('E-Series','NOKIA',1,1,'',''),('3911','CISCO',1,1,'','loadInformation446'),('3951','CISCO',1,1,'','loadInformation412');";
-    $sql = "REPLACE INTO `sccpdevmodel` (`model`, `vendor`, `dns`, `buttons`, `loadimage`, `loadinformationid`, `enabled`, `nametemplet`) VALUES ('12 SP', 'CISCO', 1, 1, '', 'loadInformation3', 0, NULL)," .
+    $sql = "REPLACE INTO `sccpdevmodel` (`model`, `vendor`, `dns`, `buttons`, `loadimage`, `loadinformationid`, `enabled`, `nametemplate`) VALUES ('12 SP', 'CISCO', 1, 1, '', 'loadInformation3', 0, NULL)," .
             "('12 SP+', 'CISCO', 1, 1, '', 'loadInformation2', 0, NULL), ('30 SP+', 'CISCO', 1, 1, '', 'loadInformation1', 0, NULL), ('30 VIP', 'CISCO', 1, 1, '', 'loadInformation5', 0, NULL), ('3911', 'CISCO', 1, 1, '', 'loadInformation446', 0, NULL), ('3951', 'CISCO', 1, 1, '', 'loadInformation412', 0, ''), ('6901', 'CISCO', 1, 0, 'SCCP6901.9-2-1-a', 'loadInformation547', 0, NULL), ('6911', 'CISCO', 1, 0, 'SCCP6911.9-2-1-a', 'loadInformation548', 0, NULL), ('6921', 'CISCO', 1, 0, 'SCCP69xx.9-2-1-0', 'loadInformation496', 0, NULL), ('6941', 'CISCO', 1, 1, 'SCCP69xx.9-2-1-0', 'loadInformation495', 0, NULL), ('6945', 'CISCO', 1, 0, 'SCCP6945.9-2-1-0', 'loadInformation564', 0, NULL), ('6961', 'CISCO', 1, 0, 'SCCP69xx.9-2-1-0', 'loadInformation497', 0, NULL), ('7902', 'CISCO', 1, 1, 'CP7902080002SCCP060817A', 'loadInformation30008', 0, NULL), " .
             "('7905', 'CISCO', 1, 1, 'CP7905080003SCCP070409A', 'loadInformation20000', 0, NULL), ('7906', 'CISCO', 1, 1, 'SCCP11.9-2-1S', 'loadInformation369', 1, 'SEP0000000000.cnf.xml_791x_template'), ('7910', 'CISCO', 1, 1, 'SCCP11.9-2-1S', 'loadInformation6', 1, 'SEP0000000000.cnf.xml_791x_template'), ('7911', 'CISCO', 1, 1, 'SCCP11.9-2-1S', 'loadInformation307', 1, 'SEP0000000000.cnf.xml_791x_template'), ('7912', 'CISCO', 1, 1, 'CP7912080004SCCP080108A', 'loadInformation30007', 0, NULL), ('7914', 'CISCO', 0, 14, 'S00105000400', 'loadInformation124', 1, NULL),('7914,7914', 'CISCO', 0, 28, 'S00105000400', 'loadInformation124', 1, NULL), ('7915', 'CISCO', 0, 24, 'B015-1-0-4', 'loadInformation227', 1, NULL), ('7915,7915', 'CISCO', 0, 48, 'B015-1-0-4', 'loadInformation228', 1, NULL), ('7916', 'CISCO', 0, 24, 'B015-1-0-4', 'loadInformation229', 1, NULL), " .
             "('7916,7916', 'CISCO', 0, 48, 'B016-1-0-4', 'loadInformation230', 1, NULL), ('7920', 'CISCO', 1, 1, 'cmterm_7920.4.0-03-02', 'loadInformation30002', 0, NULL), ('7921', 'CISCO', 1, 1, 'CP7921G-1.4.1SR1', 'loadInformation365', 0, NULL),('7925', 'CISCO', 1, 6, 'CP7925G-1.4.1SR1', 'loadInformation484', 0, NULL), ('7926', 'CISCO', 1, 1, 'CP7926G-1.4.1SR1', 'loadInformation557', 0, NULL), ('7931', 'CISCO', 1, 34, 'SCCP31.9-2-1S', 'loadInformation348', 0, NULL), ('7935', 'CISCO', 1, 2, 'P00503021900', 'loadInformation9', 0, NULL), ('7936', 'CISCO', 1, 1, 'cmterm_7936.3-3-21-0', 'loadInformation30019', 0, NULL), ('7937', 'CISCO', 1, 1, 'apps37sccp.1-4-4-0', 'loadInformation431', 0, 'SEP0000000000.cnf.xml_7937_template'), ('7940', 'CISCO', 1, 2, 'P0030801SR02', 'loadInformation8', 1, 'SEP0000000000.cnf.xml_796x_template'), " .
@@ -352,7 +358,6 @@ if (!empty($version)) {
             FROM sccpdevice
             LEFT JOIN buttonconfig ON ( buttonconfig.device = sccpdevice.name )
             GROUP BY sccpdevice.name;";
-
     
     $sql_v0 = "CREATE OR REPLACE
             ALGORITHM = MERGE            
@@ -384,7 +389,6 @@ if (!empty($version)) {
     if (DB::IsError($check)) {
         die_freepbx("Can not modify sccpdevice table\n");
     }
-
     
 //    $ss->save_submit($request);
 //    $ss->sccp_create_sccp_init();

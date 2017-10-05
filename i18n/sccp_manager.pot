@@ -974,7 +974,7 @@ msgid "Loadinformation ID"
 msgstr ""
 
 #: views/server.model:
-msgid "Model templet"
+msgid "Model template"
 msgstr ""
 
 #: views/server.model:
@@ -998,7 +998,7 @@ msgid "Load Information ID"
 msgstr ""
 
 #: views/server.model:
-msgid "Model templet XML"
+msgid "Model template XML"
 msgstr ""
 
 #: views/server.model:

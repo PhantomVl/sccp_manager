@@ -555,7 +555,7 @@ and open the template in the editor. Base Version before all crash :-)
           <help>Music Class: Available MOH Classes. These are the MOH classes listed in your current server.</help>
       </item>
       <item type="SLA-disabled" id="6"><label>Default Dial Plan</label>
-          <name>dial_templet</name> 
+          <name>dial_template</name> 
           <default>none</default>
           <select></select>
           <class>sccp-custom</class>
@@ -962,10 +962,10 @@ and open the template in the editor. Base Version before all crash :-)
       
                     
     </page_group>
-    <page_group name="sccp_dp_new_templet">
-        <item type="IE" id="1" seq="99"><label>Templet Name</label>
+    <page_group name="sccp_dp_new_template">
+        <item type="IE" id="1" seq="99"><label>Template Name</label>
             <input>
-                <name>dialtemplete_name</name> 
+                <name>dialtemplate_name</name> 
                 <default></default>
                 <class>form-control</class>
             </input>
@@ -973,8 +973,8 @@ and open the template in the editor. Base Version before all crash :-)
         </item>
         
     </page_group>
-    <page_group name="sccp_dp_templet">
-      <label>Device Templet Function</label>
+    <page_group name="sccp_dp_template">
+      <label>Device Template Function</label>
       <item type="HLP" id="2">
           <label>HELP SCCP Server Name</label>        
       <name>Help_id1</name>
@@ -1000,7 +1000,7 @@ and open the template in the editor. Base Version before all crash :-)
       </item>
 
       <item type="ITED" id="1" seq="0">
-        <name>dialtemplete</name>
+        <name>dialtemplate</name>
         <default>*/10/*</default>
         <element1 type="title" field="title"><options class="form-control control-label"/>title</element1>
         <element type="input" value="none" field="match" display_prefix="(" display_sufix=")"><options class="form-control dpt-title" placeholder="Pattern to match"/></element>

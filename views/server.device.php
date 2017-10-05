@@ -12,7 +12,7 @@ foreach ($this->get_DP_list() as $value) {
 if (strlen($data) >0 ){
     $data = substr ($data,0,-1);
 }
- $this->sccpvalues['dial_templet'] = array('keyword' => 'dial_templet', 'data' => $data, 'type' => '10', 'seq' => '90');
+ $this->sccpvalues['dial_template'] = array('keyword' => 'dial_template', 'data' => $data, 'type' => '10', 'seq' => '90');
 ?>
 <form autocomplete="off" name="frm_device" id="frm_device" class="fpbx-submit" action="" method="post">
     <input type="hidden" name="category" value="deviceform">

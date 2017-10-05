@@ -288,6 +288,76 @@ and open the template in the editor. Base Version before all crash :-)
           </select>
           <help>Date Format: Time zone</help>
         </item>
+    </page_group>        
+      
+    <page_group name="sccp_srst"><label>SCCP Phone SRST </label>
+        <item type="HLP" id="2">
+            <label>HELP SRST</label>        
+        <name>Help_srst</name>
+        <element type='p'>You can also configure a Survivable Remote Site Telephony (SRST) reference as the last device in the CallManager(CM) list.
+            This proves especially useful in a remote site configuration where the phones and Asterisk are connected over a WAN network.
+            SRST provides users with fallback support for the IP phones that cannot access the primary, secondary, or tertiary Asterisk Node in the CallManager List because
+            of an Asterisk Node failure or loss of connectivity across the WAN. For the remote sites attached to multiple-service routers across the WAN,
+            SRST ensures that your remote users receive continuous (although minimal) service by providing call handling support directly from the SRST router.
+        </element>
+        <element type='p'>When IP phones lose contact with primary, secondary, and tertiary Asterisk Nodes (CM's), they must establish a connection to a local
+            SRST router to sustain the call-processing capability necessary to place and receive calls. 
+            The IP phone retains the IP address of the local SRST router as a default router in the Network Configuration area of the Settings menu.
+            The Settings menu supports a maximum of five default router entries; however, the cnf.xml accommodates a maximum of three entries. 
+            When a secondary Asterisk Node is not available on the network, the local SRST Router's IP address is retained as the standby 
+            connection for Asterisk Node during normal operation.
+        </element>
+        </item>
+
+        <item type="IS" id="1" seq="20"><name>srst_Option</name> <label>SRST Server Enabled</label>
+          <default>no</default>
+          <button value="enabled">Yes</button>
+          <button value="disable">No</button>
+          <button value="user">TempletDefault</button>
+          <help>You enabled configure a Survivable Remote Site Telephony (SRST) reference as the last device in the CallManager(CM) list.</help>
+        </item>
+        <item type="IS" id="3" seq="20"><name>srst_userModifiable</name> <label>SRST User Modifiable</label>
+            <default>false</default>
+            <button value="true">Yes</button>
+            <button value="false">No</button>
+            <help>The user can change the personal SRST configuration on the device</help>
+        </item>
+        <item type="IS" id="3" seq="20"><name>srst_isSecure</name> <label>SRST Security</label>
+            <default>false</default>
+            <button value="true">Yes</button>
+            <button value="false">No</button>
+            <help>The user can change the personal SRST configuration on the device</help>
+        </item>
+
+        <item type="IE" id="2" seq="20">
+            <label>SRST Config Name</label>
+            <input>
+                <name>srst_Name</name> 
+                <default>Enable</default>
+            </input>
+            <help>You enabled configure a Survivable Remote Site Telephony (SRST) reference as the last device in the CallManager(CM) list.</help>
+        </item>
+
+        <item type="IED" id="3" seq="20">
+            <label>SRSt Server list</label>
+            <name>srst_ip</name>
+            <max_row>3</max_row>
+            <default>/</default>
+            <input value="none" field="Addr" nameseparator=":"><options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$" /><class></class></input>
+            <input value="none" field="port"><options placeholder="2000" pattern="^([0-9]){3,5}$"/> <class></class></input>
+            <button>Add Server</button>
+            <help>Help.</help>
+        </item>
+        <item type="IED-disabled" id="3" seq="20">
+            <label>SRST Sip Server list</label>
+            <name>srst_sip</name>
+            <max_row>3</max_row>
+            <default>/</default>
+            <input value="none" field="Addr" nameseparator=":"><options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$" /><class></class></input>
+            <input value="none" field="port"><options placeholder="2000" pattern="^[0-9]{3,5}$"/> <class></class></input>
+            <button>Add Server</button>
+            <help>Help.</help>
+        </item>
     </page_group>          
 
     <page_group name="sccp_dev_url">

@@ -31,7 +31,7 @@
                             <th data-checkbox="true"></th>
                             <th data-sortable="true" data-field="mac"><?php echo _('Device SEP ID') ?></th>
                             <th data-sortable="true" data-field="description"><?php echo _('Device  Descriptions') ?></th>
-                            <th data-sortable="true" data-field="type"><?php echo _('Device type') ?></th>
+                            <th data-sortable="true" data-formatter="DispayTypeFormatter" data-field="type"><?php echo _('Device type') ?></th>
                             <th data-sortable="false" data-field="button" data-formatter="LineFormatter"><?php echo _('Line') ?></th>
                             <th data-sortable="false" data-field="status"><?php echo _('Status') ?></th>
                             <th data-sortable="false" data-field="address"><?php echo _('Address') ?></th>
@@ -45,10 +45,22 @@
 </div>
 
 <script>
+    function DispayTypeFormatter(value, row, index) {
+        var exp_model = value;
+        if (row['addon'] !== null ) {
+            exp_model += ' + ' + row['addon'];
+        }
+        return  exp_model;
+        
+    }
     function DispayDeviceActionsKeyFormatter(value, row, index) {
         var exp_model = '';
         if (row['new_hw'] == "Y") {
-            exp_model += '<a href="?display=sccp_phone&tech_hardware=cisco&new_id=' + row['name'] + '&type='+ row['type']+'"><i class="fa fa-pencil"></i></a> &nbsp; &nbsp;\n';
+            exp_model += '<a href="?display=sccp_phone&tech_hardware=cisco&new_id=' + row['name'] + '&type='+ row['type'];
+            if (row['addon'] !== null ) {
+                exp_model += '&addon='+ row['addon'];
+            }            
+            exp_model += '"><i class="fa fa-pencil"></i></a> &nbsp; &nbsp;\n';
             
         } else {
             exp_model += '<a href="?display=sccp_phone&tech_hardware=cisco&id=' + row['name'] + '"><i class="fa fa-pencil"></i></a> &nbsp; &nbsp;\n';

@@ -23,7 +23,9 @@
  *  + Change internal use Field to _Field (new fiture support in chan_sccp )
  *  + Delete phone XML
  *  + Change Installer  ?? (test )
- *  - Auto Addons!
+ *  + SRST Config
+ *  - Failover config
+ *  + Auto Addons!
  *  + DND Mode
  *  + secondary_dialtone_digits = ""     line config
  *  + secondary_dialtone_tone = 0x22     line config                                              
@@ -43,6 +45,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
 //	const General - sccp.conf[%keyset%]  = '5';  NAME space 
 //	const General - sccp.conf[%keyset%]  = '6';  data
 //	const General - default.xml          = '10';
+//	const General - teplet.xml           = '20';
 //	const General - system_path          = '2';
 //	const General - don't store          = '99';
 
@@ -63,6 +66,10 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         "dateformat" => 'D.M.Y',
         "disallow" => 'all', "allow" => 'alaw;ulaw',
         "devicetable" => 'sccpdevice',
+        "hotline_enabled" => 'no',
+        "hotline_context" => 'default',
+        "hotline_extension" => '*60',
+        "hotline_label" => 'hotline',
         "linetable" => 'sccpline',
         "tftp_path" => '/tftpboot'
     );
@@ -365,6 +372,10 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                     "name" => _("SCCP Codec"),
                     "page" => 'views/server.codec.php'
                 ),
+                "sccpadv" => array(
+                    "name" => _("Advanced SCCP Settings"),
+                    "page" => 'views/server.advanced.php'
+                ),
             );
 
             foreach ($this->pagedata as &$page) {
@@ -548,6 +559,8 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 }
                 $this->save_submit($request);
                 $this->sccp_db_save_setting();
+//                $this->sccp_create_sccp_init();
+                
                 $res = $this->sccp_core_comands(array('cmd' => 'sccp_reload'));
                 $msg = 'Config Saved: ' . $res['Response'] . '. Info :' . $res['data'];
 //                needreload();
@@ -586,6 +599,8 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                             $this->sccp_save_db('sccpdevice', array('name' => $idv), 'delete', "name");
                             $this->sccp_save_db("sccpbuttons", array(), 'delete', '', $idv);
                             $this->sccp_delete_device_XML($idv); // Концы в вводу !!  
+//                            $this->sccp_core_comands(array('cmd' => 'reload_phone', 'name' => $idv));
+                            $this->sccp_core_comands(array('cmd' => 'reset_phone', 'name' => $idv));
                         }
                     }
                     return array('status' => true, 'table_reload' => true, 'message' => 'HW is Delete ! ');
@@ -761,10 +776,14 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                         $id_name = $dev_ids['name'];
                         if (empty($dev_ids['news'])) {
                             $dev_data = $this->sccp_getdevice_info($id_name);
+                            $dev_addon= $dev_data['SCCP_Vendor']['model_addon'];
+                            if (empty($dev_addon)) {
+                                $dev_addon = null;
+                            }
                             $dev_schema =  $this-> getSccp_model_information('byciscoid', false, "all", array('model' =>$dev_data['SCCP_Vendor']['model_id']));
-
                             $result[] = array('name' => $id_name, 'mac' => $id_name, 'button' => '---', 'type' => $dev_schema[0]['model'],  'new_hw' => 'Y',
-                                'description' => '*NEW* '.$dev_ids['descr'], 'status' => '*NEW* '.$dev_ids['status'], 'address' => $dev_ids['address'] );
+                                'description' => '*NEW* '.$dev_ids['descr'], 'status' => '*NEW* '.$dev_ids['status'], 'address' => $dev_ids['address'], 
+                                'addon' => $dev_addon);
                         }
                     }
 
@@ -941,7 +960,13 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         $this->sccp_create_device_XML($name_dev);
 //      sccp restart  
 //        $this->sccp_core_comands(array('cmd'=>'reset_phone', 'name' => $name_dev));
-        $this->sccp_core_comands(array('cmd' => 'reload_phone', 'name' => $name_dev));
+//        
+//        $this->sccp_core_comands(array('cmd' => 'reset_phone', 'name' => $idv));
+        if ($hw_id == 'new') {
+            $this->sccp_core_comands(array('cmd' => 'reset_phone', 'name' => $name_dev));
+        } else {
+            $this->sccp_core_comands(array('cmd' => 'reload_phone', 'name' => $name_dev));
+        }
 //        die();
         return $save_settings;
     }
@@ -1004,8 +1029,9 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         if (!empty($save_settings)) {
             $this->sccp_db_save_setting($save_settings);
             $this->getSccpSettingsDB();         // Overwrite Exist 
-            $this->sccp_create_sccp_init();
+//            $this->sccp_create_sccp_init();
         }
+        $this->sccp_create_sccp_init(); // Rewrite Config.
         $save_settings[] = array('status' => true);
         return $save_settings;
     }
@@ -1090,8 +1116,14 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                     $res3[$data_key] =$tmp[1];
                 }
             }
+            
             $res1 = $res3['Skinny_Phone_Type'];
-            $res3['SCCP_Vendor']= Array('vendor' => strtok($res1,' '),'model' => strtok('('), 'model_id' => strtok(')'));
+            if (!empty($res3['Addons'])) {
+                $res2 = $res3['Addons'];
+            } else {
+                $res2 = '';
+            }
+            $res3['SCCP_Vendor']= Array('vendor' => strtok($res1,' '),'model' => strtok('('), 'model_id' => strtok(')'), 'vendor_addon' => strtok($res2,' '), 'model_addon' => strtok(' '));
             return $res3;
         } else {
             return array();
@@ -1976,10 +2008,40 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                                     // Ntp Config
                                     break;
                                 case 'srstInfo':
-                                    $xml_node->$dkey = '';
+                                    if ($this->sccpvalues['srst_Option']['data'] == 'user') {
+                                        break;
+                                    }
+                                    $xnode = &$xml_node->$dkey;
+                                    $xnode -> name = $this->sccpvalues['srst_Name']['data'];
+                                    $xnode -> srstOption = $this->sccpvalues['srst_Option']['data'];
+                                    $xnode -> userModifiable = $this->sccpvalues['srst_userModifiable']['data'];
+                                    $xnode -> isSecure = $this->sccpvalues['srst_isSecure']['data'];
+
+                                    $srst_fld = array('srst_ip' => array('ipAddr','port') );
+//                                    $srst_fld = array('srst_ip' => array('ipAddr','port') , 'srst_sip' => array('sipIpAddr','sipPort') );
+                                    foreach ($srst_fld as $srst_pro => $srs_put){
+                                        $srst_data = explode(';', $this->sccpvalues[$srst_pro]['data']);
+                                        $si = 1;
+//                                        $xnode['test'] = $srst_data[0];
+                                        foreach ($srst_data as $value) {
+                                            $srs_val =  explode('/',$value);
+                                            $nod = $srs_put[0].$si;
+                                            $xnode -> $nod = $srs_val[0];
+                                            $nod = $srs_put[1].$si;
+                                            $xnode -> $nod = $srs_val[1];
+                                            $si ++;
+                                        }
+                                       while ($si < 4) {
+                                            $nod = $srs_put[0].$si;
+                                            $xnode -> $nod = '';
+                                            $nod = $srs_put[1].$si;
+                                            $xnode -> $nod = '';
+                                            $si ++;
+                                        }
+                                    }
                                     break;
                                 case 'connectionMonitorDuration':
-                                    $xml_node->$dkey = $this->sccpvalues['keepalive']['data'];
+                                    $xml_node->$dkey =  strval(intval(intval($this->sccpvalues['keepalive']['data'])* 0.75));
                                     break;
                                 case 'callManagerGroup':
                                     $xnode = &$xml_node->$dkey->members;
@@ -2153,7 +2215,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 break;
             case "SccpDevice":
 //                $sql = "SELECT * FROM `sccpdeviceconfig` ORDER BY `name`";
-                $sql = "select `name`,`name` as `mac`, `type`, `button` from `sccpdeviceconfig` ORDER BY `name`";
+                $sql = "select `name`,`name` as `mac`, `type`, `button`, `addon` from `sccpdeviceconfig` ORDER BY `name`";
                 $raw_settings = sql($sql, "getAll", DB_FETCHMODE_ASSOC);
                 break;
             case "HWDevice":

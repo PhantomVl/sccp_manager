@@ -1964,7 +1964,9 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
             'servicesURL' => 'dev_servicesURL', 'directoryURL' => 'dev_directoryURL', 'proxyServerURL' => 'dev_proxyServerURL', 'idleTimeout' => 'dev_idleTimeout',
             'idleURL' => 'dev_idleURL', 'sshUserId' => 'dev_sshUserId', 'sshPassword' => 'dev_sshPassword', 'deviceProtocol' => 'dev_deviceProtocol'
             );
-        $var_xml_general_vars = array('capfAuthMode' => '0', 'deviceSecurityMode' => '1', 'mobility' => '', 'phoneServices' =>'');
+        $var_xml_general_vars = array('capfAuthMode' => 'null', 'capfList'=> 'null', 'mobility' => 'null', 
+                                      'phoneServices' =>'null', 'certHash' =>'null',
+                                      'deviceSecurityMode' => '1');
         
         if (empty($dev_id)) {
             return false;
@@ -1975,7 +1977,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
             return false;
         }
 
-        if (!(empty($var_hw_config['nametemplate']))) {
+        if (!empty($var_hw_config['nametemplate'])) {
             $xml_template = $this->sccppath["tftp_templates"] . '/' . $var_hw_config['nametemplate'];
         } else {
             $xml_template = $this->sccppath["tftp_templates"] . '/SEP0000000000.cnf.xml_79df_template';
@@ -1983,22 +1985,23 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         $xml_name = $this->sccppath["tftp_path"] . '/' . $dev_id . '.cnf.xml';
         if (file_exists($xml_template)) {
             $xml_work = simplexml_load_file($xml_template);
-            /*
-              $node = $xml_work -> certHash;
-              if ( !empty($node)) {F
-              unset($node[0][0]);
-              }
-             * 
-             */
+
+            foreach ($var_xml_general_vars as $key => $data) {
+                if (isset($xml_work->$key)) {
+                    if ($data != 'null') {
+                        $xml_work->$key = $data;
+                    } else {
+                        $node = $xml_work->$key;
+                        unset($node[0][0]);
+                    }
+                }
+            }
+            
             foreach ($xml_work as $key => $data) {
 //              Set System global Values
                 if (!empty($var_xml_general_fields[$key])) {
                     $xml_work->$key = $this->sccpvalues[$var_xml_general_fields[$key]]['data'];
-                } else {
-                    if (!isset($var_xml_general_vars[$key])) {
-                        $xml_work->$key = $var_xml_general_vars[$key];
-                    }
-                }
+                } 
 //              Set section Values
                 $xml_node = $xml_work->$key;
                 switch ($key) {

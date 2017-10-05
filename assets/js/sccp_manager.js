@@ -618,6 +618,7 @@ function add_dynamic_input(pe, pclass, vdefault) {
 	// We'd like a new one, please.
         pcls = pe.data('for');
         pname = pe.data('id');
+        pmax = pe.data('max');
         jdata = JSON.parse(hex2bin(pe.data('json')));
         
 	var last = $("."+pcls+":last"),
@@ -633,8 +634,9 @@ function add_dynamic_input(pe, pclass, vdefault) {
             html += "<input type='text' name='"+pname+ "["+ourid+"]["+key+"]' class='" + html_calss + "' " + html_opt + " value='" + vdefault+"'> "+ jdata[key]['nameseparator'] + " ";
         }
 	html += "</div>\n";
-
-	last.after(html);
+        if (pmax >= nextid) {
+            last.after(html);
+        }
 }
 
 function del_dynamic_table(pe, pclass, vdefault) {

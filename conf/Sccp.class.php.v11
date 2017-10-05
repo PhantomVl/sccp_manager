@@ -199,8 +199,66 @@ class Sccp extends \FreePBX\modules\Core\Driver {
                 $tt = _("Digits to indicate an external line to user (secondary dialtone) Sample 9 or 8 (max 9 digits)");
 		$tmparr['secondary_dialtone_digits'] = array('prompttext' => _('Secondary dialtone digits'), 'value' => '', 'tt' => $tt, 'level' => 1);
 
+                unset($select);
+                $select[] = array( 'value' => '0x21', 'text' => 'Inside Dial Tone');
+                $select[] = array( 'value' => '0x22', 'text' => 'Outside Dial Tone');
+                $select[] = array( 'value' => '0x23', 'text' => 'Line Busy Tone');
+                $select[] = array( 'value' => '0x24', 'text' => 'Alerting Tone');
+                $select[] = array( 'value' => '0x25', 'text' => 'Reorder Tone');
+                $select[] = array( 'value' => '0x26', 'text' => 'Recorder Warning Tone');
+                $select[] = array( 'value' => '0x27', 'text' => 'Recorder Detected Tone');
+                $select[] = array( 'value' => '0x28', 'text' => 'Reverting Tone');
+                $select[] = array( 'value' => '0x29', 'text' => 'Receiver OffHook Tone');
+                $select[] = array( 'value' => '0x2A', 'text' => 'Partial Dial Tone');
+                $select[] = array( 'value' => '0x2B', 'text' => 'No Such Number Tone');
+                $select[] = array( 'value' => '0x2C', 'text' => 'Busy Verification Tone');
+                $select[] = array( 'value' => '0x2D', 'text' => 'Call Waiting Tone');
+                $select[] = array( 'value' => '0x2E', 'text' => 'Confirmation Tone');
+                $select[] = array( 'value' => '0x2F', 'text' => 'Camp On Indication Tone');
+                $select[] = array( 'value' => '0x30', 'text' => 'Recall Dial Tone');
+                $select[] = array( 'value' => '0x31', 'text' => 'Zip Zip');
+                $select[] = array( 'value' => '0x32', 'text' => 'Zip');
+                $select[] = array( 'value' => '0x33', 'text' => 'Beep Bonk');
+                $select[] = array( 'value' => '0x34', 'text' => 'Music Tone');
+                $select[] = array( 'value' => '0x35', 'text' => 'Hold Tone');
+                $select[] = array( 'value' => '0x36', 'text' => 'Test Tone');
+                $select[] = array( 'value' => '0x37', 'text' => 'DT Monitor Warning Tone');
+                $select[] = array( 'value' => '0x40', 'text' => 'Add Call Waiting');
+                $select[] = array( 'value' => '0x41', 'text' => 'Priority Call Wait');
+                $select[] = array( 'value' => '0x42', 'text' => 'Recall Dial');
+                $select[] = array( 'value' => '0x43', 'text' => 'Barg In');
+                $select[] = array( 'value' => '0x44', 'text' => 'Distinct Alert');
+                $select[] = array( 'value' => '0x45', 'text' => 'Priority Alert');
+                $select[] = array( 'value' => '0x46', 'text' => 'Reminder Ring');
+                $select[] = array( 'value' => '0x47', 'text' => 'Precedence RingBank');
+                $select[] = array( 'value' => '0x48', 'text' => 'Pre-EmptionTone');
+                $select[] = array( 'value' => '0x67', 'text' => '2105 HZ');
+                $select[] = array( 'value' => '0x68', 'text' => '2600 HZ');
+                $select[] = array( 'value' => '0x69', 'text' => '440 HZ');
+                $select[] = array( 'value' => '0x6A', 'text' => '300 HZ');
+                $select[] = array( 'value' => '0x77', 'text' => 'MLPP Pala');
+                $select[] = array( 'value' => '0x78', 'text' => 'MLPP Ica');
+                $select[] = array( 'value' => '0x79', 'text' => 'MLPP Vca');
+                $select[] = array( 'value' => '0x7A', 'text' => 'MLPP Bpa');
+                $select[] = array( 'value' => '0x7B', 'text' => 'MLPP Bnea');
+                $select[] = array( 'value' => '0x7C', 'text' => 'MLPP Upa');
+                $select[] = array( 'value' => '0x7F', 'text' => 'No Tone');
+                $select[] = array( 'value' => '0x80', 'text' => 'Meetme Greeting Tone');
+                $select[] = array( 'value' => '0x81', 'text' => 'Meetme Number Invalid Tone');
+                $select[] = array( 'value' => '0x82', 'text' => 'Meetme Number Failed Tone');
+                $select[] = array( 'value' => '0x83', 'text' => 'Meetme Enter Pin Tone');
+                $select[] = array( 'value' => '0x84', 'text' => 'Meetme Invalid Pin Tone');
+                $select[] = array( 'value' => '0x85', 'text' => 'Meetme Failed Pin Tone');
+                $select[] = array( 'value' => '0x86', 'text' => 'Meetme CFB Failed Tone');
+                $select[] = array( 'value' => '0x87', 'text' => 'Meetme Enter Access Code Tone');
+                $select[] = array( 'value' => '0x88', 'text' => 'Meetme Access Code Invalid Tone');
+                $select[] = array( 'value' => '0x89', 'text' => 'Meetme Access Code Failed Tone');
+                $select[] = array('value' => 'yes', 'text' => 'Yes');
+                $select[] = array('value' => 'no', 'text' => 'No');
+
                 $tt = _("Outside dialtone frequency (defaul 0x22)");
-		$tmparr['secondary_dialtone_tone'] = array('prompttext' => _('Secondary dialtone tone'), 'value' => '', 'tt' => $tt, 'level' => 1);
+                $tmparr['secondary_dialtone_tone'] = array('prompttext' => _('Secondary dialtone tone'), 'value' => '', 'tt' => $tt, 'select' => $select, 'level' => 1, 'type' => 'select');
+
 
 
                 unset($select);

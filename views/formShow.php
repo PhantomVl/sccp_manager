@@ -147,6 +147,10 @@ foreach ($items as $child) {
         $lnhtm = '';
         $res_id = $napref.$child->name;
         $i = 0;
+        $max_row = 255;
+        if (!empty($child->max_row)) {
+            $max_row = $child->max_row;
+        }
 
         if (!empty($fvalues[$res_n])) {
             if (!empty($fvalues[$res_n]['data'])) {
@@ -208,7 +212,7 @@ foreach ($items as $child) {
 //                                print_r($opt_at);
 //                                print_r(json_encode($opt_at));
 //                                print_r(bin2hex(json_encode($opt_at)));
-                                echo '<input type="button" id="'.$res_id.'-btn" data-id="'.$res_id.'" data-for="'.$res_id.'"data-json="'.bin2hex(json_encode($opt_at)).'" class="input-js-add" value="'._($child->button).'" />';
+                                echo '<input type="button" id="'.$res_id.'-btn" data-id="'.$res_id.'" data-for="'.$res_id.'" data-max="'.$max_row.'"data-json="'.bin2hex(json_encode($opt_at)).'" class="input-js-add" value="'._($child->button).'" />';
                                 ?>
         			</div>
                             </div>

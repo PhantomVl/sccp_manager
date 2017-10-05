@@ -6,6 +6,7 @@
  */
 $def_val = null;
 $dev_id = null;
+$dev_new = null;
 if (!empty($_REQUEST['new_id'])) {
     $dev_id = $_REQUEST['new_id'];
     $val = str_replace('SEP', '', $dev_id);
@@ -13,15 +14,14 @@ if (!empty($_REQUEST['new_id'])) {
     $def_val['mac'] = array("keyword" => 'mac', "data" => $val, "seq" => "99");
     $val = $_REQUEST['type'];
     $def_val['type'] = array("keyword" => 'type', "data" => $val, "seq" => "99");
-    
-    
+    if (!empty($_REQUEST['addon'])) {
+        $def_val['addon'] = array("keyword" => 'type', "data" => $_REQUEST['addon'], "seq" => "99");
+    }
 }
 
 if (!empty($_REQUEST['id'])) {
-//    print_r($_REQUEST);
-//    
-// get model Info
     $dev_id = $_REQUEST['id'];
+    $dev_new = $dev_id;
     $db_res = $this->get_db_SccpTableData('get_sccpdevice_byid', array("id" => $dev_id));
     foreach ($db_res as $key => $val) {
         if (!empty($val)) {
@@ -54,11 +54,14 @@ if (!empty($_REQUEST['id'])) {
     <input type="hidden" name="Submit" value="Submit">
 
     <?php
-    if (empty($dev_id)){
+    if (empty($dev_new)){
         echo '<input type="hidden" name="sccp_deviceid" value="new">';
-        echo $this->ShowGroup('sccp_hw_dev', 1, 'sccp_hw', $def_val);
     } else {
         echo '<input type="hidden" name="sccp_deviceid" value="'.$dev_id.'">';
+    }
+    if (empty($dev_id)){
+        echo $this->ShowGroup('sccp_hw_dev', 1, 'sccp_hw', $def_val);
+    } else {
         echo $this->ShowGroup('sccp_hw_dev_edit', 1, 'sccp_hw', $def_val);       
     }
     echo $this->ShowGroup('sccp_hw_dev2', 1, 'sccp_hw', $def_val);

@@ -160,8 +160,12 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         $this->initTftpLang();
 
         // Load Advanced Form Constuctor Data 
-        if (file_exists(__DIR__ . '/views/sccpgeneral.xml')) {
-            $this->xml_data = simplexml_load_file(__DIR__ . '/views/sccpgeneral.xml');
+        $xml_vars = __DIR__ . '/conf/sccpgeneral.xml.v'.$this->sccpvalues['sccp_comatable'];
+        if (!file_exists($xml_vars)) {
+            $xml_vars = __DIR__ . '/conf/sccpgeneral.xml';
+        }
+        if (file_exists($xml_vars)) {
+            $this->xml_data = simplexml_load_file($xml_vars);
             $this->initVarfromXml(); // Overwrite Exist
         } 
     }
@@ -415,15 +419,15 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                     $this->pagedata = array(
                         "general" => array(
                             "name" => _("SCCP Model information"),
-                            "page" => 'views/server.model.php'
+                            "page" => 'views/advserver.model.php'
                         ),
                         "sccpkeyset" => array(
                             "name" => _("SCCP Device Keyset"),
-                            "page" => 'views/server.keyset.php'
+                            "page" => 'views/advserver.keyset.php'
                         ),
 //                        "sccpdialplan" => array(
 //                            "name" => _("SCCP Dial Plan information"),
-//                            "page" => 'views/server.dialtemplate.php'
+//                            "page" => 'views/advserver.dialtemplate.php'
 //                        )
                     );
                     break;
@@ -1659,20 +1663,6 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
             $sccpfile = file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/admin/modules/sccp_manager/conf/sccp.conf');
             file_put_contents($this->sccppath["sccp_conf"], $sccpfile);
         }
-
-        $dst = __DIR__ . '/views/sccpgeneral.xml';
-        if (!file_exists($dst)) {
-            $src_path = $_SERVER['DOCUMENT_ROOT'] . '/admin/modules/sccp_manager/conf/' . basename($dst).'.v'.$this->sccpvalues['sccp_comatable'];
-            if (file_exists($src_path)) {
-                // Plz Test directory permission run "amportal chown"
-                copy($src_path, $dst);
-            } else {
-                // Plz Test directory  ermission run "amportal chown"
-                $src_path = $_SERVER['DOCUMENT_ROOT'] . '/admin/modules/sccp_manager/conf/' . basename($dst);
-                copy($src_path, $dst);
-            }
-        } 
-
 
         $this->sccp_conf_init = $this->cnf_read->getConfig('sccp.conf');
 

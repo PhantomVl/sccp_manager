@@ -10,8 +10,6 @@
 //   $id_name = 'SEP000A8A5C5F25';
 //   $dev_data = $this->sccp_getdevice_info($id_name);
 //   print_r($dev_data);
-   $dev_data = $this->sccp_get_active_devise();
-   print_r($dev_data);
 
 ?>
 

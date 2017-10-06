@@ -24,6 +24,9 @@
                     <button name="reset_sccp_phone" class="btn sccp_update btn-default" data-id="reset_dev">
                         <i class="glyphicon glyphicon-ok"></i> <span><?php echo _('Reset Device') ?></span>
                     </button>
+                    <button name="reset_sccp_token" class="btn sccp_update btn-default" data-id="reset_token">
+                        <i class="glyphicon glyphicon-ok"></i> <span><?php echo _('Reset Token Device') ?></span>
+                    </button>
                 </div>
                 <table data-cookie="true" data-cookie-id-table="sccp-phone" data-url="ajax.php?module=sccp_manager&amp;command=getPhoneGrid&amp;type=sccp" data-cache="false" data-show-refresh="true" data-toolbar="#toolbar-sip" data-maintain-selected="true" data-show-columns="true" data-show-toggle="true" data-toggle="table" data-pagination="true" data-search="true" class="table table-striped ext-list" id="table-sip" data-id="mac">
                     <thead>

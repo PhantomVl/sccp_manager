@@ -432,7 +432,7 @@ $(document).ready(function () {
             }
 
         }
-        if ($(this).data('id') === 'reset_dev') {
+        if ($(this).data('id') === 'reset_dev' || $(this).data('id') === 'reset_token') {
             var dev_cmd = $(this).data('id');
             var datas = '';
             var i = 0;

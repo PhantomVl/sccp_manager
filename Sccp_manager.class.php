@@ -544,6 +544,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
             case "getDialTemplete":
             case "create_hw_tftp":
             case "reset_dev":
+            case 'reset_token':
             case "model_enabled":
             case "model_disabled":
             case "model_update":
@@ -561,7 +562,8 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
     public function ajaxHandler() {
         $request = $_REQUEST;
         $msg = '';
-        switch ($request['command']) {
+        $cmd_id = $request['command'];
+        switch ($cmd_id) {
             case 'savesettings':
                 $action = isset($request['sccp_createlangdir']) ? $request['sccp_createlangdir'] : '';
                 if ($action == 'yes') {
@@ -626,22 +628,34 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 return array('status' => true, 'message' => 'Create new CNF files Ver :' . $ver_id);
 
                 break;
+            case 'reset_token':
             case 'reset_dev':
                 $msg = '';
                 if (!empty($request['name'])) {
                     foreach ($request['name'] as $idv) {
                         $msg = strpos($idv, 'SEP-');
                         if (!(strpos($idv, 'SEP') === false)) {
-                            $res = $this->sccp_core_comands(array('cmd' => 'reset_phone', 'name' => $idv));
+                            if ($cmd_id == 'reset_token') {
+                                $res = $this->sccp_core_comands(array('cmd' => 'reset_token', 'name' => $idv));
+                            } else {
+                                $res = $this->sccp_core_comands(array('cmd' => 'reset_phone', 'name' => $idv));
+                            }
 //                            $msg = print_r($this->sccp_core_comands(array('cmd' => 'reset_phone', 'name' => $idv)), 1);
                             $msg = $res['Response'] . ' ' . $res['data'];
                         }
                         if ($idv == 'all') {
                             $dev_list = $this->sccp_get_active_devise();
                             foreach ($dev_list as $key => $data) {
-                                $res = $this->sccp_core_comands(array('cmd' => 'reset_phone', 'name' => $key));
-                                $msg .= $res['Response'] . '' . $res['data'] . ' ';
-//                                $msg = print_r($this->sccp_core_comands(array('cmd' => 'reset_phone', 'name' => $key)), 1);
+                                if ($cmd_id == 'reset_token') {
+                                    if (($data['token'] == 'Rej') || ($data['status'] == 'Token ') ) {
+                                        $res = $this->sccp_core_comands(array('cmd' => 'reset_token', 'name' => $key));
+                                        $msg .= 'Send Token reset to :'. $key .' ';
+                                    }
+                                } else {
+                                    $res = $this->sccp_core_comands(array('cmd' => 'reset_phone', 'name' => $key));
+                                    $msg .= $res['Response'] . ' ' . $res['data'] . ' ';
+                                }    
+//                                $msg .= $res['Response'] . ' ' . $res['data'] . ' ';
                             }
                         }
                     }
@@ -1062,6 +1076,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
             'sccp_reload' => array('cmd' => "sccp reload force", 'param' => ''),
             'reset_phone' => array('cmd' => "sccp reset ", 'param' => 'name'), // Жесткая перезагрузка 
             'reload_phone' => array('cmd' => "sccp reload device ", 'param' => 'name'),
+            'reset_token' => array('cmd' => "sccp tokenack ", 'param' => 'name'),
         );
         $result = true;
         if (!empty($params['cmd'])) {
@@ -1247,17 +1262,24 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                     $it++;
                 } while ((count($line_arr) > 3) and ( $it < count($line_arr)));
                 explode(";|", implode(";|", $line_arr));
-                list ($descr, $adress, $devname, $status, $junk) = explode(";|", implode(";|", $line_arr));
+                list ($descr, $adress, $devname, $status, $token, $junk) = explode(";|", implode(";|", $line_arr));
 
 //                list ($descr, $adress, $devname, $status, $junk) = $line_arr;                
 
+//                if (strlen($ast_key[$devname]) < 1) {
+                if (strlen($devname) > 1) {
+                    $ast_key[$devname] = Array('name' => $devname, 'status' => $status, 'address' => $adress, 'descr' => $descr, 'token' => $token);
+                }
+/*
                 if (isset($ast_key[$devname])) {
                     if (strlen($ast_key[$devname]) < 1) {
-                        $ast_key[$devname] = Array('name' => $devname, 'status' => $status, 'address' => $adress, 'descr' => $descr);
+                        $ast_key[$devname] = Array('name' => $devname, 'status' => $status, 'address' => $adress, 'descr' => $descr, 'token' => $descr);
                     }
                 } else {
-                    $ast_key[$devname] = Array('name' => $devname, 'status' => $status, 'address' => $adress, 'descr' => $descr);
+                    $ast_key[$devname] = Array('name' => $devname, 'status' => $status, 'address' => $adress, 'descr' => $descr, 'token' => $token);
                 }
+ * 
+ */
             }
         }
         return $ast_key;

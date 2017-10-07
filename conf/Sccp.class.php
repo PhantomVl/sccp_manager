@@ -170,7 +170,8 @@ class Sccp extends \FreePBX\modules\Core\Driver {
 		$category = "general";
 		$tmparr = array();
 		$tt = _("The maximum number of incoming calls to this line.");
-		$tmparr['incominglimit'] = array('prompttext' => _('Line incoming limit'), 'value' => '2', 'tt' => $tt, 'level' => 0, 'jsvalidation' => 'isEmpty()', 'failvalidationmsg' => $msgInvalidChannel);
+//		$tmparr['incominglimit'] = array('prompttext' => _('Incoming Call Limit'), 'value' => '2', 'tt' => $tt, 'level' => 0, 'jsvalidation' => 'isEmpty()', 'failvalidationmsg' => $msgInvalidChannel);
+		$tmparr['incominglimit'] = array('prompttext' => _('Incoming Call Limit'), 'value' => '2', 'tt' => $tt, 'level' => 1);
 
                 $tt = _("Asterisk context this line will use send calls to/from (Note: Only change this is you know what you are doing).");
 		$tmparr['context'] = array('prompttext' => _('Line context'), 'value' => 'from-internal', 'tt' => $tt, 'level' => 1);
@@ -253,7 +254,7 @@ class Sccp extends \FreePBX\modules\Core\Driver {
                 $select[] = array('value' => 'no', 'text' => 'No');
 
                 $tt = _("Outside dialtone frequency (defaul 0x22)");
-                $tmparr['secondary_dialtone_tone'] = array('prompttext' => _('Secondary dialtone tone'), 'value' => '', 'tt' => $tt, 'select' => $select, 'level' => 1, 'type' => 'select');
+                $tmparr['secondary_dialtone_tone'] = array('prompttext' => _('Secondary dialtone'), 'value' => '0x22', 'tt' => $tt, 'select' => $select, 'level' => 1, 'type' => 'select');
 
 # ??? is there no easier way to specify a boolean radio group ?
                 unset($select);
@@ -298,8 +299,8 @@ class Sccp extends \FreePBX\modules\Core\Driver {
                     $select[] = array('value' => $value, 'text' => _($value));
                 }
 
-                $tt = _("Music On Hold");
-                $tmparr['musicclass'] = array('prompttext' => _('Music On Hold'), 'value' => 'no', 'tt' => $tt, 'select' => $select, 'level' => 1);
+                $tt = _("Music on hold");
+                $tmparr['musicclass'] = array('prompttext' => _('Music on hold'), 'value' => 'no', 'tt' => $tt, 'select' => $select, 'level' => 1);
                 
 		$devopts = $tmparr;
 		return $devopts;

@@ -39,6 +39,8 @@
  *  - support kv-store ?????
  *  + Shared Line 
  *  - bug Fix ...(K no w bug? no fix)
+ *  - restore default Value on page 
+ *  - restore default Value on sccp.class
  * 
  *  * I think this file should be split in 3 parts (as in Model-View-Controller(MVC))
  *    * XML/Database Parts -> Model directory

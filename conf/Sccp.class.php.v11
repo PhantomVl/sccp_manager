@@ -56,6 +56,7 @@ class Sccp extends \FreePBX\modules\Core\Driver {
                     switch ($key) {
                         case 'secondary_dialtone_digits':
                         case 'secondary_dialtone_tone':
+                        case 'incominglimit':
                         case 'dnd':
                             $sql .= ', '.$key;
                             if (!empty($settings[$val]['value'])){
@@ -116,7 +117,7 @@ class Sccp extends \FreePBX\modules\Core\Driver {
 				"flag" => $flag++
 			),
 			"incominglimit" => array(
-				"value" => "",
+				"value" => "2",
 				"flag" => $flag++
 			),
 			"context" => array(
@@ -182,20 +183,19 @@ class Sccp extends \FreePBX\modules\Core\Driver {
 		$section = _("Settings");
 		$category = "general";
 		$tmparr = array();
-		$tt = _("The SCCP channel number for this port.");
-		$tmparr['incominglimit'] = array('prompttext' => _('Line incoming limit'), 'value' => '2', 'tt' => $tt, 'level' => 0, 'jsvalidation' => 'isEmpty()', 'failvalidationmsg' => $msgInvalidChannel);
+		$tt = _("The SCCP channel number for this port. If you plaining to use this line as 'Shared' or use on several devices - leave this field blank or set limit to 10 calls.");
+//		$tmparr['incominglimit'] = array('prompttext' => _('Incoming Call Limit'), 'value' => '2', 'tt' => $tt, 'level' => 0, 'jsvalidation' => 'isEmpty()', 'failvalidationmsg' => $msgInvalidChannel);
+		$tmparr['incominglimit'] = array('prompttext' => _('Incoming Call Limit'), 'value' => '', 'tt' => $tt, 'level' => 1);
 		$tt = _("Asterisk context this device will send calls to. Only change this is you know what you are doing.");
 		$tmparr['context'] = array('prompttext' => _('Line context'), 'value' => 'from-internal', 'tt' => $tt, 'level' => 1);
 		$tt = _("Phone call group callgroup=1,3-4");
 		$tmparr['callgroup'] = array('prompttext' => _('Call group id'),'value' => '', 'tt' => $tt, 'level' => 1);
 		$tt = _("Phone pickup group pickupgroup=1,3-4");
-		$tmparr['namedcallgroup'] = array('prompttext' => _('Call group name'),'value' => '', 'tt' => $tt, 'level' => 1);
+		$tmparr['namedcallgroup'] = array('prompttext' => _('Named Call Group'),'value' => '', 'tt' => $tt, 'level' => 1);
 		$tt = _("sets the named caller groups this line is a member of (ast111)");
                 $tmparr['pickupgroup'] = array('prompttext' => _('Pickup group id'),'value' => '', 'tt' => $tt, 'level' => 1);
 		$tt = _("Phone pincode");
-		$tmparr['namedpickupgroup'] = array('prompttext' => _('Pickup group name'),'value' => '', 'tt' => $tt, 'level' => 1);
-		$tt = _("Sets the named pickup groups this line is a member of (this phone can pickup calls from remote phones which are in this caller group (ast111)");
-		$tmparr['pin'] = array('value' => '', 'tt' => $tt, 'level' => 1);
+		$tmparr['namedpickupgroup'] = array('prompttext' => _('Named Pickup Group'),'value' => '', 'tt' => $tt, 'level' => 1);
                 $tt = _("Digits to indicate an external line to user (secondary dialtone) Sample 9 or 8 (max 9 digits)");
 		$tmparr['secondary_dialtone_digits'] = array('prompttext' => _('Secondary dialtone digits'), 'value' => '', 'tt' => $tt, 'level' => 1);
 
@@ -257,7 +257,7 @@ class Sccp extends \FreePBX\modules\Core\Driver {
                 $select[] = array('value' => 'no', 'text' => 'No');
 
                 $tt = _("Outside dialtone frequency (defaul 0x22)");
-                $tmparr['secondary_dialtone_tone'] = array('prompttext' => _('Secondary dialtone tone'), 'value' => '', 'tt' => $tt, 'select' => $select, 'level' => 1, 'type' => 'select');
+                $tmparr['secondary_dialtone_tone'] = array('prompttext' => _('Secondary dialtone'), 'value' => '0x22', 'tt' => $tt, 'select' => $select, 'level' => 1, 'type' => 'select');
 
 
 
@@ -270,8 +270,8 @@ class Sccp extends \FreePBX\modules\Core\Driver {
                 unset($select);
                 $select[] = array('value' => 'yes', 'text' => 'Yes');
                 $select[] = array('value' => 'no', 'text' => 'No');
-                $tt = _("Echo calcel");
-                $tmparr['echocancel'] = array('prompttext' => _('Echo calcel'), 'value' => 'yes', 'tt' => $tt, 'select' => $select, 'level' => 1, 'type' => 'radio');
+                $tt = _("Echo cancel");
+                $tmparr['echocancel'] = array('prompttext' => _('Echo cancel'), 'value' => 'yes', 'tt' => $tt, 'select' => $select, 'level' => 1, 'type' => 'radio');
 
                 unset($select);
                 $select[] = array('value' => 'off', 'text' => 'Off');
@@ -301,9 +301,11 @@ class Sccp extends \FreePBX\modules\Core\Driver {
                     $select[] = array('value' => $value, 'text' => _($value));
                 }
 
-                $tt = _("Musik On Hold ");
-                $tmparr['musicclass'] = array('prompttext' => _('Musik On Hold'), 'value' => 'no', 'tt' => $tt, 'select' => $select, 'level' => 1);
+                $tt = _("Music on hold");
+                $tmparr['musicclass'] = array('prompttext' => _('Music on hold'), 'value' => 'no', 'tt' => $tt, 'select' => $select, 'level' => 1);
 
+		$tt = _("Sets the named pickup groups this line is a member of (this phone can pickup calls from remote phones which are in this caller group (ast111)");
+		$tmparr['pin'] = array('value' => '', 'tt' => $tt, 'level' => 1);
                 
                 
 		$devopts = $tmparr;

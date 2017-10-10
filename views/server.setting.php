@@ -11,6 +11,13 @@
 //   $dev_data = $this->sccp_getdevice_info($id_name);
 //   print_r($dev_data);
 
+///  $sccpdriver = $this->freepbx->Config->get_conf_setting('ASTSCCPDRIVER');
+//  $driver = $this->FreePBX->Core->getAllDriversInfo();
+//  $driver = $this->FreePBX->Config->get_conf_setting('ASTSCCPDRIVER');
+//  $driver = $this->FreePBX->Config->get_conf_setting('ASTSIPDRIVER');
+//  $tversion = $freepbx->Config;
+//   print_r($driver );
+
 ?>
 
 <form autocomplete="off" name="frm_general" id="frm_general" class="fpbx-submit" action="" method="post">

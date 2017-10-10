@@ -20,8 +20,10 @@ class Sccp extends \FreePBX\modules\Core\Driver {
 			"rawName" => "sccp",
 			"hardware" => "sccp_custom",
 			"prettyName" => _("Sccp Custom Driver"),
-			"shortName" => _("Sccp"),
-			"description" => _("Sccp Device")
+			"shortName" => "SCCP",
+			"description" => _("Sccp Device"),
+			"sccp_driver_ver" => "11.1"
+                    
 		);
 	}
        public function addDevice1($id, $settings) {

@@ -65,6 +65,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
 
     private $SCCP_LANG_DICTIONARY = 'SCCP-dictionary.xml'; // CISCO LANG file search in /tftp-path 
     private $pagedata = null;
+    private $sccp_driver_ver = '11.1';
     private $tftpLang = array();
     private $hint_context = '@ext-local'; /// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Get it from Config !!!
     public $sccp_model_list = array();
@@ -1672,8 +1673,22 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         }
         $this->sccpvalues['sccp_comatable'] = $this->get_comatable_sccp();
 
+        $driver = $this->FreePBX->Core->getAllDriversInfo();
+        $driver_replace = '';
+        if (empty($driver['sccp'])) {
+            $driver_replace = 'yes';
+        } else {
+            if (empty($driver['sccp']['sccp_driver_ver'])) {
+                $driver_replace = 'yes';                
+            } else {
+                if ($driver['sccp']['sccp_driver_ver'] != $this->sccp_driver_ver){
+                    $driver_replace = 'yes';                
+                }
+            }
+        }
+
         $dst = $_SERVER['DOCUMENT_ROOT'] . '/admin/modules/core/functions.inc/drivers/Sccp.class.php';
-        if (!file_exists($dst)) {
+        if (!file_exists($dst) || $driver_replace =='yes') {
             $src_path = $_SERVER['DOCUMENT_ROOT'] . '/admin/modules/sccp_manager/conf/' . basename($dst).'.v'.$this->sccpvalues['sccp_comatable'];
             if (file_exists($src_path)) {
                 copy($src_path, $dst);
@@ -1681,6 +1696,10 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 $src_path = $_SERVER['DOCUMENT_ROOT'] . '/admin/modules/sccp_manager/conf/' . basename($dst);
                 copy($src_path, $dst);
             }
+        } else {
+              $driver = $this->FreePBX->Core->getAllDriversInfo();
+              
+
         }
 
         if (!file_exists($this->sccppath["sccp_conf"])) { // System re Config 

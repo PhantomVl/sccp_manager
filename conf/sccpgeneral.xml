@@ -229,7 +229,7 @@ and open the template in the editor. Base Version before all crash :-)
           <button value="latestfirst">Latestfirst</button>
           <help>Call Answer Order: Which call should be answered first? The most common choice is "oldestfirst", but other orders are supported.</help>
       </item>
-      <item type="IS" id="13"><name>mwilamp</name> <label>Message Lamp</label>
+      <item type="IS" id="13"><name>mwilamp</name> <label>Message Waiting Indication (MWI)</label>
           <default>On</default>
           <button value="on">On</button>
           <button value="off">Off</button>
@@ -244,8 +244,6 @@ and open the template in the editor. Base Version before all crash :-)
           <button value="no">No</button>
           <help>Set the MWI on call.</help>
       </item>
-
-
     </page_group>          
     <page_group name="sccp_dev_ntp"><label>SCCP NTP Service config</label>
       <item type="IS" id="1" seq="98"><name>ntp_config_enabled</name> <label>NTP Server Enabled</label>
@@ -669,7 +667,7 @@ and open the template in the editor. Base Version before all crash :-)
         </item>
         <item type="SLT" id="5" seq="98"><label>SCCP Phone Device Language</label>
             <name>devlang</name> 
-            <default>Russian_Russia</default>
+            <default>English_United_States</default>
             <select> </select>
             <help>The user locale allows the phone to display text (menu items, soft keys etc.) native to the phone's language.</help>
         </item>
@@ -724,7 +722,7 @@ and open the template in the editor. Base Version before all crash :-)
         </item>
       
         <item type="IS" id="4" seq="99"><name>useRedialMenu</name> 
-            <label>Redial from Menu</label>
+            <label>Redial using Phonebook</label>
             <default>no</default>
             <button value="yes">On</button>
             <button value="no">Off</button>
@@ -741,7 +739,7 @@ and open the template in the editor. Base Version before all crash :-)
 
         <item type="IS" id="6" seq="99">
             <name>dtmfmode</name> 
-            <label>Dual-Tone Multi-Frequency</label>
+            <label>Dual-Tone Multi-Frequency (DTMF)</label>
             <default>outofband</default>
             <button value="outofband">outofband</button>
             <button value="inband">inband</button>
@@ -834,34 +832,25 @@ and open the template in the editor. Base Version before all crash :-)
 
     <page_group name="sccp_hw_dev_network">
         <label>Device Network Function</label>
-      <item type="IE" id="1" seq="99"> <label>Alow Networks / Mask</label>
-          <input>
-            <name>permit_net</name> 
-            <default>0.0.0.0</default>
-            <class>sccp-custom</class>
-          </input>
-          <input>
-            <name>permit_mask</name> 
-            <default>0.0.0.0</default>
-            <class>sccp-custom</class>
-          </input>
-          <help>Local network settings. Blank fields will be ignored used Network 0.0.0.0.</help>
-          <nameseparator> / </nameseparator>
-      </item>
-      <item type="IE" id="2" seq="99"> <label>Deny Networks / Mask</label>
-          <input>
-            <name>deny_net</name> 
-            <default>0.0.0.0</default>
-            <class>sccp-custom</class>
-          </input>
-          <input>
-            <name>deny_mask</name> 
-            <default>0.0.0.0</default>
-            <class>sccp-custom</class>
-          </input>
-          <help>IP deny: IP Address deny netmask. Should always be at least '0.0.0.0/0.0.0.0'.</help>
-          <nameseparator> / </nameseparator>
-      </item>
+        <item type="IED" id="1" seq="0">
+            <label>Alow Networks / Mask</label>
+            <name>permit</name>
+            <default>/</default>
+            <input value="none" field="net" nameseparator="/"><options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/></input>
+            <input value="none" field="mask"><options placeholder="255.255.255.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/> </input>
+            <button>Add Alow network</button>
+            <help>Alow network settings. Blank fields will be ignored used Network 0.0.0.0.</help>
+        </item>
+
+        <item type="IED" id="2" seq="0">
+            <label>Deny Networks / Mask</label>
+            <name>deny</name>
+            <default>/</default>
+            <input value="none" field="net" nameseparator="/"><options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/><class></class></input>
+            <input value="none" field="mask"><options placeholder="255.255.255.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/><class></class></input>
+            <button>Add Deny network</button>
+            <help>All RFC 1918 addresses are local networks. Should always be at least '0.0.0.0/0.0.0.0'.</help>
+        </item>
         <item type="IS" id="3" seq="99">
             <name>nat</name> 
             <label>NAT Device</label>

@@ -36,12 +36,12 @@ if (!empty($_REQUEST['id'])) {
                     $def_val['netlang'] =  array("keyword" => 'netlang', "data" => $tmpar[0], "seq" => "99");
                     $def_val['devlang'] =  array("keyword" => 'devlang', "data" => $tmpar[1], "seq" => "99");
                     break;
-                case 'permit':
-                case 'deny':
-                    $def_val[$key . '_net'] = array("keyword" => $key, "data" => before('/', $val), "seq" => "99");
-                    $key = $key . '_mask';
-                    $val = after('/', $val);
-                    break;
+//                case 'permit':
+//                case 'deny':
+//                    $def_val[$key . '_net'] = array("keyword" => $key, "data" => before('/', $val), "seq" => "99");
+//                    $key = $key . '_mask';
+//                    $val = after('/', $val);
+//                    break;
             }
             $def_val[$key] = array("keyword" => $key, "data" => $val, "seq" => "99");
         }
@@ -66,6 +66,8 @@ if (!empty($_REQUEST['id'])) {
     }
     echo $this->ShowGroup('sccp_hw_dev2', 1, 'sccp_hw', $def_val);
     echo $this->ShowGroup('sccp_hw_dev_advance', 1, 'sccp_hw', $def_val);
+    echo $this->ShowGroup('sccp_hw_dev_softkey', 1, 'sccp_hw', $def_val);
+    echo $this->ShowGroup('sccp_hw_dev_pickup', 1, 'sccp_hw', $def_val);
     echo $this->ShowGroup('sccp_hw_dev_conference', 1, 'sccp_hw', $def_val);
     echo $this->ShowGroup('sccp_hw_dev_network', 1, 'sccp_hw', $def_val);
     ?>    

@@ -141,6 +141,7 @@ foreach ($items as $child) {
     if ($child['type'] == 'IED') {
         $res_input = '';
         $res_name = '';
+        $res_value = '';
         $res_n =  (string)$child->name;
 
 //        $res_value

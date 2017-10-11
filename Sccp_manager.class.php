@@ -41,7 +41,9 @@
  *  - bug Fix ...(K no w bug? no fix)
  *  - restore default Value on page 
  *  - restore default Value on sccp.class
- * 
+ *  -  'Device SEP ID.[XXXXXXXXXXXX]=MAC'
+ *  -  ATA's start with       ATAXXXXXXXXXXXX.
+ *  -  VG248 ports start with VGXXXXXXXXXXXX0. 
  *  * I think this file should be split in 3 parts (as in Model-View-Controller(MVC))
  *    * XML/Database Parts -> Model directory
  *    * Processing parts -> Controller directory
@@ -842,6 +844,8 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
      */
     function save_hw_phone($get_settings, $validateonly = false) {
         $hdr_prefix = 'sccp_hw_';
+        $hdr_arprefix = 'sccp_hw-ar_';
+
         $save_buttons = array();
         $save_settings = array();
         $save_codec = array();
@@ -857,10 +861,10 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
             $key = (string) $data['Field'];
             $value = "";
             switch ($key) {
-                case 'permit':
-                case 'deny':
-                    $value = $get_settings[$hdr_prefix . $key . '_net'] . '/' . $get_settings[$hdr_prefix . $key . '_mask'];
-                    break;
+//                case 'permit':
+//                case 'deny':
+//                    $value = $get_settings[$hdr_prefix . $key . '_net'] . '/' . $get_settings[$hdr_prefix . $key . '_mask'];
+//                    break;
                 case 'name':
                     if (!empty($get_settings[$hdr_prefix . 'mac'])) {
                         $value = $get_settings[$hdr_prefix . 'mac'];
@@ -891,6 +895,21 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                     if (!empty($get_settings[$hdr_prefix . $key])) {
                         $value = $get_settings[$hdr_prefix . $key];
                     }
+                    if (!empty($get_settings[$hdr_arprefix . $key])) {
+                        $arr_data = '';
+                        foreach ($get_settings[$hdr_arprefix. $key] as $vkey => $vval) {
+                            $tmp_data = '';
+                            foreach ($vval as $vkey => $vval) {
+                                    $tmp_data .= $vval . '/';
+                            }
+                            if (strlen($tmp_data) > 2) {
+                                $arr_data .= substr($tmp_data, 0, -1) . ';';
+                            }
+                        }
+                        $arr_data = substr($arr_data, 0, -1);
+                        $value = $arr_data;
+                    }
+                    
             }
             if (!empty($value)) {
                 $save_settings[$key] = $value;
@@ -2161,12 +2180,18 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                             $lang = (empty($hwlang[1])) ? $this->sccpvalues['devlang']['data'] : $hwlang[1];
 //                            $lang=$this->sccpvalues['devlang']['data'];
                         }
-                        if ($key == 'networkLocale') {
-                            $xml_work->$key = $lang;
-                        } else {
-                            $xml_node->name = $this->sccp_lang[$lang]['locale'];
-                            $xml_node->langCode = $this->sccp_lang[$lang]['code'];
-                            $this->replaceSimpleXmlNode($xml_work->$key, $xml_node);
+                        if (!empty($lang) && $lang  !='null') {
+                            if ($key == 'networkLocale') {
+                                $xml_work->$key = $lang;
+                            } else {
+                                if (!empty($this->sccp_lang[$lang])) {
+                                    $xml_node->name = $this->sccp_lang[$lang]['locale'];
+                                    $xml_node->langCode = $this->sccp_lang[$lang]['code'];
+                                    $this->replaceSimpleXmlNode($xml_work->$key, $xml_node);
+                                }
+                            }
+                        } else {    
+                            $xml_work->$key ='';
                         }
                         break;
 // Move all set to $var_xml_general_vars

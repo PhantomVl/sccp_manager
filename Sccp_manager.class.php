@@ -627,6 +627,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 $this->sccp_delete_device_XML('all'); // Концы в вводу !!  
                 $this->sccp_create_tftp_XML();
                 $models = $this->get_db_SccpTableData("SccpDevice");
+                $ver_id = ' on found active model !';
                 foreach ($models as $data) {
                     $ver_id = $this->sccp_create_device_XML($data['name']);
                 };

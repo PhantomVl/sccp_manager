@@ -14,10 +14,10 @@
             <div class="display no-border">
                 <div id="toolbar-model">
                     <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target=".add_new_model"><i class="fa fa-bolt"></i> <?php echo _("Add model"); ?></button>
-                    <button data-id="model_disabled" class="btn btn-danger sccp_update btn-tab-select" data-type="sccp_model" disabled data-section="all">
+                    <button data-id="model_disabled" class="btn btn-danger sccp_update btn-tab-select" data-type="sccp_model" data-table="table-models" disabled data-section="all">
                         <i class="glyphicon glyphicon-remove"></i> <span><?php echo _('Disabled') ?></span>
                     </button>
-                    <button data-id="model_enabled" class="btn btn-danger sccp_update btn-tab-select" data-type="sccp_model" disabled data-section="all">
+                    <button data-id="model_enabled" class="btn btn-danger sccp_update btn-tab-select" data-table="table-models" data-type="sccp_model" disabled data-section="all">
                         <i class="glyphicon glyphicon-active"></i> <span><?php echo _('Enabled') ?></span>
                     </button>
                     <div class="btn-group">

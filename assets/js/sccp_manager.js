@@ -408,9 +408,10 @@ $(document).ready(function () {
         }
         if (($(this).data('id') === 'model_enabled') || ($(this).data('id') === 'model_disabled')) {
             var dev_cmd = $(this).data('id');
+            var tab_name ='#'+$(this).data('table');
             var datas = '';
             var i = 0;
-            $('table').bootstrapTable('getSelections').forEach(function (entry) {
+            $(tab_name).bootstrapTable('getSelections').forEach(function (entry) {
                 datas = datas + 'model[' + i + ']=' + entry['model'] + '&';
                 i++;
             });
@@ -512,7 +513,9 @@ $("table").on('check.bs.table', function (e, row) {
 });
 $("table").on('uncheck.bs.table', function (e, row) {
     var id_fld = $(this).data('id');
-    var id_count = $("table").bootstrapTable('getAllSelections').length;
+    var id_parent = '#'+$(this).parent().find('table').attr('id');
+//    console.log(id_parent);
+    var id_count = $(id_parent).bootstrapTable('getAllSelections').length;
     if (id_count < 1) {
         $(".btn-tab-select").each(function () {
             $(this).attr('disabled', true);
@@ -522,6 +525,9 @@ $("table").on('uncheck.bs.table', function (e, row) {
 });
 $("table").on('uncheck-all.bs.table', function (rows) {
     var id_fld = $(this).data('id');
+    var id_parent = '#'+$(this).parent().find('table').attr('id');
+//    console.log(id_parent);
+//    var id_count = $(id_parent).bootstrapTable('getAllSelections').length;
     var id_count = $("table").bootstrapTable('getAllSelections').length;
     if (id_count < 1) {
         $(".btn-tab-select").each(function () {

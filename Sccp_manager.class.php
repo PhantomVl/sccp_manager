@@ -783,10 +783,11 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 break;
             case "getPhoneGrid":
                 $result = $this->get_db_SccpTableData('SccpDevice');
+                $staus = $this->sccp_get_active_devise();
                 if (empty($result)) {
                     $result = array();
                 } else {
-                    $staus = $this->sccp_get_active_devise();
+//                    $staus = $this->sccp_get_active_devise();
                     foreach ($result as &$dev_id) {
                         $id_name = $dev_id['name'];
                         if (!empty($staus[$id_name])) {
@@ -801,6 +802,8 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                             $dev_id['address'] = '- -';
                         }
                     }
+                }
+                if (!empty($staus)) {
 //                    Array ( [name] => SEP0004F2EDCBFD [mac] => SEP0004F2EDCBFD [type] => 7937 [button] => line,7818,default ) 
                     foreach ($staus as $dev_ids) {
                         $id_name = $dev_ids['name'];

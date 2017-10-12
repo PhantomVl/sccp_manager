@@ -5,15 +5,15 @@ To change this template file, choose Tools | Templates
 and open the template in the editor. Base Version before all crash :-)
 -->
 <root>
-    <page_group name="sccp_hidden"><label>SCCP Hiden Server config</label>
-      <item type="IE" id="1" seq="10"><label>Phone ssh login</label>
+    <page_group name="sccp_hidden"><label>SCCP Hidden Server config</label>
+      <item type="IE" id="1" seq="10"><label>Phone SSH login</label>
         <input>
             <name>dev_sshUserId</name>
             <default>cisco</default>
         </input>
         <help>Help.</help>
       </item>
-      <item type="IE" id="1" seq="10"><label>Phone ssh password</label>
+      <item type="IE" id="1" seq="10"><label>Phone SSH password</label>
         <input>
             <name>dev_sshPassword</name>
             <default>cisco</default>
@@ -50,17 +50,17 @@ and open the template in the editor. Base Version before all crash :-)
             <default>2000</default>
             <class>sccp-custom</class>
           </input>
-          <help>Bind Address: The address to bind to for SCCP. In general, it should be set to '0.0.0.0'. If you find problems with one-way audio, you can set this to a specific address in the server. Note that '127.0.0.1' is always wrong here.</help>
+          <help>Bind Address: The address to bind to for SCCP. In general, it should be set to '0.0.0.0'. If you find problems with one-way audio, you can set this to a specific address in the server. Note that '127.0.0.1' is always wrong here.  Also note that placing in your external IP address will cause the chan_sccp module to not load.  A manual edit of the /etc/asterisk/sccp.conf file will be needed to fix and reload the module.</help>
           <nameseparator> : </nameseparator>
       </item>
-      <item type="IE" id="4"> <label>External Ip</label>
+      <item type="IE" id="4"> <label>External IP</label>
           <input>
             <name>externip</name> 
             <default></default>
             <class>sccp-custom</class>
             <options placeholder="Provider IP"></options>
           </input>
-          <help>External IP Address of the firewall, required in case the PBX is running on a seperate host behind it. IP Address that we're going to notify in RTP media stream as the pbx source address.</help>
+          <help>External IP Address of the firewall, required in case the PBX is running on a separate host behind it. IP Address that we're going to notify in RTP media stream as the pbx source address.</help>
           <nameseparator> / </nameseparator>
       </item>
       <item type="IE" id="5"><label>SCCP SERVER Keepalive</label>
@@ -85,13 +85,13 @@ and open the template in the editor. Base Version before all crash :-)
     </page_group>
     <page_group name="sccp_net"><label>SCCP Networks</label>
       <item type="IED" id="1" seq="0">
-        <label>Alow Networks / Mask</label>
+        <label>Allow Networks / Mask</label>
         <name>permit</name>
         <default>0.0.0.0/0.0.0.0</default>
         <input value="none" field="net" nameseparator="/"><options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/></input>
         <input value="none" field="mask"><options placeholder="255.255.255.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/> </input>
-        <button>Add Alow network</button>
-        <help>Alow network settings. Blank fields will be ignored used Network 0.0.0.0.</help>
+        <button>Add Allow network</button>
+        <help>Allow network settings. Blank fields will be ignored, use Network 0.0.0.0.</help>
       </item>
 
       <item type="IED" id="2" seq="0">
@@ -130,7 +130,7 @@ and open the template in the editor. Base Version before all crash :-)
       </item>
       <item type="SLT" id="3"><label>SCCP Phone Device Language</label>
           <name>devlang</name> 
-          <default>Russian_Russia</default>
+          <default>English_United_States</default>
           <select> </select>
           <help>The user locale allows the phone to display text (menu items, soft keys etc.) native to the phone's language.</help>
       </item>
@@ -145,7 +145,7 @@ and open the template in the editor. Base Version before all crash :-)
             <type>number</type>
             <options min="0" max="120"></options>
           </input>
-          <help>First Digit Timeout: The amount of time after your first digit to start dialing automatically. This can be over-ridden with settings in your dialplan.xml or by using the 'immediate dial' button.</help>
+          <help>First Digit Timeout: The amount of time after your first digit to start dialing automatically. This can be over-ridden with in your dialplan.xml or by using the 'immediate dial' button.</help>
       </item>
       <item type="IE" id="2"> <label>Digit Timeout</label>
           <input>
@@ -419,7 +419,7 @@ and open the template in the editor. Base Version before all crash :-)
       <element type='p'> </element>
       <element type='h3'>Be careful with this function. Especially not to the internet. So i would restring the deny/permit to 'internal' by default in that case. </element>
       <element type='table'>
-          <row><col>Alow =</col><col>Specify a list of your networks, for example: 192.168.1.0</col></row>
+          <row><col>Allow =</col><col>Specify a list of your networks, for example: 192.168.1.0</col></row>
           <row><col>deny =</col><col>0.0.0.0/0.0.0.0</col></row>
           <row><col>permit =</col><col>internal</col></row>
           <row><col>hotline_context =</col><col>sccp</col></row>
@@ -495,7 +495,7 @@ and open the template in the editor. Base Version before all crash :-)
           <default>no</default>
           <button value="yes">Enabled</button>
           <button value="no">Disabled</button>
-          <help>Enables and disables auto line selection.</help>
+          <help>Enables and Disables auto line selection.</help>
       </item>
       <item type="IS-disabled" id="8" seq="0"><name>meetme</name> <label>Meetme Conference</label>
           <default>no</default>

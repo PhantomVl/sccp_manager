@@ -93,61 +93,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         "tftp_path" => '/tftpboot'
     );
     public $xml_data;
-    public $keysetdefault = array('onhook' => 'redial,newcall,cfwdall,dnd,pickup,gpickup,private',
-        'connected' => 'hold,endcall,park,vidmode,select,cfwdall,cfwdbusy,idivert',
-        'onhold' => 'resume,newcall,endcall,transfer,conflist,select,dirtrfr,idivert,meetme',
-        'ringin' => 'answer,endcall,transvm,idivert',
-        'offhook' => 'redial,endcall,private,cfwdall,cfwdbusy,pickup,gpickup,meetme,barge',
-        'conntrans' => 'hold,endcall,transfer,conf,park,select,dirtrfr,vidmode,meetme,cfwdall,cfwdbusy',
-        'digitsfoll' => 'back,endcall,dial',
-        'connconf' => 'conflist,newcall,endcall,hold,vidmode',
-        'ringout' => 'empty,endcall,transfer,cfwdall,idivert',
-        'offhookfeat' => 'redial,endcall',
-        'onhint' => 'redial,newcall,pickup,gpickup,barge',
-        'onstealable' => 'redial,newcall,cfwdall,pickup,gpickup,dnd,intrcpt',
-        'holdconf' => 'resume,newcall,endcall,join',
-        'uriaction' => 'default');
-//   Cisco  Language Code / Directory  
-    public $sccp_lang = array('ar_SA' => array('code' => 'ar', 'language' => 'Arabic', 'locale' => 'Arabic_Saudi_Arabia'),
-        'bg_BG' => array('code' => 'bg', 'language' => 'Bulgarian', 'locale' => 'Bulgarian_Bulgaria'),
-        'cz_CZ' => array('code' => 'cz', 'language' => 'Czech', 'locale' => 'Czech_Czech_Republic'),
-        'da_DK' => array('code' => 'da', 'language' => 'Danish', 'locale' => 'Danish_Denmark'),
-        'de_DE' => array('code' => 'de', 'language' => 'German', 'locale' => 'German_Germany'),
-        'el_GR' => array('code' => 'el', 'language' => 'Greek', 'locale' => 'Greek_Greece'),
-        'en_AU' => array('code' => 'en', 'language' => 'English', 'locale' => 'AU_English_United_States'),
-        'en_GB' => array('code' => 'en', 'language' => 'English', 'locale' => 'English_United_Kingdom'),
-        'en_US' => array('code' => 'en', 'language' => 'English', 'locale' => 'English_United_States'),
-        'es_ES' => array('code' => 'es', 'language' => 'Spanish', 'locale' => 'Spanish_Spain'),
-        'et_EE' => array('code' => 'et', 'language' => 'Estonian', 'locale' => 'Estonian_Estonia'),
-        'fi_FI' => array('code' => 'fi', 'language' => 'Finnish', 'locale' => 'Finnish_Finland'),
-        'fr_CA' => array('code' => 'fr', 'language' => 'French', 'locale' => 'French_Canada'),
-        'fr_FR' => array('code' => 'fr', 'language' => 'French', 'locale' => 'French_France'),
-        'he_IL' => array('code' => 'he', 'language' => 'Hebrew', 'locale' => 'Hebrew_Israel'),
-        'hr_HR' => array('code' => 'hr', 'language' => 'Croatian', 'locale' => 'Croatian_Croatia'),
-        'hu_HU' => array('code' => 'hu', 'language' => 'Hungarian', 'locale' => 'Hungarian_Hungary'),
-        'it_IT' => array('code' => 'it', 'language' => 'Italian', 'locale' => 'Italian_Italy'),
-        'ja_JP' => array('code' => 'ja', 'language' => 'Japanese', 'locale' => 'Japanese_Japan'),
-        'ko_KO' => array('code' => 'ko', 'language' => 'Korean', 'locale' => 'Korean_Korea_Republic'),
-        'lt_LT' => array('code' => 'lt', 'language' => 'Lithuanian', 'locale' => 'Lithuanian_Lithuania'),
-        'lv_LV' => array('code' => 'lv', 'language' => 'Latvian', 'locale' => 'Latvian_Latvia'),
-        'nl_NL' => array('code' => 'nl', 'language' => 'Dutch', 'locale' => 'Dutch_Netherlands'),
-        'no_NO' => array('code' => 'no', 'language' => 'Norwegian', 'locale' => 'Norwegian_Norway'),
-        'pl_PL' => array('code' => 'pl', 'language' => 'Polish', 'locale' => 'Polish_Poland'),
-        'pt_BR' => array('code' => 'pt', 'language' => 'Portuguese', 'locale' => 'Portuguese_Brazil'),
-        'pt_PT' => array('code' => 'pt', 'language' => 'Portuguese', 'locale' => 'Portuguese_Portugal'),
-        'ro_RO' => array('code' => 'ro', 'language' => 'Romanian', 'locale' => 'Romanian_Romania'),
-        'ru_RU' => array('code' => 'ru', 'language' => 'Russian', 'locale' => 'Russian_Russian_Federation'),
-        'sk_SK' => array('code' => 'sk', 'language' => 'Slovakian', 'locale' => 'Slovak_Slovakia'),
-        'sl_SL' => array('code' => 'sl', 'language' => 'Slovenian', 'locale' => 'Slovenian_Slovenia'),
-        'sr_ME' => array('code' => 'sr', 'language' => 'Serbian', 'locale' => 'Serbian_Republic_of_Montenegro'),
-        'sr_RS' => array('code' => 'rs', 'language' => 'Serbian', 'locale' => 'Serbian_Republic_of_Serbia'),
-        'sv_SE' => array('code' => 'sv', 'language' => 'Swedish', 'locale' => 'Swedish_Sweden'),
-        'th_TH' => array('code' => 'th', 'language' => 'Thailand', 'locale' => 'Thai_Thailand'),
-        'tr_TR' => array('code' => 'tr', 'language' => 'Turkish', 'locale' => 'Turkish_Turkey'),
-        'zh_CN' => array('code' => 'cn', 'language' => 'Chinese', 'locale' => 'Chinese_China'),
-        'zh_TW' => array('code' => 'zh', 'language' => 'Chinese', 'locale' => 'Chinese_Taiwan')
-    );
-
+    
     public function __construct($freepbx = null) {
         if ($freepbx == null) {
             throw new Exception("Not given a FreePBX Object");
@@ -158,11 +104,38 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         $this->cnf_wr = \FreePBX::WriteConfig();
         $this->cnf_read = \FreePBX::LoadConfig();
         $this->v = new \Respect\Validation\Validator();
+
+        if(!class_exists("FreePBX\modules\Sccp_manager\configs",false)) {
+            include(__DIR__."/Sccp_manager.inc/configs.class.php");
+            $driverNamespace = "\\FreePBX\\Modules\\Sccp_manager\\configs";
+            $class = $driverNamespace;
+            $this->configs = new $class();
+//            $this->configs = \FreePBX\Modules\Sccp_manager\configs;
+        }
+/*
+        $driverNamespace = "\\FreePBX\\Modules\\Sccp_manager\\configs";
+        foreach(glob(__DIR__."/functions.inc/drivers/*.class.php") as $driver) {
+            if(preg_match("/\/([a-z1-9]*)\.class\.php$/i",$driver,$matches)) {
+                $name = $matches[1];
+                $class = $driverNamespace . "\\" . $name;
+                if(!class_exists($class,false)) {
+                    include($driver);
+                }
+                if(class_exists($class,false)) {
+                    $this->drivers[strtolower($name)] = new $class($this->freepbx);
+                } else {
+                    throw new \Exception("Invalid Class inside the drivers folder");
+                }
+            }
+        }
+ * 
+ */
         $this->getSccpSettingsDB(false); // Overwrite Exist 
 //        $this->getSccpSetingINI(false); // get from sccep.ini
         $this->init_sccp_path();
         $this->initVarfromDefs();
         $this->initTftpLang();
+
 
         // Load Advanced Form Constuctor Data 
         $xml_vars = __DIR__ . '/conf/sccpgeneral.xml.v'.$this->sccpvalues['sccp_comatable'];
@@ -201,7 +174,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
      *    Load config vars from base array
      */
     public function initVarfromDefs() {
-        foreach ($this->sccpDefaults as $key => $value) {
+        foreach ($this->$this->configs->getConfig('sccpDefaults') as $key => $value) {
             if (empty($this->sccpvalues[$key])) {
                 $this->sccpvalues[$key] = array('keyword' => $key, 'data' => $value, 'type' => '0', 'seq' => '0');
             }
@@ -740,7 +713,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 if (!empty($request['id'])) {
                     $id_name = $request['id'];
                     $this->sccp_conf_init[$id_name]['type'] = "softkeyset";
-                    foreach ($this->keysetdefault as $keyl => $vall) {
+                    foreach ($this->$this->configs->getConfig('keyset') as $keyl => $vall) {
                         if (!empty($request[$keyl])) {
                             $this->sccp_conf_init[$id_name][$keyl] = $request[$keyl];
                         }
@@ -761,7 +734,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 foreach ($this->sccp_list_keysets() as $keyl => $vall) {
                     $result[$i]['softkeys'] = $keyl;
                     if ($keyl == 'default') {
-                        foreach ($this->keysetdefault as $key => $value) {
+                        foreach ($this->configs->getConfig('keyset') as $key => $value) {
                             $result[$i][$key] = str_replace(',', '<br>', $value);
                         }
                     } else {
@@ -1604,7 +1577,8 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 if (is_dir($dir . DIRECTORY_SEPARATOR . $value)) {
                     $filename = $dir . DIRECTORY_SEPARATOR . $value . DIRECTORY_SEPARATOR . $this->SCCP_LANG_DICTIONARY;
                     if (file_exists($filename)) {
-                        foreach ($this->sccp_lang as $lang_key => $lang_value) {
+                        $lang_ar = $this->configs->getConfig('sccp_lang');
+                        foreach ($lang_ar as $lang_key => $lang_value) {
                             if ($lang_value['locale'] == $value) {
                                 $result[$lang_key] = $value;
                             }
@@ -1623,7 +1597,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
 
     private function init_tftp_lang_path() {
         $dir = $this->sccppath["tftp_path"];
-        foreach ($this->sccp_lang as $lang_key => $lang_value) {
+        foreach ($this->configs->getConfig('sccp_lang') as $lang_key => $lang_value) {
             $filename = $dir . DIRECTORY_SEPARATOR . $lang_value['locale'];
             if (!file_exists($filename)) {
                 if (!mkdir($filename, 0777, true)) {
@@ -1982,12 +1956,15 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                             } else {
                                 $lang = $this->sccpvalues['devlang']['data'];
                             }
-                            $xnode->name = $this->sccp_lang[$lang]['locale'];
-                            $xnode->langCode = $this->sccp_lang[$lang]['code'];
+//                            configs->getConfig('sccp_lang')
+                            $lang_arr =  $this->configs->getConfig('sccp_lang',$lang);
+                            $xnode->name = $lang_arr['locale'];
+                            $xnode->langCode = $$lang_arr['code'];
 //                            $this -> replaceSimpleXmlNode($xml_work->$key,$xnode); 
                             break;
                         case 'networkLocale':
-                            $xnode = $this->sccp_lang[$this->sccpvalues['netlang']['data']]['language'];
+                            $lang_arr =  $this->configs->getConfig('sccp_lang',$this->sccpvalues['netlang']['data']);                            
+                            $xnode = $lang_arr['language'];
                             break;
                     }
                     //$this-> replaceSimpleXmlNode($xml_work->$value, $xnode );                     
@@ -2188,9 +2165,10 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                             if ($key == 'networkLocale') {
                                 $xml_work->$key = $lang;
                             } else {
-                                if (!empty($this->sccp_lang[$lang])) {
-                                    $xml_node->name = $this->sccp_lang[$lang]['locale'];
-                                    $xml_node->langCode = $this->sccp_lang[$lang]['code'];
+                                $lang_arr =  $this->configs->getConfig('sccp_lang',$lang);
+                                if (!empty($lang_arr)) {
+                                    $xml_node->name = $lang_arr['locale'];
+                                    $xml_node->langCode = $lang_arr['code'];
                                     $this->replaceSimpleXmlNode($xml_work->$key, $xml_node);
                                 }
                             }

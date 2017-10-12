@@ -12,11 +12,11 @@
 //   print_r($dev_data);
 
 ///  $sccpdriver = $this->freepbx->Config->get_conf_setting('ASTSCCPDRIVER');
-//  $driver = $this->FreePBX->Core->getAllDriversInfo();
+     $driver = $this->configs->getConfig('sccp_lang');
 //  $driver = $this->FreePBX->Config->get_conf_setting('ASTSCCPDRIVER');
 //  $driver = $this->FreePBX->Config->get_conf_setting('ASTSIPDRIVER');
 //  $tversion = $freepbx->Config;
-//   print_r($driver );
+    print_r($driver );
 
 ?>
 

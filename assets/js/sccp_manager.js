@@ -396,7 +396,7 @@ $(document).ready(function () {
 
 //            $("#add_new_model").modal('hide');
         }
-        if ($(this).data('id') === 'model_applay') {
+        if ($(this).data('id') === 'model_apply') {
             var dev_cmd = 'model_update';
             var dev_fld = ["model", "loadimage", "nametemplate"];
             datas = '';
@@ -609,7 +609,7 @@ function load_oncliсk(e, data) {
                             opts_idx = j;
                         }
                     }
-                    if (opts_idx => 0) {
+                    if (opts_idx >= 0) {
                         $('#destination_' + dev_fld[i]).append($(opts[opts_idx]).clone());
                         $(opts[opts_idx]).remove();
                     }

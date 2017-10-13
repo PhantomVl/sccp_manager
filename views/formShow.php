@@ -44,9 +44,9 @@ if (function_exists('music_list')){
 if (!is_array($moh_list)){
     $moh_list = array('default');
 }
-$sofkey_list = \FreePBX::Sccp_manager()-> sccp_list_keysets();
-$model_list = \FreePBX::Sccp_manager()->get_db_SccpTableData("HWDevice");
-$extension_list = \FreePBX::Sccp_manager()->get_db_SccpTableData("HWextension");
+$sofkey_list = \FreePBX::Sccp_manager()-> srvinterface -> sccp_list_keysets();
+$model_list = \FreePBX::Sccp_manager()->dbinterface->get_db_SccpTableData("HWDevice");
+$extension_list = \FreePBX::Sccp_manager()->dbinterface->get_db_SccpTableData("HWextension");
 
 $extension_list[]=array(model=>'none', vendor=>'CISCO', dns=>'0');
 

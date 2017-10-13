@@ -8,7 +8,9 @@
 $keymultiselect = array('AllRight' =>'>>', 'Right' => '>', 'AllLeft' => '<<', 'Left' => '<');
 
 //   ------------------------------------- Key Set Value ---------------------------------------------------------
-$keysetarray = array('onhook'    => array('redial','newcall','cfwdall','dnd','pickup','gpickup','private'),
+$keysetarray =  $this->extconfigs->getextConfig('keyset');
+
+/*$keysetarray1 = array('onhook'    => array('redial','newcall','cfwdall','dnd','pickup','gpickup','private'),
                     'connected'  => array('hold','endcall','park','vidmode','select','cfwdall','cfwdbusy','idivert'),
                     'onhold'     => array('resume','newcall','endcall','transfer','conflist','select','dirtrfr','idivert','meetme'),
                     'ringin'     => array('answer','endcall','transvm','idivert'),
@@ -22,7 +24,7 @@ $keysetarray = array('onhook'    => array('redial','newcall','cfwdall','dnd','pi
                     'onstealable'=> array('redial','newcall','cfwdall','pickup','gpickup','dnd','intrcpt'),
                     'holdconf'   => array('resume','newcall','endcall','join'),
                     'uriaction'  => array('default'));
-
+*/
 //   ------------------------------------- Key Set Display information  ---------------------------------------------------------
 $keynamearray = array('onhook'    => array(sname => 'ONHOOK', name =>'Display Onhook',help =>'help.'),
                     'connected'  => array(sname => 'CONNECTED', name =>'Display Connected',help =>'help.'),
@@ -39,9 +41,6 @@ $keynamearray = array('onhook'    => array(sname => 'ONHOOK', name =>'Display On
                     'holdconf'   => array(sname => 'HOLDCONF', name =>'Display holdconf',help =>'help.'),
                     'uriaction'  => array(sname => '', name =>'Display uriaction',help =>'help.')
     );
-//    print_r($this->sccp_list_keysets());
-//    echo "<br><br>";
-//    print_r($this->sccp_conf_init);
 
 ?>
 <form autocomplete="off" name="frm_keyset" id="frm_keyset" class="fpbx-submit" action="" method="post">
@@ -133,7 +132,8 @@ $keynamearray = array('onhook'    => array(sname => 'ONHOOK', name =>'Display On
                     echo '<i class="fa fa-question-circle fpbx-help-icon" data-for="'.$key.'"></i></div>';
                     
                         echo '<div class="col-md-4"><select multiple class="form-control sccpmultiselect" name="av_'.$key.'" id="source_'.$key.'">';
-                    foreach ($value as $data) {
+                    $row_dada= explode(',', $value);
+                    foreach ($row_dada as $data) {
                           echo '<option value="'.$data.'">'.$data.'</option>';
                     }
                     echo '</select></div><div class="col-md-1">';                   

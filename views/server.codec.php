@@ -10,9 +10,12 @@
 $def_val = null;
 $dev_id = null;
 $sccp_codec = $this->getCodecs('audio', true);
+$sccp_disalow_def = $this->extconfigs->getextConfig('sccpDefaults','disallow');
+$sccp_disalow = $sccp_disalow_def;
+
 if (!empty($_REQUEST['id'])) {
     $dev_id = $_REQUEST['id'];
-    $db_res = $this->get_db_SccpTableData('get_sccpdevice_byid', array("id" => $dev_id));
+    $db_res = $this->dbinterface->get_db_SccpTableData('get_sccpdevice_byid', array("id" => $dev_id));
     if (!empty($db_res['allow'])) {
         $i = 1;
         foreach(explode(';', $db_res['allow']) as $c){
@@ -25,6 +28,10 @@ if (!empty($_REQUEST['id'])) {
             }
         }
     }
+   if (!empty($db_res['disallow'])) {
+       $sccp_disalow = $db_res['disallow'];
+   }
+
 } else {
     $codec_list = $sccp_codec;
 }
@@ -93,8 +100,8 @@ if (!empty($_REQUEST['id'])) {
                                 <i class="fa fa-question-circle fpbx-help-icon" data-for="sccp_disallow"></i>
                             </div>
                             <div class="col-md-9 radioset">
-                                <input id="sccp_disallow" type="text" name="sccp_disallow" value="<?php echo $this->sccpDefaults[disallow] ?>">  
-                                <label for="sccp_disallow"><?php echo _("default : " . $this->sccpDefaults[disallow]) ?></label>
+                                <input id="sccp_disallow" type="text" name="sccp_disallow" value="<?php echo $sccp_disalow ?>">  
+                                <label for="sccp_disallow"><?php echo _("default : " . $sccp_disalow_def) ?></label>
                             </div>
                         </div>
                     </div>

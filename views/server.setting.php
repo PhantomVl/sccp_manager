@@ -8,15 +8,11 @@
 //    print_r($this->sccpvalues['sccp_comatable']);
 //    print_r($this->sccpvalues);
 //   $id_name = 'SEP000A8A5C5F25';
-//   $dev_data = $this->sccp_getdevice_info($id_name);
-//   print_r($dev_data);
+//   $dev_data = $this->srvinterface->sccp_getdevice_info($id_name);
 
-///  $sccpdriver = $this->freepbx->Config->get_conf_setting('ASTSCCPDRIVER');
-     $driver = $this->configs->getConfig('sccp_lang');
-//  $driver = $this->FreePBX->Config->get_conf_setting('ASTSCCPDRIVER');
-//  $driver = $this->FreePBX->Config->get_conf_setting('ASTSIPDRIVER');
-//  $tversion = $freepbx->Config;
-    print_r($driver );
+//   print_r($dev_data);
+//    $lang_arr =  $this->extconfigs->getextConfig('sccp_lang','sk_SK');    
+    //print_r($this->sccpvalues);
 
 ?>
 

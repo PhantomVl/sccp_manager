@@ -5,15 +5,15 @@ To change this template file, choose Tools | Templates
 and open the template in the editor. Base Version before all crash :-)
 -->
 <root>
-    <page_group name="sccp_hidden"><label>SCCP Hiden Server config</label>
-      <item type="IE" id="1" seq="10"><label>Phone ssh login</label>
+    <page_group name="sccp_hidden"><label>SCCP Hidden Server config</label>
+      <item type="IE" id="1" seq="10"><label>Phone SSH login</label>
         <input>
             <name>dev_sshUserId</name>
             <default>cisco</default>
         </input>
         <help>Help.</help>
       </item>
-      <item type="IE" id="1" seq="10"><label>Phone ssh password</label>
+      <item type="IE" id="1" seq="10"><label>Phone SSH password</label>
         <input>
             <name>dev_sshPassword</name>
             <default>cisco</default>
@@ -50,17 +50,17 @@ and open the template in the editor. Base Version before all crash :-)
             <default>2000</default>
             <class>sccp-custom</class>
           </input>
-          <help>Bind Address: The address to bind to for SCCP. In general, it should be set to '0.0.0.0'. If you find problems with one-way audio, you can set this to a specific address in the server. Note that '127.0.0.1' is always wrong here.</help>
+          <help>Bind Address: The address to bind to for SCCP. In general, it should be set to '0.0.0.0'. If you find problems with one-way audio, you can set this to a specific address in the server. Note that '127.0.0.1' is always wrong here.  Also note that placing in your external IP address will cause the chan_sccp module to not load.  A manual edit of the /etc/asterisk/sccp.conf file will be needed to fix and reload the module.</help>
           <nameseparator> : </nameseparator>
       </item>
-      <item type="IE" id="4"> <label>External Ip</label>
+      <item type="IE" id="4"> <label>External IP</label>
           <input>
             <name>externip</name> 
             <default></default>
             <class>sccp-custom</class>
             <options placeholder="Provider IP"></options>
           </input>
-          <help>External IP Address of the firewall, required in case the PBX is running on a seperate host behind it. IP Address that we're going to notify in RTP media stream as the pbx source address.</help>
+          <help>External IP Address of the firewall, required in case the PBX is running on a separate host behind it. IP Address that we're going to notify in RTP media stream as the pbx source address.</help>
           <nameseparator> / </nameseparator>
       </item>
       <item type="IE" id="5"><label>SCCP SERVER Keepalive</label>
@@ -85,13 +85,13 @@ and open the template in the editor. Base Version before all crash :-)
     </page_group>
     <page_group name="sccp_net"><label>SCCP Networks</label>
       <item type="IED" id="1" seq="0">
-        <label>Alow Networks / Mask</label>
+        <label>Allow Networks / Mask</label>
         <name>permit</name>
         <default>0.0.0.0/0.0.0.0</default>
         <input value="none" field="net" nameseparator="/"><options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/></input>
         <input value="none" field="mask"><options placeholder="255.255.255.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/> </input>
-        <button>Add Alow network</button>
-        <help>Alow network settings. Blank fields will be ignored used Network 0.0.0.0.</help>
+        <button>Add Allow network</button>
+        <help>Allow network settings. Blank fields will be ignored, use Network 0.0.0.0.</help>
       </item>
 
       <item type="IED" id="2" seq="0">
@@ -130,7 +130,7 @@ and open the template in the editor. Base Version before all crash :-)
       </item>
       <item type="SLT" id="3"><label>SCCP Phone Device Language</label>
           <name>devlang</name> 
-          <default>Russian_Russia</default>
+          <default>English_United_States</default>
           <select> </select>
           <help>The user locale allows the phone to display text (menu items, soft keys etc.) native to the phone's language.</help>
       </item>
@@ -145,7 +145,7 @@ and open the template in the editor. Base Version before all crash :-)
             <type>number</type>
             <options min="0" max="120"></options>
           </input>
-          <help>First Digit Timeout: The amount of time after your first digit to start dialing automatically. This can be over-ridden with settings in your dialplan.xml or by using the 'immediate dial' button.</help>
+          <help>First Digit Timeout: The amount of time after your first digit to start dialing automatically. This can be over-ridden with in your dialplan.xml or by using the 'immediate dial' button.</help>
       </item>
       <item type="IE" id="2"> <label>Digit Timeout</label>
           <input>
@@ -294,7 +294,7 @@ and open the template in the editor. Base Version before all crash :-)
             <name>dev_servicesURL</name> 
             <default></default>
             <value></value>
-            <options placeholder="http://x.x.x.x/cisco_menu/authentication.php"></options>
+            <options placeholder="http://x.x.x.x/cisco_menu/phone_service.php"></options>
             
         </input>
         <help></help>
@@ -311,7 +311,7 @@ and open the template in the editor. Base Version before all crash :-)
       <item type="IE" id="3" seq="10"><label>Phone Idle information URL</label>
         <input>
             <name>dev_idleURL</name>
-            <options placeholder="http://x.x.x.x/cisco_menu/authentication.php"></options>
+            <options placeholder="http://x.x.x.x/cisco_menu/phone_idle.php"></options>
             <default></default>
             <value></value>
         </input>
@@ -320,7 +320,7 @@ and open the template in the editor. Base Version before all crash :-)
       <item type="IE" id="4" seq="10"><label>Phone information URL</label>
         <input>
             <name>dev_informationURL</name>
-            <options placeholder="http://x.x.x.x/cisco_menu/authentication.php"></options>
+            <options placeholder="http://x.x.x.x/cisco_menu/cisco_phone.php"></options>
             <default></default>
         </input>
         <help></help>
@@ -336,7 +336,7 @@ and open the template in the editor. Base Version before all crash :-)
       <item type="IE" id="6" seq="10"><label>Phone directory service URL</label>
         <input>
             <name>dev_directoryURL</name>
-            <options placeholder="http://x.x.x.x/cisco_menu/authentication.php"></options>
+            <options placeholder="http://x.x.x.x/cisco_menu/phone_directories.php"></options>
             <default></default>
         </input>
         <help>This is the URL for a CiscoIPPhoneMenu which gets appended to the end of the Missed/Received/Placed calls.  I don't use it (I find it makes more sense to put my phone book under services)</help>
@@ -344,7 +344,7 @@ and open the template in the editor. Base Version before all crash :-)
       <item type="IE" id="7" seq="10"><label>Phone proxyServer URL</label>
         <input>
             <name>dev_proxyServerURL</name>
-            <options placeholder="http://x.x.x.x/cisco_menu/authentication.php"></options>
+            <options placeholder="http://x.x.x.x/cisco_menu/proxyserver.php"></options>
             <default></default>
             <value></value>
         </input>
@@ -419,7 +419,7 @@ and open the template in the editor. Base Version before all crash :-)
       <element type='p'> </element>
       <element type='h3'>Be careful with this function. Especially not to the internet. So i would restring the deny/permit to 'internal' by default in that case. </element>
       <element type='table'>
-          <row><col>Alow =</col><col>Specify a list of your networks, for example: 192.168.1.0</col></row>
+          <row><col>Allow =</col><col>Specify a list of your networks, for example: 192.168.1.0</col></row>
           <row><col>deny =</col><col>0.0.0.0/0.0.0.0</col></row>
           <row><col>permit =</col><col>internal</col></row>
           <row><col>hotline_context =</col><col>sccp</col></row>
@@ -495,7 +495,7 @@ and open the template in the editor. Base Version before all crash :-)
           <default>no</default>
           <button value="yes">Enabled</button>
           <button value="no">Disabled</button>
-          <help>Enables and disables auto line selection.</help>
+          <help>Enables and Disables auto line selection.</help>
       </item>
       <item type="IS-disabled" id="8" seq="0"><name>meetme</name> <label>Meetme Conference</label>
           <default>no</default>
@@ -685,7 +685,7 @@ and open the template in the editor. Base Version before all crash :-)
                 <default></default>
                 <class>sccp-custom</class>
             </input>
-            <help>The ringtone that the phone will default to. Can be overridden in the phone. The files RINGLIST.XML provice the basic phone ring tones, while DISTINCTIVERINGLIST.XML defines the list of possible ring tones for your other line types. They, along with the actual 'raw' ringtones, are stored in the /tftpboot/ directory with the rest of the config files.</help>
+            <help>The ringtone that the phone will default to. Can be overridden in the phone. The file RINGLIST.XML provides the basic phone ring tones, while DISTINCTIVERINGLIST.XML defines the list of possible ring tones for your other line types. They, along with the actual 'raw' ringtones, are stored in the /tftpboot/ directory with the rest of the config files.</help>
         </item>
     
     </page_group>
@@ -708,11 +708,11 @@ and open the template in the editor. Base Version before all crash :-)
             <button value="no">Off</button>
             <help>Transfer allowed</help>
         </item>
-        <item type="IS" id="2" seq="99"><name>cfwdall</name> <label>Callforward softkeys</label>
+        <item type="IS" id="2" seq="99"><name>cfwdall</name> <label>Callforward Softkeys</label>
             <default>no</default>
             <button value="yes">On</button>
             <button value="no">Off</button>
-            <help>Activate the callforward softkeys. Default is On</help>
+            <help>Activate the Callforward Softkeys. Default is On</help>
         </item>
         <item type="IS" id="3" seq="99"><name>cfwdbusy</name> <label>Callforward busy softkeys</label>
             <default>no</default>
@@ -756,7 +756,7 @@ and open the template in the editor. Base Version before all crash :-)
             <button value="blink">Blink</button>
             <help>Set the MWI lamp style when MWI active to on, off, wink, flash or blink</help>
         </item>
-        <item type="IS" id="8" seq="99"><name>directed_pickup</name> <label>Pickup Exten</label>
+        <item type="IS" id="8" seq="99"><name>directed_pickup</name> <label>Pickup Extension</label>
             <default>yes</default>
             <button value="yes">On</button>
             <button value="no">Off</button>
@@ -774,7 +774,7 @@ and open the template in the editor. Base Version before all crash :-)
                 <default></default>
                 <class>sccp-custom</class>
             </input>
-            <help>Context where direct pickup search for extensions. if not set current contect will be use.</help>
+            <help>Context where direct pickup search for extensions. if not set current contact will be use.</help>
         </item>
         
     </page_group>
@@ -782,7 +782,7 @@ and open the template in the editor. Base Version before all crash :-)
         <label>Device Conference Function</label>
         <item type="IS" id="1" seq="99">
             <name>conf_allow</name> 
-            <label>Enabled Conference function</label>
+            <label>Enabled Conference Function</label>
             <default>yes</default>
             <button value="yes">Yes</button>
             <button value="no">No</button>
@@ -838,8 +838,8 @@ and open the template in the editor. Base Version before all crash :-)
             <default>/</default>
             <input value="none" field="net" nameseparator="/"><options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/></input>
             <input value="none" field="mask"><options placeholder="255.255.255.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/> </input>
-            <button>Add Alow network</button>
-            <help>Alow network settings. Blank fields will be ignored used Network 0.0.0.0.</help>
+            <button>Add Allow network</button>
+            <help>Allow network settings. Blank fields will be ignored used Network 0.0.0.0.</help>
         </item>
 
         <item type="IED" id="2" seq="0">
@@ -876,7 +876,7 @@ and open the template in the editor. Base Version before all crash :-)
             <button value="offhook">Offhook</button>
             <button value="dial">Dial</button>
             <button value="none">none</button>
-            <help>The audio strem will be open in the progress and connected state. Valid options: none, progress, offhook, dial, ringout. Default may be Progress.</help>
+            <help>The audio stream will be open in the progress and connected state. Valid options: none, progress, offhook, dial, ringout. Default may be Progress.</help>
         </item>                
     </page_group>
     <page_group name="sccp_dp_new_template">
@@ -886,7 +886,7 @@ and open the template in the editor. Base Version before all crash :-)
                 <default></default>
                 <class>form-control</class>
             </input>
-            <help>Help.</help>
+            <help></help>
         </item>
         
     </page_group>
@@ -929,7 +929,7 @@ and open the template in the editor. Base Version before all crash :-)
             <data>CallWaiting-3</data>
             <data>CallWaiting-4</data>
         </element>
-        <help>Alow network settings. Blank fields will be ignored used Network 0.0.0.0.</help>
+        <help>Allow network settings. Blank fields will be ignored used Network 0.0.0.0.</help>
       </item>
             
     </page_group>
@@ -989,7 +989,7 @@ and open the template in the editor. Base Version before all crash :-)
             <input value="none" field="Addr" nameseparator=":"><options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$" /><class></class></input>
             <input value="none" field="port"><options placeholder="2000" pattern="^([0-9]){3,5}$"/> <class></class></input>
             <button>Add Server</button>
-            <help>Help.</help>
+            <help></help>
         </item>
         <item type="IED-disabled" id="3" seq="20">
             <label>SRST Sip Server list</label>
@@ -999,7 +999,7 @@ and open the template in the editor. Base Version before all crash :-)
             <input value="none" field="Addr" nameseparator=":"><options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$" /><class></class></input>
             <input value="none" field="port"><options placeholder="2000" pattern="^[0-9]{3,5}$"/> <class></class></input>
             <button>Add Server</button>
-            <help>Help.</help>
+            <help></help>
         </item>
     </page_group>       
 </root>

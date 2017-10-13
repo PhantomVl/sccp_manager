@@ -1611,7 +1611,6 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                     if (!empty($value[0])) {
                         if (!in_array($value[0], array('0.0.0.0', '127.0.0.1'), true)) {
                             $xnode_obj = clone $xnode->member;
-
                             $xnode_obj['priority'] = $ifc;
                             //$xnode_obj =  &$xnode -> member -> callManager;
                             $xnode_obj->callManager->name = $this->sccpvalues['servername']['data'];

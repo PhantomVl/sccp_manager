@@ -36,7 +36,7 @@
                    <thead>
                         <tr>
                             <th data-checkbox="true"></th>
-                            <th data-sortable="false" data-formatter="StatusIconFormatter" data-field="enabled"><?php echo _('Eabled');?></th>
+                            <th data-sortable="false" data-formatter="StatusIconFormatter" data-field="enabled"><?php echo _('Enabled');?></th>
                             <th data-sortable="true" data-field="model"><?php echo _('Device Model');?></th>
                             <th data-sortable="true" data-field="vendor"><?php echo _('Vendor');?></th>
                             <th data-sortable="false" data-formatter="DisplayDnsFormatter" data-field="dns"><?php echo _('Expansion Module');?></th>
@@ -194,7 +194,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo _('Close');?></button>
-                <button type="button" class="btn btn-primary sccp_update" data-id="model_applay" data-dismiss="modal"><?php echo _('Applay');?></button>
+                <button type="button" class="btn btn-primary sccp_update" data-id="model_apply" data-dismiss="modal"><?php echo _('apply');?></button>
             </div>            
         </div>
     </div>

@@ -64,8 +64,8 @@ if (!empty($_REQUEST['new_id'])) {
                     <ul>
                     <li>empty: Empty button (no options)</li>
                     <li>line: Registers the line with identifier specified as [name]</li>
-                    <li>silent:   butons equal 'Line' with out ring</li>
-                    <li>monitor:  butons mode speeddial + show status</li>
+                    <li>silent:   buttons equal 'Line' with out ring</li>
+                    <li>monitor:  buttons mode speeddial + show status</li>
                     <li>speeddial: Adds a speeddial with label [name] and [option1] as number Optionally, [option2] can be used to specify a hint by extension@context as usual.</li>
                     <li>service (not implemented): Adds a service url Feature buttons have an on/off status represented on the device with a tick-box and can be used to set the device in a particular state. Currently Possible [option1],[option2] combinations:</li>
                     <ul>
@@ -79,7 +79,7 @@ if (!empty($_REQUEST['new_id'])) {
     </div></div>        
     <?php
         for ($line_id = 0; $line_id <=$max_buttons; $line_id ++){
-//            print_r($db_butons[$line_id]);
+//          print_r($db_butons[$line_id]);
             $show_form_mode = '';
             $defaul_tv = (empty($db_butons[$line_id])) ?  "empty": $db_butons[$line_id]['type'];
             $defaul_btn = (empty($db_butons[$line_id])) ?  "": $db_butons[$line_id]['name'];

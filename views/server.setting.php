@@ -8,13 +8,13 @@
 //    print_r($this->sccpvalues['sccp_comatable']);
 //    print_r($this->sccpvalues);
 //   $id_name = 'SEP000A8A5C5F25';
-   print_r($this->srvinterface->getChanSCCPVersion());
-   print_r('<br>');
-   print_r($this->srvinterface->getCoreSCCPVersion());
+//   print_r($this->srvinterface->getChanSCCPVersion());
+//   print_r('<br>');
+//   print_r($this->srvinterface->getCoreSCCPVersion());
 //    $lang_arr =  $this->extconfigs->getextConfig('sccp_lang','sk_SK');    
-   print_r('<br>');
-  print_r($this->srvinterface->get_comatable_sccp());
-   print_r('<br>');
+//   print_r('<br>');
+//  print_r($this->srvinterface->get_comatable_sccp());
+//   print_r('<br>');
 
 ?>
 

@@ -68,7 +68,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
 //    private $SCCP_LANG_DICTIONARY = 'SCCP-dictionary.xml'; // CISCO LANG file search in /tftp-path 
     private $SCCP_LANG_DICTIONARY = 'be-sccp.jar'; // CISCO LANG file search in /tftp-path 
     private $pagedata = null;
-    private $sccp_driver_ver = '11.1';
+    private $sccp_driver_ver = '11.2';
     private $tftpLang = array();
     private $hint_context = '@ext-local'; /// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Get it from Config !!!
     public $sccp_model_list = array();
@@ -90,20 +90,25 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         $this->v = new \Respect\Validation\Validator();
 
         $driverNamespace = "\\FreePBX\\Modules\\Sccp_manager";
-        foreach(glob(__DIR__."/Sccp_manager.inc/*.class.php") as $driver) {
-            if(preg_match("/\/([a-z1-9]*)\.class\.php$/i",$driver,$matches)) {
-                $name = $matches[1];
-                $class = $driverNamespace . "\\" . $name;
-                if(!class_exists($class,false)) {
-                    include($driver);
-                }
-                if(class_exists($class,false)) {
-                    $this->$name = new $class();
-                } else {
-                    throw new \Exception("Invalid Class inside in the include folder");
-                }
+        if(class_exists($driverNamespace,false)) {
+            foreach(glob(__DIR__."/Sccp_manager.inc/*.class.php") as $driver) {
+                if(preg_match("/\/([a-z1-9]*)\.class\.php$/i",$driver,$matches)) {
+                    $name = $matches[1];
+                    $class = $driverNamespace . "\\" . $name;
+                    if(!class_exists($class,false)) {
+                        include($driver);
+                    }
+                    if(class_exists($class,false)) {
+                        $this->$name = new $class();
+                    } else {
+                        throw new \Exception("Invalid Class inside in the include folder".print_r($freepbx));
+                    }
+             }
             }
+        } else {
+            return;
         }
+            
 
         $this->getSccpSettingFromDB(); // Overwrite Exist 
 //        $this->getSccpSetingINI(false); // get from sccep.ini

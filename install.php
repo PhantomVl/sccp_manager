@@ -8,6 +8,17 @@ global $db;
 global $amp_conf;
 global $astman;
 global $version;
+global $srvinterface;
+
+
+
+$class = "\\FreePBX\\Modules\\Sccp_manager\\srvinterface";
+if(!class_exists($class,false)) {
+    include(__DIR__."/Sccp_manager.inc/srvinterface.class.php");
+}
+if(class_exists($class,false)) {
+    $srvinterface = new $class();
+}
 
 //
 // Helper function to retrieve SCCPConfigMetaData via ASTMan
@@ -78,6 +89,7 @@ $db_config_v0 = array(
         'musicclass' =>array('def_modify' => "default"),
         'echocancel' =>array('def_modify' => "on"),
         'silencesuppression' =>array('def_modify' => "off"),
+        'id' =>array('create' => 'VARCHAR( 20 ) NULL DEFAULT NULL', 'modify' => "VARCHAR(20)", 'def_modify' =>"NULL"),
         'dnd' =>array('create' => 'VARCHAR( 12 ) DEFAULT "reject" AFTER `amaflags`', 'modify' => "VARCHAR(12)", 'def_modify' =>"reject")
     )
 );
@@ -198,8 +210,24 @@ function CheckAsteriskVersion() {
     return $ver_compatible;
 }
 
-function CheckChanSCCPVersion($astman) {
-    global $db_config, $db_config_v0, $db_config_v3;
+function CheckChanSCCPVersion() {
+    global $db_config, $db_config_v0, $db_config_v3, $srvinterface,$astman;
+    if (!$astman) {
+        ie_freepbx('No asterisk manager connection provided!. Installation Failed');
+    }
+    $sccp_ver = $srvinterface->get_comatable_sccp();
+    outn("<li>" . _("Sccp model Version : ") . $sccp_ver . "</li>");
+    if ($sccp_ver >= 11) {
+        $db_config = $db_config_v3;
+    } else {
+        $db_config = $db_config_v0;
+    }
+    return $sccp_ver;
+}
+          
+/*            
+function CheckChanSCCPVersion() {
+    global $db_config, $db_config_v0, $db_config_v3, $astman;
     if (!$astman) {
         ie_freepbx('No asterisk manager connection provided!. Installation Failed');
     }
@@ -226,28 +254,17 @@ function CheckChanSCCPVersion($astman) {
                 $sccp_ver = 430;
             }
         }
-
-        /*
-        if (array_key_exists("Branch",$metadata)) {
-            if ($metadata["Branch"] == "master") {
-            
-            } else
-            if ($metadata["Branch"] == "develop") {
-            
+        if (array_key_exists("Revision",$metadata)) { 						// old method
+            if (base_convert($metadata["Revision"],16,10) == base_convert('702487a',16,10)) {		// hash values are random, not incrementa
+                $sccp_ver = 431;
+                $db_config = $db_config_v3;
             }
         }
-        */
-
-        /* Revision got replaced by RevisionHash in 10404 (using the hash does not work)*/
-        if (array_key_exists("Revision",$metadata) &&						// old method
-          (base_convert($metadata["Revision"],16,10) == base_convert('702487a',16,10))		// hash values are random, not incremental
-        ) {
-            $sccp_ver = 431;
-            $db_config = $db_config_v3;
-        } else 
-        if (array_key_exists("RevisionNum",$metadata) && $metadata["RevisionNum"] >= "10403") {	// new method, RevisionNum is incremental
-            $sccp_ver = 432;
-            $db_config = $db_config_v3;
+        if (array_key_exists("RevisionNum",$metadata)) {
+            if ($metadata["RevisionNum"] >= "10403") {	// new method, RevisionNum is incremental
+                $sccp_ver = 432;
+                $db_config = $db_config_v3;
+            }
         }
     } else {
         die_freepbx("Version information could not be retrieved from chan-sccp, via astman::SCCPConfigMetaData");
@@ -255,7 +272,8 @@ function CheckChanSCCPVersion($astman) {
     outn("<li>" . _("Sccp Version : ") . $sccp_ver . "</li>");
     return $sccp_ver;
 }
-
+*/
+    
 function InstallDB_sccpsettings() {
     global $db;
     outn("<li>" . _("Creating sccpsettings table...") . "</li>");
@@ -483,7 +501,7 @@ function InstallDB_CreateSccpDeviceConfigView($sccp_ver) {
 CheckSCCPManagerDBTables($table_req);
 CheckPermissions();
 CheckAsteriskVersion();
-$sccp_ver = CheckChanSCCPVersion($astman);
+$sccp_ver = CheckChanSCCPVersion();
 InstallDB_sccpsettings();
 InstallDB_sccpdevmodel();
 InstallDB_updateSchema($db_config);
@@ -496,4 +514,5 @@ outn("<br>");
 //    $ss->save_submit($request);
 //    $ss->sccp_create_sccp_init();
 //    $ss->sccp_db_save_setting();
+//
 //}

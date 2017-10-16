@@ -10,7 +10,7 @@ class Sccp extends \FreePBX\modules\Core\Driver {
                                  "callgroup"=>'callgroup',"pickupgroup"=>'pickupgroup',
                                  "transfer" => 'transfer', "echocancel" => 'echocancel',
                                  "language" => 'language', "description" => 'callerid',
-                                 "cid_num" => 'cid_num', "cid_name" => 'label', "mailbox" => 'description',
+                                 "cid_num" => 'cid_num', "cid_name" => 'label', "mailbox" => 'mailbox',
                                  "musicclass" => 'musicclass',
                                  "dnd" => 'dnd', "silencesuppression" => 'silencesuppression',
                                  "secondary_dialtone_digits" => 'secondary_dialtone_digits', "secondary_dialtone_tone" => 'secondary_dialtone_tone',
@@ -29,7 +29,7 @@ class Sccp extends \FreePBX\modules\Core\Driver {
 			"prettyName" => _("Sccp Custom Driver"),
 			"shortName" => "SCCP",
 			"description" => _("Sccp Device"),
-			"sccp_driver_ver" => "11.1"
+			"sccp_driver_ver" => "11.2"
 		);
 	}
        public function addDevice1($id, $settings) {
@@ -43,11 +43,12 @@ class Sccp extends \FreePBX\modules\Core\Driver {
         }
 
 	public function addDevice($id, $settings) {
-                $add_fld = array ("name"=>'label',"outboundcid"=>'cid_num',"langcode"=>'language',"extdisplay"=>'description');
+                $add_fld = array ("name"=>'label',"outboundcid"=>'cid_num',"langcode"=>'language',"extdisplay"=>'description','devinfo_mailbox'=>'mailbox');
 //                print_r($_REQUEST);
 //                echo '<br><br>';
 //                die(print_r($settings));
                 $settings['cid_num']['value']='';
+                $settings['mailbox']['value']= '';
                 if (isset($_REQUEST)){
                     foreach($add_fld as $key => $val) {
                         if (!empty($_REQUEST[$key])){
@@ -58,7 +59,16 @@ class Sccp extends \FreePBX\modules\Core\Driver {
                 if (empty($settings['cid_num']['value'])) {
                     $settings['cid_num']['value']= $id;
                 }
-                $sql = 'INSERT INTO sccpline (name, id';
+                
+                if (!empty($_REQUEST['vm']) && ($_REQUEST['vm'] =='enabled')){ // mailbox 
+                    if (empty($settings['mailbox']['value'])) {
+                        $settings['mailbox']['value']= $id;
+                    }
+                }
+ 
+//                die(print_r($settings));
+                
+                $sql = 'REPLACE INTO sccpline (name, id';
                 $sqlv = 'values ("'.$id.'", "'.$id.'"';
 		foreach($this->data_fld as $key => $val) {
                     switch ($key) {
@@ -84,13 +94,15 @@ class Sccp extends \FreePBX\modules\Core\Driver {
                     }
                 }
                 $sql .= ") ".$sqlv.");";              
+//                die(print_r($sql));
 		$sth = $this->database->prepare($sql);
                 $sth->execute();
 		return true;
         }
 
 	public function delDevice($id) {
-		$sql = "DELETE FROM sccpline WHERE id = ?";
+//		$sql = "DELETE FROM sccpline WHERE id = ?";
+		$sql = "DELETE FROM sccpline WHERE name = ?";
 		$sth = $this->database->prepare($sql);
 		$sth->execute(array($id));
 		return true;
@@ -99,11 +111,12 @@ class Sccp extends \FreePBX\modules\Core\Driver {
         
 	public function getDevice($id) {
                 $sccp_line = array();
-		$sql = "SELECT id";
+		$sql = "SELECT name as id";
 		foreach($this->data_fld as $key => $val) {
                     $sql .= ',`'. $key .'` as '.$val;
                 }
-		$sql .= " FROM sccpline WHERE id = ?";
+//		$sql .= " FROM sccpline WHERE id = ?";
+		$sql .= " FROM sccpline WHERE name = ?";
 		$sth = $this->database->prepare($sql);
 		$result = array();
 		$tech = array();
@@ -113,6 +126,12 @@ class Sccp extends \FreePBX\modules\Core\Driver {
                     $tech = $result;
                     $tech['dial']='SCCP/'.$id;
 		} catch(\Exception $e) {}
+
+//                print_r($tech);
+//                echo '<br><br>';
+//                print_r($sql);
+//                die(print_r($id));
+//                echo '<br><br>';
 
 		return $tech;
 	}
@@ -147,6 +166,10 @@ class Sccp extends \FreePBX\modules\Core\Driver {
 	public function getDefaultDeviceSettings($id, $displayname, &$flag) {
 		$dial = 'SCCP';
 		$settings  = array(
+			"mailbox" => array(
+				"value" => "",
+				"flag" => $flag++
+			),
 			"incominglimit" => array(
 				"value" => "2",
 				"flag" => $flag++
@@ -220,6 +243,8 @@ class Sccp extends \FreePBX\modules\Core\Driver {
 //                Assigned DID/CID
                 $named_group = $this->getNamedGroup();
 		$tmparr = array();
+                $tt = _("Name or id of lincked maibox");
+		$tmparr['mailbox'] = array('prompttext' => _('Mailbox'), 'value' => '', 'tt' => $tt, 'level' => 1, 'section' => $section);
                 $tt = _("The SCCP channel number for this port. If you plaining to use this line as 'Shared' or use on several devices - leave this field blank or set limit to 10 calls.");
 //		$tmparr['incominglimit'] = array('prompttext' => _('Incoming Call Limit'), 'value' => '2', 'tt' => $tt, 'level' => 0, 'jsvalidation' => 'isEmpty()', 'failvalidationmsg' => $msgInvalidChannel);
 //		$tmparr['incominglimit'] = array('prompttext' => _('Incoming Call Limit'), 'value' => '', 'tt' => $tt, 'level' => 1, 'section' => $section, 'category' => 'general');

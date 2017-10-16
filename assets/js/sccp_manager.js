@@ -304,6 +304,38 @@ $(document).ready(function () {
         });
 
     });
+    
+    $('.sccp_button_hide').each(function () { // On page create !!  
+        var dev_id = $(this).data('vhide');
+        var dev_class = $(this).data('clhide');
+        var dev_val = $(this).val();
+        var dev_state = $(this).attr('checked');
+        if (dev_state == 'checked'){
+            $(dev_class).each(function () {
+                if (dev_val !=  dev_id) {
+                    $(this).removeClass('hidden');
+                    $(this).removeAttr('hidden')
+                } else {
+                    $(this).addClass('hidden');
+                }
+            });
+        }
+    });
+    
+    $('.sccp_button_hide').on('click', function (e) {
+        var dev_id = $(this).data('vhide');
+        var dev_class = $(this).data('clhide');
+        var dev_val = $(this).val();
+        $(dev_class).each(function () {
+            if (dev_val !=  dev_id) {
+                $(this).removeClass('hidden');
+                $(this).removeAttr('hidden')
+            } else {
+                $(this).addClass('hidden');
+            }
+        });
+    });
+    
 // ----------------------- TEST Validate ----------------
     $('.need-validate').on('change', function (e) {
         var dev_class = $(this).attr('class');
@@ -314,17 +346,15 @@ $(document).ready(function () {
 //        confirm(dev_id);        
     });
     
-//    $('.sccp_test').on('click', function (e) {
-//        var dev_id = [];
+    $('.sccp_test').on('click', function (e) {
+        var dev_id = [];
 //        $('table').bootstrapTable('getSelections').forEach(function (entry) {
 //            dev_id.push(entry['name']);
 //        });
-//        dv = dev_id;
-//        confirm(dv);
-//    });
+        dv = dev_id;
+        confirm(dv);
+    });
 // ----------------------- TEST ----------------
-
-
     $('.test').on('click', function (e) {
         var dev_fld = ['onhook', 'connected', 'onhold', 'ringin', 'offhook', 'conntrans', 'digitsfoll', 'connconf', 'ringout', 'offhookfeat',
             'onhint', 'onstealable', 'holdconf', 'uriaction'];

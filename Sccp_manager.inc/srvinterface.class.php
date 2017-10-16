@@ -7,6 +7,7 @@
      */
 
 namespace FreePBX\modules\Sccp_manager;
+
 class srvinterface {
 
     public function __construct() {
@@ -126,24 +127,42 @@ class srvinterface {
     }
     
     public function get_comatable_sccp() {
-        $res = 0;        
-        $ast_out = $this->sccp_version();
-        if ($ast_out[0] >= '4.3.0'){
-            $res = 1;
+        $res = $this-> getChanSCCPVersion();
+        if (empty($res)) {
+            $res = $this-> getChanSCCPVersion();
         }
-        if (!empty($ast_out[1]) && $ast_out[1] == 'develop'){           
+        if (empty($res)) {
+            return 0;
+        }
+        if ($res["vCode"] >= 431) {
+            return 11;
+        } else {
+            return 10;
+        }
+//        return $res["vCode"];
+    }
+   
+   function getCoreSCCPVersion() {
+        $result =  array();
+        $ast_out = $this->sccp_version();
+        $result["Version"] = $ast_out[0];
+        $version_parts=explode(".", $ast_out[0]);
+        $result["vCode"] = implode('', $version_parts);
+        if (!empty($ast_out[1]) && $ast_out[1] == 'develop'){
+            $result["develop"] = $ast_out[1];
             $res = 10;
-            if (!empty($ast_out[3])) {
-                if (base_convert($ast_out[3],16,10) >= base_convert('702487a',16,10)){           
-                            $res  += 1;
-                }
+            if (base_convert($ast_out[3],16,10) == base_convert('702487a',16,10)) {
+                $result["vCode"] = 431;
+            }
+            if (base_convert($ast_out[3],16,10) >= "10403") {	// new method, RevisionNum is incremental
+                 $result["vCode"] = 432;
             }
         }
-        return $res;
+        return $result;
         
     }
 // rename public - >  privat 
-    public function sccp_version() {
+    private function sccp_version() {
         $ast_out = $this->sccp_core_comands(array('cmd' => 'get_version'));
         if (preg_match("/Release.*\(/", $ast_out['data'] , $matches)) {
             $ast_out = substr($matches[0],9,-1);
@@ -152,6 +171,69 @@ class srvinterface {
             return aray('unknown');
         }
     }
+    
+    
+  function getChanSCCPVersion() {
+    global $astman;
+    $result =  array();
+    if (!$astman) {
+        return $result;
+    }
+    $metadata = $this->astman_retrieveJSFromMetaData("");
+    if ($metadata && array_key_exists("Version",$metadata)) {
+        $result["Version"] = $metadata["Version"];
+        $version_parts=explode(".", $metadata["Version"]);
+        $result["vCode"] = 0;
+        
+        # not sure about this sccp_ver numbering. Might be better to just check "Version" and Revision
+        # $result["vCode"] = implode('', $version_parts);
+        $result["vCode"] = 0;
+        if ($version_parts[0] == "4") {
+            $result["vCode"] = 400;
+            if ($version_parts[1] == "1") {
+                $result["vCode"] = 410;
+            } else
+            if ($version_parts[1] == "2") {
+                $result["vCode"] = 420;
+            } else
+            if ($version_parts[1] >= "3") {
+                $result["vCode"] = 430;
+            }
+        }
+
+        /*
+        if (array_key_exists("Branch",$metadata)) {
+            if ($metadata["Branch"] == "master") {
+            
+            } else
+            if ($metadata["Branch"] == "develop") {
+            
+            }
+        }
+        */
+
+        /* Revision got replaced by RevisionHash in 10404 (using the hash does not work)*/
+        if (array_key_exists("Revision",$metadata)) {
+          if (base_convert($metadata["Revision"],16,10) == base_convert('702487a',16,10)) {
+           $result["vCode"] = 431;
+          }
+          if (base_convert($metadata["Revision"],16,10) >= "10403") {	
+           $result["vCode"] = 431;
+          }
+        }
+        if (array_key_exists("RevisionNum",$metadata)) {
+          if ($metadata["RevisionNum"] >= "10403") {	// new method, RevisionNum is incremental
+             $result["vCode"] = 432;
+          }
+        }
+        if (array_key_exists("ConfigureEnabled",$metadata)) {
+            $result["futures"] = implode(';', $metadata["ConfigureEnabled"]);
+        }
+    } else {
+        die_freepbx("Version information could not be retrieved from chan-sccp, via astman::SCCPConfigMetaData");
+    }
+    return $result;
+}
     
     public function sccp_list_keysets() {
         $ast_out = $this->sccp_core_comands(array('cmd' => 'get_softkey'));
@@ -228,6 +310,24 @@ class srvinterface {
         }
         return $ast_key;
     }
-
+/*
+ *  Replace  sccp_core_comands($params = array()) {
+ */
+    
+    private function astman_retrieveJSFromMetaData($segment = "") {
+        global $astman;
+        $params = array();
+        if ($segment != "") {
+            $params["Segment"] = $segment;
+        }
+        $response = $astman->send_request('SCCPConfigMetaData', $params);
+        if ($response["Response"] == "Success") {
+            //outn(_("JSON-content:").$response["JSON"]);
+            $decode=json_decode($response["JSON"], true);
+            return $decode;
+        } else {
+            return false;
+        }
+    }
         
 }

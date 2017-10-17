@@ -153,7 +153,7 @@ msgid "Local network settings. Blank fields will be ignored used Network 0.0.0.0
 msgstr "Настройки локальной сети. Пустые поля будут игнорироваться в используемой сети 0.0.0.0."
 
 #: views/sccpgeneral.xml:
-msgid "Alow network settings. Blank fields will be ignored used Network 0.0.0.0."
+msgid "Allow network settings. Blank fields will be ignored used Network 0.0.0.0."
 msgstr "Список допустимых для регистрации подсетей."
 
 #: views/sccpgeneral.xml:
@@ -283,7 +283,7 @@ msgid "Silence Suppression"
 msgstr "Подавление тишины"
 
 #: views/sccpgeneral.xml:
-msgid "Silence Suppression: Slience Suppression on the phone."
+msgid "Silence Suppression: Silence Suppression on the phone."
 msgstr "Подавление тишины: подавление тишины на телефоне."
 
 #: views/sccpgeneral.xml:
@@ -335,7 +335,7 @@ msgid "Enabling NTP settings in device configuration."
 msgstr "Включение параметров NTP в конфигурации устройства."
 
 #: views/sccpgeneral.xml:
-msgid "NTP Server name (ip)"
+msgid "NTP Server name (IP)"
 msgstr "Адрес Сервера NTP (IP)"
 
 #: views/sccpgeneral.xml:
@@ -343,7 +343,7 @@ msgid "NTP Server name or IP"
 msgstr "Адрес Сервера NTP"
 
 #: views/sccpgeneral.xml:
-msgid "Configure NTP Server protocol time syncronization"
+msgid "Configure NTP Server protocol time synchronization"
 msgstr "Настойка протокола синхронизации времени"
 
 #: views/sccpgeneral.xml:
@@ -632,7 +632,7 @@ msgid "Ringtone"
 msgstr "Мелодия звонка"
 
 #: views/sccpgeneral.xml:
-msgid "The ringtone that the phone will default to. Can be overridden in the phone. The files RINGLIST.XML provice the basic phone ring tones, while DISTINCTIVERINGLIST.XML defines the list of possible ring tones for your other line types. They, along with the actual 'raw' ringtones, are stored in the /tftpboot/ directory with the rest of the config files."
+msgid "The ringtone that the phone will default to. Can be overridden in the phone. The files RINGLIST.XML provide the basic phone ring tones, while DISTINCTIVERINGLIST.XML defines the list of possible ring tones for your other line types. They, along with the actual 'raw' ringtones, are stored in the /tftpboot/ringtones directory with the rest of the config files."
 msgstr "Мелодия, по которой по умолчанию будет работать телефон. Может быть отменено в телефоне. Файлы RINGLIST.XML предоставляют основные тональные сигналы телефона, а DISTINCTIVERINGLIST.XML определяет список возможных мелодий звонка для других типов линий. Они вместе с фактическими «сырыми» мелодиями хранятся в каталоге / tftpboot / с остальными конфигурационными файлами."
 
 #: views/sccpgeneral.xml: views/form.buttons: -----------------------------
@@ -644,7 +644,7 @@ msgid "Device MAC SEP."
 msgstr "Прямое подключение."
 
 #: views/sccpgeneral.xml:
-msgid "Device Properies"
+msgid "Device Properties"
 msgstr "Прямое подключение"
 
 #: views/sccpgeneral.xml:
@@ -704,7 +704,7 @@ msgid "Pickup Context"
 msgstr "Контекст перехвата"
 
 #: views/sccpgeneral.xml:
-msgid "Context where direct pickup search for extensions. if not set current contect will be use."
+msgid "Context where direct pickup search for extensions. if not set current context will be use."
 msgstr "Контекст, где разрешен прямой захват звонка. Если не установить будет использоваться текущий контекст."
 
 #: views/sccpgeneral.xml:
@@ -763,7 +763,7 @@ msgstr "Сетевые настройки"
 
 #: views/sccpgeneral.xml:
 #, fuzzy
-msgid "Alow Networks / Mask"
+msgid "Allow Networks / Mask"
 msgstr "Разешенные Подсети"
 
 #: views/sccpgeneral.xml:
@@ -792,7 +792,7 @@ msgid "Early Rtp Device"
 msgstr "Настройки для Cisco Phone"
 
 #: views/sccpgeneral.xml:
-msgid "The audio strem will be open in the progress and connected state. Valid options: none, progress, offhook, dial, ringout. Default may be Progress."
+msgid "The audio stream will be open in the progress and connected state. Valid options: none, progress, offhook, dial, ringout. Default may be Progress."
 msgstr "Звуковой поток будет открыт в процессе соединения. Действующие параметры: \"none, progress, offhook, dial, ringout\". По умолчанию может быть \"progress\"."
 
 #: views/sccpgeneral.xml:
@@ -800,7 +800,7 @@ msgid "Buttons "
 msgstr "Кнопки "
 
 #: views/sccpgeneral.xml:
-msgid "buttons come in the following flavours:empty: Empty button (no options)line: Registers the line with identifier specified as [name]silent:   butons equal 'Line' with out ringmonitor:  butons mode speeddial + show statusspeeddial: Adds a speeddial with label [name] and [option1] as number Optionally, [option2] can be used to specify a hint by extension@context as usual.service (not implemented): Adds a service url Feature buttons have an on/off status represented on the device with a tick-box and can be used to set the device in a particular state. Currently Possible [option1],[option2] combinations:privacy,callpresent = Make a private call, number is suppressedprivacy,hint = Make a private call, hint is suppressedcfwdall,number = Forward all calls cfwbusy,number = Forward on busycfwnoaswer,number = Forward on no-answer (not implemented yet)DND,busy = Do-not-disturb, return Busy signal to Caller DND,silent = Do-not-disturb, return nothing to callermonitor = Record Calls using AutoMon (asterisk 1.6.x only)</li><li>devstate,custom_devstate = Device State Feature Button (asterisk 1.6.1 and up). custom_devstate is the name of the custom devicestate to be toggled (How to use devicestate)hold = To be implementedtransfer = To be implementedmultiblink = To be implementedmobility = To be implementedconference = To be implemented"
+msgid "buttons come in the following flavours: empty: Empty button (no options)line: Registers the line with identifier specified as [name]silent:   butons equal 'Line' with out ringmonitor:  butons mode speeddial + show statusspeeddial: Adds a speeddial with label [name] and [option1] as number Optionally, [option2] can be used to specify a hint by extension@context as usual.service (not implemented): Adds a service url Feature buttons have an on/off status represented on the device with a tick-box and can be used to set the device in a particular state. Currently Possible [option1],[option2] combinations:privacy,callpresent = Make a private call, number is suppressedprivacy,hint = Make a private call, hint is suppressedcfwdall,number = Forward all calls cfwbusy,number = Forward on busycfwnoaswer,number = Forward on no-answer (not implemented yet)DND,busy = Do-not-disturb, return Busy signal to Caller DND,silent = Do-not-disturb, return nothing to callermonitor = Record Calls using AutoMon (asterisk 1.6.x only)</li><li>devstate,custom_devstate = Device State Feature Button (asterisk 1.6.1 and up). custom_devstate is the name of the custom devicestate to be toggled (How to use devicestate)hold = To be implementedtransfer = To be implementedmultiblink = To be implementedmobility = To be implementedconference = To be implemented"
 msgstr "Помощь придет"
 
 #: views/server.model:

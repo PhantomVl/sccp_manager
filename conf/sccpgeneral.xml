@@ -294,7 +294,7 @@ and open the template in the editor. Base Version before all crash :-)
             <name>dev_servicesURL</name> 
             <default></default>
             <value></value>
-            <options placeholder="http://x.x.x.x/cisco_menu/phone_service.php"></options>
+            <options placeholder="http://x.x.x.x/cisco_menu/service.php"></options>
             
         </input>
         <help></help>
@@ -311,7 +311,7 @@ and open the template in the editor. Base Version before all crash :-)
       <item type="IE" id="3" seq="10"><label>Phone Idle information URL</label>
         <input>
             <name>dev_idleURL</name>
-            <options placeholder="http://x.x.x.x/cisco_menu/phone_idle.php"></options>
+            <options placeholder="http://x.x.x.x/cisco_menu/idle.php"></options>
             <default></default>
             <value></value>
         </input>
@@ -320,7 +320,7 @@ and open the template in the editor. Base Version before all crash :-)
       <item type="IE" id="4" seq="10"><label>Phone information URL</label>
         <input>
             <name>dev_informationURL</name>
-            <options placeholder="http://x.x.x.x/cisco_menu/cisco_phone.php"></options>
+            <options placeholder="http://x.x.x.x/cisco_menu/information.php"></options>
             <default></default>
         </input>
         <help></help>
@@ -328,7 +328,7 @@ and open the template in the editor. Base Version before all crash :-)
       <item type="IE" id="5" seq="10"><label>Phone messages URL</label>
         <input>
             <name>dev_messagesURL</name>
-            <options placeholder="http://x.x.x.x/cisco_menu/authentication.php"></options>
+            <options placeholder="http://x.x.x.x/cisco_menu/messages.php"></options>
             <default></default>
         </input>
         <help></help>
@@ -336,7 +336,7 @@ and open the template in the editor. Base Version before all crash :-)
       <item type="IE" id="6" seq="10"><label>Phone directory service URL</label>
         <input>
             <name>dev_directoryURL</name>
-            <options placeholder="http://x.x.x.x/cisco_menu/phone_directories.php"></options>
+            <options placeholder="http://x.x.x.x/cisco_menu/directories.php"></options>
             <default></default>
         </input>
         <help>This is the URL for a CiscoIPPhoneMenu which gets appended to the end of the Missed/Received/Placed calls.  I don't use it (I find it makes more sense to put my phone book under services)</help>
@@ -344,7 +344,7 @@ and open the template in the editor. Base Version before all crash :-)
       <item type="IE" id="7" seq="10"><label>Phone proxyServer URL</label>
         <input>
             <name>dev_proxyServerURL</name>
-            <options placeholder="http://x.x.x.x/cisco_menu/proxyserver.php"></options>
+            <options placeholder="http://x.x.x.x/cisco_menu/proxy.php"></options>
             <default></default>
             <value></value>
         </input>

@@ -22,7 +22,7 @@ class Sccp extends \FreePBX\modules\Core\Driver {
 			"prettyName" => _("Sccp Custom Driver"),
 			"shortName" => "SCCP",
 			"description" => _("Sccp Device"),
-			"sccp_driver_ver" => "11.1"
+			"sccp_driver_ver" => "11.2"
                     
 		);
 	}
@@ -69,7 +69,7 @@ class Sccp extends \FreePBX\modules\Core\Driver {
         }
 
 	public function delDevice($id) {
-		$sql = "DELETE FROM sccpline WHERE id = ?";
+		$sql = "DELETE FROM sccpline WHERE name = ?";
 		$sth = $this->database->prepare($sql);
 		$sth->execute(array($id));
 		return true;
@@ -78,11 +78,11 @@ class Sccp extends \FreePBX\modules\Core\Driver {
         
 	public function getDevice($id) {
                 $sccp_line = array();
-		$sql = "SELECT id";
+		$sql = "SELECT name as id";
 		foreach($this->data_fld as $key => $val) {
                     $sql .= ',`'. $key .'` as '.$val;
                 }
-		$sql .= " FROM sccpline WHERE id = ?";
+		$sql .= " FROM sccpline WHERE name = ?";
 		$sth = $this->database->prepare($sql);
 		$result = array();
 		$tech = array();

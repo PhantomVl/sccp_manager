@@ -55,12 +55,16 @@ $items = $itm -> children();
 //print_r($syslangs);
 //print_r($moh_list);
 if ($h_show==1) {
+ $sec_class ='';   
+ if (!empty($items ->class)){
+    $sec_class = (string)$items ->class;
+ }
  ?>
 
  <div class="section-title" data-for="<?php echo $npref.$itm['name'];?>">
     <h3><i class="fa fa-minus"></i><?php echo _($items ->label) ?></h3>
  </div>
- <div class="section" data-id="<?php echo $npref.$itm['name'];?>">
+ <div class="section <?php echo $sec_class;?>" data-id="<?php echo $npref.$itm['name'];?>">
 
 <?php
 }
@@ -242,10 +246,11 @@ foreach ($items as $child) {
                         <label class="control-label" for="<?php echo $res_id; ?>"><?php echo _($child->label);?></label>
                         <i class="fa fa-question-circle fpbx-help-icon" data-for="<?php echo $res_id; ?>"></i>
                     </div>
-                    <div class="col-md-9 radioset">
+                    <div class="col-md-9 radioset " data-hide="on">
                         <?php
                           $i = 0;
 //                          $res_v = 'no';
+                          $opt_hide = '';
                           if (empty($child->default)) {
                               $res_v = 'no';
                           } else {
@@ -259,9 +264,11 @@ foreach ($items as $child) {
                                 $res_v = (string)$fvalues[$res_n]['data'];
                             }
                           }
-
+                          if (!empty($child->option_hide)) { 
+                           $opt_hide = ' class="sccp_button_hide" data-vhide="'.$child->option_hide.'" data-clhide="'.$child->option_hide['class'].'" ';
+                          }                          
                           foreach ($child->xpath('button') as $value) {
-                            echo '<input type="radio" name="' . $res_id . '" id="' . $res_id. '_' . $i .'" value="' . $value[@value] . '"' . (strtolower((string)$value[@value]) == strtolower($res_v) ? " checked" : "") . '>';
+                            echo '<input type="radio" name="' . $res_id . '" id="' . $res_id. '_' . $i .'" value="' . $value[@value] . '"' . (strtolower((string)$value[@value]) == strtolower($res_v) ? " checked" : "") . $opt_hide.'>';
                             echo '<label for="' . $res_id. '_' . $i . '">' . _($value) . '</label>';
                             $i++;
                           }

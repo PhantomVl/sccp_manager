@@ -74,8 +74,8 @@ and open the template in the editor. Base Version before all crash :-)
           <help>Time between Keep Alive checks. Valid range is 60-300 seconds. After much trial-and-error, the minimum (60) seems to work just fine.</help>
       </item>
       <item type="IS" id="6"><name>debug</name> <label>SCCP DEBUG</label>
-          <default>none</default>
-          <button value="none">No</button>
+          <default>NONE</default>
+          <button value="NONE">No</button>
           <button value="core">Core</button>
           <button value="sccp">SCCP</button>
           <button value="device">Device</button>
@@ -88,8 +88,8 @@ and open the template in the editor. Base Version before all crash :-)
         <label>Allow Networks / Mask</label>
         <name>permit</name>
         <default>0.0.0.0/0.0.0.0</default>
-        <input value="none" field="net" nameseparator="/"><options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/></input>
-        <input value="none" field="mask"><options placeholder="255.255.255.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/> </input>
+        <input value="NONE" field="net" nameseparator="/"><options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/></input>
+        <input value="NONE" field="mask"><options placeholder="255.255.255.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/> </input>
         <button>Add Allow network</button>
         <help>Allow network settings. Blank fields will be ignored, use Network 0.0.0.0.</help>
       </item>
@@ -98,8 +98,8 @@ and open the template in the editor. Base Version before all crash :-)
         <label>Deny Networks / Mask</label>
         <name>deny</name>
         <default>0.0.0.0/0.0.0.0</default>
-        <input value="none" field="net" nameseparator="/"><options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/><class></class></input>
-        <input value="none" field="mask"><options placeholder="255.255.255.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/><class></class></input>
+        <input value="NONE" field="net" nameseparator="/"><options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/><class></class></input>
+        <input value="NONE" field="mask"><options placeholder="255.255.255.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/><class></class></input>
         <button>Add Deny network</button>
         <help>All RFC 1918 addresses are local networks. Should always be at least '0.0.0.0/0.0.0.0'.</help>
       </item>
@@ -108,8 +108,8 @@ and open the template in the editor. Base Version before all crash :-)
         <label>Local Networks / Mask</label>
         <name>localnet</name>
         <default>0.0.0.0/0.0.0.0</default>
-        <input value="none" field="net" nameseparator="/"><options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$" /><class></class></input>
-        <input value="none" field="mask"><options placeholder="255.255.255.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/> <class></class></input>
+        <input value="NONE" field="net" nameseparator="/"><options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$" /><class></class></input>
+        <input value="NONE" field="mask"><options placeholder="255.255.255.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/> <class></class></input>
         <button>Add local networks</button>
         <help>Local network settings. Blank fields will be ignored used Network 0.0.0.0.</help>
       </item>
@@ -477,14 +477,14 @@ and open the template in the editor. Base Version before all crash :-)
       </item>
       <item type="SLM" id="6"><label>Music On Hold Class</label>
           <name>musicclass</name> 
-          <default>none</default>
+          <default>NONE</default>
           <select></select>
           <class>form-control</class>
           <help>Music Class: Available MOH Classes. These are the MOH classes listed in your current server.</help>
       </item>
       <item type="SLA-disabled" id="6"><label>Default Dial Plan</label>
           <name>dial_template</name> 
-          <default>none</default>
+          <default>NONE</default>
           <select></select>
           <class>sccp-custom</class>
           <help>Help.</help>
@@ -586,7 +586,7 @@ and open the template in the editor. Base Version before all crash :-)
         <item type="SDE" id="3" seq="99">
             <label>Addon</label>
             <name>addon</name> 
-            <default>none</default>
+            <default>NONE</default>
             <select name="model" dataval="buttons">model</select>
             <class>hw_select sccp-custom</class>
             <help>Addon: Addons are model specific and only work with certain base phones. This phone model is identified as being a phone that does not accept sidecars. Update devmodel if this is not correct.</help>
@@ -628,7 +628,7 @@ and open the template in the editor. Base Version before all crash :-)
             <label>Addon</label>
             <input>
                 <name>addon</name> 
-                <default>none</default>
+                <default>NONE</default>
                 <class>sccp-custom</class>
                 <options readonly="readonly"></options>
             </input>
@@ -836,8 +836,8 @@ and open the template in the editor. Base Version before all crash :-)
             <label>Alow Networks / Mask</label>
             <name>permit</name>
             <default>/</default>
-            <input value="none" field="net" nameseparator="/"><options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/></input>
-            <input value="none" field="mask"><options placeholder="255.255.255.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/> </input>
+            <input value="NONE" field="net" nameseparator="/"><options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/></input>
+            <input value="NONE" field="mask"><options placeholder="255.255.255.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/> </input>
             <button>Add Allow network</button>
             <help>Allow network settings. Blank fields will be ignored used Network 0.0.0.0.</help>
         </item>
@@ -846,8 +846,8 @@ and open the template in the editor. Base Version before all crash :-)
             <label>Deny Networks / Mask</label>
             <name>deny</name>
             <default>/</default>
-            <input value="none" field="net" nameseparator="/"><options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/><class></class></input>
-            <input value="none" field="mask"><options placeholder="255.255.255.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/><class></class></input>
+            <input value="NONE" field="net" nameseparator="/"><options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/><class></class></input>
+            <input value="NONE" field="mask"><options placeholder="255.255.255.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/><class></class></input>
             <button>Add Deny network</button>
             <help>All RFC 1918 addresses are local networks. Should always be at least '0.0.0.0/0.0.0.0'.</help>
         </item>
@@ -875,8 +875,8 @@ and open the template in the editor. Base Version before all crash :-)
             <button value="progress">Progress</button>
             <button value="offhook">Offhook</button>
             <button value="dial">Dial</button>
-            <button value="none">none</button>
-            <help>The audio stream will be open in the progress and connected state. Valid options: none, progress, offhook, dial, ringout. Default may be Progress.</help>
+            <button value="NONE">NONE</button>
+            <help>The audio stream will be open in the progress and connected state. Valid options: NONE, progress, offhook, dial, ringout. Default may be Progress.</help>
         </item>                
     </page_group>
     <page_group name="sccp_dp_new_template">
@@ -896,11 +896,11 @@ and open the template in the editor. Base Version before all crash :-)
         <name>dialtemplate</name>
         <default>*/10/*</default>
         <element1 type="title" field="title"><options class="form-control control-label"/>title</element1>
-        <element type="input" value="none" field="match" display_prefix="(" display_sufix=")"><options class="form-control dpt-title" placeholder="Pattern to match"/></element>
-        <element type="number" value="none" field="timeout" display_prefix="[" display_sufix="]"><options min="0" max="30" class="form-control dpt-title" placeholder="Time wait" /></element>
+        <element type="input" value="n" field="match" display_prefix="(" display_sufix=")"><options class="form-control dpt-title" placeholder="Pattern to match"/></element>
+        <element type="number" value="NONE" field="timeout" display_prefix="[" display_sufix="]"><options min="0" max="30" class="form-control dpt-title" placeholder="Time wait" /></element>
         <element1 type="label" field="label1"><options class="form-control control-label"/>text1</element1>
-        <element type="input" value="none" field="rewrite" display_prefix="(" display_sufix=")"><options class="form-control dpt-title" placeholder="Rewrite the matched"/></element>
-        <element type="select" value="none" field="tone">
+        <element type="input" value="NONE" field="rewrite" display_prefix="(" display_sufix=")"><options class="form-control dpt-title" placeholder="Rewrite the matched"/></element>
+        <element type="select" value="NONE" field="tone">
             <options class="form-control dpt-title" /> 
             <data>empty</data>
             <data>Bellcore-Alerting</data>
@@ -986,8 +986,8 @@ and open the template in the editor. Base Version before all crash :-)
             <name>srst_ip</name>
             <max_row>3</max_row>
             <default>/</default>
-            <input value="none" field="Addr" nameseparator=":"><options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$" /><class></class></input>
-            <input value="none" field="port"><options placeholder="2000" pattern="^([0-9]){3,5}$"/> <class></class></input>
+            <input value="NONE" field="Addr" nameseparator=":"><options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$" /><class></class></input>
+            <input value="NONE" field="port"><options placeholder="2000" pattern="^([0-9]){3,5}$"/> <class></class></input>
             <button>Add Server</button>
             <help></help>
         </item>
@@ -996,8 +996,8 @@ and open the template in the editor. Base Version before all crash :-)
             <name>srst_sip</name>
             <max_row>3</max_row>
             <default>/</default>
-            <input value="none" field="Addr" nameseparator=":"><options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$" /><class></class></input>
-            <input value="none" field="port"><options placeholder="2000" pattern="^[0-9]{3,5}$"/> <class></class></input>
+            <input value="NONE" field="Addr" nameseparator=":"><options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$" /><class></class></input>
+            <input value="NONE" field="port"><options placeholder="2000" pattern="^[0-9]{3,5}$"/> <class></class></input>
             <button>Add Server</button>
             <help></help>
         </item>

@@ -207,7 +207,7 @@
 		return (value === '1') ? '<i class="fa fa-check-square-o" style="color:green" title="<?php echo _("Device is enabled")?>"></i>' : '<i class="fa fa-square-o" title="<?php echo _("Device is disabled")?>"></i>';
 	}
     function DisplayDnsFormatter(value, row, index) {
-        var exp_model = ['Expansion Module', 'No awalable', 'One ExpModule', 'Tow ExpModule'];
+        var exp_model = ['Expansion Module', 'Not Available', 'One ExpModule', 'Two ExpModule'];
         return  exp_model[value];
     }
 

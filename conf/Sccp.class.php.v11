@@ -68,8 +68,8 @@ class Sccp extends \FreePBX\modules\Core\Driver {
  
 //                die(print_r($settings));
                 
-                $sql = 'REPLACE INTO sccpline (name, id';
-                $sqlv = 'values ("'.$id.'", "'.$id.'"';
+                $sql = 'REPLACE INTO sccpline (name';
+                $sqlv = 'values ("'.$id.'"';
 		foreach($this->data_fld as $key => $val) {
                     switch ($key) {
                         case 'secondary_dialtone_digits':
@@ -111,7 +111,7 @@ class Sccp extends \FreePBX\modules\Core\Driver {
         
 	public function getDevice($id) {
                 $sccp_line = array();
-		$sql = "SELECT name as id";
+		$sql = "SELECT name as id, name as name ";
 		foreach($this->data_fld as $key => $val) {
                     $sql .= ',`'. $key .'` as '.$val;
                 }
@@ -203,11 +203,11 @@ class Sccp extends \FreePBX\modules\Core\Driver {
 				"flag" => $flag++
 			),
 			"transfer" => array(
-				"value" => "yes",
+				"value" => "on",
 				"flag" => $flag++
 			),
 			"echocancel" => array(
-				"value" => "yes",
+				"value" => "on",
 				"flag" => $flag++
 			),
 			"dnd" => array(
@@ -215,7 +215,7 @@ class Sccp extends \FreePBX\modules\Core\Driver {
 				"flag" => $flag++
 			),
 			"silencesuppression" => array(
-				"value" => "no",
+				"value" => "off",
 				"flag" => $flag++
 			),
 			"musicclass" => array(
@@ -339,34 +339,34 @@ class Sccp extends \FreePBX\modules\Core\Driver {
 
 
                 unset($select);
-                $select[] = array('value' => 'yes', 'text' => 'Yes');
-                $select[] = array('value' => 'no', 'text' => 'No');
+                $select[] = array('value' => 'on', 'text' => 'Yes');
+                $select[] = array('value' => 'off', 'text' => 'No');
                 $tt = _("Allow call transfer.");
 //                $tmparr['transfer'] = array('prompttext' => _('Call Transfer'), 'value' => 'yes', 'tt' => $tt, 'select' => $select, 'level' => 1, 'type' => 'radio', 'section' => $section, 'category' => 'general');
-                $tmparr['transfer'] = array('prompttext' => _('Call Transfer'), 'value' => 'yes', 'tt' => $tt, 'select' => $select, 'level' => 1, 'type' => 'radio', 'section' => $section);
+                $tmparr['transfer'] = array('prompttext' => _('Call Transfer'), 'value' => 'on', 'tt' => $tt, 'select' => $select, 'level' => 1, 'type' => 'radio', 'section' => $section);
 
                 unset($select);
-                $select[] = array('value' => 'yes', 'text' => 'Yes');
-                $select[] = array('value' => 'no', 'text' => 'No');
+                $select[] = array('value' => 'on', 'text' => 'Yes');
+                $select[] = array('value' => 'off', 'text' => 'No');
                 $tt = _("Echo cancel");
-                $tmparr['echocancel'] = array('prompttext' => _('Echo cancel'), 'value' => 'yes', 'tt' => $tt, 'select' => $select, 'level' => 1, 'type' => 'radio', 'section' => $section);
+                $tmparr['echocancel'] = array('prompttext' => _('Echo cancel'), 'value' => 'on', 'tt' => $tt, 'select' => $select, 'level' => 1, 'type' => 'radio', 'section' => $section);
 
                 unset($select);
                 $select[] = array('value' => 'off', 'text' => 'Off');
                 $select[] = array('value' => 'reject', 'text' => 'Reject');
                 $select[] = array('value' => 'silent', 'text' => 'Silent');
-                $select[] = array('value' => '', 'text' => 'Cycle');
+                $select[] = array('value' => 'user', 'text' => 'Cycle');
                 $tt = _("DND: Means how will dnd react when it is set on the device level dnd can have three states: off / busy(reject) / silent / Cycle").'<br>'.
                       _("Cycle  - dnd that cycles through all three states off -> reject -> silent -> off (this is the normal behaviour)").'<br>'.
                       _("Reject - Usesr can only switch off and on (in reject/busy mode)").'<br>'.
                       _("Silent - Usesr can only switch off and on (in silent mode)");
-                $tmparr['dnd'] = array('prompttext' => _('DND'), 'value' => '', 'tt' => $tt, 'select' => $select, 'level' => 1, 'type' => 'radio', 'section' => $section);
+                $tmparr['dnd'] = array('prompttext' => _('DND'), 'value' => 'reject', 'tt' => $tt, 'select' => $select, 'level' => 1, 'type' => 'radio', 'section' => $section);
 
                 unset($select);
-                $select[] = array('value' => 'yes', 'text' => 'Yes');
-                $select[] = array('value' => 'no', 'text' => 'No');
+                $select[] = array('value' => 'on', 'text' => 'Yes');
+                $select[] = array('value' => 'off', 'text' => 'No');
                 $tt = _("Silence Suppression. Asterisk Not suported");
-                $tmparr['silencesuppression'] = array('prompttext' => _('Silence Suppression'), 'value' => 'no', 'tt' => $tt, 'select' => $select, 'level' => 1, 'type' => 'radio', 'section' => $section);
+                $tmparr['silencesuppression'] = array('prompttext' => _('Silence Suppression'), 'value' => 'off', 'tt' => $tt, 'select' => $select, 'level' => 1, 'type' => 'radio', 'section' => $section);
 
                 unset($select);
                 $select[] = array('value' => 'default', 'text' => _('default'));
@@ -380,7 +380,7 @@ class Sccp extends \FreePBX\modules\Core\Driver {
                 }
 
                 $tt = _("Music on hold");
-                $tmparr['musicclass'] = array('prompttext' => _('Music on hold'), 'value' => 'no', 'tt' => $tt, 'select' => $select, 'level' => 1, 'section' => $section);
+                $tmparr['musicclass'] = array('prompttext' => _('Music on hold'), 'value' => '', 'tt' => $tt, 'select' => $select, 'level' => 1, 'section' => $section);
 
 		$tt = _("Sets the named pickup groups this line is a member of (this phone can pickup calls from remote phones which are in this caller group (ast111)");
 		$tmparr['pin'] = array('value' => '', 'tt' => $tt, 'level' => 1, 'section' => $section);

@@ -71,6 +71,8 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
     private $sccp_driver_ver = '11.2';
     private $tftpLang = array();
     private $hint_context = '@ext-local'; /// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Get it from Config !!!
+    private $val_null = 'NONE'; /// REPLACE to null Field
+    
     public $sccp_model_list = array();
     private $cnf_wr = null;
     public $sccppath = array();
@@ -636,7 +638,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                         if (!empty($request[$value])) {
                             $save_settings[$value] = $request[$value];
                         } else {
-                            $save_settings[$value] = 'none';
+                            $save_settings[$value] = $val_null; // null
                         }
                     }
                     $this->dbinterface->sccp_save_db('sccpdevmodel', $save_settings, $upd_mode, "model");

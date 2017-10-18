@@ -8,6 +8,7 @@
 
 namespace FreePBX\modules\Sccp_manager;
 class dbinterface {
+    private $val_null = 'NONE'; /// REPLACE to null Field
 
     public function __construct() {
         }
@@ -160,7 +161,7 @@ class dbinterface {
                     if (!empty($sql_var)) {
                         $sql_var .= ', ';
                     }
-                    if ($data === 'none') {
+                    if ($data === $this->val_null) {
                         $sql_var .= '`' . $key_v . '`=NULL';
                     } else {
                         $sql_var .= '`' . $key_v . '`="' . $data . '"';

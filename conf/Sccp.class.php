@@ -52,8 +52,8 @@ class Sccp extends \FreePBX\modules\Core\Driver {
                 if (empty($settings['cid_num']['value'])) {
                     $settings['cid_num']['value']= $id;
                 }
-                $sql = 'INSERT INTO sccpline (name, id';
-                $sqlv = 'values ("'.$id.'", "'.$id.'"';
+                $sql = 'INSERT INTO sccpline (name';
+                $sqlv = 'values ("'.$id.'"';
 		foreach($this->data_fld as $key => $val) {
                     if (!empty($settings[$val]) ) {
                         if (!empty($settings[$val]['value'])){
@@ -78,7 +78,7 @@ class Sccp extends \FreePBX\modules\Core\Driver {
         
 	public function getDevice($id) {
                 $sccp_line = array();
-		$sql = "SELECT name as id";
+		$sql = "SELECT name as id, name as name";
 		foreach($this->data_fld as $key => $val) {
                     $sql .= ',`'. $key .'` as '.$val;
                 }

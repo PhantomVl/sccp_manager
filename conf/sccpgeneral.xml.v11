@@ -75,8 +75,8 @@ and open the template in the editor. Base Version before all crash :-)
           <help>Time between Keep Alive checks. Valid range is 60-300 seconds. After much trial-and-error, the minimum (60) seems to work just fine.</help>
       </item>
       <item type="IS" id="6"><name>debug</name> <label>SCCP DEBUG</label>
-          <default>none</default>
-          <button value="none">No</button>
+          <default>NONE</default>
+          <button value="NONE">No</button>
           <button value="core">Core</button>
           <button value="sccp">SCCP</button>
           <button value="device">Device</button>
@@ -89,8 +89,8 @@ and open the template in the editor. Base Version before all crash :-)
         <label>Alow Networks / Mask</label>
         <name>permit</name>
         <default>0.0.0.0/0.0.0.0</default>
-        <input value="none" field="net" nameseparator="/"><options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/></input>
-        <input value="none" field="mask"><options placeholder="255.255.255.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/> </input>
+        <input value="NONE" field="net" nameseparator="/"><options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/></input>
+        <input value="NONE" field="mask"><options placeholder="255.255.255.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/> </input>
         <button>Add Alow network</button>
         <help>Alow network settings. Blank fields will be ignored used Network 0.0.0.0.</help>
       </item>
@@ -99,8 +99,8 @@ and open the template in the editor. Base Version before all crash :-)
         <label>Deny Networks / Mask</label>
         <name>deny</name>
         <default>0.0.0.0/0.0.0.0</default>
-        <input value="none" field="net" nameseparator="/"><options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/><class></class></input>
-        <input value="none" field="mask"><options placeholder="255.255.255.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/><class></class></input>
+        <input value="NONE" field="net" nameseparator="/"><options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/><class></class></input>
+        <input value="NONE" field="mask"><options placeholder="255.255.255.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/><class></class></input>
         <button>Add Deny network</button>
         <help>All RFC 1918 addresses are local networks. Should always be at least '0.0.0.0/0.0.0.0'.</help>
       </item>
@@ -109,8 +109,8 @@ and open the template in the editor. Base Version before all crash :-)
         <label>Local Networks / Mask</label>
         <name>localnet</name>
         <default>0.0.0.0/0.0.0.0</default>
-        <input value="none" field="net" nameseparator="/"><options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$" /><class></class></input>
-        <input value="none" field="mask"><options placeholder="255.255.255.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/> <class></class></input>
+        <input value="NONE" field="net" nameseparator="/"><options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$" /><class></class></input>
+        <input value="NONE" field="mask"><options placeholder="255.255.255.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/> <class></class></input>
         <button>Add local networks</button>
         <help>Local network settings. Blank fields will be ignored used Network 0.0.0.0.</help>
       </item>
@@ -201,27 +201,27 @@ and open the template in the editor. Base Version before all crash :-)
           <help>Call Waiting Tone: The tone played when a call is waiting. If you set this one to '0', you will not get a tone in your current call if a new call comes in, so you might want to disable call waiting for this line instead.</help>
       </item>
       <item type="IS" id="8"><name>echocancel</name> <label>Echo Cancel</label>
-          <default>no</default>
-          <button value="yes">On</button>
-          <button value="no">Off</button>
+          <default>off</default>
+          <button value="on">On</button>
+          <button value="off">Off</button>
           <help>Echo Cancel: Echo Cancellation (On or Off).</help>
       </item>
       <item type="IS" id="9"><name>silencesuppression</name> <label>Silence Suppression</label>      
-          <default>no</default>
-          <button value="yes">On</button>
-          <button value="no">Off</button>
+          <default>off</default>
+          <button value="on">On</button>
+          <button value="off">Off</button>
           <help>Silence Suppression: Slience Suppression on the phone.</help>
       </item>
       <item type="IS" id="10"><name>private</name> <label>Private Calling</label>
-          <default>yes</default>
-          <button value="yes">On</button>
-          <button value="no">Off</button>
+          <default>on</default>
+          <button value="on">On</button>
+          <button value="off">Off</button>
           <help>Private Calling Enabled: Place a call with privacy Options (no Caller ID) turned on. Needs to be supported in Asterisk to work through SIP and DAHDI trunks.</help>
       </item>
       <item type="IS" id="11"><name>directed_pickup_modeanswer</name> <label>Directed Pickup</label>
-          <default>no</default>
-          <button value="yes">On</button>
-          <button value="no">Off</button>
+          <default>off</default>
+          <button value="on">On</button>
+          <button value="off">Off</button>
           <help>Directed Pickup Mode (Answer): If a call is sent with the "directed pickup" flag, the phone will answer when set to "Yes".</help>
       </item>
       <item type="IS" id="12"><name>callanswerorder</name> <label>Call Answer Order</label>
@@ -240,9 +240,9 @@ and open the template in the editor. Base Version before all crash :-)
           <help>Set the MWI lamp style when MWI active to on, off, wink, flash or blink</help>
       </item>
       <item type="IS" id="14"><name>mwioncall</name> <label>Message Lamp On Call</label>
-          <default>no</default>
-          <button value="yes">Yes</button>
-          <button value="no">No</button>
+          <default>off</default>
+          <button value="on">Yes</button>
+          <button value="off">No</button>
           <help>Set the MWI on call.</help>
       </item>
 
@@ -250,9 +250,9 @@ and open the template in the editor. Base Version before all crash :-)
     </page_group>          
     <page_group name="sccp_dev_ntp"><label>SCCP NTP Service config</label>
       <item type="IS" id="1" seq="98"><name>ntp_config_enabled</name> <label>NTP Server Enabled</label>
-          <default>no</default>
-          <button value="yes">Yes</button>
-          <button value="no">No</button>
+          <default>off</default>
+          <button value="on">Yes</button>
+          <button value="off">No</button>
           <help>Enabling NTP settings in device configuration.</help>
       </item>
       <item type="IE" id="2" seq="10"><label>NTP Server name (ip)</label>
@@ -310,7 +310,7 @@ and open the template in the editor. Base Version before all crash :-)
         </item>
 
         <item type="IS" id="1" seq="20"><name>srst_Option</name> <label>SRST Server Enabled</label>
-          <default>no</default>
+          <default>off</default>
           <button value="enabled">Yes</button>
           <button value="disable">No</button>
           <button value="user">TempletDefault</button>
@@ -343,8 +343,8 @@ and open the template in the editor. Base Version before all crash :-)
             <name>srst_ip</name>
             <max_row>3</max_row>
             <default>/</default>
-            <input value="none" field="Addr" nameseparator=":"><options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$" /><class></class></input>
-            <input value="none" field="port"><options placeholder="2000" pattern="^([0-9]){3,5}$"/> <class></class></input>
+            <input value="NONE" field="Addr" nameseparator=":"><options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$" /><class></class></input>
+            <input value="NONE" field="port"><options placeholder="2000" pattern="^([0-9]){3,5}$"/> <class></class></input>
             <button>Add Server</button>
             <help>Help.</help>
         </item>
@@ -353,8 +353,8 @@ and open the template in the editor. Base Version before all crash :-)
             <name>srst_sip</name>
             <max_row>3</max_row>
             <default>/</default>
-            <input value="none" field="Addr" nameseparator=":"><options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$" /><class></class></input>
-            <input value="none" field="port"><options placeholder="2000" pattern="^[0-9]{3,5}$"/> <class></class></input>
+            <input value="NONE" field="Addr" nameseparator=":"><options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$" /><class></class></input>
+            <input value="NONE" field="port"><options placeholder="2000" pattern="^[0-9]{3,5}$"/> <class></class></input>
             <button>Add Server</button>
             <help>Help.</help>
         </item>
@@ -502,9 +502,9 @@ and open the template in the editor. Base Version before all crash :-)
       </item>
     
       <item type="IS" id="1"><name>hotline_enabled</name> <label>Hotline</label>
-          <default>no</default>
-          <button value="yes">Enabled</button>
-          <button value="no">Disabled</button>
+          <default>off</default>
+          <button value="on">Enabled</button>
+          <button value="off">Disabled</button>
           <help>Hotline Enabled: This allows unregistered extensions to connect to the system and dial the number listed below.</help>
       </item>
       <item type="IE" id="2"><label>Hotline extension</label>
@@ -549,14 +549,14 @@ and open the template in the editor. Base Version before all crash :-)
       </item>
       <item type="SLM" id="6"><label>Music On Hold Class</label>
           <name>musicclass</name> 
-          <default>none</default>
+          <default>NONE</default>
           <select></select>
           <class>form-control</class>
           <help>Music Class: Available MOH Classes. These are the MOH classes listed in your current server.</help>
       </item>
       <item type="SLA-disabled" id="6"><label>Default Dial Plan</label>
           <name>dial_template</name> 
-          <default>none</default>
+          <default>NONE</default>
           <select></select>
           <class>sccp-custom</class>
           <help>Help.</help>
@@ -564,15 +564,15 @@ and open the template in the editor. Base Version before all crash :-)
       <item type="IS" id="7" seq="98">
           <name>autoselectline_enabled</name> 
           <label>Autoselect Line</label>
-          <default>no</default>
-          <button value="yes">Enabled</button>
-          <button value="no">Disabled</button>
+          <default>off</default>
+          <button value="on">Enabled</button>
+          <button value="off">Disabled</button>
           <help>Enables and disables auto line selection.</help>
       </item>
       <item type="IS-disabled" id="8" seq="0"><name>meetme</name> <label>Meetme Conference</label>
-          <default>no</default>
-          <button value="yes">Enabled</button>
-          <button value="no">Disabled</button>
+          <default>off</default>
+          <button value="on">Enabled</button>
+          <button value="off">Disabled</button>
           <help>enable/disable conferencing via meetme (on/off), make sure you have one of the meetme apps mentioned below activated in module.conf</help>
       </item>
       <item type="IS-disabled" id="9" seq="0"><label>Meetme Options</label>
@@ -587,15 +587,15 @@ and open the template in the editor. Base Version before all crash :-)
       <item type="IS" id="10" seq="98">
           <name>autocall_select</name> 
           <label>Auto Call Select</label>
-          <default>no</default>
-          <button value="yes">Enabled</button>
-          <button value="no">Disabled</button>
+          <default>off</default>
+          <button value="on">Enabled</button>
+          <button value="off">Disabled</button>
           <help></help>
       </item>
       <item type="IS" id="11" seq="98"><name>backgroundImageAccess</name> <label>Background Image</label>
-          <default>no</default>
-          <button value="yes">Enabled</button>
-          <button value="no">Disabled</button>
+          <default>off</default>
+          <button value="on">Enabled</button>
+          <button value="off">Disabled</button>
           <help>I'm guessing on this one, but on some devices, the background image on the display can be modified at the device. I think this is the thing that allows that to take.</help>
       </item>
 
@@ -629,9 +629,9 @@ and open the template in the editor. Base Version before all crash :-)
 
         <item type="IS" id="4" seq="99">
             <name>createlangdir</name> <label>Create tftp empty language dir</label>
-          <default>no</default>
-          <button value="yes">Yes</button>
-          <button value="no">No</button>
+          <default>off</default>
+          <button value="on">Yes</button>
+          <button value="off">No</button>
           <help>Say 'yes' if you need to create cisco default language directory in tftp path.</help>
         </item>
     
@@ -658,7 +658,7 @@ and open the template in the editor. Base Version before all crash :-)
         <item type="SDE" id="3" seq="99">
             <label>Addon</label>
             <name>addon</name> 
-            <default>none</default>
+            <default>NONE</default>
             <select name="model" dataval="buttons">model</select>
             <class>hw_select sccp-custom</class>
             <help>Addon: Addons are model specific and only work with certain base phones. This phone model is identified as being a phone that does not accept sidecars. Update devmodel if this is not correct.</help>
@@ -700,7 +700,7 @@ and open the template in the editor. Base Version before all crash :-)
             <label>Addon</label>
             <input>
                 <name>addon</name> 
-                <default>none</default>
+                <default>NONE</default>
                 <class>sccp-custom</class>
                 <options readonly="readonly"></options>
             </input>
@@ -774,44 +774,44 @@ and open the template in the editor. Base Version before all crash :-)
     </page_group>
     <page_group name="sccp_hw_dev_softkey"><label>Enable/Disable Softkeys</label>
         <item type="IS" id="1" seq="99"><name>transfer</name> <label>Transfer</label>
-            <default>no</default>
-            <button value="yes">On</button>
-            <button value="no">Off</button>
+            <default>off</default>
+            <button value="on">On</button>
+            <button value="off">Off</button>
             <help>Transfer allowed</help>
         </item>
         <item type="IS" id="2" seq="99"><name>cfwdall</name> <label>Call Forward</label>
-            <default>no</default>
-            <button value="yes">On</button>
-            <button value="no">Off</button>
+            <default>off</default>
+            <button value="on">On</button>
+            <button value="off">Off</button>
             <help>Activate the callforward softkeys. Default is On</help>
         </item>
         <item type="IS" id="3" seq="99"><name>cfwdbusy</name> <label>Call Forward busy</label>
-            <default>no</default>
-            <button value="yes">On</button>
-            <button value="no">Off</button>
+            <default>off</default>
+            <button value="on">On</button>
+            <button value="off">Off</button>
             <help>Activate the callforward busy softkeys. Default is On</help>
         </item>
-        <item type="IS" id="5" seq="99"><name>DND</name> 
+        <item type="IS" id="5" seq="99"><name>dndFeature</name> 
             <label>DND Button on Device</label>
-            <default>On</default>
+            <default>on</default>
             <button value="on">On</button>
             <button value="off">Off</button>
             <help>Do Not Disturb. Default is Off</help>
         </item>
         <item type="IS" id="8" seq="99"><name>directed_pickup</name> <label>Pickup/Gpickup</label>
-            <default>yes</default>
+            <default>on</default>
             <option_hide class=".pickup_hide">no</option_hide>
-            <button value="yes">On</button>
-            <button value="no">Off</button>
+            <button value="on">On</button>
+            <button value="off">Off</button>
             <help>Enable Pickup function to direct pickup an extension. Default is On</help>
         </item>
         <item type="IS" id="1" seq="99">
             <name>conf_allow</name> 
             <label>Conference</label>
-            <default>yes</default>
+            <default>on</default>
             <option_hide class=".conf_hide">no</option_hide>
-            <button value="yes">Yes</button>
-            <button value="no">No</button>
+            <button value="on">Yes</button>
+            <button value="off">No</button>
             <help>Allow the use of conference</help>
         </item>        
     </page_group>
@@ -827,9 +827,9 @@ and open the template in the editor. Base Version before all crash :-)
             <help>Context where direct pickup search for extensions. if not set current contect will be use.</help>
         </item>
         <item type="IS" id="9" seq="99"><name>directed_pickup_modeanswer</name> <label>Mode Answer</label>
-            <default>yes</default>
-            <button value="yes">On</button>
-            <button value="no">Off</button>
+            <default>on</default>
+            <button value="on">On</button>
+            <button value="off">Off</button>
             <help>On (Default)= the call has been answered when picked up. Off = call manager way, the phone who picked up the call rings the call</help>
             <help-disables>Options: 'Immediate Answer' or 'Show CallerID' ??????</help-disables>
         </item>
@@ -838,13 +838,13 @@ and open the template in the editor. Base Version before all crash :-)
     <page_group name="sccp_hw_dev_advance"><label>Device Properies</label>
         <item type="IS" id="4" seq="99"><name>useRedialMenu</name> 
             <label>Redial using Phonebook</label>
-            <default>no</default>
-            <button value="yes">On</button>
-            <button value="no">Off</button>
+            <default>off</default>
+            <button value="on">On</button>
+            <button value="off">Off</button>
             <help>You can specifying 'useRedialMenu = yes' in the sccp.conf device section and the redial softkey will cause the "placed calls" list instead of immediately calling the last dialed number.</help>
         </item>
 
-        <item type="IS" id="6" seq="99">
+        <item type="IS-disabled" id="6" seq="99">
             <name>dtmfmode</name> 
             <label>Dual-Tone Multi-Frequency (DTMF)</label>
             <default>outofband</default>
@@ -871,33 +871,33 @@ and open the template in the editor. Base Version before all crash :-)
         <item type="IS" id="2" seq="99">
             <name>conf_play_general_announce</name> 
             <label>Playback Conference Anncouncements</label>
-            <default>yes</default>
-            <button value="yes">Yes</button>
-            <button value="no">No</button>
+            <default>on</default>
+            <button value="on">Yes</button>
+            <button value="off">No</button>
             <help>Playback General Announcements (like: 'You are Entering/Leaving the conference')</help>
         </item>
         <item type="IS" id="3" seq="99">
             <name>conf_play_part_announce</name> 
             <label>Playback Participant Anncouncements</label>
-            <default>yes</default>
-            <button value="yes">Yes</button>
-            <button value="no">No</button>
+            <default>on</default>
+            <button value="on">Yes</button>
+            <button value="off">No</button>
             <help>Playback Personal/Participant Announcements, (like: 'You have been muted / You have been kicked')</help>
         </item>
         <item type="IS" id="4" seq="99">
             <name>conf_mute_on_entry</name> 
             <label>Start Muted</label>
-            <default>no</default>
-            <button value="yes">Yes</button>
-            <button value="no">No</button>
+            <default>off</default>
+            <button value="on">Yes</button>
+            <button value="off">No</button>
             <help>Mute new participants from the start</help>
         </item>
         <item type="IS" id="5" seq="99">
             <name>conf_show_conflist</name> 
             <label>Show conference list</label>
-            <default>yes</default>
-            <button value="yes">Yes</button>
-            <button value="no">No</button>
+            <default>on</default>
+            <button value="on">Yes</button>
+            <button value="off">No</button>
             <help>Automatically show conference list to the moderator</help>
         </item>
         <item type="SLM" id="6" seq="99"><label>Music On Hold Class</label>
@@ -916,8 +916,8 @@ and open the template in the editor. Base Version before all crash :-)
             <label>Alow Networks / Mask</label>
             <name>permit</name>
             <default>/</default>
-            <input value="none" field="net" nameseparator="/"><options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/></input>
-            <input value="none" field="mask"><options placeholder="255.255.255.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/> </input>
+            <input value="NONE" field="net" nameseparator="/"><options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/></input>
+            <input value="NONE" field="mask"><options placeholder="255.255.255.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/> </input>
             <button>Add Alow network</button>
             <help>Alow network settings. Blank fields will be ignored used Network 0.0.0.0.</help>
         </item>
@@ -926,16 +926,16 @@ and open the template in the editor. Base Version before all crash :-)
             <label>Deny Networks / Mask</label>
             <name>deny</name>
             <default>/</default>
-            <input value="none" field="net" nameseparator="/"><options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/><class></class></input>
-            <input value="none" field="mask"><options placeholder="255.255.255.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/><class></class></input>
+            <input value="NONE" field="net" nameseparator="/"><options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/><class></class></input>
+            <input value="NONE" field="mask"><options placeholder="255.255.255.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/><class></class></input>
             <button>Add Deny network</button>
             <help>All RFC 1918 addresses are local networks. Should always be at least '0.0.0.0/0.0.0.0'.</help>
         </item>        
         <item type="IS" id="3" seq="99">
             <name>nat</name> 
             <label>NAT</label>
-            <default>none</default>
-            <button value="none">Auto</button>
+            <default>auto</default>
+            <button value="auto">Auto</button>
             <button value="off">Off</button>
             <button value="on">On</button>
             <help>Device NAT support (default Auto)</help>
@@ -944,8 +944,8 @@ and open the template in the editor. Base Version before all crash :-)
         <item type="IS" id="4" seq="99">
             <name>directrtp</name> 
             <label>Direct RTP</label>
-            <default>none</default>
-            <button value="none">Auto</button>
+            <default>NONE</default>
+            <button value="NONE">Auto</button>
             <button value="off">Off</button>
             <button value="on">On</button>
             <help>This option allow devices to do direct RTP sessions (default Off)</help>
@@ -954,13 +954,13 @@ and open the template in the editor. Base Version before all crash :-)
             <name>earlyrtp</name> 
             <label>Early RTP</label>
             <default>none</default>
-            <button value="none">Progress</button>
-            <button value="offhook">Offhook</button>
             <button-d value="immediate">Immediate</button-d>
-            <button value="dial">Dial</button>
+            <button value="offhook">Offhook</button>
+            <button value="dialing">Dial</button>
             <button value="ringout">Ringout</button>
-            <button value="None">None</button>
-            <help>The audio strem will be open in the progress and connected state. Valid options: none, progress, offhook, dial, ringout. Default may be Progress.</help>
+            <button value="progress">Progress</button>
+            <button value="none">None</button>
+            <help>The audio strem will be open in the progress and connected state. Valid options: NONE, progress, offhook, dial, ringout. Default may be Progress.</help>
         </item>
     </page_group>
     <page_group name="sccp_dp_new_template">
@@ -1004,11 +1004,11 @@ and open the template in the editor. Base Version before all crash :-)
         <name>dialtemplate</name>
         <default>*/10/*</default>
         <element1 type="title" field="title"><options class="form-control control-label"/>title</element1>
-        <element type="input" value="none" field="match" display_prefix="(" display_sufix=")"><options class="form-control dpt-title" placeholder="Pattern to match"/></element>
-        <element type="number" value="none" field="timeout" display_prefix="[" display_sufix="]"><options min="0" max="30" class="form-control dpt-title" placeholder="Time wait" /></element>
+        <element type="input" value="NONE" field="match" display_prefix="(" display_sufix=")"><options class="form-control dpt-title" placeholder="Pattern to match"/></element>
+        <element type="number" value="NONE" field="timeout" display_prefix="[" display_sufix="]"><options min="0" max="30" class="form-control dpt-title" placeholder="Time wait" /></element>
         <element1 type="label" field="label1"><options class="form-control control-label"/>text1</element1>
-        <element type="input" value="none" field="rewrite" display_prefix="(" display_sufix=")"><options class="form-control dpt-title" placeholder="Rewrite the matched"/></element>
-        <element type="select" value="none" field="tone">
+        <element type="input" value="NONE" field="rewrite" display_prefix="(" display_sufix=")"><options class="form-control dpt-title" placeholder="Rewrite the matched"/></element>
+        <element type="select" value="NONE" field="tone">
             <options class="form-control dpt-title" /> 
             <data>empty</data>
             <data>Bellcore-Alerting</data>

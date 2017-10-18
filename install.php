@@ -41,6 +41,7 @@ function astman_retrieveJSFromMetaData($astman, $segment = "") {
     }
 }
 
+function Get_DB_config($sccp_comatable) {
 $db_config_v0 = array(
     'sccpdevmodel' => array(
         'enabled' => array('create' => "INT(2) NULL DEFAULT '0'"),
@@ -94,7 +95,7 @@ $db_config_v0 = array(
     )
 );
 
-$db_config_v3 = array(
+$db_config_v5 = array(
     'sccpdevmodel' => array(
         'enabled' => array('create' => "INT(2) NULL DEFAULT '0'"),
         'nametemplate' => array('create' => 'VARCHAR(50) NULL DEFAULT NULL'),
@@ -161,13 +162,98 @@ $db_config_v3 = array(
     )
 );
 
+$db_config_v3 = array(
+    'sccpdevmodel' => array(
+        'enabled' => array('create' => "INT(2) NULL DEFAULT '0'"),
+        'nametemplate' => array('create' => 'VARCHAR(50) NULL DEFAULT NULL'),
+        'loadinformationid' => array('create' => "VARCHAR(30) NULL DEFAULT NULL" )
+    ),
+    'sccpdevice' => array(
+        'pickupexten' =>  array('rename' => "directed_pickup"),
+        'directed_pickup' =>  array('create' => " enum('on','off') NOT NULL default 'on'", 'modify' => "enum('on','off')"),
+        'pickupcontext' =>  array('rename' => "directed_pickup_context"),
+        'directed_pickup_context' =>  array('create' => "VARCHAR(100) NULL DEFAULT NULL"),
+        'pickupmodeanswer' => array('rename' => "directed_pickup_modeanswer"),
+        'directed_pickup_modeanswer' => array('create' => "VARCHAR(5) NULL DEFAULT 'yes'"),
+        'hwlang' => array('rename' => "_hwlang"),
+        '_hwlang' => array('create' => 'varchar(12) NULL DEFAULT NULL'),
+        'useRedialMenu' => array('create' => "VARCHAR(5) NULL DEFAULT 'no' AFTER `_hwlang`"),
+
+        //'dtmfmode' => array('create' => "VARCHAR(10) default 'outofband'", 'modify' => "VARCHAR(10)", 'def_modify'=> 'outofband'),
+        'dtmfmode' => array('drop' => "yes"),
+
+        'deny' =>	array('create' => 'VARCHAR(100) NULL DEFAULT NULL','modify' => "VARCHAR(100)"),
+        'permit' => array('create' => 'VARCHAR(100) NULL DEFAULT NULL','modify' => "VARCHAR(100)"),
+        'backgroundImage' =>	array('create' => 'VARCHAR(255) NULL DEFAULT NULL','modify' => "VARCHAR(255)"),
+        'ringtone' => array('create' => 'VARCHAR(255) NULL DEFAULT NULL','modify' => "VARCHAR(255)"),
+
+        'transfer'   =>array('create' => "enum('on','off') NOT NULL default 'on'",'modify' => "enum('on','off')"),
+        'cfwdall'    =>array('create' => "enum('on','off') NOT NULL default 'on'",'modify' => "enum('on','off')"),
+        'cfwdbusy'   =>array('create' => "enum('on','off') NOT NULL default 'on'",'modify' => "enum('on','off')"),
+        'directrtp'  =>array('create' => "enum('on','off') NULL default 'off'",'modify' => "enum('on','off')"),
+        'dndFeature' =>array('create' => "enum('on','off') NOT NULL default 'on'",'modify' => "enum('on','off')"),
+        'earlyrtp' =>array('create' => "enum('immediate','offHook','dialing','ringout','progress','none') NOT NULL default 'progress'",'modify' => "enum('immediate','offHook','dialing','ringout','progress','none')"),
+        'audio_tos'=>array('def_modify' => "0xB8"),
+        'audio_cos'=>array('def_modify' => "6"),
+        'video_tos'=>array('def_modify' => "0x88"),
+        'video_cos'=>array('def_modify' => "5"),
+        'trustphoneip'=>array('drop' => "yes"),
+
+        'mwilamp'    =>array('create' => "enum('on','off','wink','flash','blink') default 'on'",'modify' => "enum('on','off','wink','flash','blink')"),
+        'mwioncall'  =>array('create' => "enum('on','off') NOT NULL default 'on'",'modify' => "enum('on','off')"),
+        'private'    =>array('create' => "enum('on','off') NOT NULL default 'off'",'modify' => "enum('on','off')"),
+        'privacy'    =>array('create' => "enum('full','on','off') NOT NULL default 'full'",'modify' => "enum('full','on','off')"),
+        'nat'        =>array('create' => "enum('on','off','auto') NOT NULL default 'auto'",'modify' => "enum('on','off','auto')"),
+        'conf_allow' =>array('create' => "enum('on','off') NOT NULL default 'on'",'modify' => "enum('on','off')"),
+        'conf_play_part_announce' =>array('create' => "enum('on','off') NOT NULL default 'on'",'modify' => "enum('on','off')"),
+        'conf_mute_on_entry' =>array('create' => "enum('on','off') NOT NULL default 'off'",'modify' => "enum('on','off')"),
+        'conf_show_conflist' =>array('create' => "enum('on','off') NOT NULL default 'on'",'modify' => "enum('on','off')"),
+
+        'type'         =>array('create' => 'VARCHAR(15) NULL DEFAULT NULL','modify' => "VARCHAR(15)"),
+        'imageversion' =>array('create' => 'VARCHAR(31) NULL DEFAULT NULL','modify' => "VARCHAR(31)"),
+        
+        'softkeyset' =>array('def_modify' => "softkeyset")
+    ),
+    'sccpline' => array(
+        'namedcallgroup' =>array('create' => "VARCHAR(100) NULL DEFAULT NULL AFTER `setvar`", 'modify' => "VARCHAR(100)"),
+         'namedpickupgroup' =>array('create' => "VARCHAR(100) NULL DEFAULT NULL AFTER `namedcallgroup`", 'modify' => "VARCHAR(100)"),
+         'adhocNumber' =>array('create' => "VARCHAR(45) NULL DEFAULT NULL AFTER `namedpickupgroup`"),
+         'meetme' =>array('create' => "VARCHAR(5) NULL DEFAULT NULL AFTER `adhocNumber`"),
+         'meetmenum' =>array('create' => "VARCHAR(45) NULL DEFAULT NULL AFTER `meetme`"),
+         'meetmeopts' =>array('create' => "VARCHAR(45) NULL DEFAULT NULL AFTER `meetmenum`"),
+         'regexten' =>array('create' => "VARCHAR(45) NULL DEFAULT NULL AFTER `meetmeopts`"),
+         'rtptos' => array('drop' => "yes"),
+         'audio_tos' => array('drop' => "yes"),
+         'audio_cos' => array('drop' => "yes"),
+         'video_tos' => array('drop' => "yes"),
+         'video_cos' => array('drop' => "yes"),
+         'incominglimit' =>array('def_modify' => "2"),
+         'transfer' =>array('create' => "enum('on','off') NOT NULL default 'on'",'modify' => "enum('on','off')"),
+         'vmnum' =>array('def_modify' => "*97"),
+         'musicclass' =>array('def_modify' => "default"),
+         'id' =>array('create' => 'MEDIUMINT(9) NOT NULL AUTO_INCREMENT, ADD UNIQUE(id);', 'modify' => "MEDIUMINT(9)",'index' =>'id'),
+//        'id' =>array('create' => 'VARCHAR( 20 ) NULL DEFAULT NULL', 'modify' => "VARCHAR(20)", 'def_modify' =>"NULL"),
+        
+         'echocancel' =>array('create' => "enum('on','off') NOT NULL default 'off'",'modify' => "enum('on','off')"),
+         'silencesuppression' =>array('create' => "enum('on','off') NOT NULL default 'off'",'modify' => "enum('on','off')"),
+         'dnd'     => array('create' => "enum('off','reject','silent','user') NOT NULL default 'reject'", 'modify' => "enum('off','reject','silent','user')", 'def_modify' =>"reject")
+    )
+);
+    if ($sccp_comatable >= 11) {
+        return $db_config_v3;
+    } else {
+        return $db_config_v0;
+    }
+}
+
 $autoincrement = (($amp_conf["AMPDBENGINE"] == "sqlite") || ($amp_conf["AMPDBENGINE"] == "sqlite3")) ? "AUTOINCREMENT" : "AUTO_INCREMENT";
 
 $table_req = array('sccpdevice', 'sccpline', 'buttonconfig');
 $ss = FreePBX::create()->Sccp_manager;
 $astman = FreePBX::create()->astman;
-$sccp_ver = 0;
-$db_config = $db_config_v0;
+$sccp_comatable = 0;
+//$db_config = $db_config_v0;
+$db_config = '';
 
 function CheckSCCPManagerDBTables($table_req) {
     global $db;
@@ -210,69 +296,16 @@ function CheckAsteriskVersion() {
     return $ver_compatible;
 }
 
-function CheckChanSCCPVersion() {
-    global $db_config, $db_config_v0, $db_config_v3, $srvinterface,$astman;
+function CheckChanSCCPСomatable() {
+    global $srvinterface,$astman;
     if (!$astman) {
         ie_freepbx('No asterisk manager connection provided!. Installation Failed');
     }
-    $sccp_ver = $srvinterface->get_comatable_sccp();
-    outn("<li>" . _("Sccp model Version : ") . $sccp_ver . "</li>");
-    if ($sccp_ver >= 11) {
-        $db_config = $db_config_v3;
-    } else {
-        $db_config = $db_config_v0;
-    }
-    return $sccp_ver;
+    $sccp_comatable = $srvinterface->get_comatable_sccp();
+    outn("<li>" . _("Sccp model Compatable code : ") . $sccp_comatable . "</li>");
+    return $sccp_comatable;
 }
           
-/*            
-function CheckChanSCCPVersion() {
-    global $db_config, $db_config_v0, $db_config_v3, $astman;
-    if (!$astman) {
-        ie_freepbx('No asterisk manager connection provided!. Installation Failed');
-    }
-    $metadata = astman_retrieveJSFromMetaData($astman, "");
-    // example metadata:
-    // {"Name":"Chan-sccp-b","Branch":"develop","Version":"4.3.0","RevisionHash":"d3f4482","RevisionNum":"10403","Tag":"v4.2.3-574-gd3f44824","VersioningType":"git","ConfigRevision":"0",
-    // "ConfigureEnabled": ["park","pickup","realtime","video","conferenence","dirtrfr","feature_monitor","functions","manager_events","devstate_feature","dynamic_speeddial","dynamic_speeddial_cid","experimental","debug"],
-    // "Segments":["general","device","line","softkey"]}
-    
-    if ($metadata && array_key_exists("Version",$metadata)) {
-        $version_parts=explode(".", $metadata["Version"]);
-        
-        # not sure about this sccp_ver numbering. Might be better to just check "Version" and Revision
-        if ($version_parts[0] == "4") {
-            $sccp_ver = 400;
-            $db_config = $db_config_v0;
-            if ($version_parts[1] == "1") {
-                $sccp_ver = 410;
-            } else
-            if ($version_parts[1] == "2") {
-                $sccp_ver = 420;
-            } else
-            if ($version_parts[1] >= "3") {
-                $sccp_ver = 430;
-            }
-        }
-        if (array_key_exists("Revision",$metadata)) { 						// old method
-            if (base_convert($metadata["Revision"],16,10) == base_convert('702487a',16,10)) {		// hash values are random, not incrementa
-                $sccp_ver = 431;
-                $db_config = $db_config_v3;
-            }
-        }
-        if (array_key_exists("RevisionNum",$metadata)) {
-            if ($metadata["RevisionNum"] >= "10403") {	// new method, RevisionNum is incremental
-                $sccp_ver = 432;
-                $db_config = $db_config_v3;
-            }
-        }
-    } else {
-        die_freepbx("Version information could not be retrieved from chan-sccp, via astman::SCCPConfigMetaData");
-    }
-    outn("<li>" . _("Sccp Version : ") . $sccp_ver . "</li>");
-    return $sccp_ver;
-}
-*/
     
 function InstallDB_sccpsettings() {
     global $db;
@@ -313,11 +346,55 @@ function InstallDB_sccpdevmodel() {
     return true;
 }
 
+/*
+function InstallDB_updateEnums($db_config) {
+    global $db;
+    if (!$db_config) {
+        die_freepbx("No db_config provided");
+    }
+    $count_modify = 0;
+    outn("<li>" . _("Update Database Enums") . "</li>");
+    foreach ($db_config as $tabl_name => &$tab_modify) {
+        $sql = "";
+        $sql_r = array();
+        foreach ($tab_modify as $row_fld => $row_data){
+            if (!empty($row_data['crate'])) {                    
+                if (strpos($row_data['crate'], 'enum') !== false) {
+                    $sql_r[] = $row_fld;
+                }
+            }
+        }
+        $sql = "SELECT " . implode(',', $sql_r) . " from ".$tabl_name;
+        $db_result= $db->getAll($sql);
+        if (DB::IsError($db_result)) {
+            die_freepbx("Can not add get informations from ".$tabl_name." table\n");
+        }
+        $sql_table = '';
+        $enum_data = array('true'=>'on','false'=>'off','yes'=>'on','no'=>'off');
+        foreach ($db_result as $tabl_data){
+            $sql = "";
+            foreach( $tabl_data as $row => $col_val){
+                $val= strtolower($col_val);
+                if (isset($enum_data[$val])) {
+                    $sql .= $row.'="'.$enum_data[$val].'",';
+                }
+            }
+            if (!empty($sql)){
+            }
+        }
+        
+    }
+    
+}
+
+*/
+
 function InstallDB_updateSchema($db_config) {
     global $db;
     if (!$db_config) {
         die_freepbx("No db_config provided");
     }
+    $count_modify = 0;
     outn("<li>" . _("Modify Database schema") . "</li>");
     foreach ($db_config as $tabl_name => &$tab_modify) {
         // 0 - name 1-type  4- default
@@ -334,6 +411,8 @@ function InstallDB_updateSchema($db_config) {
                     if (strtoupper($tab_modify[$fld_id]['def_modify']) ==  strtoupper($tabl_data[4])) {
                         $db_config[$tabl_name][$fld_id]['def_mod_stat']  = 'no';
                     }
+                }
+                if (!empty($tab_modify[$fld_id]['modify'])) {
                     if ( strtoupper ($tab_modify[$fld_id]['modify']) ==  strtoupper($tabl_data[1])) {
                         $db_config[$tabl_name][$fld_id]['mod_stat']  = 'no';
                     }
@@ -352,11 +431,12 @@ function InstallDB_updateSchema($db_config) {
             if (empty($row_data['status'])) {
                 if (!empty($row_data['create'])) {
                     $sql_create .='ADD COLUMN `'.$row_fld.'` '. $row_data['create'].', ';
+                    $count_modify ++;
                 }
             } else {
                 if (!empty($row_data['rename'])) {                    
                     $sql_modify .= 'CHANGE COLUMN `'.$row_fld.'` `'. $row_data['rename'].'` '.$row_data['create'].', ';
-                    
+                    $count_modify ++;
                 }
                 if (!empty($row_data['modify'])) {
                     if (empty($row_data['mod_stat'])) {
@@ -366,15 +446,18 @@ function InstallDB_updateSchema($db_config) {
                             $sql_modify .=  "CHANGE COLUMN  `".$row_fld."` `".$row_fld."` ".$row_data['modify']." DEFAULT '".$row_data['def_modify']."', ";
                         }
                         $row_data['def_mod_stat'] = 'no';
+                        $count_modify ++;
                     }
                 }
                 if (!empty($row_data['def_modify'])) {
                     if (empty($row_data['def_mod_stat'])) {
                         $sql_modify .=  "ALTER COLUMN `".$row_fld."` SET DEFAULT '".$row_data['def_modify']."', ";
+                        $count_modify ++;
                     }
                 }
                 if (!empty($row_data['drop'])) {                    
                     $sql_create .='DROP COLUMN `'.$row_fld.'`, ';
+                    $count_modify ++;
                 }
                 
             }
@@ -397,6 +480,7 @@ function InstallDB_updateSchema($db_config) {
             }
         }
     }
+    outn("<li>" . _("Modify count :") .$count_modify. "</li>");
     return true;
 }
 
@@ -452,11 +536,11 @@ function InstallDB_createButtonConfigTrigger() {
     return true;
 }
 
-function InstallDB_CreateSccpDeviceConfigView($sccp_ver) {
+function InstallDB_CreateSccpDeviceConfigView($sccp_comatable) {
     global $db;
     outn("<li>" . _("(Re)Create sccpdeviceconfig view") . "</li>");
     $sql = "";
-    if ($sccp_ver < 430)  {
+    if ($sccp_comatable < 11)  {
         $sql= "
         CREATE OR REPLACE
             ALGORITHM = MERGE
@@ -501,14 +585,15 @@ function InstallDB_CreateSccpDeviceConfigView($sccp_ver) {
 CheckSCCPManagerDBTables($table_req);
 CheckPermissions();
 CheckAsteriskVersion();
-$sccp_ver = CheckChanSCCPVersion();
+$sccp_comatable = CheckChanSCCPСomatable();
+$db_config = Get_DB_config($sccp_comatable);
 InstallDB_sccpsettings();
 InstallDB_sccpdevmodel();
 InstallDB_updateSchema($db_config);
 InstallDB_fillsccpdevmodel();
 InstallDB_updateSccpDevice();
 InstallDB_createButtonConfigTrigger();
-InstallDB_CreateSccpDeviceConfigView($sccp_ver);
+InstallDB_CreateSccpDeviceConfigView($sccp_comatable);
 outn("<br>");
 
 //    $ss->save_submit($request);

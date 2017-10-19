@@ -94,7 +94,7 @@ $db_config_v0 = array(
         'dnd' =>array('create' => 'VARCHAR( 12 ) DEFAULT "reject" AFTER `amaflags`', 'modify' => "VARCHAR(12)", 'def_modify' =>"reject")
     )
 );
-
+/*  Old  */
 $db_config_v5 = array(
     'sccpdevmodel' => array(
         'enabled' => array('create' => "INT(2) NULL DEFAULT '0'"),
@@ -120,23 +120,23 @@ $db_config_v5 = array(
         'backgroundImage' =>	array('create' => 'VARCHAR(255) NULL DEFAULT NULL','modify' => "VARCHAR(255)"),
         'ringtone' => array('create' => 'VARCHAR(255) NULL DEFAULT NULL','modify' => "VARCHAR(255)"),
 
-        'transfer' =>array('def_modify' => "on"),
-        'cfwdall' =>array('def_modify' => "on"),
-        'cfwdbusy' =>array('def_modify' => "on"),
-        'directrtp' =>array('def_modify' => "off"),
-        'dndFeature' =>array('def_modify' => "on"),
-        'earlyrtp' =>array('def_modify' => "on"),
-        'audio_tos'=>array('def_modify' => "0xB8"),
-        'audio_cos'=>array('def_modify' => "6"),
-        'video_tos'=>array('def_modify' => "0x88"),
-        'video_cos'=>array('def_modify' => "5"),
+        'transfer'   =>array('create' => 'VARCHAR(5) DEFAULT "on"','modify' => "VARCHAR(5)",'def_modify' => "on"),
+        'cfwdall'    =>array('create' => 'VARCHAR(5) DEFAULT "on"','modify' => "VARCHAR(5)",'def_modify' => "on"),
+        'cfwdbusy'   =>array('create' => 'VARCHAR(5) DEFAULT "on"','modify' => "VARCHAR(5)",'def_modify' => "on"),
+        'directrtp'  =>array('create' => 'VARCHAR(3) DEFAULT "off"','modify' => "VARCHAR(3)",'def_modify' => "off"),
+        'dndFeature' =>array('create' => 'VARCHAR(5) DEFAULT "on"','modify' => "VARCHAR(5)",'def_modify' => "on"),
+        'earlyrtp'   =>array('create' => 'VARCHAR(10) DEFAULT "progress"','modify' => "VARCHAR(10)",'def_modify' => "progress"),
+        'audio_tos'  =>array('def_modify' => "0xB8"),
+        'audio_cos'  =>array('def_modify' => "6"),
+        'video_tos'  =>array('def_modify' => "0x88"),
+        'video_cos'  =>array('def_modify' => "5"),
         'trustphoneip'=>array('drop' => "yes"),
 
-        'mwilamp' =>array('def_modify' => "on"),
-        'mwioncall' =>array('def_modify' => "on"),
-        'private' =>array('def_modify' => "on"),
-        'privacy' =>array('def_modify' => "off"),
-        'nat' =>array('def_modify' => "auto"),
+        'mwilamp'     =>array('create' => 'VARCHAR(5) DEFAULT "on"','modify' => "VARCHAR(5)",'def_modify' => "on"),
+        'mwioncall'   =>array('create' => 'VARCHAR(5) DEFAULT "off"','modify' => "VARCHAR(5)",'def_modify' => "off"),
+        'private'     =>array('create' => 'VARCHAR(5) DEFAULT "on"','modify' => "VARCHAR(5)",'def_modify' => "on"),
+        'privacy'     =>array('create' => 'VARCHAR(100) DEFAULT "full"','modify' => "VARCHAR(5)",'def_modify' => "full"),
+        'nat'         =>array('create' => 'VARCHAR(7) DEFAULT "auto"','modify' => "VARCHAR(7)",'def_modify' => "auto"),
         'softkeyset' =>array('def_modify' => "softkeyset")
     ),
     'sccpline' => array(
@@ -170,11 +170,11 @@ $db_config_v3 = array(
     ),
     'sccpdevice' => array(
         'pickupexten' =>  array('rename' => "directed_pickup"),
-        'directed_pickup' =>  array('create' => " enum('on','off') NOT NULL default 'on'", 'modify' => "enum('on','off')"),
+        'directed_pickup' =>  array('create' => "enum('on','off') NOT NULL default 'on'", 'modify' => "enum('on','off')"),
         'pickupcontext' =>  array('rename' => "directed_pickup_context"),
         'directed_pickup_context' =>  array('create' => "VARCHAR(100) NULL DEFAULT NULL"),
         'pickupmodeanswer' => array('rename' => "directed_pickup_modeanswer"),
-        'directed_pickup_modeanswer' => array('create' => "VARCHAR(5) NULL DEFAULT 'yes'"),
+        'directed_pickup_modeanswer' => array('create' => "enum('on','off') NOT NULL default 'on'", 'modify' => "enum('on','off')"),
         'hwlang' => array('rename' => "_hwlang"),
         '_hwlang' => array('create' => 'varchar(12) NULL DEFAULT NULL'),
         'useRedialMenu' => array('create' => "VARCHAR(5) NULL DEFAULT 'no' AFTER `_hwlang`"),
@@ -190,20 +190,20 @@ $db_config_v3 = array(
         'transfer'   =>array('create' => "enum('on','off') NOT NULL default 'on'",'modify' => "enum('on','off')"),
         'cfwdall'    =>array('create' => "enum('on','off') NOT NULL default 'on'",'modify' => "enum('on','off')"),
         'cfwdbusy'   =>array('create' => "enum('on','off') NOT NULL default 'on'",'modify' => "enum('on','off')"),
-        'directrtp'  =>array('create' => "enum('on','off') NULL default 'off'",'modify' => "enum('on','off')"),
-        'dndFeature' =>array('create' => "enum('on','off') NOT NULL default 'on'",'modify' => "enum('on','off')"),
-        'earlyrtp' =>array('create' => "enum('immediate','offHook','dialing','ringout','progress','none') NOT NULL default 'progress'",'modify' => "enum('immediate','offHook','dialing','ringout','progress','none')"),
+        'directrtp'  =>array('create' => "enum('on','off') NULL default NULL",'modify' => "enum('on','off')"),
+        'dndFeature' =>array('create' => "enum('on','off') NULL default NULL",'modify' => "enum('on','off')"),
+        'earlyrtp' =>array('create' => "ENUM('immediate','offHook','dialing','ringout','progress','none') NULL default NULL",'modify' => "ENUM('immediate','offHook','dialing','ringout','progress','none')"),
         'audio_tos'=>array('def_modify' => "0xB8"),
         'audio_cos'=>array('def_modify' => "6"),
         'video_tos'=>array('def_modify' => "0x88"),
         'video_cos'=>array('def_modify' => "5"),
         'trustphoneip'=>array('drop' => "yes"),
 
-        'mwilamp'    =>array('create' => "enum('on','off','wink','flash','blink') default 'on'",'modify' => "enum('on','off','wink','flash','blink')"),
-        'mwioncall'  =>array('create' => "enum('on','off') NOT NULL default 'on'",'modify' => "enum('on','off')"),
-        'private'    =>array('create' => "enum('on','off') NOT NULL default 'off'",'modify' => "enum('on','off')"),
-        'privacy'    =>array('create' => "enum('full','on','off') NOT NULL default 'full'",'modify' => "enum('full','on','off')"),
-        'nat'        =>array('create' => "enum('on','off','auto') NOT NULL default 'auto'",'modify' => "enum('on','off','auto')"),
+        'mwilamp'    =>array('create' => "enum('on','off','wink','flash','blink') NULL  default 'on'" ,'modify' => "enum('on','off','wink','flash','blink')"),
+        'mwioncall'  =>array('create' => "enum('on','off') NULL default 'on'",'modify' => "enum('on','off')"),
+        'private'    =>array('create' => "enum('on','off') NOT NULL default 'off'",'modify' => "enum('on','off')"), // Что-то лишенне 
+        'privacy'    =>array('create' => "enum('full','on','off') NOT NULL default 'full'",'modify' => "enum('full','on','off')"), // Что-то лишенне 
+        'nat'        =>array('create' => "enum('on','off','auto') NULL default NULL",'modify' => "enum('on','off','auto')"),
         'conf_allow' =>array('create' => "enum('on','off') NOT NULL default 'on'",'modify' => "enum('on','off')"),
         'conf_play_part_announce' =>array('create' => "enum('on','off') NOT NULL default 'on'",'modify' => "enum('on','off')"),
         'conf_mute_on_entry' =>array('create' => "enum('on','off') NOT NULL default 'off'",'modify' => "enum('on','off')"),
@@ -236,7 +236,7 @@ $db_config_v3 = array(
         
          'echocancel' =>array('create' => "enum('on','off') NOT NULL default 'off'",'modify' => "enum('on','off')"),
          'silencesuppression' =>array('create' => "enum('on','off') NOT NULL default 'off'",'modify' => "enum('on','off')"),
-         'dnd'     => array('create' => "enum('off','reject','silent','user') NOT NULL default 'reject'", 'modify' => "enum('off','reject','silent','user')", 'def_modify' =>"reject")
+         'dnd'        => array('create' => "enum('off','reject','silent','user') NOT NULL default 'reject'", 'modify' => "enum('off','reject','silent','user')", 'def_modify' =>"reject")
     )
 );
     if ($sccp_comatable >= 11) {
@@ -426,6 +426,7 @@ function InstallDB_updateSchema($db_config) {
         }
         $sql_create =''; 
         $sql_modify =''; 
+        $sql_update =''; 
         
         foreach ($tab_modify as $row_fld => $row_data){
             if (empty($row_data['status'])) {
@@ -441,9 +442,14 @@ function InstallDB_updateSchema($db_config) {
                 if (!empty($row_data['modify'])) {
                     if (empty($row_data['mod_stat'])) {
                         if (!empty($row_data['create'])) {
-                            $sql_modify .=  "CHANGE COLUMN  `".$row_fld."` `".$row_fld."` ".$row_data['create'].", ";
+//                            $sql_modify .=  "CHANGE COLUMN  `".$row_fld."` `".$row_fld."` ".$row_data['create'].", ";
+                            $sql_modify .=  "MODIFY COLUMN  `".$row_fld."` ".$row_data['create'].", ";
                         } else {
-                            $sql_modify .=  "CHANGE COLUMN  `".$row_fld."` `".$row_fld."` ".$row_data['modify']." DEFAULT '".$row_data['def_modify']."', ";
+//                            $sql_modify .=  "CHANGE COLUMN  `".$row_fld."` `".$row_fld."` ".$row_data['modify']." DEFAULT '".$row_data['def_modify']."', ";
+                            $sql_modify .=  "MODIFY COLUMN  `".$row_fld."` ".$row_data['modify']." DEFAULT '".$row_data['def_modify']."', ";
+                        }
+                        if (strpos($row_data['modify'],'enum') !== false ) {
+                            $sql_update .= "UPDATE ".$tabl_name." set `".$row_fld."`=case when lower(`".$row_fld."`) in ('yes','true','1') then 'on' when lower(`".$row_fld."`) in ('no', 'false', '0') then 'off' else `".$row_fld."` end; ";
                         }
                         $row_data['def_mod_stat'] = 'no';
                         $count_modify ++;
@@ -462,25 +468,40 @@ function InstallDB_updateSchema($db_config) {
                 
             }
         }
+        if (!empty($sql_update)) {
+            $sql_update = 'BEGIN; '.$sql_update.' COMMIT;';
+            sql($sql_update);
+            $affected_rows = $db->affectedRows();
+//            $check = $db->query($sql_update);
+//            $db->closeCursor();
+            outn("<li>" . _("Update table row :").$affected_rows. "</li>");
+//            if (db::IsError($check)) {
+//                die_freepbx("Can not update  ".$tabl_name." table sql: ".$sql_update."n");
+//                die_freepbx("Can not update  ".$tabl_name." table\n");
+//            }
+        }
+
         if (!empty($sql_create)) {
+            outn("<li>" . _("Create New table"). "</li>");
             $sql_create = "ALTER TABLE `".$tabl_name."` ". substr($sql_create,0,-2); 
             $check = $db->query($sql_create);
             if (db::IsError($check)) {
                 die_freepbx("Can not create ".$tabl_name." table sql: ".$sql_create."n");
-                die_freepbx("Can not create ".$tabl_name." table\n");
-        }
-            
+            }
         }
         if (!empty($sql_modify)) {
-            $sql_modify = "ALTER TABLE `".$tabl_name."` ". substr($sql_modify,0,-2); 
+            outn("<li>" . _("Modify table"). "</li>");
+
+            $sql_modify = "ALTER TABLE `".$tabl_name."` ". substr($sql_modify,0,-2).';'; 
             $check = $db->query($sql_modify);
             if (db::IsError($check)) {
+                out("<li>" . print_r($check,1). "</li>");
+                die("Can not modify ".$tabl_name." table sql: ".$sql_modify."n");
                 die_freepbx("Can not modify ".$tabl_name." table sql: ".$sql_modify."n");
-                die_freepbx("Can not modify ".$tabl_name." table\n");
             }
         }
     }
-    outn("<li>" . _("Modify count :") .$count_modify. "</li>");
+    outn("<li>" . _("Total modify count :") .$count_modify. "</li>");
     return true;
 }
 

@@ -27,10 +27,20 @@ if (empty($form_prefix)){
 $day_format = array("D.M.Y", "D.M.YA", "Y.M.D", "YA.M.D", "M-D-Y", "M-D-YA", "D-M-Y", "D-M-YA", "Y-M-D", "YA-M-D", "M/D/Y", "M/D/YA",
         "D/M/Y", "D/M/YA", "Y/M/D", "YA/M/D", "M/D/Y", "M/D/YA");
 $mysql_table = array("sccpdevice","sccpdeviceconfig");
-$time_zone_name = timezone_identifiers_list();
+//$time_zone_name = timezone_identifiers_list();
+//$time_zone = array("-12", "-11", "-10", "-09", "-08", "-07", "-06", "-05", "-04", "-03", "-02", "-01", "00",
+//                   "01","02","03","04","05","06","07","08","09","10","11","12");
+$time_zone = array('-12' => 'GTM -12', '-11' => 'GTM -11', '-10' => 'GTM -10', '-09' => 'GTM -9',
+                   '-08' => 'GTM -8',  '-07' => 'GTM -7',  '-06' => 'GTM -6', '-05' => 'GTM -5',
+                   '-04' => 'GTM -4',  '-03' => 'GTM -3',  '-02' => 'GTM -2', '-01' => 'GTM -1',
+                   '00'  => 'GTM time', '01' => 'GTM +1',  '02'  => 'GTM +2', '03'  => 'GTM +3',
+                   '04'  => 'GTM +4',   '05' => 'GTM +5',  '06'  => 'GTM +6', '07'  => 'GTM +7',
+                   '08'  => 'GTM +8',   '09' => 'GTM +9',  '10'  => 'GTM +10', '11'=> 'GTM +11', '12' => 'GTM +12');
 
-$time_zone = array("-12", "-11", "-10", "-09", "-08", "-07", "-06", "-05", "-04", "-03", "-02", "-01", "00",
-                   "01","02","03","04","05","06","07","08","09","10","11","12");
+$time_zone_name = \FreePBX::Sccp_manager()-> extconfigs-> getextConfig('cisco_timezone');
+//$time_zone = \FreePBX::Sccp_manager()-> extconfigs-> getextConfig('cisco_time');
+//$system_time_zone = \FreePBX::Sccp_manager()->getSysnemTimeZone();
+
 if (\FreePBX::Modules()->checkStatus("soundlang")) {
     $syslangs = \FreePBX::Soundlang()->getLanguages();
     if (!is_array($syslangs)) {
@@ -51,9 +61,7 @@ $extension_list = \FreePBX::Sccp_manager()->dbinterface->get_db_SccpTableData("H
 $extension_list[]=array(model=>'none', vendor=>'CISCO', dns=>'0');
 
 $items = $itm -> children();
-//print_r($sofkey_list);
-//print_r($syslangs);
-//print_r($moh_list);
+
 if ($h_show==1) {
  $sec_class ='';   
  if (!empty($items ->class)){
@@ -284,7 +292,7 @@ foreach ($items as $child) {
         echo '<!-- END '.$child->label.' -->';
 
     }
-
+    
 /*
  *    Input element Select SLD - Date format 
  *                         SLZ - Time Zone 
@@ -293,7 +301,7 @@ foreach ($items as $child) {
  *                         SLK - System KeySet
  */
 
-    if ($child['type'] == 'SLD'  || $child['type'] == 'SLM'|| $child['type'] == 'SLK'|| $child['type'] == 'SLZ' || $child['type'] == 'SLZN') {
+    if ($child['type'] == 'SLD'  || $child['type'] == 'SLM'|| $child['type'] == 'SLK' ) {
 //        $value = $child -> select;
         $res_n =  (string)$child ->name;       
         $res_id = $npref.$res_n;
@@ -304,21 +312,16 @@ foreach ($items as $child) {
         if ($child['type'] == 'SLD') {
             $select_opt= $day_format;
         }
-//        if ($child['type'] == 'SLT') {
-//            $select_opt= $tftp_lang;
-//        }
+
         if ($child['type'] == 'SLM') {
             $select_opt= $moh_list;
         }
         if ($child['type'] == 'SLK') {
             $select_opt= $sofkey_list;
         }
-        if ($child['type'] == 'SLZ') {
-            $select_opt= $time_zone;
-        }
-        if ($child['type'] == 'SLZN') {
-            $select_opt= $time_zone_name;
-        }
+//        if ($child['type'] == 'SLZ') {
+//            $select_opt= $time_zone;
+//        }
 
         echo '<!-- Begin '.$child->label.' -->';
 
@@ -359,16 +362,25 @@ foreach ($items as $child) {
  *    Input element Select SLS - System Language 
  */
     
-    if ($child['type'] == 'SLS' || $child['type'] == 'SLT' || $child['type'] == 'SLA') {
+    if ($child['type'] == 'SLS' || $child['type'] == 'SLT' || $child['type'] == 'SLA' || $child['type'] == 'SLZ' || $child['type'] == 'SLZN') {
 //        $value = $child -> select;
         $res_n =  (string)$child ->name;       
         $res_id = $npref.$res_n;
+        $child->value ='';
+
 
         if ($child['type'] == 'SLS') {
             $select_opt= $syslangs;
         }
         if ($child['type'] == 'SLT') {
             $select_opt= $tftp_lang;
+        }
+        if ($child['type'] == 'SLZN') {
+            $select_opt= $time_zone_name;
+        }
+        if ($child['type'] == 'SLZ') {
+            $select_opt= $time_zone;
+//            $child->value = ($system_time_zone[offset]/60);
         }
 
         if ($child['type'] == 'SLA') {
@@ -390,6 +402,18 @@ foreach ($items as $child) {
            $child->class = 'form-control';
         }
         
+        if (!empty($fvalues[$res_n])) {
+            if (!empty($fvalues[$res_n]['data'])) {
+                $child->value = $fvalues[$res_n]['data'];
+            }
+        }
+        
+        if (empty($child->value)){
+            if (!empty($child->default)){
+                $child->value = $child->default;
+            }
+        }
+        
         echo '<!-- Begin '.$child->label.' -->';
         ?>
         <div class="element-container">
@@ -401,17 +425,19 @@ foreach ($items as $child) {
                     </div>
                     <div class="col-md-9"> <!-- <div class = "lnet form-group form-inline" data-nextid=1> --> <?php
                             echo  '<select name="'.$res_id.'" class="'. $child->class . '" id="' . $res_id . '">';
-                            if (!empty($fvalues[$res_n])) {
-                                if (!empty($fvalues[$res_n]['data'])) {
-                                    $child->value = $fvalues[$res_n]['data'];
-                                }
-                            }
                             foreach ($select_opt as $key => $val) {
-                                echo '<option value="' . $key . '"';
-                                if ($key == $child->value) {
+                                if (is_array($val)) {
+                                    $opt_key = (isset($val['id'])) ? $val['id'] : $key;
+                                    $opt_val = (isset($val['val'])) ? $val['val'] : $val;
+                                } else {
+                                    $opt_key = $key;
+                                    $opt_val = $val;
+                                }
+                                echo '<option value="' . $opt_key . '"';
+                                if ($opt_key == $child->value) {
                                     echo ' selected="selected"';
                                 }
-                                echo '>' . $val. '</option>';
+                                echo '>' . $opt_val. '</option>';
                             }
                             ?> </select>
                     <!-- </div> --> </div>

@@ -283,6 +283,7 @@ and open the template in the editor. Base Version before all crash :-)
         </item>
         <item type="SLZN" id="2" seq="95"><label>Time Zone</label>
           <name>ntp_timezone</name> 
+          <class>sccp-custom</class>
           <select>
               <default>UTC</default>
           </select>

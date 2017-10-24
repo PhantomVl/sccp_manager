@@ -11,7 +11,6 @@ global $version;
 global $srvinterface;
 
 
-
 $class = "\\FreePBX\\Modules\\Sccp_manager\\srvinterface";
 if(!class_exists($class,false)) {
     include(__DIR__."/Sccp_manager.inc/srvinterface.class.php");
@@ -603,6 +602,71 @@ function InstallDB_CreateSccpDeviceConfigView($sccp_comatable) {
     return true;
 }    
 
+function Setup_RealTime() {
+    global $amp_conf;
+    outn("<li>" . _("Pre config RealTime") . "</li>");
+    $cnf_int = \FreePBX::Config();
+    $cnf_wr = \FreePBX::WriteConfig();
+    $cnf_read = \FreePBX::LoadConfig();
+    $def_config =array('sccpdevice' => 'mysql,sccp,sccpdeviceconfig','sccpline' => ' mysql,sccp,sccpline');
+    $def_bd_config = array('dbhost' => $amp_conf['AMPDBHOST'], 'dbname' => $amp_conf['AMPDBNAME'], 
+                           'dbuser' => $amp_conf['AMPDBUSER'], 'dbpass' => $amp_conf['AMPDBPASS'],
+                           'dbport' => '3306', 'dbsock' => '/var/lib/mysql/mysql.sock');
+    $def_bd_sec = 'sccp';
+
+    $dir = $cnf_int->get('ASTETCDIR');
+    
+    $res_conf_old = '';
+    $res_conf = '';
+    $ext_conf = '';
+    if (file_exists($dir. '/extconfig.conf')) {
+        $ext_conf = $cnf_read->getConfig('extconfig.conf');
+    }
+
+    if (!empty($ext_conf)) {        
+        $tmp = array();
+        if (!empty($ext_conf['settings']['sccpdevice'])) {
+            $tmp = explode(',', $ext_conf['settings']['sccpdevice']);
+            $def_config['sccpdevice']=$ext_conf['settings']['sccpdevice'];
+        }  
+        if (!empty($ext_conf['settings']['sccpline'])) {
+            if (empty($tmp)){
+                $tmp = explode(',', $ext_conf['settings']['sccpline']);
+                $tmp[2] ='sccpdevice';
+                $def_config['sccpdevice']= implode(',', $tmp);
+            } 
+            $def_config['sccpline']=$ext_conf['settings']['sccpline'];
+        }
+        if (!empty($tmp)){ 
+            $def_bd_sec = $tmp[1];
+        }
+    }
+    $ext_conf['settings']['sccpdevice'] = $def_config['sccpdevice'];
+    $ext_conf['settings']['sccpline'] = $def_config['sccpline'];
+
+    if (file_exists($dir. '/res_mysql.conf')) {
+        $res_conf = $cnf_read->getConfig('res_mysql.conf');
+        if (empty($res_conf[$def_bd_sec])) {
+            $res_conf[$def_bd_sec] = $def_bd_config; 
+        }
+        $cnf_wr -> writeConfig('res_mysql.conf', $res_conf,false);
+    }
+    if (file_exists($dir. '/res_config_mysql.conf')) {
+        $res_conf = $cnf_read->getConfig('res_config_mysql.conf');
+        if (empty($res_conf_old[$def_bd_sec])) {
+            $res_conf[$def_bd_sec] = $def_bd_config; 
+        }
+        $cnf_wr -> writeConfig('res_config_mysql.conf', $res_conf,false);
+    }
+    if (empty($res_conf)) {
+        $res_conf[$def_bd_sec] = $def_bd_config; 
+        $res_conf['general']['dbsock'] = $res_conf[$def_bd_sec]['dbsock'];
+        $cnf_wr -> writeConfig('res_config_mysql.conf', $res_conf,false);
+    }
+    $cnf_wr -> writeConfig('extconfig.conf', $ext_conf,false);
+    
+}
+
 CheckSCCPManagerDBTables($table_req);
 CheckPermissions();
 CheckAsteriskVersion();
@@ -615,6 +679,7 @@ InstallDB_fillsccpdevmodel();
 InstallDB_updateSccpDevice();
 InstallDB_createButtonConfigTrigger();
 InstallDB_CreateSccpDeviceConfigView($sccp_comatable);
+Setup_RealTime();
 outn("<br>");
 
 //    $ss->save_submit($request);

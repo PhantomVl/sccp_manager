@@ -13,9 +13,8 @@
 //   print_r($this->srvinterface->getCoreSCCPVersion());
 //    $lang_arr =  $this->extconfigs->getextConfig('sccp_lang','sk_SK');    
 //   print_r('<br>');
-//  print_r($this->srvinterface->get_comatable_sccp());
+//  print_r(timezone_identifiers_list());
 //   print_r('<br>');
-
 ?>
 
 <form autocomplete="off" name="frm_general" id="frm_general" class="fpbx-submit" action="" method="post">

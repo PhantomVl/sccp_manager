@@ -1036,6 +1036,16 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                             'type' => $this->sccpvalues['allow']['type']);
                     }
                     break;
+                    
+                case 'sccp_ntp_timezone':
+                        $tz_id = $value;
+                        $TZdata = $this-> extconfigs->getextConfig('sccp_timezone',$tz_id);
+                        if (!empty($TZdata)){
+                            $save_settings[] = array('keyword' => 'tzoffset', 'data' => ($TZdata['offset']/60),
+                            'seq' => '98',
+                            'type' => '2');
+                        }
+                    break;
             }
         }
         if (!empty($save_settings)) {
@@ -1746,9 +1756,15 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                             switch ($dkey) {
                                 case 'dateTimeSetting':
                                     $xnode = &$xml_node->$dkey;
-                                    $xnode->name = $this->sccpvalues['ntp_timezone']['data'];
+                                    $tz_id = $this->sccpvalues['ntp_timezone']['data'];
+                                    $TZdata = $this-> extconfigs->getextConfig('sccp_timezone',$tz_id);
+                                    if (empty($TZdata)){
+                                        $TZdata = array('offset' => '0', 'daylight' => '');
+                                    }
+                                    $xnode->name = $tz_id;
                                     $xnode->dateTemplate = $this->sccpvalues['dateformat']['data'];
-                                    $xnode->timeZone = $this->sccpvalues['ntp_timezone']['data'];
+                                    $xnode->timeZone = $tz_id.((empty($TZdata['daylight']))? '': '/'.$TZdata['daylight']);
+
                                     if ($this->sccpvalues['ntp_config_enabled']['data'] == 'yes') {
                                         $xnode->ntps->ntp->name = $this->sccpvalues['ntp_server']['data'];
                                         $xnode->ntps->ntp->ntpMode = $this->sccpvalues['ntp_server_mode']['data'];

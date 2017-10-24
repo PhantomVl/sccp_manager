@@ -23,7 +23,23 @@ class extconfigs {
                 case 'sccpDefaults':
                     $result =  $this->sccpDefaults;
                     break;
-
+                case 'sccp_timezone':
+                    $result =  $this->cisco_timezone;
+                    break;
+                case 'cisco_time':
+                    $result = array();
+                    foreach ($this->cisco_timezone as $key => $value) {
+                        $result[] = array('id'=> ($value['offset']/60) ,'val'=>$key.((empty($value['daylight']))? '': '/'.$value['daylight']));
+                    }
+                    break;
+                    
+                case 'cisco_timezone':
+                    $result = array();
+                    foreach ($this->cisco_timezone as $key => $value) {
+                        $result[] = array('id'=> $key ,'val'=>$key.((empty($value['daylight']))? '': '/'.$value['daylight']));
+//                        $result[$key] =$key.((empty($value['daylight']))? '': '/'.$value['daylight']);
+                    }
+                    break;
                 default:
                     return array('noId');
                     break;
@@ -114,72 +130,75 @@ class extconfigs {
         );
 
         private $cisco_timezone = array(
-            'Dateline'             => array('offset' => '-12', 'time' => 'Standard Time'),
-            'Samoa'                => array('offset' => '-12', 'time' => 'Standard Time'),
-            'Hawaiian'             => array('offset' => '-12', 'time' => 'Standard Time'),
-            'Alaskan'              => array('offset' => '-12', 'time' => 'Standard/Daylight Time'),
-            'Pacific'              => array('offset' => '-12', 'time' => 'Standard/Daylight Time'),
-            'Mountain'             => array('offset' => '-12', 'time' => 'Standard/Daylight Time'),
-            'US Mountain'          => array('offset' => '-12', 'time' => 'Standard Time'),
-            'Central'              => array('offset' => '-12', 'time' => 'Standard/Daylight Time'),
-            'Mexico'               => array('offset' => '-12', 'time' => 'Standard/Daylight Time'),
-            'Canada Central'       => array('offset' => '-12', 'time' => 'Standard Time'),
-            'SA Pacific'           => array('offset' => '-12', 'time' => 'Standard Time'),
-            'Eastern'              => array('offset' => '-12', 'time' => 'Standard/Daylight Time'),
-            'US Eastern'           => array('offset' => '-12', 'time' => 'Standard Time'),
-            'Atlantic'             => array('offset' => '-12', 'time' => 'Standard/Daylight Time'),
-            'SA Western'           => array('offset' => '-12', 'time' => 'Standard Time'),
-            'Newfoundland'         => array('offset' => '-12', 'time' => 'Standard/Daylight Time'),
-            'South America'        => array('offset' => '-12', 'time' => 'Standard/Daylight Time'),
-            'SA Eastern'           => array('offset' => '-12', 'time' => 'Standard Time'),
-            'Mid-Atlantic'         => array('offset' => '-12', 'time' => 'Standard/Daylight Time'),
-            'Azores'               => array('offset' => '-12', 'time' => 'Standard/Daylight Time'),
-            'GMT'                  => array('offset' => '00', 'time' => 'Standard/Daylight Time'),
-            'Greenwich'            => array('offset' => '00', 'time' => 'Standard Time'),
-            'W. Europe'            => array('offset' => '-12', 'time' => 'Standard/Daylight Time'),
-            'GTB'                  => array('offset' => '-12', 'time' => 'Standard/Daylight Time'),
-            'Egypt'                => array('offset' => '-12', 'time' => 'Standard/Daylight Time'),
-            'E. Europe'            => array('offset' => '-12', 'time' => 'Standard/Daylight Time'),
-            'Romance'              => array('offset' => '-12', 'time' => 'Standard/Daylight Time'),
-            'Central Europe'       => array('offset' => '-12', 'time' => 'Standard/Daylight Time'),
-            'South Africa'         => array('offset' => '-12', 'time' => 'Standard Time'),
-            'Jerusalem'            => array('offset' => '-12', 'time' => 'Standard/Daylight Time'),
-            'Saudi Arabia'         => array('offset' => '-12', 'time' => 'Standard Time'),
+            'Dateline'             => array('offset' => '-720', 'daylight' => ''),
+            'Samoa'                => array('offset' => '-660', 'daylight' => ''),
+            'Hawaiian'             => array('offset' => '-600', 'daylight' => ''),
+            'Alaskan'              => array('offset' => '-540', 'daylight' => 'Daylight Time'),
+            'Pacific'              => array('offset' => '-480', 'daylight' => 'Daylight Time'),
+            'Mountain'             => array('offset' => '-420', 'daylight' => 'Daylight Time'),
+            'US Mountain'          => array('offset' => '-420', 'daylight' => ''),
+            'Central'              => array('offset' => '-360', 'daylight' => 'Daylight Time'),
+            'Mexico'               => array('offset' => '-360', 'daylight' => 'Daylight Time'),
+            'Canada Central'       => array('offset' => '-360', 'daylight' => ''),
+            'SA Pacific'           => array('offset' => '-300', 'daylight' => ''),
+            'Eastern'              => array('offset' => '-300', 'daylight' => 'Daylight Time'),
+            'US Eastern'           => array('offset' => '-300', 'daylight' => ''),
+            'Atlantic'             => array('offset' => '-240', 'daylight' => 'Daylight Time'),
+            'SA Western'           => array('offset' => '-240', 'daylight' => ''),
+            'Pacific SA'           => array('offset' => '-240', 'daylight' => ''),
+            'Newfoundland'         => array('offset' => '-210', 'daylight' => 'Daylight Time'),
+            'E. South America'     => array('offset' => '-180', 'daylight' => 'Daylight Time'),
+            'SA Eastern'           => array('offset' => '-180', 'daylight' => ''),
+            'Pacific SA'           => array('offset' => '-180', 'daylight' => 'Daylight Time'),
+            'Mid-Atlantic'         => array('offset' => '-120', 'daylight' => 'Daylight Time'),
+            'Azores'               => array('offset' => '-060', 'daylight' => 'Daylight Time'),
+            'GMT'                  => array('offset' => '00',  'daylight' => 'Daylight Time'),
+            'Greenwich'            => array('offset' => '00',  'daylight' => ''),
+            'W. Europe'            => array('offset' => '60',   'daylight' => 'Daylight Time'),
+            'GTB'                  => array('offset' => '60',   'daylight' => 'Daylight Time'),
+            'Egypt'                => array('offset' => '60',   'daylight' => 'Daylight Time'),
+            'E. Europe'            => array('offset' => '60',   'daylight' => 'Daylight Time'),
+            'Romance'              => array('offset' => '120',  'daylight' => 'Daylight Time'),
+            'Central Europe'       => array('offset' => '120',  'daylight' => 'Daylight Time'),
+            'South Africa'         => array('offset' => '120',  'daylight' => ''),
+            'Jerusalem'            => array('offset' => '120',  'daylight' => 'Daylight Time'),
+            'Saudi Arabia'         => array('offset' => '180',  'daylight' => ''),
 /*              Russion  Regions                                                                 */            
-            'Russian/Kaliningrad'  => array('offset' => '02', 'time' => 'Standard/Daylight Time'),
-            'Russian/Moscow'       => array('offset' => '03', 'time' => 'Standard/Daylight Time'),
-            'Russian/St.Peterburg' => array('offset' => '03', 'time' => 'Standard/Daylight Time'),
-            'Russian/Samara'       => array('offset' => '04', 'time' => 'Standard/Daylight Time'),
-            'Russian/Novosibirsk'  => array('offset' => '07', 'time' => 'Standard/Daylight Time'),
-            'Russian/Ekaterinburg' => array('offset' => '07', 'time' => 'Standard/Daylight Time'),
-            'Russian/Irkutsk'      => array('offset' => '08', 'time' => 'Standard/Daylight Time'),
-            'Russian/Yakutsk'      => array('offset' => '09', 'time' => 'Standard/Daylight Time'),
-            'Russian/Khabarovsk'   => array('offset' => '10', 'time' => 'Standard/Daylight Time'),
-            'Russian/Vladivostok'  => array('offset' => '10', 'time' => 'Standard/Daylight Time'),
-            'Russian/Sakhalin'     => array('offset' => '11', 'time' => 'Standard/Daylight Time'),
-            'Russian/Magadan'      => array('offset' => '11', 'time' => 'Standard/Daylight Time'),
-            'Russian/Kamchatka'    => array('offset' => '12', 'time' => 'Standard/Daylight Time'),
+            'Russian/Kaliningrad'  => array('offset' => '120', 'daylight' => ''),
+            'Russian/Moscow'       => array('offset' => '180', 'daylight' => ''),
+            'Russian/St.Peterburg' => array('offset' => '180', 'daylight' => ''),
+            'Russian/Samara'       => array('offset' => '240', 'daylight' => ''),
+            'Russian/Novosibirsk'  => array('offset' => '300', 'daylight' => ''),
+            'Russian/Ekaterinburg' => array('offset' => '300', 'daylight' => ''),
+            'Russian/Irkutsk'      => array('offset' => '480', 'daylight' => ''),
+            'Russian/Yakutsk'      => array('offset' => '540', 'daylight' => ''),
+            'Russian/Khabarovsk'   => array('offset' => '600', 'daylight' => ''),
+            'Russian/Vladivostok'  => array('offset' => '600', 'daylight' => ''),
+            'Russian/Sakhalin'     => array('offset' => '660', 'daylight' => ''),
+            'Russian/Magadan'      => array('offset' => '660', 'daylight' => ''),
+            'Russian/Kamchatka'    => array('offset' => '720', 'daylight' => ''),
 /*              EnD - Russion  Regions                                                             */            
             
-            'Iran'                 => array('offset' => '-12', 'time' => 'Standard/Daylight Time'),
-            'Caucasus'             => array('offset' => '-12', 'time' => 'Standard/Daylight Time'),
-            'Arabian'              => array('offset' => '-12', 'time' => 'Standard Time'),
-            'Afghanistan'          => array('offset' => '-12', 'time' => 'Standard Time'),
-            'West Asia'            => array('offset' => '-12', 'time' => 'Standard Time'),
-            'Central Asia'         => array('offset' => '-12', 'time' => 'Standard Time'),
-            'SE Asia'              => array('offset' => '-12', 'time' => 'Standard Time'),
-            'China'                => array('offset' => '-12', 'time' => 'Standard Time'),
-            'Taipei'               => array('offset' => '-12', 'time' => 'Standard Time'),
-            'Tokyo'                => array('offset' => '-12', 'time' => 'Standard Time'),
-            'Cen. Australia'       => array('offset' => '10', 'time' => 'Standard/Daylight Time'),
-            'AUS Central'          => array('offset' => '-12', 'time' => 'Standard Time'),
-            'E. Australia'         => array('offset' => '-12', 'time' => 'Standard Time'),
-            'AUS Eastern'          => array('offset' => '10', 'time' => 'Standard/Daylight Time'),
-            'West Pacific'         => array('offset' => '-12', 'time' => 'Standard Time'),
-            'Tasmania'             => array('offset' => '10', 'time' => 'Standard/Daylight Time'),
-            'Central Pacific'      => array('offset' => '-12', 'time' => 'Standard Time'),
-            'Fiji'                 => array('offset' => '-12', 'time' => 'Standard Time'),
-            'New Zealand'          => array('offset' => '10', 'time' => 'Standard/Daylight Time')
+            'Iran'                 => array('offset' => '210',  'daylight' => 'Daylight Time'),
+            'Caucasus'             => array('offset' => '240', 'daylight' => 'Daylight Time'),
+            'Arabian'              => array('offset' => '240', 'daylight' => ''),
+            'Afghanistan'          => array('offset' => '270', 'daylight' => ''),
+            'West Asia'            => array('offset' => '300', 'daylight' => ''),
+            'India'                => array('offset' => '330', 'daylight' => ''),
+            'Central Asia'         => array('offset' => '360', 'daylight' => ''),
+            'SE Asia'              => array('offset' => '420', 'daylight' => ''),
+            'China'                => array('offset' => '480', 'daylight' => ''),
+            'Taipei'               => array('offset' => '480', 'daylight' => ''),
+            'Tokyo'                => array('offset' => '540', 'daylight' => ''),
+            'Cen. Australia'       => array('offset' => '570', 'daylight' => 'Daylight Time'),
+            'AUS Central'          => array('offset' => '570', 'daylight' => ''),
+            'E. Australia'         => array('offset' => '600', 'daylight' => ''),
+            'AUS Eastern'          => array('offset' => '600', 'daylight' => 'Daylight Time'),
+            'West Pacific'         => array('offset' => '600', 'daylight' => ''),
+            'Tasmania'             => array('offset' => '600', 'daylight' => 'Daylight Time'),
+            'Central Pacific'      => array('offset' => '660', 'daylight' => ''),
+            'Fiji'                 => array('offset' => '720', 'daylight' => ''),
+            'New Zealand'          => array('offset' => '720', 'daylight' => 'Daylight Time')
             );
         
 }

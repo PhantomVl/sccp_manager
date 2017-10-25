@@ -226,7 +226,7 @@ $db_config_v3 = array(
          'audio_cos' => array('drop' => "yes"),
          'video_tos' => array('drop' => "yes"),
          'video_cos' => array('drop' => "yes"),
-         'incominglimit' =>array('create' => "INT(11) NOT NULL DEFAULT '6'", 'modify' =>'INT(11)', 'def_modify' => "6"),
+         'incominglimit' =>array('create' => "INT(11) DEFAULT '6'", 'modify' =>'INT(11)', 'def_modify' => "6"),
          'transfer' =>array('create' => "enum('on','off') NOT NULL default 'on'",'modify' => "enum('on','off')"),
          'vmnum' =>array('def_modify' => "*97"),
          'musicclass' =>array('def_modify' => "default"),

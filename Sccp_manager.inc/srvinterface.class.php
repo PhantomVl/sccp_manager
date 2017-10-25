@@ -135,9 +135,9 @@ class srvinterface {
             return 0;
         }
         if ($res["vCode"] >= 431) {
-            return 11;
+            return '4.3.1';
         } else {
-            return 10;
+            return '4.3.0';
         }
 //        return $res["vCode"];
     }

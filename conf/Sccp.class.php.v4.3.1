@@ -72,15 +72,23 @@ class Sccp extends \FreePBX\modules\Core\Driver {
                 $sqlv = 'values ("'.$id.'"';
 		foreach($this->data_fld as $key => $val) {
                     switch ($key) {
+                        case 'incominglimit':
+                            $sql .= ', '.$key;
+                            if (!empty($settings[$val]['value'])){
+                                $sqlv .= ", '".$settings[$val]['value']."' ";
+                            } else {
+                                $sqlv .= ", DEFAULT(`".$key."`)";
+                            }
+                            break;
                         case 'secondary_dialtone_digits':
                         case 'secondary_dialtone_tone':
-//                        case 'incominglimit':
                         case 'dnd':
                             $sql .= ', '.$key;
                             if (!empty($settings[$val]['value'])){
                                 $sqlv .= ", '".$settings[$val]['value']."' ";
                             } else {
                                 $sqlv .= ", NULL ";
+//                                $sqlv .= ", DEFAULT(`".$key."`)";
                             }
                             break;
                         default:

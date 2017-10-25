@@ -1870,6 +1870,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                     case 'networkLocaleInfo':
                     case 'networkLocale':
                         $hwlang = '';
+                        $lang = '';
                         if (!empty($var_hw_config["_hwlang"])) {
                             $hwlang = explode(':', $var_hw_config["_hwlang"]);
                         }

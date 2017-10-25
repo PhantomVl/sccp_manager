@@ -31,7 +31,7 @@ and open the template in the editor. Base Version before all crash :-)
     </page_group>
 
     <page_group name="sccp_general">
-      <label>SCCP Server config</label>
+      <label>SCCP Server config v431</label>
 
       <item type="IE" id="2"><label>SCCP Server Name</label>
           <input>

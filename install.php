@@ -40,7 +40,7 @@ function astman_retrieveJSFromMetaData($astman, $segment = "") {
     }
 }
 
-function Get_DB_config($sccp_comatable) {
+function Get_DB_config($sccp_compatible) {
 $db_config_v0 = array(
     'sccpdevmodel' => array(
         'enabled' => array('create' => "INT(2) NULL DEFAULT '0'"),
@@ -238,7 +238,7 @@ $db_config_v3 = array(
          'dnd'        => array('create' => "enum('off','reject','silent','user') NOT NULL default 'reject'", 'modify' => "enum('off','reject','silent','user')", 'def_modify' =>"reject")
     )
 );
-    if ($sccp_comatable >= 11) {
+    if ($sccp_compatible >= 430) {
         return $db_config_v3;
     } else {
         return $db_config_v0;
@@ -250,7 +250,7 @@ $autoincrement = (($amp_conf["AMPDBENGINE"] == "sqlite") || ($amp_conf["AMPDBENG
 $table_req = array('sccpdevice', 'sccpline', 'buttonconfig');
 $ss = FreePBX::create()->Sccp_manager;
 $astman = FreePBX::create()->astman;
-$sccp_comatable = 0;
+$sccp_compatible = 0;
 //$db_config = $db_config_v0;
 $db_config = '';
 
@@ -300,9 +300,9 @@ function CheckChanSCCPСomatable() {
     if (!$astman) {
         ie_freepbx('No asterisk manager connection provided!. Installation Failed');
     }
-    $sccp_comatable = $srvinterface->get_comatable_sccp();
-    outn("<li>" . _("Sccp model Compatable code : ") . $sccp_comatable . "</li>");
-    return $sccp_comatable;
+    $sccp_compatible = $srvinterface->get_compatible_sccp();
+    outn("<li>" . _("Sccp model Compatable code : ") . $sccp_compatible . "</li>");
+    return $sccp_compatible;
 }
           
     
@@ -556,11 +556,11 @@ function InstallDB_createButtonConfigTrigger() {
     return true;
 }
 
-function InstallDB_CreateSccpDeviceConfigView($sccp_comatable) {
+function InstallDB_CreateSccpDeviceConfigView($sccp_compatible) {
     global $db;
     outn("<li>" . _("(Re)Create sccpdeviceconfig view") . "</li>");
     $sql = "";
-    if ($sccp_comatable < 11)  {
+    if ($sccp_compatible < 431)  {
         $sql= "
         CREATE OR REPLACE
             ALGORITHM = MERGE
@@ -670,15 +670,15 @@ function Setup_RealTime() {
 CheckSCCPManagerDBTables($table_req);
 CheckPermissions();
 CheckAsteriskVersion();
-$sccp_comatable = CheckChanSCCPСomatable();
-$db_config = Get_DB_config($sccp_comatable);
+$sccp_compatible = CheckChanSCCPСomatable();
+$db_config = Get_DB_config($sccp_compatible);
 InstallDB_sccpsettings();
 InstallDB_sccpdevmodel();
 InstallDB_updateSchema($db_config);
 InstallDB_fillsccpdevmodel();
 InstallDB_updateSccpDevice();
 InstallDB_createButtonConfigTrigger();
-InstallDB_CreateSccpDeviceConfigView($sccp_comatable);
+InstallDB_CreateSccpDeviceConfigView($sccp_compatible);
 Setup_RealTime();
 outn("<br>");
 

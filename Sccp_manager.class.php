@@ -68,7 +68,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
 //    private $SCCP_LANG_DICTIONARY = 'SCCP-dictionary.xml'; // CISCO LANG file search in /tftp-path 
     private $SCCP_LANG_DICTIONARY = 'be-sccp.jar'; // CISCO LANG file search in /tftp-path 
     private $pagedata = null;
-    private $sccp_driver_ver = '11.21';
+    private $sccp_driver_ver = '11.2';
     private $tftpLang = array();
     private $hint_context = '@ext-local'; /// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Get it from Config !!!
     private $val_null = 'NONE'; /// REPLACE to null Field
@@ -120,7 +120,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
 
 
         // Load Advanced Form Constuctor Data 
-        $xml_vars = __DIR__ . '/conf/sccpgeneral.xml.v'.$this->sccpvalues['sccp_comatable']['data'];
+        $xml_vars = __DIR__ . '/conf/sccpgeneral.xml.v'.$this->sccpvalues['sccp_compatible']['data'];
         if (!file_exists($xml_vars)) {
             $xml_vars = __DIR__ . '/conf/sccpgeneral.xml';
         }
@@ -1451,8 +1451,9 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 copy($filename, $dst_path . basename($filename));
             }
         }
-        $this->sccpvalues['sccp_comatable'] = array('keyword' => 'sccp_comatable', 'data' => $this->srvinterface->get_comatable_sccp(), 'type' => '1', 'seq' => '99');                
-//        $this->sccpvalues['sccp_comatable'] = '11';
+
+        $this->sccpvalues['sccp_compatible'] = array('keyword' => 'compatible', 'data' => $this->srvinterface->get_compatible_sccp(), 'type' => '1', 'seq' => '99');                
+//        $this->sccpvalues['sccp_compatible'] = '11';
 
         $driver = $this->FreePBX->Core->getAllDriversInfo();
         $driver_replace = '';
@@ -1470,7 +1471,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
 
         $dst = $_SERVER['DOCUMENT_ROOT'] . '/admin/modules/core/functions.inc/drivers/Sccp.class.php';
         if (!file_exists($dst) || $driver_replace =='yes') {
-            $src_path = $_SERVER['DOCUMENT_ROOT'] . '/admin/modules/sccp_manager/conf/' . basename($dst).'.v'.$this->sccpvalues['sccp_comatable']['data'];
+            $src_path = $_SERVER['DOCUMENT_ROOT'] . '/admin/modules/sccp_manager/conf/' . basename($dst).'.v'.$this->sccpvalues['sccp_compatible']['data'];
             if (file_exists($src_path)) {
                 copy($src_path, $dst);
             } else {
@@ -1951,7 +1952,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                     case "netlang": // Remove Key 
                     case "devlang":
                     case "tftp_path":
-                    case "sccp_comatable":
+                    case "sccp_compatible":
                         break;
                     default:
                         $this->sccp_conf_init['general'][$key] = $value['data'];

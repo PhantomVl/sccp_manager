@@ -125,8 +125,8 @@ class srvinterface {
         }
         return $ast_key;
     }
-    
-    public function get_comatable_sccp() {
+
+    public function get_compatible_sccp() {
         $res = $this-> getChanSCCPVersion();
         if (empty($res)) {
             $res = $this-> getChanSCCPVersion();
@@ -135,9 +135,9 @@ class srvinterface {
             return 0;
         }
         if ($res["vCode"] >= 431) {
-            return '4.3.1';
+            return 431;
         } else {
-            return '4.3.0';
+            return 430;
         }
 //        return $res["vCode"];
     }
@@ -222,6 +222,7 @@ class srvinterface {
           }
         }
         if (array_key_exists("RevisionNum",$metadata)) {
+          $result["RevisionNum"]=$metadata["RevisionNum"];
           if ($metadata["RevisionNum"] >= "10403") {	// new method, RevisionNum is incremental
              $result["vCode"] = 432;
           }

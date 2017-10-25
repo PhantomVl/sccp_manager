@@ -74,7 +74,7 @@ class Sccp extends \FreePBX\modules\Core\Driver {
                     switch ($key) {
                         case 'secondary_dialtone_digits':
                         case 'secondary_dialtone_tone':
-                        case 'incominglimit':
+//                        case 'incominglimit':
                         case 'dnd':
                             $sql .= ', '.$key;
                             if (!empty($settings[$val]['value'])){

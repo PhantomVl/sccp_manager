@@ -801,7 +801,7 @@ and open the template in the editor. Base Version before all crash :-)
         </item>
         <item type="IS" id="8" seq="99"><name>directed_pickup</name> <label>Pickup/Gpickup</label>
             <default>on</default>
-            <option_hide class=".pickup_hide">no</option_hide>
+            <option_hide class=".pickup_hide">off</option_hide>
             <button value="on">On</button>
             <button value="off">Off</button>
             <help>Enable Pickup function to direct pickup an extension. Default is On</help>
@@ -810,9 +810,9 @@ and open the template in the editor. Base Version before all crash :-)
             <name>conf_allow</name> 
             <label>Conference</label>
             <default>on</default>
-            <option_hide class=".conf_hide">no</option_hide>
-            <button value="on">Yes</button>
-            <button value="off">No</button>
+            <option_hide class=".conf_hide">off</option_hide>
+            <button value="on">On</button>
+            <button value="off">Off</button>
             <help>Allow the use of conference</help>
         </item>        
     </page_group>

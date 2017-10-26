@@ -50,7 +50,7 @@ class extconfigs {
                 if (isset($result[$index])) {
                     return $result[$index];
                 } else {
-                    return array('');
+                    return array();
                 }
             }
         }

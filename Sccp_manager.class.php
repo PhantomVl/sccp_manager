@@ -1881,7 +1881,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                             $lang = (empty($hwlang[1])) ? $this->sccpvalues['devlang']['data'] : $hwlang[1];
 //                            $lang=$this->sccpvalues['devlang']['data'];
                         }
-                        if (!empty($lang) && $lang  !='null') {
+                        if (($lang  !='null') && (!empty(trim($lang)))) {
                             if ($key == 'networkLocale') {
                                 $xml_work->$key = $lang;
                             } else {

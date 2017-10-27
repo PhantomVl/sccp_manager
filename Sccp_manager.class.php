@@ -39,6 +39,7 @@
  *  + secondary_dialtone_tone = 0x22     line config                                              
  *  - support kv-store ?????
  *  + Shared Line 
+ *  - bug Soft key set (empty keysets )
  *  - bug Fix ...(K no w bug? no fix)
  *  - restore default Value on page 
  *  - restore default Value on sccp.class
@@ -1497,7 +1498,17 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
             file_put_contents($this->sccppath["sccp_conf"], $sccpfile);
         }
 
-        $this->sccp_conf_init = $this->cnf_read->getConfig('sccp.conf');
+//        $this->sccp_conf_init = $this->cnf_read->getConfig('sccp.conf');
+
+        $read_config = $this->cnf_read->getConfig('sccp.conf');
+        $this->sccp_conf_init['general'] = $read_config['general'];
+        foreach ($read_config as $key => $value) {
+            if (isset($read_config[$key]['type'])) { // copy soft key
+                if ($read_config[$key]['type'] == 'softkeyset') {
+                    $this->sccp_conf_init[$key] = $read_config[$key];
+                }
+            }
+        }
 
 //        $this->sccp_conf_init = @parse_ini_file($this->sccppath["sccp_conf"], true);
     }

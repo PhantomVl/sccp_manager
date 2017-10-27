@@ -93,7 +93,7 @@ class dbinterface {
                 if (!empty($filter)) {
                     if (!empty($filter['model'])) {
                         if (strpos($filter['model'],'loadInformation')) { 
-                            $sql = "SELECT " . $sel_inf . " FROM sccpdevmodel WHERE (`loadinformationid` =" . $filter['model'] . ") ORDER BY model ";
+                            $sql = "SELECT " . $sel_inf . " FROM sccpdevmodel WHERE (`loadinformationid` ='" . $filter['model'] . "') ORDER BY model ";
                         } else  {
                             $sql = "SELECT " . $sel_inf . " FROM sccpdevmodel WHERE (`loadinformationid` ='loadInformation" . $filter['model'] . "') ORDER BY model ";
                         }
@@ -107,7 +107,7 @@ class dbinterface {
             case "byid":
                 if (!empty($filter)) {
                     if (!empty($filter['model'])) {
-                        $sql = "SELECT " . $sel_inf . " FROM sccpdevmodel WHERE (`model` =" . $filter['model'] . ") ORDER BY model ";
+                        $sql = "SELECT " . $sel_inf . " FROM sccpdevmodel WHERE (`model` ='" . $filter['model'] . "') ORDER BY model ";
                     } else {
 //                          $sql = "SELECT ".$filter['model'];
                         $sql = "SELECT " . $sel_inf . " FROM sccpdevmodel ORDER BY model ";

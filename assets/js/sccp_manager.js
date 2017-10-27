@@ -284,8 +284,8 @@ $(document).ready(function () {
 //        var btn_add=$('#sccp_hw_addon').find(':selected').data('val');
 
         if (type_id === 1) {
-            if ($('#sccp_hw_addon').val() !== 'none') {
-                $('#sccp_hw_addon').val('none').change();
+            if ($('#sccp_hw_addon').val() !== 'NONE') {
+                $('#sccp_hw_addon').val('NONE').change();
             }
             $('#sccp_hw_addon').attr("disabled", "disabled");
 

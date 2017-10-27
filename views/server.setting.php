@@ -5,15 +5,12 @@
  * and open the template in the editor.
  */
 // vim: set ai ts=4 sw=4 ft=phtml:
-//    print_r($this->sccpvalues['sccp_compatible']);
-//    print_r($this->sccpvalues);
-//   $id_name = 'SEP000A8A5C5F25';
-//   print_r($this->srvinterface->getChanSCCPVersion());
-//   print_r('<br>');
+//   print_r($this->sccpvalues['sccp_compatible']);
+//   print_r($this->sccpvalues);
 //   print_r($this->srvinterface->getCoreSCCPVersion());
-//    $lang_arr =  $this->extconfigs->getextConfig('sccp_lang','sk_SK');    
+//   $lang_arr =  $this->extconfigs->getextConfig('sccp_lang','sk_SK');    
 //   print_r('<br>');
-//  print_r(timezone_identifiers_list());
+//   print_r(timezone_identifiers_list());
 //   print_r('<br>');
 ?>
 

@@ -30,6 +30,7 @@
  *  + Change internal use Field to _Field (new feature in chan_sccp (added for Sccp_manager))
  *  + Delete phone XML
  *  + Change Installer  ?? (test )
+ *  - Bootstrap encodeURI(row['type']) ??????? 
  *  + SRST Config
  *  - Failover config
  *  + Auto Addons!
@@ -764,15 +765,17 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                         $id_name = $dev_ids['name'];
                         if (empty($dev_ids['news'])) {
                             $dev_data = $this->srvinterface->sccp_getdevice_info($id_name);
+                            if (!empty($dev_data['SCCP_Vendor']['model_id'])) {
 //                            $dev_data = $this->sccp_getdevice_info($id_name);
-                            $dev_addon= $dev_data['SCCP_Vendor']['model_addon'];
-                            if (empty($dev_addon)) {
-                                $dev_addon = null;
+                                $dev_addon= $dev_data['SCCP_Vendor']['model_addon'];
+                                if (empty($dev_addon)) {
+                                    $dev_addon = null;
+                                }
+                                $dev_schema =  $this-> getSccp_model_information('byciscoid', false, "all", array('model' =>$dev_data['SCCP_Vendor']['model_id']));
+                                $result[] = array('name' => $id_name, 'mac' => $id_name, 'button' => '---', 'type' => $dev_schema[0]['model'],  'new_hw' => 'Y',
+                                    'description' => '*NEW* '.$dev_ids['descr'], 'status' => '*NEW* '.$dev_ids['status'], 'address' => $dev_ids['address'], 
+                                    'addon' => $dev_addon);
                             }
-                            $dev_schema =  $this-> getSccp_model_information('byciscoid', false, "all", array('model' =>$dev_data['SCCP_Vendor']['model_id']));
-                            $result[] = array('name' => $id_name, 'mac' => $id_name, 'button' => '---', 'type' => $dev_schema[0]['model'],  'new_hw' => 'Y',
-                                'description' => '*NEW* '.$dev_ids['descr'], 'status' => '*NEW* '.$dev_ids['status'], 'address' => $dev_ids['address'], 
-                                'addon' => $dev_addon);
                         }
                     }
 
@@ -878,7 +881,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         $lines_list = $this->dbinterface->get_db_SccpTableData('SccpExtension');
         $max_btn = ((!empty($get_settings['butonscount']) ? $get_settings['butonscount'] : 100));
         $last_btn = $max_btn;
-        for ($it = $max_btn; $it >0; $it--) {
+        for ($it = $max_btn; $it >=0; $it--) {
             if (!empty($get_settings['button' . $it . '_type'])) {
                 $last_btn = $it;
                 $btn_t = $get_settings['button' . $it . '_type'];
@@ -950,12 +953,17 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                         break;
                     case 'line':
                     case 'silent':
-                        $btn_n = (string) $get_settings['button' . $it . '_line'];
-                        if ($it > 0) {
-                            if ($btn_t == 'silent') {
-                                $btn_n .= '!silent';
-                                $btn_t = 'line';
+                        if (isset($get_settings['button' . $it . '_line'])) {
+                            $btn_n = (string) $get_settings['button' . $it . '_line'];
+                            if ($it > 0) {
+                                if ($btn_t == 'silent') {
+                                    $btn_n .= '!silent';
+                                    $btn_t = 'line';
+                                }
                             }
+                        } else {
+                            $btn_t = 'empty';
+                            $btn_n = '';
                         }
                         break;
                     case 'empty':

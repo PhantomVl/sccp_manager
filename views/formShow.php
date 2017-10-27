@@ -58,7 +58,7 @@ $sofkey_list = \FreePBX::Sccp_manager()-> srvinterface -> sccp_list_keysets();
 $model_list = \FreePBX::Sccp_manager()->dbinterface->get_db_SccpTableData("HWDevice");
 $extension_list = \FreePBX::Sccp_manager()->dbinterface->get_db_SccpTableData("HWextension");
 
-$extension_list[]=array(model=>'none', vendor=>'CISCO', dns=>'0');
+$extension_list[]=array(model=>'NONE', vendor=>'CISCO', dns=>'0');
 
 $items = $itm -> children();
 

@@ -27,6 +27,13 @@ and open the template in the editor. Base Version before all crash :-)
         </input>
         <help>Help.</help>
       </item>
+      <item type="IE" id="1" seq="99"><label>Phone ssh login</label>
+        <input>
+            <name>sccp_xml_about</name>
+            <default>XML Base ver: 11.2, Sccp ver: default</default>
+        </input>
+        <help>Help.</help>
+      </item>
     
     </page_group>
 

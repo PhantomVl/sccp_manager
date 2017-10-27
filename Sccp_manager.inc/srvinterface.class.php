@@ -89,12 +89,18 @@ class srvinterface {
             }
             
             $res1 = $res3['Skinny_Phone_Type'];
+            $res4 = $res3['Config_Phone_Type'];
             if (!empty($res3['Addons'])) {
                 $res2 = $res3['Addons'];
             } else {
                 $res2 = '';
             }
             $res3['SCCP_Vendor']= Array('vendor' => strtok($res1,' '),'model' => strtok('('), 'model_id' => strtok(')'), 'vendor_addon' => strtok($res2,' '), 'model_addon' => strtok(' '));
+            if (empty($res3['SCCP_Vendor']['vendor']) || $res3['SCCP_Vendor']['vendor']=='Undefined'){
+                $res3['SCCP_Vendor']= Array('vendor' => 'Undefined','model' => $res4, 'model_id' => '', 'vendor_addon' => $res3['SCCP_Vendor']['vendor_addon'], 'model_addon' => $res3['SCCP_Vendor']['model_addon']);
+//               return $res4;
+//                return array();
+            } 
             return $res3;
         } else {
             return array();

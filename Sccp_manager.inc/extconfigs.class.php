@@ -9,7 +9,8 @@ class extconfigs {
         }
 
         public function info() {
-           return Array('Ver' =>'Default Setings and Enums');
+           return Array('Version' => '13.0.2',
+                        'about' =>'Default Setings and Enums ver: 13.0.2');
         }
         
         public function getextConfig($id = '', $index = '') {

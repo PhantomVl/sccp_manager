@@ -668,7 +668,7 @@ function Setup_RealTime() {
 }
 
 CheckSCCPManagerDBTables($table_req);
-CheckPermissions();
+#CheckPermissions();
 CheckAsteriskVersion();
 $sccp_compatible = CheckChanSCCPСomatable();
 $db_config = Get_DB_config($sccp_compatible);

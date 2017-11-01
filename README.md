@@ -49,9 +49,8 @@ Make sure you have the following installed on your system:
 ### Requirements
 - Chan_SCCP module 4.3.0 (or later) channel driver for Asterisk: [See our WIKI] (https://github.com/chan-sccp/chan-sccp/wiki/Building-and-Installation-Guide)
   - configure flags ./configure --enable-conference --enable-advanced-functions --enable-distributed-devicestate 
+  - Creating mysql DB from sorce (mysql -u root asterisk < mysql-v5_enum.sql)
 
-- Real Time cofiguration for Chan_SCCP
-  - Creating mysql DB from sorce (mysql -u root asterisk < mysql-v5.sql)
 
 - TFTP Server running under (recomended) /tftpboot/ [See our WIKI] (https://github.com/chan-sccp/chan-sccp/wiki/setup-tftp-service)
   - You will need the phone settings templates. You can use the templates taken from the distribution "chan-sccp" 

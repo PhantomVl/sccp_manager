@@ -70,7 +70,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
 //    private $SCCP_LANG_DICTIONARY = 'SCCP-dictionary.xml'; // CISCO LANG file search in /tftp-path 
     private $SCCP_LANG_DICTIONARY = 'be-sccp.jar'; // CISCO LANG file search in /tftp-path 
     private $pagedata = null;
-    private $sccp_driver_ver = '11.2';
+    private $sccp_driver_ver = '11.3';
     private $tftpLang = array();
     private $hint_context = '@ext-local'; /// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Get it from Config !!!
     private $val_null = 'NONE'; /// REPLACE to null Field
@@ -347,6 +347,10 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 "sccpadv" => array(
                     "name" => _("Advanced SCCP Settings"),
                     "page" => 'views/server.advanced.php'
+                ),
+                "sccpinfo" => array(
+                    "name" => _("SCCP info"),
+                    "page" => 'views/server.info.php'
                 ),
             );
 
@@ -1469,10 +1473,10 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         if (empty($driver['sccp'])) {
             $driver_replace = 'yes';
         } else {
-            if (empty($driver['sccp']['sccp_driver_ver'])) {
+            if (empty($driver['sccp']['Version'])) {
                 $driver_replace = 'yes';                
             } else {
-                if ($driver['sccp']['sccp_driver_ver'] != $this->sccp_driver_ver){
+                if ($driver['sccp']['Version'] != $this->sccp_driver_ver){
                     $driver_replace = 'yes';                
                 }
             }

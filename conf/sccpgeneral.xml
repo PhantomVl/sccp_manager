@@ -5,7 +5,17 @@ To change this template file, choose Tools | Templates
 and open the template in the editor. Base Version before all crash :-)
 -->
 <root>
-    <page_group name="sccp_hidden"><label>SCCP Hidden Server config</label>
+    <page_group name="sccp_info">
+      <item type="IS" id="6" seq="99"><name>XML_info</name> <label>XML_Ver Default</label>
+          <default>NONE</default>
+          <button value="NONE">XML_Ver_Old</button>
+          <help></help>
+      </item>
+        
+    </page_group>
+
+    <page_group name="sccp_hidden">
+        <label>SCCP Hidden Server config</label>
       <item type="IE" id="1" seq="10"><label>Phone SSH login</label>
         <input>
             <name>dev_sshUserId</name>

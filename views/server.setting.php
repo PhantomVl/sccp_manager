@@ -5,13 +5,7 @@
  * and open the template in the editor.
  */
 // vim: set ai ts=4 sw=4 ft=phtml:
-//   print_r($this->sccp_conf_init);
-//   print_r($this->sccpvalues);
-//   print_r($this->srvinterface->getCoreSCCPVersion());
-//   $lang_arr =  $this->extconfigs->getextConfig('sccp_lang','sk_SK');    
-//   print_r('<br>');
-//   print_r(timezone_identifiers_list());
-//   print_r('<br>');
+
 ?>
 
 <form autocomplete="off" name="frm_general" id="frm_general" class="fpbx-submit" action="" method="post">

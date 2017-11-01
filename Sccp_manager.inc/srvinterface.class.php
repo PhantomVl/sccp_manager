@@ -13,7 +13,8 @@ class srvinterface {
     public function __construct() {
         }
        public function info() {
-           return Array('Ver' =>'server interface data');
+           return Array('Version' => '13.0.2', 
+                        'about' =>'Server interface data ver 13.0.2');
        }
 
 /*

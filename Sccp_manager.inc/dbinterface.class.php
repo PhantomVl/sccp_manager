@@ -13,7 +13,8 @@ class dbinterface {
     public function __construct() {
         }
        public function info() {
-           return Array('Ver' =>'Data access interface');
+           return Array('Version' => '13.0.2',
+                        'about' =>'Data access interface v. 13.0.2');
        }
 
 /*

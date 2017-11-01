@@ -22,8 +22,8 @@ class Sccp extends \FreePBX\modules\Core\Driver {
 			"prettyName" => _("Sccp Custom Driver"),
 			"shortName" => "SCCP",
 			"description" => _("Sccp Device"),
-			"sccp_driver_ver" => "11.2",
-			"about" => "Sccp mysql class Base ver: 11.2, Sccp ver: default"
+			"Version" => "11.3",
+			"about" => "Sccp mysql class Base ver: 11.3, Sccp ver: default"
                     
 		);
 	}
@@ -79,7 +79,8 @@ class Sccp extends \FreePBX\modules\Core\Driver {
         
 	public function getDevice($id) {
                 $sccp_line = array();
-		$sql = "SELECT name as id, name as name";
+//		$sql = "SELECT name as id, name as name";
+		$sql = "SELECT name as id, name as name ";
 		foreach($this->data_fld as $key => $val) {
                     $sql .= ',`'. $key .'` as '.$val;
                 }

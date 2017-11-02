@@ -159,8 +159,8 @@ if (!empty($_REQUEST['new_id'])) {
                         <select class ="form-control lineselect_<?php echo $line_id.(($show_form_mode=='line' || $show_form_mode=='adv.line')?'':' hidden');?>" name="<?php echo $forminfo[1]['name'].$line_id.'_line';?>" >
                         <?php 
                             foreach ($lines_list as $data){
-                              $select = (($data['id']==$defaul_btn)?"selected":"");
-                              echo '<option value="'.$data['id'].'" '.$select.' >'.$data['id'].' / '.$data['label'].'</option>';
+                              $select = (($data['name']==$defaul_btn)?"selected":"");
+                              echo '<option value="'.$data['name'].'" '.$select.' >'.$data['name'].' / '.$data['label'].'</option>';
                             }
                             ?>
                         </select>
@@ -187,8 +187,8 @@ if (!empty($_REQUEST['new_id'])) {
                                 echo '<select  class="form-control" name="'.$forminfo[1]['name'].$line_id.'_hline" >';
                                 
                                 foreach ($hint_list as $data){
-                                  $select = (($data['id']==$defaul_btn)?"selected":"");
-                                  echo '<option value="'.$data['id'].'" '.$select.' >'.$data['id'].' / '.$data['label'].'</option>';
+                                  $select = (($data['name']==$defaul_btn)?"selected":"");
+                                  echo '<option value="'.$data['name'].'" '.$select.' >'.$data['name'].' / '.$data['label'].'</option>';
                                 }
                                 echo '</select>';
                                 echo '</div>';

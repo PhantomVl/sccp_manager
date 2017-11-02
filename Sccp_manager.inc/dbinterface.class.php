@@ -26,11 +26,11 @@ class dbinterface {
         }
         switch ($dataid) {
             case "SccpExtension":
-                if (empty($data['id'])) {
-                    $sql = "SELECT * FROM `sccpline` ORDER BY `id`";
+                if (empty($data['name'])) {
+                    $sql = "SELECT * FROM `sccpline` ORDER BY `name`";
                     $raw_settings = sql($sql, "getAll", DB_FETCHMODE_ASSOC);
                 } else {
-                    $sql = "SELECT * FROM `sccpline` WHERE `id`=" . $data['id'];
+                    $sql = "SELECT * FROM `sccpline` WHERE `name`=" . $data['name'];
                     $raw_settings = sql($sql, "getAll", DB_FETCHMODE_ASSOC);
                 }
                 break;

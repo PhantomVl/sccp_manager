@@ -932,7 +932,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                     case 'monitor':
                         $btn_t = 'speeddial';
                         $btn_opt = (string) $get_settings['button' . $it . '_line'];
-                        $db_res = $this-> dbinterface->get_db_SccpTableData('SccpExtension', array('id' => $btn_opt));
+                        $db_res = $this-> dbinterface->get_db_SccpTableData('SccpExtension', array('name' => $btn_opt));
                         $btn_n = $db_res[0]['label'];
                         $btn_opt .= ',' . $btn_opt . $this->hint_context;
                         break;

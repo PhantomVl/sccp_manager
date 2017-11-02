@@ -30,7 +30,17 @@
  *  + Change internal use Field to _Field (new feature in chan_sccp (added for Sccp_manager))
  *  + Delete phone XML
  *  + Change Installer  ?? (test )
+ *  + Installer  Realtime config update
+ *  + Installer  Adaptive DB reconfig.
+ *  + Add system info page 
+ *  + Change Cisco Language data
+ *  + Make DB Acces from separate class
+ *  + Make System Acces from separate class
+ *  + Make Var elements from separate class
+ *  - To make creating XML files in a separate class
+ *  - Add Switch to select XML schema (display)
  *  - Bootstrap encodeURI(row['type']) ??????? 
+ *  - Check Time zone .... 
  *  + SRST Config
  *  - Failover config
  *  + Auto Addons!
@@ -1637,6 +1647,21 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
      */
 
     function sccp_create_tftp_XML() {
+        
+        foreach ($this->sccpvalues as $key => $value) {
+            $data_value[$key] = $value['data'];
+        }
+        $data_value['server_if_list'] = $this->getIP_information();
+        $model_information = $this->getSccp_model_information($get = "enabled", $validate = false); // Get Active
+
+        if (empty($model_information))
+            $model_information = $this->getSccp_model_information($get = "all", $validate = false); // Get All
+        
+        $lang_data =  $this->extconfigs->getextConfig('sccp_lang');
+        
+        $this->xmlinterface->create_default_XML($this->sccppath["tftp_path"], $data_value,  $model_information, $lang_data);
+        
+/*                
         $def_xml_fields = array('authenticationURL', 'informationURL', 'messagesURL', 'servicesURL', 'directoryURL', 'proxyServerURL', 'idleTimeout', 'idleURL');
         $def_xml_locale = array('userLocale', 'networkLocaleInfo', 'networkLocale');
         $xml_name = $this->sccppath["tftp_path"] . '/XMLDefault.cnf.xml';
@@ -1722,6 +1747,8 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
             //
 //            die(print_r($xml_work));            
         }
+ * 
+ */
     }
 
     /*
@@ -1729,6 +1756,34 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
      */
 
     function sccp_create_device_XML($dev_id = '') {
+        
+        if (empty($dev_id)) {
+            return false;
+        }
+
+        $dev_config = $this->dbinterface->get_db_SccpTableData("get_sccpdevice_byid", array('id' => $dev_id));
+
+        foreach ($this->sccpvalues as $key => $value) {
+            $data_value[$key] = $value['data'];
+        }
+        $data_value['ntp_timezone_id'] = $this-> extconfigs->getextConfig('sccp_timezone',$data_value['ntp_timezone']);
+        $data_value['server_if_list'] = $this->getIP_information();
+
+        $dev_config['addon_info'] = array();
+        if (!empty($dev_config['addon'])) {
+            $hw_addon = explode(',', $dev_config['addon']);
+            foreach ($hw_addon as $key) {
+                $hw_data = $this->getSccp_model_information('byid', false, "all", array('model' => $key));
+                $dev_config['addon_info'][$key] = $hw_data[0]['loadimage'];
+            }
+        }
+        $lang_data =  $this->extconfigs->getextConfig('sccp_lang');
+        
+        return $this->xmlinterface->create_SEP_XML($this->sccppath["tftp_path"], $data_value, $dev_config, $dev_id, $lang_data);
+        
+        
+    /*
+        
         $var_xml_general_fields = array('authenticationURL' => 'dev_authenticationURL', 'informationURL' => 'dev_informationURL', 'messagesURL' => 'dev_messagesURL',
             'servicesURL' => 'dev_servicesURL', 'directoryURL' => 'dev_directoryURL', 'proxyServerURL' => 'dev_proxyServerURL', 'idleTimeout' => 'dev_idleTimeout',
             'idleURL' => 'dev_idleURL', 'sshUserId' => 'dev_sshUserId', 'sshPassword' => 'dev_sshPassword', 'deviceProtocol' => 'dev_deviceProtocol'
@@ -1937,6 +1992,8 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
             die('Error Hardware templatee :' . $xml_template . ' not found');
         }
         return time();
+     * 
+     */
     }
 
     function sccp_delete_device_XML($dev_id = '') {

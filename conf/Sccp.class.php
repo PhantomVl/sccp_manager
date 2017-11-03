@@ -27,7 +27,9 @@ class Sccp extends \FreePBX\modules\Core\Driver {
                     
 		);
 	}
-       public function addDevice1($id, $settings) {
+
+	/* !TODO!: Not clear what the difference is between addDevice and addDevice1 */
+        public function addDevice1($id, $settings) {
                 $sql = 'INSERT INTO sccp (id, keyword, data, flags) values (?,?,?,?)';
                 $sth = $this->database->prepare($sql);
                 $settings = is_array($settings)?$settings:array();
@@ -168,29 +170,31 @@ class Sccp extends \FreePBX\modules\Core\Driver {
 		);
 	}
 
-# ??? Would it not be better to put this part in the view directory (MVC) ?
+# !TODO!: Would it not be better to put this part in the view directory (MVC) ?
 	public function getDeviceDisplay($display, $deviceInfo, $currentcomponent, $primarySection) {
 		$section = _("Settings");
 		$category = "general";
 		$tmparr = array();
-		$tt = _("The maximum number of incoming calls to this line.");
+		$tt = _("The maximum number of incoming calls on this line.");
 //		$tmparr['incominglimit'] = array('prompttext' => _('Incoming Call Limit'), 'value' => '2', 'tt' => $tt, 'level' => 0, 'jsvalidation' => 'isEmpty()', 'failvalidationmsg' => $msgInvalidChannel);
+                /* !TODO!: Please change the default value for incominglimit to '6' or higher */
 		$tmparr['incominglimit'] = array('prompttext' => _('Incoming Call Limit'), 'value' => '2', 'tt' => $tt, 'level' => 1);
 
-                $tt = _("Asterisk context this line will use send calls to/from (Note: Only change this is you know what you are doing).");
+                $tt = _("Asterisk context which this line will use to send and receive calls (Note: Only change this is you know what you are doing).");
 		$tmparr['context'] = array('prompttext' => _('Line context'), 'value' => 'from-internal', 'tt' => $tt, 'level' => 1);
 
+		/* !TODO!: Maybe completely remove support for old numberic callgroup/pickupgroup in favor of the named version ? */
                 $tt = _("Phone call group (numeric only, example:1,3-4)");
 		$tmparr['callgroup'] = array('prompttext' => _('Call group id'),'value' => '', 'tt' => $tt, 'level' => 1);
 
-# ??? multiple allowed (not sure if that is implemented here)
+# !TODO!: multiple allowed (not sure if that is implemented here)
                 $tt = _("Phone named call group (>asterisk-11)");
 		$tmparr['namedcallgroup'] = array('prompttext' => _('Named Call Group'),'value' => '', 'tt' => $tt, 'level' => 1);
 
                 $tt = _("Sets the pickup group (numeric only, example:1,3-4) this line is a member of. Allows this line to pickup calls from remote phones which are in this callhroup.");
                 $tmparr['pickupgroup'] = array('prompttext' => _('Pickup group id'),'value' => '', 'tt' => $tt, 'level' => 1);
 
-# ??? multiple allowed (not sure if that is implemented here)
+# !TODO!: multiple allowed (not sure if that is implemented here)
                 $tt = _("Sets the named pickup name group this line is a member of. Allows this line to pickup calls from remote phones which are in this name callgroup (>asterisk-11).");
 		$tmparr['namedpickupgroup'] = array('prompttext' => _('Named Pickup Group'),'value' => '', 'tt' => $tt, 'level' => 1);
 
@@ -233,6 +237,7 @@ class Sccp extends \FreePBX\modules\Core\Driver {
                 $select[] = array( 'value' => '0x46', 'text' => 'Reminder Ring');
                 $select[] = array( 'value' => '0x47', 'text' => 'Precedence RingBank');
                 $select[] = array( 'value' => '0x48', 'text' => 'Pre-EmptionTone');
+                /* !TODO!: I would remove the values below this line, except for 'No Tone' */
                 $select[] = array( 'value' => '0x67', 'text' => '2105 HZ');
                 $select[] = array( 'value' => '0x68', 'text' => '2600 HZ');
                 $select[] = array( 'value' => '0x69', 'text' => '440 HZ');
@@ -260,7 +265,7 @@ class Sccp extends \FreePBX\modules\Core\Driver {
                 $tt = _("Outside dialtone frequency (defaul 0x22)");
                 $tmparr['secondary_dialtone_tone'] = array('prompttext' => _('Secondary dialtone'), 'value' => '0x22', 'tt' => $tt, 'select' => $select, 'level' => 1, 'type' => 'select');
 
-# ??? is there no easier way to specify a boolean radio group ?
+# !TODO!: is there no easier way to specify a boolean radio group ?
                 unset($select);
                 $select[] = array('value' => 'yes', 'text' => 'Yes');
                 $select[] = array('value' => 'no', 'text' => 'No');
@@ -278,10 +283,11 @@ class Sccp extends \FreePBX\modules\Core\Driver {
                 $select[] = array('value' => 'reject', 'text' => 'Reject');
                 $select[] = array('value' => 'silent', 'text' => 'Silent');
                 $select[] = array('value' => 'UserDefined', 'text' => 'UserDefined');
-                $tt = _("DND: Means how will dnd react when it is set on the device level dnd can have three states: off / busy(reject) / silent / UserDefined").'<br>'.
-# ??? The next entry should be "null/empty" (not UserDefined) -> to indicate the trie-state behaviour
+                $tt = _("DND: How will dnd react when it is set on the device level dnd can have three states: off / busy(reject) / silent / UserDefined").'<br>'.
+# !TODO!: The next entry should be "null/empty" (not UserDefined) -> to indicate the trie-state behaviour
                       _("UserDefined - dnd that cycles through all three states off -> reject -> silent -> off (this is the normal behaviour)").'<br>'.
-# ??? Userdefined is also a possible state, but it is not used or implemented (and it should not be implemented here, i think)
+r
+# !TODO!: Userdefined is also a possible state, but it is not used or implemented (and it should not be implemented here, i think)
                       _("Reject - Usesr can only switch off and on (in reject/busy mode)").'<br>'.
                       _("Silent  - Usesr can only switch off and on (in silent mode)");
                 $tmparr['dnd'] = array('prompttext' => _('DND'), 'value' => 'UserDefined', 'tt' => $tt, 'select' => $select, 'level' => 1, 'type' => 'radio');

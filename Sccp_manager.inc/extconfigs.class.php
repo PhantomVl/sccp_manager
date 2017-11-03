@@ -61,15 +61,15 @@ class extconfigs {
             "bindaddr" => '0.0.0.0', "port" => '2000',			# chan_sccp also supports ipv6
                                                                         # bindaddr = "::" will support ipv6 and ipv4 at the same time
             "deny" => '0.0.0.0/0.0.0.0',
-            "permit" => '0.0.0.0/0.0.0.0',					# defaults to 'internal' which means:
+            "permit" => '0.0.0.0/0.0.0.0',				# !TODO!: please change this to 'internal' which would mean:
                                                                         # permit:127.0.0.0/255.0.0.0,permit:10.0.0.0/255.0.0.0,permit:172.0.0.0/255.224.0.0,permit:192.168.0.0/255.255.0.0"
             "dateformat" => 'D.M.Y',					# This is the german default format. Should be "D/M/Y" or "D/M/YA" instead
             "disallow" => 'all', "allow" => 'alaw;ulaw',
-            "devicetable" => 'sccpdevice',
             "hotline_enabled" => 'no',
-            "hotline_context" => 'default',
-            "hotline_extension" => '*60',
+            "hotline_context" => 'default',				# !TODO!: Should this not be from-internal on FreePBX ?
+            "hotline_extension" => '*60',				# !TODO!: Is this a good default extension to dial for hotline ?
             "hotline_label" => 'hotline',
+            "devicetable" => 'sccpdevice',
             "linetable" => 'sccpline',
             "tftp_path" => '/tftpboot'
         );

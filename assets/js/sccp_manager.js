@@ -526,7 +526,7 @@ $(document).ready(function () {
 //});
 
 
-//    Bootstrap table Enabled / Disabled butons ( class="btn-tab-select") 
+//    Bootstrap table Enabled / Disabled buttons ( class="btn-tab-select") 
 $("table").on('check-all.bs.table', function (rows) {
     var id_fld = $(this).data('id');
     $(".btn-tab-select").each(function () {

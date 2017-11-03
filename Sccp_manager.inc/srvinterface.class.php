@@ -6,6 +6,7 @@
      * 
      */
 
+/* !TODO!: Re-Indent this file */
 namespace FreePBX\modules\Sccp_manager;
 
 class srvinterface {
@@ -20,7 +21,7 @@ class srvinterface {
 /*
      Core Access Function
  */      
-    public function sccp_core_comands($params = array()) {
+    public function sccp_core_commands($params = array()) {
         global $astman;
         $cmd_list = array('get_softkey' => array('cmd' => "sccp show softkeyssets", 'param' => ''),
             'get_version' => array('cmd' => "sccp show version", 'param' => ''),
@@ -76,7 +77,7 @@ class srvinterface {
         if (empty($dev_id)) {
             return array();
         }
-        $res = $this->sccp_core_comands(array('cmd' => 'get_dev_info', 'name' => $dev_id));
+        $res = $this->sccp_core_commands(array('cmd' => 'get_dev_info', 'name' => $dev_id));
         $res1 = str_replace(array("\r\n", "\r", "\n"), ';',  strip_tags((string)$res['data'])); 
         if (strpos($res1,'MAC-Address')) {
             $res2 = substr($res1,0,strpos($res1,'+--- Buttons '));
@@ -107,9 +108,10 @@ class srvinterface {
             return array();
         }
     }
+
 /*  Current not use */    
     public function sccp_list_hints() {
-        $ast_out = $this->sccp_core_comands(array('cmd' => 'get_hints'));
+        $ast_out = $this->sccp_core_commands(array('cmd' => 'get_hints'));
         $ast_out = preg_split("/[\n]/", $ast_out['data']);
         $ast_key = array();
         for ($i = 0; $i < 3; $i++) {
@@ -133,6 +135,7 @@ class srvinterface {
         return $ast_key;
     }
 
+   /* !TODO!: install.php is still using the other version number*/
     public function get_compatible_sccp() {
         $res = $this-> getChanSCCPVersion();
         if (empty($res)) {
@@ -148,7 +151,9 @@ class srvinterface {
         }
 //        return $res["vCode"];
     }
-   
+
+   /* !TODO!: Multiple Version functions (choose one)*/
+   /* !TODO!: private ? */
    function getCoreSCCPVersion() {
         $result =  array();
         $ast_out = $this->sccp_version();
@@ -158,7 +163,7 @@ class srvinterface {
         if (!empty($ast_out[1]) && $ast_out[1] == 'develop'){
             $result["develop"] = $ast_out[1];
             $res = 10;
-            if (base_convert($ast_out[3],16,10) == base_convert('702487a',16,10)) {
+            if (base_convert($ast_out[3],16,10) == base_convert('702487a',16,10)) {	/* !TODO!: This does not work as you might expect */
                 $result["vCode"] = 431;
             }
             if (base_convert($ast_out[3],16,10) >= "10403") {	// new method, RevisionNum is incremental
@@ -168,9 +173,11 @@ class srvinterface {
         return $result;
         
     }
-// rename public - >  privat 
+
+    /* !TODO!: Old Method */
+    /* !TODO!: rename public - >  private
     private function sccp_version() {
-        $ast_out = $this->sccp_core_comands(array('cmd' => 'get_version'));
+        $ast_out = $this->sccp_core_commands(array('cmd' => 'get_version'));
         if (preg_match("/Release.*\(/", $ast_out['data'] , $matches)) {
             $ast_out = substr($matches[0],9,-1);
             return explode(' ', $ast_out);
@@ -179,8 +186,9 @@ class srvinterface {
         }
     }
     
-    
-  function getChanSCCPVersion() {
+   /* !TODO!: Multiple Version functions (choose one :-)*/
+   /* !TODO!: private ? */
+   function getChanSCCPVersion() {
     global $astman;
     $result =  array();
     if (!$astman) {
@@ -244,7 +252,7 @@ class srvinterface {
 }
     
     public function sccp_list_keysets() {
-        $ast_out = $this->sccp_core_comands(array('cmd' => 'get_softkey'));
+        $ast_out = $this->sccp_core_commands(array('cmd' => 'get_softkey'));
 
         $ast_out = preg_split("/[\n]/", $ast_out['data']);
         $ast_key = array();
@@ -269,8 +277,8 @@ class srvinterface {
         return $ast_key;
     }
 
-    public function sccp_get_active_devise() {
-        $ast_out = $this->sccp_core_comands(array('cmd' => 'get_device'));
+    public function sccp_get_active_device() {
+        $ast_out = $this->sccp_core_commands(array('cmd' => 'get_device'));
 
         $ast_out = preg_split("/[\n]/", $ast_out['data']);
 
@@ -319,7 +327,7 @@ class srvinterface {
         return $ast_key;
     }
 /*
- *  Replace  sccp_core_comands($params = array()) {
+ *  Replace  sccp_core_commands($params = array()) {
  */
     
     private function astman_retrieveJSFromMetaData($segment = "") {

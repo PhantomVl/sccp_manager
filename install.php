@@ -19,6 +19,7 @@ if(class_exists($class,false)) {
     $srvinterface = new $class();
 }
 
+/* unused / moved to srvinterface
 //
 // Helper function to retrieve SCCPConfigMetaData via ASTMan
 // segment: ["", "general","device","line","softkey"]}
@@ -39,6 +40,7 @@ function astman_retrieveJSFromMetaData($astman, $segment = "") {
         return false;
     }
 }
+*/
 
 function Get_DB_config($sccp_compatible) {
 $db_config_v0 = array(
@@ -268,6 +270,7 @@ function CheckSCCPManagerDBTables($table_req) {
     }
 }
 
+/* notused */
 function CheckPermissions() {
     outn("<li>" . _("Checking Filesystem Permissions") . "</li>");
     $dst = $_SERVER['DOCUMENT_ROOT'] . '/admin/modules/sccp_manager/views';
@@ -295,13 +298,13 @@ function CheckAsteriskVersion() {
     return $ver_compatible;
 }
 
-function CheckChanSCCPСomatable() {
+function CheckChanSCCPCompatible() {
     global $srvinterface,$astman;
     if (!$astman) {
         ie_freepbx('No asterisk manager connection provided!. Installation Failed');
     }
     $sccp_compatible = $srvinterface->get_compatible_sccp();
-    outn("<li>" . _("Sccp model Compatable code : ") . $sccp_compatible . "</li>");
+    outn("<li>" . _("Sccp model Compatible code : ") . $sccp_compatible . "</li>");
     return $sccp_compatible;
 }
           
@@ -670,7 +673,7 @@ function Setup_RealTime() {
 CheckSCCPManagerDBTables($table_req);
 #CheckPermissions();
 CheckAsteriskVersion();
-$sccp_compatible = CheckChanSCCPСomatable();
+$sccp_compatible = CheckChanSCCPCompatible();
 $db_config = Get_DB_config($sccp_compatible);
 InstallDB_sccpsettings();
 InstallDB_sccpdevmodel();

@@ -1,27 +1,32 @@
 <?php
-    /**
-     * 
-     * Core Comsnd Interface 
-     * 
-     * 
-     */
+
+/**
+ * 
+ * Core Comsnd Interface 
+ * 
+ * 
+ */
 
 namespace FreePBX\modules\Sccp_manager;
+
 class dbinterface {
+
     private $val_null = 'NONE'; /// REPLACE to null Field
 
     public function __construct() {
+        
     }
 
     public function info() {
         $Ver = '13.0.2';
         return Array('Version' => $Ver,
-                        'about' =>'Data access interface ver: '.$Ver);
+            'about' => 'Data access interface ver: ' . $Ver);
     }
 
     /*
      * Core Access Function
      */
+
     public function get_db_SccpTableData($dataid, $data = array()) {
         if ($dataid == '') {
             return False;
@@ -76,6 +81,7 @@ class dbinterface {
     /*
      *      Get Sccp Device Model information
      */
+
     function getDb_model_info($get = "all", $format_list = "all", $filter = array()) {
         global $db;
         switch ($format_list) {
@@ -93,9 +99,9 @@ class dbinterface {
             case "byciscoid":
                 if (!empty($filter)) {
                     if (!empty($filter['model'])) {
-                        if (strpos($filter['model'],'loadInformation')) { 
+                        if (strpos($filter['model'], 'loadInformation')) {
                             $sql = "SELECT " . $sel_inf . " FROM sccpdevmodel WHERE (`loadinformationid` ='" . $filter['model'] . "') ORDER BY model ";
-                        } else  {
+                        } else {
                             $sql = "SELECT " . $sel_inf . " FROM sccpdevmodel WHERE (`loadinformationid` ='loadInformation" . $filter['model'] . "') ORDER BY model ";
                         }
                     } else {
@@ -204,4 +210,5 @@ class dbinterface {
         }
         return $result;
     }
+
 }

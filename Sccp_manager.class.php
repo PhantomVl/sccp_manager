@@ -16,16 +16,16 @@
  *  + Model Information 
  *  + Device Right Menu 
 
-<!-- Dial Templates are not really needed for skinny, skinny get's direct feed back from asterisk per digit -->
-<!-- If your dialplan is finite (completely fixed length (depends on your country dialplan) dialplan, then dial templates are not required) -->
-<!-- As far as i know FreePBX does also attempt to build a finite dialplan -->
-<!-- Having to maintain both an asterisk dialplan and these skinny dial templates is annoying -->
+  <!-- Dial Templates are not really needed for skinny, skinny get's direct feed back from asterisk per digit -->
+  <!-- If your dialplan is finite (completely fixed length (depends on your country dialplan) dialplan, then dial templates are not required) -->
+  <!-- As far as i know FreePBX does also attempt to build a finite dialplan -->
+  <!-- Having to maintain both an asterisk dialplan and these skinny dial templates is annoying -->
 
  *  + Dial Templates + Configuration 
  *  + Dial Templates in Global Configuration ( Enabled / Disabled ; default template )
  *  ? Dial Templates - Howto IT Include in XML.Config ???????
  *  - Dial Templates in device Configuration ( Enabled / inheret / Disabled ; template )
- 
+
  *  - WiFi Config (Bulk Deployment Utility for Cisco 7921, 7925, 7926)?????
  *  + Change internal use Field to _Field (new feature in chan_sccp (added for Sccp_manager))
  *  + Delete phone XML
@@ -76,7 +76,6 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
 //	const General - teplet.xml           = '20';
 //	const General - system_path          = '2';
 //	const General - don't store          = '99';
-
 //    private $SCCP_LANG_DICTIONARY = 'SCCP-dictionary.xml'; // CISCO LANG file search in /tftp-path 
     private $SCCP_LANG_DICTIONARY = 'be-sccp.jar'; // CISCO LANG file search in /tftp-path 
     private $pagedata = null;
@@ -84,14 +83,13 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
     private $tftpLang = array();
     private $hint_context = '@ext-local'; /// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Get it from Config !!!
     private $val_null = 'NONE'; /// REPLACE to null Field
-    
     public $sccp_model_list = array();
     private $cnf_wr = null;
     public $sccppath = array();
     public $sccpvalues = array();
     public $sccp_conf_init = array();
     public $xml_data;
-    
+
     public function __construct($freepbx = null) {
         if ($freepbx == null) {
             throw new Exception("Not given a FreePBX Object");
@@ -104,25 +102,25 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         $this->v = new \Respect\Validation\Validator();
 
         $driverNamespace = "\\FreePBX\\Modules\\Sccp_manager";
-        if(class_exists($driverNamespace,false)) {
-            foreach(glob(__DIR__."/Sccp_manager.inc/*.class.php") as $driver) {
-                if(preg_match("/\/([a-z1-9]*)\.class\.php$/i",$driver,$matches)) {
+        if (class_exists($driverNamespace, false)) {
+            foreach (glob(__DIR__ . "/Sccp_manager.inc/*.class.php") as $driver) {
+                if (preg_match("/\/([a-z1-9]*)\.class\.php$/i", $driver, $matches)) {
                     $name = $matches[1];
                     $class = $driverNamespace . "\\" . $name;
-                    if(!class_exists($class,false)) {
+                    if (!class_exists($class, false)) {
                         include($driver);
                     }
-                    if(class_exists($class,false)) {
+                    if (class_exists($class, false)) {
                         $this->$name = new $class();
                     } else {
-                        throw new \Exception("Invalid Class inside in the include folder".print_r($freepbx));
+                        throw new \Exception("Invalid Class inside in the include folder" . print_r($freepbx));
                     }
-             }
+                }
             }
         } else {
             return;
         }
-            
+
 
         $this->getSccpSettingFromDB(); // Overwrite Exist 
 //        $this->getSccpSetingINI(false); // get from sccep.ini
@@ -132,19 +130,20 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
 
 
         // Load Advanced Form Constuctor Data 
-        $xml_vars = __DIR__ . '/conf/sccpgeneral.xml.v'.$this->sccpvalues['sccp_compatible']['data'];
+        $xml_vars = __DIR__ . '/conf/sccpgeneral.xml.v' . $this->sccpvalues['sccp_compatible']['data'];
         if (!file_exists($xml_vars)) {
             $xml_vars = __DIR__ . '/conf/sccpgeneral.xml';
         }
         if (file_exists($xml_vars)) {
             $this->xml_data = simplexml_load_file($xml_vars);
             $this->initVarfromXml(); // Overwrite Exist
-        } 
+        }
     }
 
     /*
      *   Generate Input elements in Html Code from sccpgeneral.xml
      */
+
     public function ShowGroup($grup_name, $heder_show, $form_prefix = 'sccp', $form_values = null) {
         $htmlret = "";
         if (empty($form_values)) {
@@ -167,6 +166,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
     /*
      *    Load config vars from base array
      */
+
     public function initVarfromDefs() {
         foreach ($this->extconfigs->getextConfig('sccpDefaults') as $key => $value) {
             if (empty($this->sccpvalues[$key])) {
@@ -178,6 +178,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
     /*
      *    Load config vars from xml
      */
+
     public function initVarfromXml() {
         if ((array) $this->xml_data) {
             foreach ($this->xml_data->xpath('//page_group') as $item) {
@@ -232,26 +233,31 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
     }
 
     /* unused */
+
     public function doConfigPageInit($page) {
         $this->doGeneralPost();
     }
 
     /* unused */
+
     public function install() {
         
     }
 
     /* unused */
+
     public function uninstall() {
         
     }
 
     /* unused */
+
     public function backup() {
         
     }
 
     /* unused */
+
     public function restore($backup) {
         
     }
@@ -513,7 +519,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
 
     public function ajaxRequest($req, &$setting) {
         switch ($req) {
-            case 'savesettings':		/* !TODO!: mixing snake case and camel case, chooose one :-) */
+            case 'savesettings': /* !TODO!: mixing snake case and camel case, chooose one :-) */
             case "save_hardware":
             case "save_dp_template":
             case "delete_hardware":
@@ -553,7 +559,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 $this->save_submit($request);
                 $this->sccp_db_save_setting();
 //                $this->sccp_create_sccp_init();
-                
+
                 $res = $this->srvinterface->sccp_core_commands(array('cmd' => 'sccp_reload'));
                 $msg = 'Config Saved: ' . $res['Response'] . '. Info :' . $res['data'];
 //                needreload();
@@ -567,7 +573,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 return $this->save_hw_phone($request);
 
                 break;
-            case "save_dp_template":			/* !TODO!: dialplan templates should be removed (only required for very old devices (like ATA) */
+            case "save_dp_template": /* !TODO!: dialplan templates should be removed (only required for very old devices (like ATA) */
                 $res = $this->save_DialPlant($request);
                 if (empty($res)) {
                     return array('status' => true, 'search' => '?display=sccp_adv', 'hash' => 'sccpdialplan');
@@ -579,7 +585,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 if (!empty($request['dialplan'])) {
                     $get_file = $request['dialplan'];
                     $res = $this->del_DialPlant($get_file);
-                    return array('status' => true, 'message' => 'Dial Template has been deleted ! ', 'table_reload'=>true);
+                    return array('status' => true, 'message' => 'Dial Template has been deleted ! ', 'table_reload' => true);
                 } else {
                     return array('status' => false, 'message' => print_r($res));
                 }
@@ -630,14 +636,14 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                             $dev_list = $this->srvinterface->sccp_get_active_device();
                             foreach ($dev_list as $key => $data) {
                                 if ($cmd_id == 'reset_token') {
-                                    if (($data['token'] == 'Rej') || ($data['status'] == 'Token ') ) {
+                                    if (($data['token'] == 'Rej') || ($data['status'] == 'Token ')) {
                                         $res = $this->srvinterface->sccp_core_commands(array('cmd' => 'reset_token', 'name' => $key));
-                                        $msg .= 'Send Token reset to :'. $key .' ';
+                                        $msg .= 'Send Token reset to :' . $key . ' ';
                                     }
                                 } else {
                                     $res = $this->srvinterface->sccp_core_commands(array('cmd' => 'reset_phone', 'name' => $key));
                                     $msg .= $res['Response'] . ' ' . $res['data'] . ' ';
-                                }    
+                                }
 //                                $msg .= $res['Response'] . ' ' . $res['data'] . ' ';
                             }
                         }
@@ -678,7 +684,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 $save_settings = array();
                 if (!empty($request['model'])) {
                     foreach ($request['model'] as $idv) {
-                        $this->dbinterface ->sccp_save_db('sccpdevmodel', array('model' => $idv, 'enabled' => $model_set), 'update', "model");
+                        $this->dbinterface->sccp_save_db('sccpdevmodel', array('model' => $idv, 'enabled' => $model_set), 'update', "model");
                     }
                 }
                 return array('status' => true, 'table_reload' => true);
@@ -772,7 +778,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                             $dev_id['status'] = $staus[$id_name]['status'];
                             $dev_id['address'] = $staus[$id_name]['address'];
                             $dev_id['new_hw'] = 'N';
-                            $staus[$id_name]['news'] ='N';
+                            $staus[$id_name]['news'] = 'N';
                         } else {
                             $dev_id['description'] = '- -';
                             $dev_id['status'] = 'not connected';
@@ -788,30 +794,28 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                             $dev_data = $this->srvinterface->sccp_getdevice_info($id_name);
                             if (!empty($dev_data['SCCP_Vendor']['model_id'])) {
 //                            $dev_data = $this->sccp_getdevice_info($id_name);
-                                $dev_addon= $dev_data['SCCP_Vendor']['model_addon'];
+                                $dev_addon = $dev_data['SCCP_Vendor']['model_addon'];
                                 if (empty($dev_addon)) {
                                     $dev_addon = null;
                                 }
-                                $dev_schema =  $this-> getSccp_model_information('byciscoid', false, "all", array('model' =>$dev_data['SCCP_Vendor']['model_id']));
-                                $result[] = array('name' => $id_name, 'mac' => $id_name, 'button' => '---', 'type' => $dev_schema[0]['model'],  'new_hw' => 'Y',
-                                    'description' => '*NEW* '.$dev_ids['descr'], 'status' => '*NEW* '.$dev_ids['status'], 'address' => $dev_ids['address'], 
+                                $dev_schema = $this->getSccp_model_information('byciscoid', false, "all", array('model' => $dev_data['SCCP_Vendor']['model_id']));
+                                $result[] = array('name' => $id_name, 'mac' => $id_name, 'button' => '---', 'type' => $dev_schema[0]['model'], 'new_hw' => 'Y',
+                                    'description' => '*NEW* ' . $dev_ids['descr'], 'status' => '*NEW* ' . $dev_ids['status'], 'address' => $dev_ids['address'],
                                     'addon' => $dev_addon);
                             }
                         }
                     }
-
                 }
                 return $result;
                 break;
-                
+
             case "getDialTemplate":
-                $result = $this->get_DP_list();			/* !TODO!: please use DialPlan instead of DP */
+                $result = $this->get_DP_list();   /* !TODO!: please use DialPlan instead of DP */
                 if (empty($result)) {
                     $result = array();
                 }
                 return $result;
                 break;
-                
         }
     }
 
@@ -826,6 +830,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
      * *  Save Hardware Device Information to Db + ???? Create / update XML Profile
      * 
      */
+
     function save_hw_phone($get_settings, $validateonly = false) {
         $hdr_prefix = 'sccp_hw_';
         $hdr_arprefix = 'sccp_hw-ar_';
@@ -877,10 +882,10 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                     }
                     if (!empty($get_settings[$hdr_arprefix . $key])) {
                         $arr_data = '';
-                        foreach ($get_settings[$hdr_arprefix. $key] as $vkey => $vval) {
+                        foreach ($get_settings[$hdr_arprefix . $key] as $vkey => $vval) {
                             $tmp_data = '';
                             foreach ($vval as $vkey => $vval) {
-                                    $tmp_data .= $vval . '/';
+                                $tmp_data .= $vval . '/';
                             }
                             if (strlen($tmp_data) > 2) {
                                 $arr_data .= substr($tmp_data, 0, -1) . ';';
@@ -889,7 +894,6 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                         $arr_data = substr($arr_data, 0, -1);
                         $value = $arr_data;
                     }
-                    
             }
             if (!empty($value)) {
                 $save_settings[$key] = $value;
@@ -902,16 +906,16 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         $lines_list = $this->dbinterface->get_db_SccpTableData('SccpExtension');
         $max_btn = ((!empty($get_settings['buttonscount']) ? $get_settings['buttonscount'] : 100));
         $last_btn = $max_btn;
-        for ($it = $max_btn; $it >=0; $it--) {
+        for ($it = $max_btn; $it >= 0; $it--) {
             if (!empty($get_settings['button' . $it . '_type'])) {
                 $last_btn = $it;
                 $btn_t = $get_settings['button' . $it . '_type'];
-                if ($btn_t != 'empty'){
+                if ($btn_t != 'empty') {
                     break;
                 }
             }
         }
-        
+
         for ($it = 0; $it <= $last_btn; $it++) {
             if (!empty($get_settings['button' . $it . '_type'])) {
                 $btn_t = $get_settings['button' . $it . '_type'];
@@ -938,7 +942,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                     case 'monitor':
                         $btn_t = 'speeddial';
                         $btn_opt = (string) $get_settings['button' . $it . '_line'];
-                        $db_res = $this-> dbinterface->get_db_SccpTableData('SccpExtension', array('name' => $btn_opt));
+                        $db_res = $this->dbinterface->get_db_SccpTableData('SccpExtension', array('name' => $btn_opt));
                         $btn_n = $db_res[0]['label'];
                         $btn_opt .= ',' . $btn_opt . $this->hint_context;
                         break;
@@ -968,9 +972,9 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                     case 'adv.line':
                         $btn_t = 'line';
                         $btn_n = (string) $get_settings['button' . $it . '_line'];
-                        $btn_n .= '@'.(string)$get_settings['button' . $it . '_advline'];
+                        $btn_n .= '@' . (string) $get_settings['button' . $it . '_advline'];
                         $btn_opt = (string) $get_settings['button' . $it . '_advopt'];
-                        
+
                         break;
                     case 'line':
                     case 'silent':
@@ -998,7 +1002,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         }
 
 //      Sace Buttons config
-        $this->dbinterface ->sccp_save_db("sccpbuttons", $save_buttons, $update_hw, '', $name_dev);
+        $this->dbinterface->sccp_save_db("sccpbuttons", $save_buttons, $update_hw, '', $name_dev);
 
 //      Create Device XML 
         $this->sccp_create_device_XML($name_dev);
@@ -1065,37 +1069,36 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                             'type' => $this->sccpvalues['allow']['type']);
                     }
                     break;
-                    
+
                 case 'sccp_ntp_timezone':
-                        $tz_id = $value;
-                        $TZdata = $this-> extconfigs->getextConfig('sccp_timezone',$tz_id);
-                        if (!empty($TZdata)){
-                            $save_settings[] = array('keyword' => 'tzoffset', 'data' => ($TZdata['offset']/60),
+                    $tz_id = $value;
+                    $TZdata = $this->extconfigs->getextConfig('sccp_timezone', $tz_id);
+                    if (!empty($TZdata)) {
+                        $save_settings[] = array('keyword' => 'tzoffset', 'data' => ($TZdata['offset'] / 60),
                             'seq' => '98',
                             'type' => '2');
-                        }
+                    }
                     break;
             }
         }
         if (!empty($save_settings)) {
             $this->sccp_db_save_setting($save_settings);
-            $this->getSccpSettingFromDB(); 
+            $this->getSccpSettingFromDB();
 //            $this->sccp_create_sccp_init();
         }
         $this->sccp_create_sccp_init(); // Rewrite Config.
         $save_settings[] = array('status' => true);
         return $save_settings;
     }
-    
+
     public function getSccpSettingFromDB() {
         $raw_data = $this->dbinterface->get_db_SccpSetting();
         foreach ($raw_data as $var) {
             $this->sccpvalues[$var['keyword']] = array('keyword' => $var['keyword'], 'data' => $var['data'], 'seq' => $var['seq'], 'type' => $var['type']);
         }
         return;
-        
-    }    
-    
+    }
+
     function sccp_get_keysetdata($name) {
 
         if ($name == 'default') {
@@ -1126,7 +1129,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         $file_context = $keysetData['name'];
         if ($file_context != 'default') {
             $confDir = $amp_conf["ASTETCDIR"];
-            if (strlen($confDir) < 1) {				/* !TODO!: Can this actually happen, or does it mean amp_conf array is empty ? */
+            if (strlen($confDir) < 1) { /* !TODO!: Can this actually happen, or does it mean amp_conf array is empty ? */
                 $confDir = "/etc/asterisk";
             }
             $inputfile = "$confDir/sccp.conf";
@@ -1406,6 +1409,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
     /*
      *    Check tftp/xml file path and permissions
      */
+
     private function init_tftp_lang_path() {
         $dir = $this->sccppath["tftp_path"];
         foreach ($this->extconfigs->getextConfig('sccp_lang') as $lang_key => $lang_value) {
@@ -1422,10 +1426,11 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
      *    Check file paths and permissions
      */
     /* !TODO!: This function is getting a little big. Might be possible to sperate tftp work into it's own file/class */
+
     function init_sccp_path() {
         global $db;
-        global $amp_conf;        
-        
+        global $amp_conf;
+
         $confDir = $amp_conf["ASTETCDIR"];
         if (empty($this->sccppath["asterisk"])) {
             if (strlen($confDir) < 1) {
@@ -1446,8 +1451,8 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 }
             }
             if (empty($this->sccppath["tftp_path"])) {
-                if (file_exists($this->extconfigs->getextConfig('sccpDefaults',"tftp_path"))) {
-                    $this->sccppath["tftp_path"] = $this->extconfigs->getextConfig('sccpDefaults',"tftp_path");
+                if (file_exists($this->extconfigs->getextConfig('sccpDefaults', "tftp_path"))) {
+                    $this->sccppath["tftp_path"] = $this->extconfigs->getextConfig('sccpDefaults', "tftp_path");
                 }
             }
         }
@@ -1480,7 +1485,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
             }
         }
 
-        $this->sccpvalues['sccp_compatible'] = array('keyword' => 'compatible', 'data' => $this->srvinterface->get_compatible_sccp(), 'type' => '1', 'seq' => '99');                
+        $this->sccpvalues['sccp_compatible'] = array('keyword' => 'compatible', 'data' => $this->srvinterface->get_compatible_sccp(), 'type' => '1', 'seq' => '99');
 //        $this->sccpvalues['sccp_compatible'] = '11';
 
         $driver = $this->FreePBX->Core->getAllDriversInfo();
@@ -1489,17 +1494,17 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
             $driver_replace = 'yes';
         } else {
             if (empty($driver['sccp']['Version'])) {
-                $driver_replace = 'yes';                
+                $driver_replace = 'yes';
             } else {
-                if ($driver['sccp']['Version'] != $this->sccp_driver_ver){
-                    $driver_replace = 'yes';                
+                if ($driver['sccp']['Version'] != $this->sccp_driver_ver) {
+                    $driver_replace = 'yes';
                 }
             }
         }
 
         $dst = $_SERVER['DOCUMENT_ROOT'] . '/admin/modules/core/functions.inc/drivers/Sccp.class.php';
-        if (!file_exists($dst) || $driver_replace =='yes') {
-            $src_path = $_SERVER['DOCUMENT_ROOT'] . '/admin/modules/sccp_manager/conf/' . basename($dst).'.v'.$this->sccpvalues['sccp_compatible']['data'];
+        if (!file_exists($dst) || $driver_replace == 'yes') {
+            $src_path = $_SERVER['DOCUMENT_ROOT'] . '/admin/modules/sccp_manager/conf/' . basename($dst) . '.v' . $this->sccpvalues['sccp_compatible']['data'];
             if (file_exists($src_path)) {
                 copy($src_path, $dst);
             } else {
@@ -1507,9 +1512,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 copy($src_path, $dst);
             }
         } else {
-              $driver = $this->FreePBX->Core->getAllDriversInfo();
-              
-
+            $driver = $this->FreePBX->Core->getAllDriversInfo();
         }
 
         if (!file_exists($this->sccppath["sccp_conf"])) { // System re Config 
@@ -1538,35 +1541,36 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
      */
     /* !TODO!: please use DialPlan instead of DP */
     /* !TODO!: I think Dialplan stuff can be removed or at least commented out */
+
     function get_DP_list() {
-        $dir = $this->sccppath["tftp_DP"].'/*.xml';
-        $base_len = strlen($this->sccppath["tftp_DP"])+ 1;
-        $res =  glob($dir);
+        $dir = $this->sccppath["tftp_DP"] . '/*.xml';
+        $base_len = strlen($this->sccppath["tftp_DP"]) + 1;
+        $res = glob($dir);
         $dp_list = array();
         foreach ($res as $key => $value) {
-            $res[$key] = array('id'=> substr($value,$base_len,-4), 'file' => substr($value,$base_len));
+            $res[$key] = array('id' => substr($value, $base_len, -4), 'file' => substr($value, $base_len));
         }
-        
+
         return $res;
     }
 
     function get_DialPlan($get_file) {
-        $file = $this->sccppath["tftp_DP"].'/'.$get_file.'.xml';
+        $file = $this->sccppath["tftp_DP"] . '/' . $get_file . '.xml';
         if (file_exists($file)) {
 //            $load_xml_data = simplexml_load_file($file);
 
-            $fileContents= file_get_contents($file);
+            $fileContents = file_get_contents($file);
             $fileContents = str_replace(array("\n", "\r", "\t"), '', $fileContents);
             $fileContents = trim(str_replace('"', "'", $fileContents));
             $fileContents = strtolower($fileContents);
-            $res  = (array) simplexml_load_string($fileContents);     
+            $res = (array) simplexml_load_string($fileContents);
         }
         return $res;
     }
 
     function del_DialPlan($get_file) {
         if (!empty($get_file)) {
-            $file = $this->sccppath["tftp_DP"].'/'.$get_file.'.xml';
+            $file = $this->sccppath["tftp_DP"] . '/' . $get_file . '.xml';
             if (file_exists($file)) {
                 $res = unlink($file);
             }
@@ -1574,58 +1578,60 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         return $res;
     }
 
-    
     function save_DialPlan($get_settings) {
         $xmlstr = "<DIALTEMPLATE>\n";
-        $dialFelds = array('match','timeout','rewrite','tone'); //str -to lo ! 
+        $dialFelds = array('match', 'timeout', 'rewrite', 'tone'); //str -to lo ! 
 
         $hdr_prefix = 'sccp_dial_';
         $hdr_arprefix = 'sccp_dial-ar_';
         $save_data = array();
         $integer_msg = _("%s must be a non-negative integer");
         $errors = array();
-        foreach ($get_settings[$hdr_arprefix.'dialtemplate'] as $key => $value) {
-            $xmlstr .=  '<TEMPLATE';
+        foreach ($get_settings[$hdr_arprefix . 'dialtemplate'] as $key => $value) {
+            $xmlstr .= '<TEMPLATE';
             if (!empty($value['match'])) {
-                foreach ($dialFelds as $fld){
-                    if (isset($value[$fld]) ) {
-                        if ($value[$fld] == 'empty' || $value[$fld] == '')  {
+                foreach ($dialFelds as $fld) {
+                    if (isset($value[$fld])) {
+                        if ($value[$fld] == 'empty' || $value[$fld] == '') {
 //                            
                         } else {
-                            $xmlstr .=  ' '.$fld.'="'.(string)$value[$fld].'"';
+                            $xmlstr .= ' ' . $fld . '="' . (string) $value[$fld] . '"';
                         }
                     }
                 }
             } else {
                 $errors = array('Fields need to match !!');
-                
             }
             $xmlstr .= "/>\n";
         }
         $xmlstr .= '</DIALTEMPLATE>';
         if (!empty($get_settings['idtemplate'])) {
             if ($get_settings['idtemplate'] == '*new*') {
-                if (!empty($get_settings[$hdr_prefix.'dialtemplate_name'])) {
-                    $put_file = (string)$get_settings[$hdr_prefix.'dialtemplate_name'];
-                } else { $errors = array('Fields Dial Plan Name is requered !!'); }
-            } else $put_file = (string)$get_settings['idtemplate'];
-        } else { $errors = array('Fields Dial Plan Name is requered !!'); }
+                if (!empty($get_settings[$hdr_prefix . 'dialtemplate_name'])) {
+                    $put_file = (string) $get_settings[$hdr_prefix . 'dialtemplate_name'];
+                } else {
+                    $errors = array('Fields Dial Plan Name is requered !!');
+                }
+            } else
+                $put_file = (string) $get_settings['idtemplate'];
+        } else {
+            $errors = array('Fields Dial Plan Name is requered !!');
+        }
 
         if (empty($errors)) {
 //            $put_file = 'test';
-            $put_file = str_replace(array("\n", "\r", "\t","/","\\",".",","), '', $put_file);            
-            $file = $this->sccppath["tftp_DP"].'/'.$put_file.'.xml';
+            $put_file = str_replace(array("\n", "\r", "\t", "/", "\\", ".", ","), '', $put_file);
+            $file = $this->sccppath["tftp_DP"] . '/' . $put_file . '.xml';
             file_put_contents($file, $xmlstr);
         }
-        
+
         return $errors;
     }
-    
+
     /*
      *      Save Config Value to mysql DB
      *      sccp_db_save_setting(empty) - Save All settings from $sccpvalues
      */
-
 
     private function sccp_db_save_setting($save_value = array()) {
         global $db;
@@ -1652,7 +1658,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
      */
 
     function sccp_create_tftp_XML() {
-        
+
         foreach ($this->sccpvalues as $key => $value) {
             $data_value[$key] = $value['data'];
         }
@@ -1661,99 +1667,99 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
 
         if (empty($model_information))
             $model_information = $this->getSccp_model_information($get = "all", $validate = false); // Get All
-        
-        $lang_data =  $this->extconfigs->getextConfig('sccp_lang');
-        
-        $this->xmlinterface->create_default_XML($this->sccppath["tftp_path"], $data_value,  $model_information, $lang_data);
-        
-/*                
-        $def_xml_fields = array('authenticationURL', 'informationURL', 'messagesURL', 'servicesURL', 'directoryURL', 'proxyServerURL', 'idleTimeout', 'idleURL');
-        $def_xml_locale = array('userLocale', 'networkLocaleInfo', 'networkLocale');
-        $xml_name = $this->sccppath["tftp_path"] . '/XMLDefault.cnf.xml';
-        $xml_template = $this->sccppath["tftp_templates"] . '/XMLDefault.cnf.xml_template';
 
-        if (file_exists($xml_template)) {
-            $xml_work = simplexml_load_file($xml_template);
+        $lang_data = $this->extconfigs->getextConfig('sccp_lang');
+
+        $this->xmlinterface->create_default_XML($this->sccppath["tftp_path"], $data_value, $model_information, $lang_data);
+
+        /*
+          $def_xml_fields = array('authenticationURL', 'informationURL', 'messagesURL', 'servicesURL', 'directoryURL', 'proxyServerURL', 'idleTimeout', 'idleURL');
+          $def_xml_locale = array('userLocale', 'networkLocaleInfo', 'networkLocale');
+          $xml_name = $this->sccppath["tftp_path"] . '/XMLDefault.cnf.xml';
+          $xml_template = $this->sccppath["tftp_templates"] . '/XMLDefault.cnf.xml_template';
+
+          if (file_exists($xml_template)) {
+          $xml_work = simplexml_load_file($xml_template);
 
 
-            $xnode = &$xml_work->callManagerGroup->members;
-            if ($this->sccpvalues['bindaddr']['data'] == '0.0.0.0') {
-                $ifc = 0;
-                foreach ($this->getIP_information() as $value) {
-                    if (!empty($value[0])) {
-                        if (!in_array($value[0], array('0.0.0.0', '127.0.0.1'), true)) {
-                            $xnode_obj = clone $xnode->member;
-                            $xnode_obj['priority'] = $ifc;
-                            //$xnode_obj =  &$xnode -> member -> callManager;
-                            $xnode_obj->callManager->name = $this->sccpvalues['servername']['data'];
-                            $xnode_obj->callManager->ports->ethernetPhonePort = $this->sccpvalues['port']['data'];
-                            $xnode_obj->callManager->processNodeName = $value[0];
-                            if ($ifc === 0) {
-                                $this->replaceSimpleXmlNode($xnode->member, $xnode_obj);
-                            } else {
-                                $this->appendSimpleXmlNode($xnode->member, $xnode_obj);
-                            }
-                            $ifc ++;
-                        }
-                    }
-                }
-            } else {
-                $xnode->member['priority'] = '0';
-                $xnode_obj = &$xnode->member->callManager;
-                $xnode_obj->name = $this->sccpvalues['servername']['data'];
-                $xnode_obj->ports->ethernetPhonePort = $this->sccpvalues['port']['data'];
-                $xnode_obj->processNodeName = $this->sccpvalues['bindaddr']['data'];
-            }
-            $this->replaceSimpleXmlNode($xml_work->callManagerGroup->members, $xnode);
+          $xnode = &$xml_work->callManagerGroup->members;
+          if ($this->sccpvalues['bindaddr']['data'] == '0.0.0.0') {
+          $ifc = 0;
+          foreach ($this->getIP_information() as $value) {
+          if (!empty($value[0])) {
+          if (!in_array($value[0], array('0.0.0.0', '127.0.0.1'), true)) {
+          $xnode_obj = clone $xnode->member;
+          $xnode_obj['priority'] = $ifc;
+          //$xnode_obj =  &$xnode -> member -> callManager;
+          $xnode_obj->callManager->name = $this->sccpvalues['servername']['data'];
+          $xnode_obj->callManager->ports->ethernetPhonePort = $this->sccpvalues['port']['data'];
+          $xnode_obj->callManager->processNodeName = $value[0];
+          if ($ifc === 0) {
+          $this->replaceSimpleXmlNode($xnode->member, $xnode_obj);
+          } else {
+          $this->appendSimpleXmlNode($xnode->member, $xnode_obj);
+          }
+          $ifc ++;
+          }
+          }
+          }
+          } else {
+          $xnode->member['priority'] = '0';
+          $xnode_obj = &$xnode->member->callManager;
+          $xnode_obj->name = $this->sccpvalues['servername']['data'];
+          $xnode_obj->ports->ethernetPhonePort = $this->sccpvalues['port']['data'];
+          $xnode_obj->processNodeName = $this->sccpvalues['bindaddr']['data'];
+          }
+          $this->replaceSimpleXmlNode($xml_work->callManagerGroup->members, $xnode);
 
-            foreach ($def_xml_fields as $value) {
-                if (!empty($this->sccpvalues['dev_' . $value])) {
-                    $xml_work->$value = trim($this->sccpvalues['dev_' . $value]['data']);
-                }
-            }
-            foreach ($def_xml_locale as $key) {
-                if (!empty($xml_work->$key)) {
-                    $xnode = &$xml_work->$key;
-                    switch ($key) {
-                        case 'userLocale':
-                        case 'networkLocaleInfo':
-                            if ($key == 'networkLocaleInfo') {
-                                $lang = $this->sccpvalues['netlang']['data'];
-                            } else {
-                                $lang = $this->sccpvalues['devlang']['data'];
-                            }
-//                            configs->getConfig('sccp_lang')
-                            $lang_arr =  $this->extconfigs->getextConfig('sccp_lang',$lang);
-                            $xnode->name = $lang_arr['locale'];
-                            $xnode->langCode = $$lang_arr['code'];
-//                            $this -> replaceSimpleXmlNode($xml_work->$key,$xnode); 
-                            break;
-                        case 'networkLocale':
-                            $lang_arr =  $this->extconfigs->getextConfig('sccp_lang',$this->sccpvalues['netlang']['data']);                            
-                            $xnode = $lang_arr['language'];
-                            break;
-                    }
-                    //$this-> replaceSimpleXmlNode($xml_work->$value, $xnode );                     
-                }
-            }
+          foreach ($def_xml_fields as $value) {
+          if (!empty($this->sccpvalues['dev_' . $value])) {
+          $xml_work->$value = trim($this->sccpvalues['dev_' . $value]['data']);
+          }
+          }
+          foreach ($def_xml_locale as $key) {
+          if (!empty($xml_work->$key)) {
+          $xnode = &$xml_work->$key;
+          switch ($key) {
+          case 'userLocale':
+          case 'networkLocaleInfo':
+          if ($key == 'networkLocaleInfo') {
+          $lang = $this->sccpvalues['netlang']['data'];
+          } else {
+          $lang = $this->sccpvalues['devlang']['data'];
+          }
+          //                            configs->getConfig('sccp_lang')
+          $lang_arr =  $this->extconfigs->getextConfig('sccp_lang',$lang);
+          $xnode->name = $lang_arr['locale'];
+          $xnode->langCode = $$lang_arr['code'];
+          //                            $this -> replaceSimpleXmlNode($xml_work->$key,$xnode);
+          break;
+          case 'networkLocale':
+          $lang_arr =  $this->extconfigs->getextConfig('sccp_lang',$this->sccpvalues['netlang']['data']);
+          $xnode = $lang_arr['language'];
+          break;
+          }
+          //$this-> replaceSimpleXmlNode($xml_work->$value, $xnode );
+          }
+          }
 
-            $msro = $this->getSccp_model_information($get = "enabled", $validate = false); // Get Active
-            if (empty($msro))
-                $msro = $this->getSccp_model_information($get = "all", $validate = false); // Get All
-            foreach ($msro as $var) {
-                if (!empty($var['loadinformationid'])) {
-                    $node = $xml_work->addChild($var['loadinformationid'], $var['loadimage']);
-                    $node->addAttribute('model', $var['vendor'] . ' ' . $var['model']);
-                }
-            }
-            $xml_work->asXml($xml_name);  // Save  XMLDefault1.cnf.xml
-            //
-            //
-            //
-//            die(print_r($xml_work));            
-        }
- * 
- */
+          $msro = $this->getSccp_model_information($get = "enabled", $validate = false); // Get Active
+          if (empty($msro))
+          $msro = $this->getSccp_model_information($get = "all", $validate = false); // Get All
+          foreach ($msro as $var) {
+          if (!empty($var['loadinformationid'])) {
+          $node = $xml_work->addChild($var['loadinformationid'], $var['loadimage']);
+          $node->addAttribute('model', $var['vendor'] . ' ' . $var['model']);
+          }
+          }
+          $xml_work->asXml($xml_name);  // Save  XMLDefault1.cnf.xml
+          //
+          //
+          //
+          //            die(print_r($xml_work));
+          }
+         * 
+         */
     }
 
     /*
@@ -1761,7 +1767,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
      */
 
     function sccp_create_device_XML($dev_id = '') {
-        
+
         if (empty($dev_id)) {
             return false;
         }
@@ -1771,7 +1777,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         foreach ($this->sccpvalues as $key => $value) {
             $data_value[$key] = $value['data'];
         }
-        $data_value['ntp_timezone_id'] = $this-> extconfigs->getextConfig('sccp_timezone',$data_value['ntp_timezone']);
+        $data_value['ntp_timezone_id'] = $this->extconfigs->getextConfig('sccp_timezone', $data_value['ntp_timezone']);
         $data_value['server_if_list'] = $this->getIP_information();
 
         $dev_config['addon_info'] = array();
@@ -1782,234 +1788,234 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 $dev_config['addon_info'][$key] = $hw_data[0]['loadimage'];
             }
         }
-        $lang_data =  $this->extconfigs->getextConfig('sccp_lang');
-        
+        $lang_data = $this->extconfigs->getextConfig('sccp_lang');
+
         return $this->xmlinterface->create_SEP_XML($this->sccppath["tftp_path"], $data_value, $dev_config, $dev_id, $lang_data);
-        
-        
-    /*
-        
-        $var_xml_general_fields = array('authenticationURL' => 'dev_authenticationURL', 'informationURL' => 'dev_informationURL', 'messagesURL' => 'dev_messagesURL',
-            'servicesURL' => 'dev_servicesURL', 'directoryURL' => 'dev_directoryURL', 'proxyServerURL' => 'dev_proxyServerURL', 'idleTimeout' => 'dev_idleTimeout',
-            'idleURL' => 'dev_idleURL', 'sshUserId' => 'dev_sshUserId', 'sshPassword' => 'dev_sshPassword', 'deviceProtocol' => 'dev_deviceProtocol'
-            );
-        $var_xml_general_vars = array('capfAuthMode' => 'null', 'capfList'=> 'null', 'mobility' => 'null', 
-                                      'phoneServices' =>'null', 'certHash' =>'null',
-                                      'deviceSecurityMode' => '1');
-        
-        if (empty($dev_id)) {
-            return false;
-        }
-        $var_hw_config = $this->dbinterface->get_db_SccpTableData("get_sccpdevice_byid", array('id' => $dev_id));
 
-        if (empty($var_hw_config)) {
-            return false;
-        }
 
-        if (!empty($var_hw_config['nametemplate'])) {
-            $xml_template = $this->sccppath["tftp_templates"] . '/' . $var_hw_config['nametemplate'];
-        } else {
-            $xml_template = $this->sccppath["tftp_templates"] . '/SEP0000000000.cnf.xml_79df_template';
-        }
-        $xml_name = $this->sccppath["tftp_path"] . '/' . $dev_id . '.cnf.xml';
-        if (file_exists($xml_template)) {
-            $xml_work = simplexml_load_file($xml_template);
+        /*
 
-            foreach ($var_xml_general_vars as $key => $data) {
-                if (isset($xml_work->$key)) {
-                    if ($data != 'null') {
-                        $xml_work->$key = $data;
-                    } else {
-                        $node = $xml_work->$key;
-                        unset($node[0][0]);
-                    }
-                }
-            }
-            
-            foreach ($xml_work as $key => $data) {
-//              Set System global Values
-                if (!empty($var_xml_general_fields[$key])) {
-                    $xml_work->$key = $this->sccpvalues[$var_xml_general_fields[$key]]['data'];
-                } 
-//              Set section Values
-                $xml_node = $xml_work->$key;
-                switch ($key) {
-                    case 'devicePool':
-                        $xml_node = $xml_work->$key;
-                        foreach ($xml_work->$key->children() as $dkey => $ddata) {
-                            switch ($dkey) {
-                                case 'dateTimeSetting':
-                                    $xnode = &$xml_node->$dkey;
-                                    $tz_id = $this->sccpvalues['ntp_timezone']['data'];
-                                    $TZdata = $this-> extconfigs->getextConfig('sccp_timezone',$tz_id);
-                                    if (empty($TZdata)){
-                                        $TZdata = array('offset' => '0', 'daylight' => '');
-                                    }
-                                    $xnode->name = $tz_id;
-                                    $xnode->dateTemplate = $this->sccpvalues['dateformat']['data'];
-                                    $xnode->timeZone = $tz_id.((empty($TZdata['daylight']))? '': '/'.$TZdata['daylight']);
+          $var_xml_general_fields = array('authenticationURL' => 'dev_authenticationURL', 'informationURL' => 'dev_informationURL', 'messagesURL' => 'dev_messagesURL',
+          'servicesURL' => 'dev_servicesURL', 'directoryURL' => 'dev_directoryURL', 'proxyServerURL' => 'dev_proxyServerURL', 'idleTimeout' => 'dev_idleTimeout',
+          'idleURL' => 'dev_idleURL', 'sshUserId' => 'dev_sshUserId', 'sshPassword' => 'dev_sshPassword', 'deviceProtocol' => 'dev_deviceProtocol'
+          );
+          $var_xml_general_vars = array('capfAuthMode' => 'null', 'capfList'=> 'null', 'mobility' => 'null',
+          'phoneServices' =>'null', 'certHash' =>'null',
+          'deviceSecurityMode' => '1');
 
-                                    if ($this->sccpvalues['ntp_config_enabled']['data'] == 'yes') {
-                                        $xnode->ntps->ntp->name = $this->sccpvalues['ntp_server']['data'];
-                                        $xnode->ntps->ntp->ntpMode = $this->sccpvalues['ntp_server_mode']['data'];
-                                    } else {
-                                        $xnode->ntps = '';
-                                    }
-                                    // Ntp Config
-                                    break;
-                                case 'srstInfo':
-                                    if ($this->sccpvalues['srst_Option']['data'] == 'user') {
-                                        break;
-                                    }
-                                    $xnode = &$xml_node->$dkey;
-                                    $xnode -> name = $this->sccpvalues['srst_Name']['data'];
-                                    $xnode -> srstOption = $this->sccpvalues['srst_Option']['data'];
-                                    $xnode -> userModifiable = $this->sccpvalues['srst_userModifiable']['data'];
-                                    $xnode -> isSecure = $this->sccpvalues['srst_isSecure']['data'];
+          if (empty($dev_id)) {
+          return false;
+          }
+          $var_hw_config = $this->dbinterface->get_db_SccpTableData("get_sccpdevice_byid", array('id' => $dev_id));
 
-                                    $srst_fld = array('srst_ip' => array('ipAddr','port') );
-//                                    $srst_fld = array('srst_ip' => array('ipAddr','port') , 'srst_sip' => array('sipIpAddr','sipPort') );
-                                    foreach ($srst_fld as $srst_pro => $srs_put){
-                                        $srst_data = explode(';', $this->sccpvalues[$srst_pro]['data']);
-                                        $si = 1;
-//                                        $xnode['test'] = $srst_data[0];
-                                        foreach ($srst_data as $value) {
-                                            $srs_val =  explode('/',$value);
-                                            $nod = $srs_put[0].$si;
-                                            $xnode -> $nod = $srs_val[0];
-                                            $nod = $srs_put[1].$si;
-                                            $xnode -> $nod = $srs_val[1];
-                                            $si ++;
-                                        }
-                                       while ($si < 4) {
-                                            $nod = $srs_put[0].$si;
-                                            $xnode -> $nod = '';
-                                            $nod = $srs_put[1].$si;
-                                            $xnode -> $nod = '';
-                                            $si ++;
-                                        }
-                                    }
-                                    break;
-                                case 'connectionMonitorDuration':
-                                    $xml_node->$dkey =  strval(intval(intval($this->sccpvalues['keepalive']['data'])* 0.75));
-                                    break;
-                                case 'callManagerGroup':
-                                    $xnode = &$xml_node->$dkey->members;
-                                    if ($this->sccpvalues['bindaddr']['data'] == '0.0.0.0') {
-                                        $ifc = 0;
-                                        foreach ($this->getIP_information() as $value) {
-                                            if (!empty($value[0])) {
-                                                if (!in_array($value[0], array('0.0.0.0', '127.0.0.1'), true)) {
-                                                    $xnode_obj = clone $xnode->member;
-//                                                $xnode_obj = $xnode -> member;
-//                                                $xnode_obj = $xnode -> addChild($xnode->member);
-                                                    $xnode_obj['priority'] = $ifc;
-                                                    //$xnode_obj =  &$xnode -> member -> callManager;
-                                                    $xnode_obj->callManager->name = $this->sccpvalues['servername']['data'];
-                                                    $xnode_obj->callManager->ports->ethernetPhonePort = $this->sccpvalues['port']['data'];
-                                                    $xnode_obj->callManager->processNodeName = $value[0];
-                                                    if ($ifc === 0) {
-                                                        $this->replaceSimpleXmlNode($xnode->member, $xnode_obj);
-                                                    } else {
-                                                        $this->appendSimpleXmlNode($xnode->member, $xnode_obj);
-                                                    }
-                                                    $ifc ++;
-                                                }
-                                            }
-                                        }
-                                    } else {
-                                        $xnode->member['priority'] = '0';
-                                        $xnode_obj = &$xnode->member->callManager;
-                                        $xnode_obj->name = $this->sccpvalues['servername']['data'];
-                                        $xnode_obj->ports->ethernetPhonePort = $this->sccpvalues['port']['data'];
-                                        $xnode_obj->processNodeName = $this->sccpvalues['bindaddr']['data'];
-                                    }
-                                    break;
-                            }
-                        }
-                        $this->replaceSimpleXmlNode($xml_work->$key, $xml_node);
-                        break;
-                    case 'versionStamp':
-                        $xml_work->$key = time();
-                        break;
-                    case 'loadInformation':
-                        $xml_work->$key = $var_hw_config["loadimage"];
-                        if (!empty($var_hw_config['addon'])) {
-                            $hw_addon = explode(',', $var_hw_config['addon']);
-                            $xnode = $xml_work->addChild('addOnModules');
-                            $ti = 1;
-                            foreach ($hw_addon as $key) {
-                                $hw_inf = $this->getSccp_model_information('byid', false, "all", array('model' => $key));
-                                $xnode_obj = $xnode->addChild('addOnModule');
-//                                if $hw_inf['loadimage']
-                                $xnode_obj->addAttribute('idx', $ti);
-                                $xnode_obj->addChild('loadInformation', $hw_inf[0]['loadimage']);
-                                $ti ++;
-                            }
-//                            $this->appendSimpleXmlNode($xml_work , $xnode_obj);
-                        }
-                        break;
-                    case 'userLocale':
-                    case 'networkLocaleInfo':
-                    case 'networkLocale':
-                        $hwlang = '';
-                        $lang = '';
-                        if (!empty($var_hw_config["_hwlang"])) {
-                            $hwlang = explode(':', $var_hw_config["_hwlang"]);
-                        }
-                        if (($key == 'networkLocaleInfo') || ($key == 'networkLocale')) {
-//                            $lang=$this->sccpvalues['netlang']['data'];
-                            $lang = (empty($hwlang[0])) ? $this->sccpvalues['netlang']['data'] : $hwlang[0];
-                        } else {
-                            $lang = (empty($hwlang[1])) ? $this->sccpvalues['devlang']['data'] : $hwlang[1];
-//                            $lang=$this->sccpvalues['devlang']['data'];
-                        }
-                        if (($lang  !='null') && (!empty(trim($lang)))) {
-                            if ($key == 'networkLocale') {
-                                $xml_work->$key = $lang;
-                            } else {
-                                $lang_arr =  $this->extconfigs->getextConfig('sccp_lang',$lang);
-                                if (!empty($lang_arr)) {
-                                    $xml_node->name = $lang_arr['locale'];
-                                    $xml_node->langCode = $lang_arr['code'];
-                                    $this->replaceSimpleXmlNode($xml_work->$key, $xml_node);
-                                }
-                            }
-                        } else {    
-                            $xml_work->$key ='';
-                        }
-                        break;
-// Move all set to $var_xml_general_vars
-//                    case 'mobility':
-//                    case 'capfList':
-//                       break;
-//                    case 'phoneServices':
-//                        break;
-//                        $xml_work->$key = '';
-                    default:
-                        break;
-                }
-            }
+          if (empty($var_hw_config)) {
+          return false;
+          }
 
-//            print_r($xml_work);
-            $xml_work->asXml($xml_name);  // Save  
-        } else {
-            die('Error Hardware template :' . $xml_template . ' not found');
-        }
-        return time();
-     * 
-     */
+          if (!empty($var_hw_config['nametemplate'])) {
+          $xml_template = $this->sccppath["tftp_templates"] . '/' . $var_hw_config['nametemplate'];
+          } else {
+          $xml_template = $this->sccppath["tftp_templates"] . '/SEP0000000000.cnf.xml_79df_template';
+          }
+          $xml_name = $this->sccppath["tftp_path"] . '/' . $dev_id . '.cnf.xml';
+          if (file_exists($xml_template)) {
+          $xml_work = simplexml_load_file($xml_template);
+
+          foreach ($var_xml_general_vars as $key => $data) {
+          if (isset($xml_work->$key)) {
+          if ($data != 'null') {
+          $xml_work->$key = $data;
+          } else {
+          $node = $xml_work->$key;
+          unset($node[0][0]);
+          }
+          }
+          }
+
+          foreach ($xml_work as $key => $data) {
+          //              Set System global Values
+          if (!empty($var_xml_general_fields[$key])) {
+          $xml_work->$key = $this->sccpvalues[$var_xml_general_fields[$key]]['data'];
+          }
+          //              Set section Values
+          $xml_node = $xml_work->$key;
+          switch ($key) {
+          case 'devicePool':
+          $xml_node = $xml_work->$key;
+          foreach ($xml_work->$key->children() as $dkey => $ddata) {
+          switch ($dkey) {
+          case 'dateTimeSetting':
+          $xnode = &$xml_node->$dkey;
+          $tz_id = $this->sccpvalues['ntp_timezone']['data'];
+          $TZdata = $this-> extconfigs->getextConfig('sccp_timezone',$tz_id);
+          if (empty($TZdata)){
+          $TZdata = array('offset' => '0', 'daylight' => '');
+          }
+          $xnode->name = $tz_id;
+          $xnode->dateTemplate = $this->sccpvalues['dateformat']['data'];
+          $xnode->timeZone = $tz_id.((empty($TZdata['daylight']))? '': '/'.$TZdata['daylight']);
+
+          if ($this->sccpvalues['ntp_config_enabled']['data'] == 'yes') {
+          $xnode->ntps->ntp->name = $this->sccpvalues['ntp_server']['data'];
+          $xnode->ntps->ntp->ntpMode = $this->sccpvalues['ntp_server_mode']['data'];
+          } else {
+          $xnode->ntps = '';
+          }
+          // Ntp Config
+          break;
+          case 'srstInfo':
+          if ($this->sccpvalues['srst_Option']['data'] == 'user') {
+          break;
+          }
+          $xnode = &$xml_node->$dkey;
+          $xnode -> name = $this->sccpvalues['srst_Name']['data'];
+          $xnode -> srstOption = $this->sccpvalues['srst_Option']['data'];
+          $xnode -> userModifiable = $this->sccpvalues['srst_userModifiable']['data'];
+          $xnode -> isSecure = $this->sccpvalues['srst_isSecure']['data'];
+
+          $srst_fld = array('srst_ip' => array('ipAddr','port') );
+          //                                    $srst_fld = array('srst_ip' => array('ipAddr','port') , 'srst_sip' => array('sipIpAddr','sipPort') );
+          foreach ($srst_fld as $srst_pro => $srs_put){
+          $srst_data = explode(';', $this->sccpvalues[$srst_pro]['data']);
+          $si = 1;
+          //                                        $xnode['test'] = $srst_data[0];
+          foreach ($srst_data as $value) {
+          $srs_val =  explode('/',$value);
+          $nod = $srs_put[0].$si;
+          $xnode -> $nod = $srs_val[0];
+          $nod = $srs_put[1].$si;
+          $xnode -> $nod = $srs_val[1];
+          $si ++;
+          }
+          while ($si < 4) {
+          $nod = $srs_put[0].$si;
+          $xnode -> $nod = '';
+          $nod = $srs_put[1].$si;
+          $xnode -> $nod = '';
+          $si ++;
+          }
+          }
+          break;
+          case 'connectionMonitorDuration':
+          $xml_node->$dkey =  strval(intval(intval($this->sccpvalues['keepalive']['data'])* 0.75));
+          break;
+          case 'callManagerGroup':
+          $xnode = &$xml_node->$dkey->members;
+          if ($this->sccpvalues['bindaddr']['data'] == '0.0.0.0') {
+          $ifc = 0;
+          foreach ($this->getIP_information() as $value) {
+          if (!empty($value[0])) {
+          if (!in_array($value[0], array('0.0.0.0', '127.0.0.1'), true)) {
+          $xnode_obj = clone $xnode->member;
+          //                                                $xnode_obj = $xnode -> member;
+          //                                                $xnode_obj = $xnode -> addChild($xnode->member);
+          $xnode_obj['priority'] = $ifc;
+          //$xnode_obj =  &$xnode -> member -> callManager;
+          $xnode_obj->callManager->name = $this->sccpvalues['servername']['data'];
+          $xnode_obj->callManager->ports->ethernetPhonePort = $this->sccpvalues['port']['data'];
+          $xnode_obj->callManager->processNodeName = $value[0];
+          if ($ifc === 0) {
+          $this->replaceSimpleXmlNode($xnode->member, $xnode_obj);
+          } else {
+          $this->appendSimpleXmlNode($xnode->member, $xnode_obj);
+          }
+          $ifc ++;
+          }
+          }
+          }
+          } else {
+          $xnode->member['priority'] = '0';
+          $xnode_obj = &$xnode->member->callManager;
+          $xnode_obj->name = $this->sccpvalues['servername']['data'];
+          $xnode_obj->ports->ethernetPhonePort = $this->sccpvalues['port']['data'];
+          $xnode_obj->processNodeName = $this->sccpvalues['bindaddr']['data'];
+          }
+          break;
+          }
+          }
+          $this->replaceSimpleXmlNode($xml_work->$key, $xml_node);
+          break;
+          case 'versionStamp':
+          $xml_work->$key = time();
+          break;
+          case 'loadInformation':
+          $xml_work->$key = $var_hw_config["loadimage"];
+          if (!empty($var_hw_config['addon'])) {
+          $hw_addon = explode(',', $var_hw_config['addon']);
+          $xnode = $xml_work->addChild('addOnModules');
+          $ti = 1;
+          foreach ($hw_addon as $key) {
+          $hw_inf = $this->getSccp_model_information('byid', false, "all", array('model' => $key));
+          $xnode_obj = $xnode->addChild('addOnModule');
+          //                                if $hw_inf['loadimage']
+          $xnode_obj->addAttribute('idx', $ti);
+          $xnode_obj->addChild('loadInformation', $hw_inf[0]['loadimage']);
+          $ti ++;
+          }
+          //                            $this->appendSimpleXmlNode($xml_work , $xnode_obj);
+          }
+          break;
+          case 'userLocale':
+          case 'networkLocaleInfo':
+          case 'networkLocale':
+          $hwlang = '';
+          $lang = '';
+          if (!empty($var_hw_config["_hwlang"])) {
+          $hwlang = explode(':', $var_hw_config["_hwlang"]);
+          }
+          if (($key == 'networkLocaleInfo') || ($key == 'networkLocale')) {
+          //                            $lang=$this->sccpvalues['netlang']['data'];
+          $lang = (empty($hwlang[0])) ? $this->sccpvalues['netlang']['data'] : $hwlang[0];
+          } else {
+          $lang = (empty($hwlang[1])) ? $this->sccpvalues['devlang']['data'] : $hwlang[1];
+          //                            $lang=$this->sccpvalues['devlang']['data'];
+          }
+          if (($lang  !='null') && (!empty(trim($lang)))) {
+          if ($key == 'networkLocale') {
+          $xml_work->$key = $lang;
+          } else {
+          $lang_arr =  $this->extconfigs->getextConfig('sccp_lang',$lang);
+          if (!empty($lang_arr)) {
+          $xml_node->name = $lang_arr['locale'];
+          $xml_node->langCode = $lang_arr['code'];
+          $this->replaceSimpleXmlNode($xml_work->$key, $xml_node);
+          }
+          }
+          } else {
+          $xml_work->$key ='';
+          }
+          break;
+          // Move all set to $var_xml_general_vars
+          //                    case 'mobility':
+          //                    case 'capfList':
+          //                       break;
+          //                    case 'phoneServices':
+          //                        break;
+          //                        $xml_work->$key = '';
+          default:
+          break;
+          }
+          }
+
+          //            print_r($xml_work);
+          $xml_work->asXml($xml_name);  // Save
+          } else {
+          die('Error Hardware template :' . $xml_template . ' not found');
+          }
+          return time();
+         * 
+         */
     }
 
     function sccp_delete_device_XML($dev_id = '') {
         if (empty($dev_id)) {
             return false;
         }
-        if ($dev_id =='all') {
+        if ($dev_id == 'all') {
             $xml_name = $this->sccppath["tftp_path"] . '/SEP*.cnf.xml';
             array_map("unlink", glob($xml_name));
         } else {
-            if  (!strpos($dev_id,'SEP')) {
+            if (!strpos($dev_id, 'SEP')) {
                 return false;
             }
             $xml_name = $this->sccppath["tftp_path"] . '/' . $dev_id . '.cnf.xml';
@@ -2018,10 +2024,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
             }
         }
     }
-    
-    
-    
-    
+
     function sccp_create_sccp_init() {
 //     Make sccp.conf data        
 //     [general]
@@ -2057,8 +2060,8 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         $dir = $this->sccppath["tftp_path"];
         $dir_tepl = $this->sccppath["tftp_templates"];
 
-        $raw_settings = $this-> dbinterface -> getDb_model_info($get,  $format_list, $filter) ;
-        
+        $raw_settings = $this->dbinterface->getDb_model_info($get, $format_list, $filter);
+
         if ($validate) {
             for ($i = 0; $i < count($raw_settings); $i++) {
                 $raw_settings[$i]['validate'] = '-;-';
@@ -2097,7 +2100,6 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         }
         return $raw_settings;
     }
-    
 
     function getIP_information() {
         $interfaces['auto'] = array('0.0.0.0', 'All', '0');

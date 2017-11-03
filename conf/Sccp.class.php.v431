@@ -1,4 +1,5 @@
 <?php
+
 // vim: set ai ts=4 sw=4 ft=php:
 // Version for SCCP Manager 13.0.0.A 
 namespace FreePBX\modules\Core\Drivers;

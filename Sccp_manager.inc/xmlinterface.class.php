@@ -1,26 +1,30 @@
 <?php
-    /**
-     * 
-     * Core Comsnd Interface 
-     * 
-     * 
-     */
 
+/**
+ * 
+ * Core Comsnd Interface 
+ * 
+ * 
+ */
 /* !TODO!: Would you like to use my XSD file to check if the provided template file is a correct cisco cnf.xml file ? */
+
 namespace FreePBX\modules\Sccp_manager;
+
 class xmlinterface {
+
     private $val_null = 'NONE'; /// REPLACE to null Field
 
     public function __construct() {
-        }
-       public function info() {
-           $Ver = '13.0.2';
-           return Array('Version' => $Ver,
-                        'about' =>'Create XML data interface ver: '.$Ver);
-       }
+        
+    }
 
-       
-    function create_default_XML($data_path = '', $data_values= array(), $model_information =array(), $lang_info =array()) {
+    public function info() {
+        $Ver = '13.0.2';
+        return Array('Version' => $Ver,
+            'about' => 'Create XML data interface ver: ' . $Ver);
+    }
+
+    function create_default_XML($data_path = '', $data_values = array(), $model_information = array(), $lang_info = array()) {
         if (empty($data_path) || empty($data_values)) {
             return;
         }
@@ -82,10 +86,10 @@ class xmlinterface {
 //                            configs->getConfig('sccp_lang')
                             if (isset($lang_info[$lang])) {
                                 $xnode->name = $lang_info[$lang]['locale'];
-                                $xnode->langCode = $lang_info[$lang]['code'];                                
+                                $xnode->langCode = $lang_info[$lang]['code'];
                             } else {
                                 $xnode->name = '';
-                                $xnode->langCode = '';                                
+                                $xnode->langCode = '';
                             }
 //                            $this -> replaceSimpleXmlNode($xml_work->$key,$xnode); 
                             break;
@@ -111,18 +115,17 @@ class xmlinterface {
             $xml_work->asXml($xml_name);  // Save  XMLDefault1.cnf.xml
         }
     }
-    
-    
-    function create_SEP_XML($data_path = '', $data_values= array(), $dev_config = array(), $dev_id = '',$lang_info =array()) {
-    
+
+    function create_SEP_XML($data_path = '', $data_values = array(), $dev_config = array(), $dev_id = '', $lang_info = array()) {
+
         $var_xml_general_fields = array('authenticationURL' => 'dev_authenticationURL', 'informationURL' => 'dev_informationURL', 'messagesURL' => 'dev_messagesURL',
             'servicesURL' => 'dev_servicesURL', 'directoryURL' => 'dev_directoryURL', 'proxyServerURL' => 'dev_proxyServerURL', 'idleTimeout' => 'dev_idleTimeout',
             'idleURL' => 'dev_idleURL', 'sshUserId' => 'dev_sshUserId', 'sshPassword' => 'dev_sshPassword', 'deviceProtocol' => 'dev_deviceProtocol'
-            );
-        $var_xml_general_vars = array('capfAuthMode' => 'null', 'capfList'=> 'null', 'mobility' => 'null', 
-                                      'phoneServices' =>'null', 'certHash' =>'null',
-                                      'deviceSecurityMode' => '1');
-        
+        );
+        $var_xml_general_vars = array('capfAuthMode' => 'null', 'capfList' => 'null', 'mobility' => 'null',
+            'phoneServices' => 'null', 'certHash' => 'null',
+            'deviceSecurityMode' => '1');
+
         if (empty($dev_id)) {
             return false;
         }
@@ -151,12 +154,12 @@ class xmlinterface {
                     }
                 }
             }
-            
+
             foreach ($xml_work as $key => $data) {
 //              Set System global Values
                 if (!empty($var_xml_general_fields[$key])) {
                     $xml_work->$key = $data_values[$var_xml_general_fields[$key]];
-                } 
+                }
 //              Set section Values
                 $xml_node = $xml_work->$key;
                 switch ($key) {
@@ -168,7 +171,7 @@ class xmlinterface {
                                     $xnode = &$xml_node->$dkey;
                                     $tz_id = $data_values['ntp_timezone'];
                                     $TZdata = $data_values['ntp_timezone_id'];
-                                    if (empty($TZdata)){
+                                    if (empty($TZdata)) {
                                         $TZdata = array('offset' => '0', 'daylight' => '', 'cisco_code' => 'Greenwich Standard Time');
                                     }
                                     $xnode->name = $tz_id;
@@ -189,36 +192,36 @@ class xmlinterface {
                                         break;
                                     }
                                     $xnode = &$xml_node->$dkey;
-                                    $xnode -> name = $data_values['srst_Name'];
-                                    $xnode -> srstOption = $data_values['srst_Option'];
-                                    $xnode -> userModifiable = $data_values['srst_userModifiable'];
-                                    $xnode -> isSecure = $data_values['srst_isSecure'];
+                                    $xnode->name = $data_values['srst_Name'];
+                                    $xnode->srstOption = $data_values['srst_Option'];
+                                    $xnode->userModifiable = $data_values['srst_userModifiable'];
+                                    $xnode->isSecure = $data_values['srst_isSecure'];
 
-                                    $srst_fld = array('srst_ip' => array('ipAddr','port') );
+                                    $srst_fld = array('srst_ip' => array('ipAddr', 'port'));
 //                                    $srst_fld = array('srst_ip' => array('ipAddr','port') , 'srst_sip' => array('sipIpAddr','sipPort') );
-                                    foreach ($srst_fld as $srst_pro => $srs_put){
+                                    foreach ($srst_fld as $srst_pro => $srs_put) {
                                         $srst_data = explode(';', $data_values[$srst_pro]);
                                         $si = 1;
 //                                        $xnode['test'] = $srst_data[0];
                                         foreach ($srst_data as $value) {
-                                            $srs_val =  explode('/',$value);
-                                            $nod = $srs_put[0].$si;
-                                            $xnode -> $nod = $srs_val[0];
-                                            $nod = $srs_put[1].$si;
-                                            $xnode -> $nod = $srs_val[1];
+                                            $srs_val = explode('/', $value);
+                                            $nod = $srs_put[0] . $si;
+                                            $xnode->$nod = $srs_val[0];
+                                            $nod = $srs_put[1] . $si;
+                                            $xnode->$nod = $srs_val[1];
                                             $si ++;
                                         }
-                                       while ($si < 4) {
-                                            $nod = $srs_put[0].$si;
-                                            $xnode -> $nod = '';
-                                            $nod = $srs_put[1].$si;
-                                            $xnode -> $nod = '';
+                                        while ($si < 4) {
+                                            $nod = $srs_put[0] . $si;
+                                            $xnode->$nod = '';
+                                            $nod = $srs_put[1] . $si;
+                                            $xnode->$nod = '';
                                             $si ++;
                                         }
                                     }
                                     break;
                                 case 'connectionMonitorDuration':
-                                    $xml_node->$dkey =  strval(intval(intval($data_values['keepalive'])* 0.75));
+                                    $xml_node->$dkey = strval(intval(intval($data_values['keepalive']) * 0.75));
                                     break;
                                 case 'callManagerGroup':
                                     $xnode = &$xml_node->$dkey->members;
@@ -286,7 +289,7 @@ class xmlinterface {
                         } else {
                             $lang = (empty($hwlang[1])) ? $data_values['devlang'] : $hwlang[1];
                         }
-                        if (($lang  !='null') && (!empty(trim($lang)))) {
+                        if (($lang != 'null') && (!empty(trim($lang)))) {
                             if ($key == 'networkLocale') {
                                 $xml_work->$key = $lang;
                             } else {
@@ -296,8 +299,8 @@ class xmlinterface {
                                     $this->replaceSimpleXmlNode($xml_work->$key, $xml_node);
                                 }
                             }
-                        } else {    
-                            $xml_work->$key ='';
+                        } else {
+                            $xml_work->$key = '';
                         }
                         break;
 // Move all set to $var_xml_general_vars
@@ -320,8 +323,6 @@ class xmlinterface {
         return time();
     }
 
-    
-       
     private function replaceSimpleXmlNode($xml, $element = SimpleXMLElement) {
         $dom = dom_import_simplexml($xml);
         $import = $dom->ownerDocument->importNode(
@@ -340,6 +341,4 @@ class xmlinterface {
         $dom->parentNode->appendChild($import->cloneNode(true));
     }
 
-       
-        
 }

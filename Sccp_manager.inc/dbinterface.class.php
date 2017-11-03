@@ -11,15 +11,15 @@ class dbinterface {
     private $val_null = 'NONE'; /// REPLACE to null Field
 
     public function __construct() {
-        }
-       public function info() {
-           return Array('Version' => '13.0.2',
-                        'about' =>'Data access interface v. 13.0.2');
-       }
+    }
 
-/*
-     Core Access Function
- */      
+    public function info() {
+        return Array('Version' => '13.0.2', 'about' =>'Data access interface v. 13.0.2');
+    }
+
+    /*
+     * Core Access Function
+     */
     public function get_db_SccpTableData($dataid, $data = array()) {
         if ($dataid == '') {
             return False;
@@ -73,9 +73,7 @@ class dbinterface {
 
     /*
      *      Get Sccp Device Model information
-     *      
      */
-
     function getDb_model_info($get = "all", $format_list = "all", $filter = array()) {
         global $db;
         switch ($format_list) {
@@ -204,6 +202,4 @@ class dbinterface {
         }
         return $result;
     }
-
-        
 }

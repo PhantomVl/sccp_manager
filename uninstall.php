@@ -1,5 +1,10 @@
 <?php
 /* $Id:$ */
+
+/* !TODO!: In an ideal world this should roll back everything the install.php script did, except for what existed before install.php was run */
+/* !TODO!: This would require the install.php to make a note of all the actions that were skipped and/or performed */
+/* !TODO!: Might be a good idea to create a backup of the database before removing anything */
+
 if (!defined('FREEPBX_IS_AUTH')) { die('No direct script access allowed'); }
 
     global $db;

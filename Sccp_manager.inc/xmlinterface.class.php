@@ -6,6 +6,7 @@
      * 
      */
 
+/* !TODO!: Would you like to use my XSD file to check if the provided template file is a correct cisco cnf.xml file ? */
 namespace FreePBX\modules\Sccp_manager;
 class xmlinterface {
     private $val_null = 'NONE'; /// REPLACE to null Field
@@ -312,7 +313,7 @@ class xmlinterface {
 //            print_r($xml_work);
             $xml_work->asXml($xml_name);  // Save  
         } else {
-            die('Error Hardware templatee :' . $xml_template . ' not found');
+            die('Error Hardware template :' . $xml_template . ' not found');
         }
         return time();
     }

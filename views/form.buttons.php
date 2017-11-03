@@ -23,7 +23,7 @@ $show_buttons =1;
 //print_r($hint_list);
 if (!empty($_REQUEST['id'])) {
     $dev_id = $_REQUEST['id'];
-    $db_butons = $this->dbinterface->get_db_SccpTableData('get_sccpdevice_buttons', array("id" => $dev_id));
+    $db_buttons = $this->dbinterface->get_db_SccpTableData('get_sccpdevice_buttons', array("id" => $dev_id));
     $db_device = $this->dbinterface->get_db_SccpTableData('get_sccpdevice_byid', array("id" => $dev_id));
     $max_buttons = $db_device['buttons'];
     if (!empty($db_device['addon_buttons'])){
@@ -46,10 +46,10 @@ if (!empty($_REQUEST['new_id'])) {
 
 ?>
 
-<form autocomplete="off" name="frm_editbutons" id="frm_editbutons" class="fpbx-submit" action="" method="post" data-id="hw_edit">
-    <input type="hidden" name="category" value="frm_editbutons">
+<form autocomplete="off" name="frm_editbuttons" id="frm_editbuttons" class="fpbx-submit" action="" method="post" data-id="hw_edit">
+    <input type="hidden" name="category" value="frm_editbuttons">
     <input type="hidden" name="Submit" value="Submit">
-    <input type="hidden" name="butonscount" value="<?php echo $max_buttons?>">
+    <input type="hidden" name="buttonscount" value="<?php echo $max_buttons?>">
     <div class="section-title" data-for="<?php echo $forminfo[0]['name'];?>">
         <h3><i class="fa fa-minus"></i><?php echo _($forminfo[0]['label']) ?></h3>
     </div>
@@ -79,11 +79,11 @@ if (!empty($_REQUEST['new_id'])) {
     </div></div>        
     <?php
         for ($line_id = 0; $line_id <=$max_buttons; $line_id ++){
-//          print_r($db_butons[$line_id]);
+//          print_r($db_buttons[$line_id]);
             $show_form_mode = '';
-            $defaul_tv = (empty($db_butons[$line_id])) ?  "empty": $db_butons[$line_id]['type'];
-            $defaul_btn = (empty($db_butons[$line_id])) ?  "": $db_butons[$line_id]['name'];
-            $defaul_opt = (empty($db_butons[$line_id])) ?  array(''): explode(',',$db_butons[$line_id]['options']);
+            $defaul_tv = (empty($db_buttons[$line_id])) ?  "empty": $db_buttons[$line_id]['type'];
+            $defaul_btn = (empty($db_buttons[$line_id])) ?  "": $db_buttons[$line_id]['name'];
+            $defaul_opt = (empty($db_buttons[$line_id])) ?  array(''): explode(',',$db_buttons[$line_id]['options']);
             
             
             $show_form_mode = $defaul_tv; 
@@ -167,7 +167,7 @@ if (!empty($_REQUEST['new_id'])) {
 <!--  if Line Type = Othe Show    Input -->
                         <div class="linevalue_<?php echo $line_id.(($show_form_mode=='speeddial')? '':' hidden');?>" >
                             <?php 
-                                echo '<input class="form-control" type="text" id="'.$forminfo[1]['name'].$line_id.'_input"  name="'.$forminfo[1]['name'].$line_id.'_input" placeholder="Name" value="'.$db_butons[$line_id]['name'].'" >';
+                                echo '<input class="form-control" type="text" id="'.$forminfo[1]['name'].$line_id.'_input"  name="'.$forminfo[1]['name'].$line_id.'_input" placeholder="Name" value="'.$db_buttons[$line_id]['name'].'" >';
                             ?>
                         </div>
                         </div>
@@ -197,7 +197,7 @@ if (!empty($_REQUEST['new_id'])) {
                         <div class="linefeature_<?php echo $line_id.(($show_form_mode=='feature')? '':' hidden');?>" name="<?php echo $forminfo[1]['name'].$line_id.'_hint';?>">
                             <div class="col-xs-5">
                             <?php 
-                                echo '<input class="form-control" type="text" id="'.$forminfo[1]['name'].$line_id.'_flabel"  name="'.$forminfo[1]['name'].$line_id.'_flabel" placeholder="Display Label" value="'.$db_butons[$line_id]['name'].'" >';
+                                echo '<input class="form-control" type="text" id="'.$forminfo[1]['name'].$line_id.'_flabel"  name="'.$forminfo[1]['name'].$line_id.'_flabel" placeholder="Display Label" value="'.$db_buttons[$line_id]['name'].'" >';
                             ?>
                             </div>
                             <div class="col-xs-5">
@@ -216,7 +216,7 @@ if (!empty($_REQUEST['new_id'])) {
                             </div>
                             <div class="col-xs-5">
                             <?php 
-                                echo '<input class="form-control" type="text" id="'.$forminfo[1]['name'].$line_id.'_advopt"  name="'.$forminfo[1]['name'].$line_id.'_advopt" placeholder="ButtonLabel,Options" value="'.$db_butons[$line_id]['options'].'" >';
+                                echo '<input class="form-control" type="text" id="'.$forminfo[1]['name'].$line_id.'_advopt"  name="'.$forminfo[1]['name'].$line_id.'_advopt" placeholder="ButtonLabel,Options" value="'.$db_buttons[$line_id]['options'].'" >';
                             ?>
                             </div>
                         </div>

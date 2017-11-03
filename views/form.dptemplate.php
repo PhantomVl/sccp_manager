@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-//$list_data = $this->get_DialPlant('dialplan');
+//$list_data = $this->get_DialPlan('dialplan');
 //print_r($list_data);
 //$dialFelds = array('match','timeout','line','rewrite','tone');
 //$dialFelds = array('match','timeout','User','rewrite','tone');
@@ -16,7 +16,7 @@ if (!empty($_REQUEST['extdisplay'])) {
     $dev_id = $_REQUEST['extdisplay'];
 }
 if ($dev_id != '*new*') {
-    $list_data= $this->get_DialPlant($dev_id );
+    $list_data= $this->get_DialPlan($dev_id );
     $data_s= '';
     foreach ($list_data['template'] as $key => $value) {
         foreach ($dialFelds as $fld) {
@@ -29,13 +29,13 @@ if ($dev_id != '*new*') {
         $data_s .= ';';
     }
     $data_s = substr($data_s, 0, -1);
-    $def_val['dialtemplatee'] =  array("keyword" => 'dialtemplatee', "data" => $data_s, "seq" => "99");
+    $def_val['dialtemplate'] =  array("keyword" => 'dialtemplate', "data" => $data_s, "seq" => "99");
 }
 
 ?>
 
 
-<form autocomplete="off" name="frm_editdialtemplate" id="frm_editbutons" class="fpbx-submit" action="" method="post" data-id="dial_template">
+<form autocomplete="off" name="frm_editdialtemplate" id="frm_editbuttons" class="fpbx-submit" action="" method="post" data-id="dial_template">
     
     <input type="hidden" name="idtemplate" value="<?php echo $dev_id;?>">
     <input type="hidden" name="Submit" value="Submit">

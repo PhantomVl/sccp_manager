@@ -48,22 +48,22 @@ Make sure you have the following installed on your system:
 
 ### Requirements
 - Chan_SCCP module 4.3.0 (or later) channel driver for Asterisk: [See our WIKI] (https://github.com/chan-sccp/chan-sccp/wiki/Building-and-Installation-Guide)
-  - configure flags ./configure --enable-conference --enable-advanced-functions --enable-distributed-devicestate 
-  - Creating mysql DB from sorce (mysql -u root asterisk < mysql-v5_enum.sql)
-
+  - expected configure flags: 
+    ```./configure --enable-conference --enable-advanced-functions --enable-distributed-devicestate```
+  - Creating mysql DB from sorce 
+    ```mysql -u root asterisk < mysql-v5_enum.sql```
 
 - TFTP Server running under (recomended) /tftpboot/ [See our WIKI] (https://github.com/chan-sccp/chan-sccp/wiki/setup-tftp-service)
   - You will need the phone settings templates. You can use the templates taken from the distribution "chan-sccp" 
-    sample: copy /usr/src/chan-sccp/conf/tftp/*.xml* /tftpboot/templates/
+    ```cp /usr/src/chan-sccp/conf/tftp/\*.xml\* /tftpboot/templates/```
 
-- cofigure DHCP server [See our WIKI] (https://github.com/chan-sccp/chan-sccp/wiki/setup-dhcp-service)
+- configure DHCP server [See our WIKI] (https://github.com/chan-sccp/chan-sccp/wiki/setup-dhcp-service)
 
-### Setting up a FreePBX system
-[See our WIKI](http://wiki.freepbx.org/display/FOP/Install+FreePBX)
-
-### Setting up a Sccp 
-[See our WIKI] https://github.com/chan-sccp/chan-sccp/wiki/How-to-setup-the-chan_sccp-Module
-
+### Setup
+- [Setting up a FreePBX system](http://wiki.freepbx.org/display/FOP/Install+FreePBX)
+- [Setting up Chan-Sccp](https://github.com/chan-sccp/chan-sccp/wiki/How-to-setup-the-chan_sccp-Module)
+- The sccp_manager module will automatically setup and configure asterisk realtime database for chan-sccp.
+  For more information about realtime [See chan-sccp wiki](https://github.com/chan-sccp/chan-sccp/wiki/Realtime-Configuration).
 
 ### Module installation
 
@@ -77,10 +77,9 @@ Make sure you have the following installed on your system:
 8. Close Status window.
 9. Apply Config to FreePBX.
 
-### IMPORTANT NOTE: 
-- This system assumes you are using the SCCP Real-time Database. If you are
-not yet using the RTD, you will need to set it up for this module to be
-effective. 
-- For the correct operation of the cisco-phones you will be tempted cisco phone firmware (recomended v 8.1 or later) 
-- You can also use cisco language profiles to personalize sysnem and any cisco phones.
+### IMPORTANT NOTES: 
+- This system assumes/requires that you are using the Asterisk realtime database. If you are not yet using the realtime database, 
+you will have to set it up for this module to work ([See](https://github.com/chan-sccp/chan-sccp/wiki/Realtime-Configuration)).
+- For the cisco phones to work correctly, they should be provisioned with the latest firmware (v8.1 or higher)
+- You can use cisco language profiles (localization) to switch the phones to your locale.
 

@@ -19,29 +19,6 @@ if(class_exists($class,false)) {
     $srvinterface = new $class();
 }
 
-/* unused / moved to srvinterface
-//
-// Helper function to retrieve SCCPConfigMetaData via ASTMan
-// segment: ["", "general","device","line","softkey"]}
-// returns a php variable (array/set)
-//
-// Move to seperate helper file
-function astman_retrieveJSFromMetaData($astman, $segment = "") {
-    $params = array();
-    if ($segment != "") {
-        $params["Segment"] = $segment;
-    }
-    $response = $astman->send_request('SCCPConfigMetaData', $params);
-    if ($response["Response"] == "Success") {
-        //outn(_("JSON-content:").$response["JSON"]);
-        $decode=json_decode($response["JSON"], true);
-        return $decode;
-    } else {
-        return false;
-    }
-}
-*/
-
 function Get_DB_config($sccp_compatible) {
 $db_config_v0 = array(
     'sccpdevmodel' => array(
@@ -347,49 +324,6 @@ function InstallDB_sccpdevmodel() {
     }
     return true;
 }
-
-/*
-function InstallDB_updateEnums($db_config) {
-    global $db;
-    if (!$db_config) {
-        die_freepbx("No db_config provided");
-    }
-    $count_modify = 0;
-    outn("<li>" . _("Update Database Enums") . "</li>");
-    foreach ($db_config as $tabl_name => &$tab_modify) {
-        $sql = "";
-        $sql_r = array();
-        foreach ($tab_modify as $row_fld => $row_data){
-            if (!empty($row_data['crate'])) {                    
-                if (strpos($row_data['crate'], 'enum') !== false) {
-                    $sql_r[] = $row_fld;
-                }
-            }
-        }
-        $sql = "SELECT " . implode(',', $sql_r) . " from ".$tabl_name;
-        $db_result= $db->getAll($sql);
-        if (DB::IsError($db_result)) {
-            die_freepbx("Can not add get informations from ".$tabl_name." table\n");
-        }
-        $sql_table = '';
-        $enum_data = array('true'=>'on','false'=>'off','yes'=>'on','no'=>'off');
-        foreach ($db_result as $tabl_data){
-            $sql = "";
-            foreach( $tabl_data as $row => $col_val){
-                $val= strtolower($col_val);
-                if (isset($enum_data[$val])) {
-                    $sql .= $row.'="'.$enum_data[$val].'",';
-                }
-            }
-            if (!empty($sql)){
-            }
-        }
-        
-    }
-    
-}
-
-*/
 
 function InstallDB_updateSchema($db_config) {
     global $db;

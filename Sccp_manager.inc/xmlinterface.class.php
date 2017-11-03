@@ -14,8 +14,9 @@ class xmlinterface {
     public function __construct() {
         }
        public function info() {
-           return Array('Version' => '13.0.2',
-                        'about' =>'Create XML data interface v. 13.0.2');
+           $Ver = '13.0.2';
+           return Array('Version' => $Ver,
+                        'about' =>'Create XML data interface ver: '.$Ver);
        }
 
        
@@ -168,11 +169,12 @@ class xmlinterface {
                                     $tz_id = $data_values['ntp_timezone'];
                                     $TZdata = $data_values['ntp_timezone_id'];
                                     if (empty($TZdata)){
-                                        $TZdata = array('offset' => '0', 'daylight' => '');
+                                        $TZdata = array('offset' => '0', 'daylight' => '', 'cisco_code' => 'Greenwich Standard Time');
                                     }
                                     $xnode->name = $tz_id;
                                     $xnode->dateTemplate = $data_values['dateformat'];
-                                    $xnode->timeZone = $tz_id.' Standard'.((empty($TZdata['daylight']))? '': '/'.$TZdata['daylight']).' Time';
+                                    $xnode->timeZone = $TZdata['cisco_code'];
+//                                    $xnode->timeZone = $tz_id.' Standard'.((empty($TZdata['daylight']))? '': '/'.$TZdata['daylight']).' Time';
 
                                     if ($data_values['ntp_config_enabled'] == 'yes') {
                                         $xnode->ntps->ntp->name = $data_values['ntp_server'];

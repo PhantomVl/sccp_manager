@@ -14,7 +14,9 @@ class dbinterface {
     }
 
     public function info() {
-        return Array('Version' => '13.0.2', 'about' =>'Data access interface v. 13.0.2');
+        $Ver = '13.0.2';
+        return Array('Version' => $Ver,
+                        'about' =>'Data access interface ver: '.$Ver);
     }
 
     /*

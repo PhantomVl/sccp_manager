@@ -608,7 +608,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                     $ver_id = $this->sccp_create_device_XML($data['name']);
                 };
                 /* !TODO!: Do these returned message strings work with i18n ? */
-                return array('status' => true, 'message' => 'Create new config files (version:' . $ver_id . ')'));
+                return array('status' => true, 'message' => 'Create new config files (version:' . $ver_id . ')');
 
                 break;
             case 'reset_token':

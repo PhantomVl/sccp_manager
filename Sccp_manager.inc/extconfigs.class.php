@@ -9,8 +9,9 @@ class extconfigs {
         }
 
         public function info() {
-           return Array('Version' => '13.0.2',
-                        'about' =>'Default Setings and Enums ver: 13.0.2');
+            $Ver = '13.0.2';
+            return Array('Version' => $Ver,
+                        'about' =>'Default Setings and Enums ver: '.$Ver);
         }
         
         public function getextConfig($id = '', $index = '') {
@@ -25,15 +26,22 @@ class extconfigs {
                     $result =  $this->sccpDefaults;
                     break;
                 case 'sccp_timezone':
-                    $result =  $this->cisco_timezone;
-                    break;
-                case 'cisco_time':
+                    $result =  array();
+                    foreach ($this->cisco_timezone as $key => $value) {
+                        $cisco_code = $key .' Standard'.((empty($value['daylight']))? '': '/'.$value['daylight']).' Time';
+                        if (isset($value['cisco_code'])) {
+                            $cisco_code = (empty($value['cisco_code']))? $cisco_code : $value['cisco_code'];
+                        }
+                        $result[$key] = array('offset' => $value['offset'], 'daylight' => $value['daylight'], 'cisco_code' =>$cisco_code);
+                    }
+                    break;                
+/*                case 'cisco_time':
                     $result = array();
                     foreach ($this->cisco_timezone as $key => $value) {
                         $result[] = array('id'=> ($value['offset']/60) ,'val'=>$key.((empty($value['daylight']))? '': '/'.$value['daylight']));
                     }
                     break;
-                    
+  */                  
                 case 'cisco_timezone':
                     $result = array();
                     foreach ($this->cisco_timezone as $key => $value) {
@@ -165,20 +173,20 @@ class extconfigs {
             'Jerusalem'            => array('offset' => '120',  'daylight' => 'Daylight'),
             'Saudi Arabia'         => array('offset' => '180',  'daylight' => ''),
 /*              Russion  Regions                                                                 */            
-            'Russian/Kaliningrad'  => array('offset' => '120', 'daylight' => ''),
-            'Russian/Moscow'       => array('offset' => '180', 'daylight' => ''),
-            'Russian/St.Peterburg' => array('offset' => '180', 'daylight' => ''),
-            'Russian/Samara'       => array('offset' => '240', 'daylight' => ''),
-            'Russian/Novosibirsk'  => array('offset' => '300', 'daylight' => ''),
-            'Russian/Ekaterinburg' => array('offset' => '300', 'daylight' => ''),
-            'Russian/Irkutsk'      => array('offset' => '480', 'daylight' => ''),
-            'Russian/Yakutsk'      => array('offset' => '540', 'daylight' => ''),
-            'Russian/Khabarovsk'   => array('offset' => '600', 'daylight' => ''),
-            'Russian/Vladivostok'  => array('offset' => '600', 'daylight' => ''),
-            'Russian/Sakhalin'     => array('offset' => '660', 'daylight' => ''),
-            'Russian/Magadan'      => array('offset' => '660', 'daylight' => ''),
-            'Russian/Kamchatka'    => array('offset' => '720', 'daylight' => ''),
-/*              EnD - Russion  Regions                                                             */            
+            'Russian/Kaliningrad'  => array('offset' => '120', 'daylight' => '', 'cisco_code' => 'South Africa Standard Time'),
+            'Russian/Moscow'       => array('offset' => '180', 'daylight' => '', 'cisco_code' => 'Russian Standard Time'),
+            'Russian/St.Peterburg' => array('offset' => '180', 'daylight' => '', 'cisco_code' => 'Russian Standard Time'),
+            'Russian/Samara'       => array('offset' => '240', 'daylight' => '', 'cisco_code' => 'Arabian Standard Time'),
+            'Russian/Novosibirsk'  => array('offset' => '300', 'daylight' => '', 'cisco_code' => 'Ekaterinburg Standard Time'),
+            'Russian/Ekaterinburg' => array('offset' => '300', 'daylight' => '', 'cisco_code' => 'Ekaterinburg Standard Time'),
+            'Russian/Irkutsk'      => array('offset' => '480', 'daylight' => '', 'cisco_code' => 'China Standard Time'),
+            'Russian/Yakutsk'      => array('offset' => '540', 'daylight' => '', 'cisco_code' => 'Tokyo Standard Time'),
+            'Russian/Khabarovsk'   => array('offset' => '600', 'daylight' => '', 'cisco_code' => 'West Pacific Standard Time'),
+            'Russian/Vladivostok'  => array('offset' => '600', 'daylight' => '', 'cisco_code' => 'West Pacific Standard Time'),
+            'Russian/Sakhalin'     => array('offset' => '660', 'daylight' => '', 'cisco_code' => 'Central Pacific Standard Time'),
+            'Russian/Magadan'      => array('offset' => '660', 'daylight' => '', 'cisco_code' => 'Central Pacific Standard Time'),
+            'Russian/Kamchatka'    => array('offset' => '720', 'daylight' => '', 'cisco_code' => 'Fiji Standard Time'),
+ /*              EnD - Russion  Regions                                                             */            
             
             'Iran'                 => array('offset' => '210',  'daylight' => 'Daylight'),
             'Caucasus'             => array('offset' => '240', 'daylight' => 'Daylight'),

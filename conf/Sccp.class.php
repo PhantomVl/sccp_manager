@@ -283,11 +283,10 @@ class Sccp extends \FreePBX\modules\Core\Driver {
                 $select[] = array('value' => 'reject', 'text' => 'Reject');
                 $select[] = array('value' => 'silent', 'text' => 'Silent');
                 $select[] = array('value' => 'UserDefined', 'text' => 'UserDefined');
-                $tt = _("DND: How will dnd react when it is set on the device level dnd can have three states: off / busy(reject) / silent / UserDefined").'<br>'.
 # !TODO!: The next entry should be "null/empty" (not UserDefined) -> to indicate the trie-state behaviour
-                      _("UserDefined - dnd that cycles through all three states off -> reject -> silent -> off (this is the normal behaviour)").'<br>'.
-r
 # !TODO!: Userdefined is also a possible state, but it is not used or implemented (and it should not be implemented here, i think)
+                $tt = _("DND: How will dnd react when it is set on the device level dnd can have three states: off / busy(reject) / silent / UserDefined").'<br>'.
+                      _("UserDefined - dnd that cycles through all three states off -> reject -> silent -> off (this is the normal behaviour)").'<br>'.
                       _("Reject - Usesr can only switch off and on (in reject/busy mode)").'<br>'.
                       _("Silent  - Usesr can only switch off and on (in silent mode)");
                 $tmparr['dnd'] = array('prompttext' => _('DND'), 'value' => 'UserDefined', 'tt' => $tt, 'select' => $select, 'level' => 1, 'type' => 'radio');

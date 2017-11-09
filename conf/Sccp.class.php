@@ -1,6 +1,9 @@
 <?php
 // vim: set ai ts=4 sw=4 ft=php:
-// Version for SCCP Manager 13.0.0.A 
+// Version for SCCP Manager 13.0.X
+// 
+//   Templete for Sccp Driver
+//
 namespace FreePBX\modules\Core\Drivers;
 class Sccp extends \FreePBX\modules\Core\Driver {
         private $data_fld = array("pin"=>'pin', "label" => 'label', "accountcode" => 'account',
@@ -28,8 +31,7 @@ class Sccp extends \FreePBX\modules\Core\Driver {
 		);
 	}
 
-	/* !TODO!: Not clear what the difference is between addDevice and addDevice1 */
-        public function addDevice1($id, $settings) {
+/*        public function addDevice1($id, $settings) {
                 $sql = 'INSERT INTO sccp (id, keyword, data, flags) values (?,?,?,?)';
                 $sth = $this->database->prepare($sql);
                 $settings = is_array($settings)?$settings:array();
@@ -38,7 +40,7 @@ class Sccp extends \FreePBX\modules\Core\Driver {
                 }
                 return true;
         }
-
+*/
 	public function addDevice($id, $settings) {
                 $add_fld = array ("name"=>'label',"outboundcid"=>'cid_num',"langcode"=>'language',"extdisplay"=>'description');
 //                print_r($_REQUEST);
@@ -170,31 +172,31 @@ class Sccp extends \FreePBX\modules\Core\Driver {
 		);
 	}
 
-# !TODO!: Would it not be better to put this part in the view directory (MVC) ?
+# !TODO!: -TODO-: Would it not be better to put this part in the view directory (MVC) ? No,  This is a template for Freepbx.
 	public function getDeviceDisplay($display, $deviceInfo, $currentcomponent, $primarySection) {
 		$section = _("Settings");
 		$category = "general";
 		$tmparr = array();
 		$tt = _("The maximum number of incoming calls on this line.");
 //		$tmparr['incominglimit'] = array('prompttext' => _('Incoming Call Limit'), 'value' => '2', 'tt' => $tt, 'level' => 0, 'jsvalidation' => 'isEmpty()', 'failvalidationmsg' => $msgInvalidChannel);
-                /* !TODO!: Please change the default value for incominglimit to '6' or higher */
+// !TODO!: Please change the default value for incominglimit to '6' or higher 
 		$tmparr['incominglimit'] = array('prompttext' => _('Incoming Call Limit'), 'value' => '2', 'tt' => $tt, 'level' => 1);
 
                 $tt = _("Asterisk context which this line will use to send and receive calls (Note: Only change this is you know what you are doing).");
 		$tmparr['context'] = array('prompttext' => _('Line context'), 'value' => 'from-internal', 'tt' => $tt, 'level' => 1);
 
-		/* !TODO!: Maybe completely remove support for old numberic callgroup/pickupgroup in favor of the named version ? */
+// !TODO!: -TODO-: Maybe completely remove support for old numberic callgroup/pickupgroup in favor of the named version ?  See Sccp.class.php.v431 
                 $tt = _("Phone call group (numeric only, example:1,3-4)");
 		$tmparr['callgroup'] = array('prompttext' => _('Call group id'),'value' => '', 'tt' => $tt, 'level' => 1);
 
-# !TODO!: multiple allowed (not sure if that is implemented here)
+// !TODO!: -TODO-: multiple allowed (not sure if that is implemented here). See Sccp.class.php.v431 
                 $tt = _("Phone named call group (>asterisk-11)");
 		$tmparr['namedcallgroup'] = array('prompttext' => _('Named Call Group'),'value' => '', 'tt' => $tt, 'level' => 1);
 
                 $tt = _("Sets the pickup group (numeric only, example:1,3-4) this line is a member of. Allows this line to pickup calls from remote phones which are in this callhroup.");
                 $tmparr['pickupgroup'] = array('prompttext' => _('Pickup group id'),'value' => '', 'tt' => $tt, 'level' => 1);
 
-# !TODO!: multiple allowed (not sure if that is implemented here)
+// !TODO!: -TODO-: multiple allowed (not sure if that is implemented here). See Sccp.class.php.v431 
                 $tt = _("Sets the named pickup name group this line is a member of. Allows this line to pickup calls from remote phones which are in this name callgroup (>asterisk-11).");
 		$tmparr['namedpickupgroup'] = array('prompttext' => _('Named Pickup Group'),'value' => '', 'tt' => $tt, 'level' => 1);
 
@@ -237,7 +239,6 @@ class Sccp extends \FreePBX\modules\Core\Driver {
                 $select[] = array( 'value' => '0x46', 'text' => 'Reminder Ring');
                 $select[] = array( 'value' => '0x47', 'text' => 'Precedence RingBank');
                 $select[] = array( 'value' => '0x48', 'text' => 'Pre-EmptionTone');
-                /* !TODO!: I would remove the values below this line, except for 'No Tone' */
                 $select[] = array( 'value' => '0x67', 'text' => '2105 HZ');
                 $select[] = array( 'value' => '0x68', 'text' => '2600 HZ');
                 $select[] = array( 'value' => '0x69', 'text' => '440 HZ');
@@ -248,7 +249,8 @@ class Sccp extends \FreePBX\modules\Core\Driver {
                 $select[] = array( 'value' => '0x7A', 'text' => 'MLPP Bpa');
                 $select[] = array( 'value' => '0x7B', 'text' => 'MLPP Bnea');
                 $select[] = array( 'value' => '0x7C', 'text' => 'MLPP Upa');
-                $select[] = array( 'value' => '0x7F', 'text' => 'No Tone');
+/* !TODO!: +TODO+: I would remove the values below this line, except for 'No Tone' */
+//                $select[] = array( 'value' => '0x7F', 'text' => 'No Tone');
                 $select[] = array( 'value' => '0x80', 'text' => 'Meetme Greeting Tone');
                 $select[] = array( 'value' => '0x81', 'text' => 'Meetme Number Invalid Tone');
                 $select[] = array( 'value' => '0x82', 'text' => 'Meetme Number Failed Tone');
@@ -265,7 +267,7 @@ class Sccp extends \FreePBX\modules\Core\Driver {
                 $tt = _("Outside dialtone frequency (defaul 0x22)");
                 $tmparr['secondary_dialtone_tone'] = array('prompttext' => _('Secondary dialtone'), 'value' => '0x22', 'tt' => $tt, 'select' => $select, 'level' => 1, 'type' => 'select');
 
-# !TODO!: is there no easier way to specify a boolean radio group ?
+# !TODO!: -TODO-: is there no easier way to specify a boolean radio group ? No.
                 unset($select);
                 $select[] = array('value' => 'yes', 'text' => 'Yes');
                 $select[] = array('value' => 'no', 'text' => 'No');
@@ -283,8 +285,8 @@ class Sccp extends \FreePBX\modules\Core\Driver {
                 $select[] = array('value' => 'reject', 'text' => 'Reject');
                 $select[] = array('value' => 'silent', 'text' => 'Silent');
                 $select[] = array('value' => 'UserDefined', 'text' => 'UserDefined');
-# !TODO!: The next entry should be "null/empty" (not UserDefined) -> to indicate the trie-state behaviour
-# !TODO!: Userdefined is also a possible state, but it is not used or implemented (and it should not be implemented here, i think)
+# !TODO!: -TODO-: The next entry should be "null/empty" (not UserDefined) -> to indicate the trie-state behaviour
+# !TODO!: -TODO-: Userdefined is also a possible state, but it is not used or implemented (and it should not be implemented here, i think). See Sccp.class.php.v431, See Sccp.class.php - Old Style 
                 $tt = _("DND: How will dnd react when it is set on the device level dnd can have three states: off / busy(reject) / silent / UserDefined").'<br>'.
                       _("UserDefined - dnd that cycles through all three states off -> reject -> silent -> off (this is the normal behaviour)").'<br>'.
                       _("Reject - Usesr can only switch off and on (in reject/busy mode)").'<br>'.

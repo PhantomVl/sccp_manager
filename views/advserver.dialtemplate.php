@@ -5,8 +5,6 @@
  * and open the template in the editor.
  */
 // vim: set ai ts=4 sw=4 ft=phtml:
-//print_r($this->get_DP_list());
-//print_r($this->get_DialPlan('dialplan'));
 ?>
 <div class="fpbx-container container-fluid">
     <div class="row">

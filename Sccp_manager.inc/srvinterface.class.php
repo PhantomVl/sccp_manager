@@ -6,7 +6,7 @@
  * 
  * 
  */
-/* !TODO!: Re-Indent this file */
+/* !TODO!: Re-Indent this file.  -TODO-: What do you mean? coreaccessinterface  ??  */
 
 namespace FreePBX\modules\Sccp_manager;
 
@@ -115,6 +115,9 @@ class srvinterface {
     }
 
     /*  Current not use */
+    /*
+     * A function should be used in the form of buttons for getting all hint. Not working. I don't know how to use properly.
+     */
 
     public function sccp_list_hints() {
         $ast_out = $this->sccp_core_commands(array('cmd' => 'get_hints'));
@@ -141,13 +144,11 @@ class srvinterface {
         return $ast_key;
     }
 
-    /* !TODO!: install.php is still using the other version number */
+// !TODO!: -TODO-: install.php is still using the other version number. This is actually where I use another method ? 
+
 
     public function get_compatible_sccp() {
-        $res = $this->getChanSCCPVersion();
-        if (empty($res)) {
-            $res = $this->getChanSCCPVersion();
-        }
+        $res = $this->getSCCPVersion();
         if (empty($res)) {
             return 0;
         }
@@ -159,10 +160,15 @@ class srvinterface {
 //        return $res["vCode"];
     }
 
-    /* !TODO!: Multiple Version functions (choose one) */
-    /* !TODO!: private ? */
+    public function getSCCPVersion() {
+        $res = $this->getChanSCCPVersion();
+        if (empty($res)) {
+            $res = $this->getCoreSCCPVersion();
+        }        
+        return $res;
+    }
 
-    function getCoreSCCPVersion() {
+    private function getCoreSCCPVersion() {
         $result = array();
         $ast_out = $this->sccp_version();
         $result["Version"] = $ast_out[0];
@@ -171,7 +177,8 @@ class srvinterface {
         if (!empty($ast_out[1]) && $ast_out[1] == 'develop') {
             $result["develop"] = $ast_out[1];
             $res = 10;
-            if (base_convert($ast_out[3], 16, 10) == base_convert('702487a', 16, 10)) { /* !TODO!: This does not work as you might expect */
+// !TODO!: This does not work as you might expect 
+            if (base_convert($ast_out[3], 16, 10) == base_convert('702487a', 16, 10)) { 
                 $result["vCode"] = 431;
             }
             if (base_convert($ast_out[3], 16, 10) >= "10403") { // new method, RevisionNum is incremental
@@ -181,22 +188,17 @@ class srvinterface {
         return $result;
     }
 
-    /* !TODO!: Old Method */
-    /* !TODO!: rename public - >  private
-      private function sccp_version() {
-      $ast_out = $this->sccp_core_commands(array('cmd' => 'get_version'));
-      if (preg_match("/Release.*\(/", $ast_out['data'] , $matches)) {
-      $ast_out = substr($matches[0],9,-1);
-      return explode(' ', $ast_out);
-      } else {
-      return aray('unknown');
-      }
-      }
+    private function sccp_version() {
+        $ast_out = $this->sccp_core_commands(array('cmd' => 'get_version'));
+        if (preg_match("/Release.*\(/", $ast_out['data'], $matches)) {
+            $ast_out = substr($matches[0], 9, -1);
+            return explode(' ', $ast_out);
+        } else {
+            return aray('unknown');
+        }
+    }
 
-      /* !TODO!: Multiple Version functions (choose one :-) */
-    /* !TODO!: private ? */
-
-    function getChanSCCPVersion() {
+    private function getChanSCCPVersion() {
         global $astman;
         $result = array();
         if (!$astman) {

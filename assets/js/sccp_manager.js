@@ -34,7 +34,7 @@ $(document).ready(function () {
             snd_command = 'save_hardware';
         }
         if ($('.fpbx-submit').data('id') == "dial_template") {
-            snd_command = 'save_dp_template';
+            snd_command = 'save_dialplan_template';
         }
         
         $.ajax({
@@ -69,7 +69,7 @@ $(document).ready(function () {
             snd_command = 'save_hardware';
         }
         if ($('.fpbx-submit').data('id') == "dial_template") {
-            snd_command = 'save_dp_template';
+            snd_command = 'save_dialplan_template';
         }
         $.ajax({
             type: 'POST',

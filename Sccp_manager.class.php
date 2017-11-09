@@ -10,8 +10,7 @@
 // http://chan-sccp-b.sourceforge.net/doc/_howto.xhtml#nf_adhoc_plar
 // https://www.cisco.com/c/en/us/td/docs/voice_ip_comm/cuipph/all_models/xsi/9-1-1/CUIP_BK_P82B3B16_00_phones-services-application-development-notes/CUIP_BK_P82B3B16_00_phones-services-application-development-notes_chapter_011.html
 // https://www.cisco.com/c/en/us/td/docs/voice_ip_comm/cuipph/7960g_7940g/sip/4_4/english/administration/guide/ver4_4/sipins44.html
-/*
- * ToDo: 
+/* !TODO!: 
  *  + Cisco Format Mac 
  *  + Model Information 
  *  + Device Right Menu 
@@ -519,27 +518,27 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
 
     public function ajaxRequest($req, &$setting) {
         switch ($req) {
-            case 'savesettings': /* !TODO!: mixing snake case and camel case, chooose one :-) */
-            case "save_hardware":
-            case "save_dp_template":
-            case "delete_hardware":
-            case "getPhoneGrid":
-            case "getExtensionGrid":
-            case "getDeviceModel":
-            case "getUserGrid":
-            case "getSoftKey":
-            case "getDialTemplate":
-            case "create_hw_tftp":
-            case "reset_dev":
+            case 'savesettings': 
+            case 'save_hardware':
+            case 'save_dialplan_template':
+            case 'delete_hardware':
+            case 'getPhoneGrid':
+            case 'getExtensionGrid':
+            case 'getDeviceModel':
+            case 'getUserGrid':
+            case 'getSoftKey':
+            case 'getDialTemplate':
+            case 'create_hw_tftp':
+            case 'reset_dev':
             case 'reset_token':
-            case "model_enabled":
-            case "model_disabled":
-            case "model_update":
-            case "model_add":
-            case "model_delete":
-            case "updateSoftKey":
-            case "deleteSoftKey":
-            case "delete_dialplan":
+            case 'model_enabled':
+            case 'model_disabled':
+            case 'model_update':
+            case 'model_add':
+            case 'model_delete':
+            case 'updateSoftKey':
+            case 'deleteSoftKey':
+            case 'delete_dialplan':
                 return true;
                 break;
         }
@@ -563,6 +562,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 $res = $this->srvinterface->sccp_core_commands(array('cmd' => 'sccp_reload'));
                 $msg = 'Config Saved: ' . $res['Response'] . '. Info :' . $res['data'];
 //                needreload();
+// !TODO!: It is necessary in the future to check, and replace all server responses on correct messages. Use _(msg)                 
                 return array('status' => true, 'message' => $msg, 'reload' => true);
                 break;
             case 'save_hardware':
@@ -573,23 +573,29 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 return $this->save_hw_phone($request);
 
                 break;
-            case "save_dp_template": /* !TODO!: dialplan templates should be removed (only required for very old devices (like ATA) */
+/* !TODO!: -TODO-: dialplan templates should be removed (only required for very old devices (like ATA) */ 
+// -------------------------------   Old deviece suport - In the development--- 
+            case 'save_dialplan_template': 
                 $res = $this->save_DialPlant($request);
                 if (empty($res)) {
                     return array('status' => true, 'search' => '?display=sccp_adv', 'hash' => 'sccpdialplan');
                 } else {
+// !TODO!: It is necessary in the future to check, and replace all server responses on correct messages. Use _(msg)                     
                     return array('status' => false, 'message' => print_r($res));
                 }
                 break;
-            case "delete_dialplan":
+            case 'delete_dialplan':
                 if (!empty($request['dialplan'])) {
                     $get_file = $request['dialplan'];
                     $res = $this->del_DialPlant($get_file);
+// !TODO!: It is necessary in the future to check, and replace all server responses on correct messages. Use _(msg) 
                     return array('status' => true, 'message' => 'Dial Template has been deleted ! ', 'table_reload' => true);
                 } else {
+// !TODO!: It is necessary in the future to check, and replace all server responses on correct messages. Use _(msg) 
                     return array('status' => false, 'message' => print_r($res));
                 }
                 break;
+// -------------------------------   Old deviece suport - In the development--- 
             case 'delete_hardware':
                 if (!empty($request['idn'])) {
                     foreach ($request['idn'] as $idv) {
@@ -602,6 +608,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                             $this->srvinterface->sccp_core_commands(array('cmd' => 'reset_phone', 'name' => $idv));
                         }
                     }
+// !TODO!: It is necessary in the future to check, and replace all server responses on correct messages. Use _(msg)                    
                     return array('status' => true, 'table_reload' => true, 'message' => 'HW is Delete ! ');
                 }
                 break;
@@ -613,7 +620,8 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 foreach ($models as $data) {
                     $ver_id = $this->sccp_create_device_XML($data['name']);
                 };
-                /* !TODO!: Do these returned message strings work with i18n ? */
+// !TODO!: -TODO-: Do these returned message strings work with i18n ? 
+// !TODO!: It is necessary in the future to check, and replace all server responses on correct messages. Use _(msg) 
                 return array('status' => true, 'message' => 'Create new config files (version:' . $ver_id . ')');
 
                 break;
@@ -649,6 +657,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                         }
                     }
                 }
+// !TODO!: It is necessary in the future to check, and replace all server responses on correct messages. Use _(msg)                 
                 return array('status' => true, 'message' => 'Reset command send ' . $msg, 'reload' => true);
 //                }
                 break;
@@ -710,7 +719,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 return $devices;
                 break;
 
-            case "deleteSoftKey":
+            case 'deleteSoftKey':
                 if (!empty($request['softkey'])) {
                     $id_name = $request['softkey'];
                     unset($this->sccp_conf_init[$id_name]);
@@ -719,13 +728,15 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                     return array('status' => true, 'table_reload' => true);
                 }
                 break;
-            case "updateSoftKey":
+            case 'updateSoftKey':
                 if (!empty($request['id'])) {
                     $id_name = $request['id'];
                     $this->sccp_conf_init[$id_name]['type'] = "softkeyset";
                     foreach ($this->extconfigs->getextConfig('keyset') as $keyl => $vall) {
                         if (!empty($request[$keyl])) {
                             $this->sccp_conf_init[$id_name][$keyl] = $request[$keyl];
+                        } else {
+//                            $this->sccp_conf_init[$id_name][$keyl] = ''; // ????
                         }
                     }
                     $this->sccp_create_sccp_init();
@@ -757,14 +768,14 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 }
                 return $result;
                 break;
-            case "getExtensionGrid":
+            case 'getExtensionGrid':
                 $result = $this->dbinterface->get_db_SccpTableData('SccpExtension');
                 if (empty($result)) {
                     $result = array();
                 }
                 return $result;
                 break;
-            case "getPhoneGrid":
+            case 'getPhoneGrid':
                 $result = $this->dbinterface->get_db_SccpTableData('SccpDevice');
                 $staus = $this->srvinterface->sccp_get_active_device();
                 if (empty($result)) {
@@ -808,14 +819,15 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 }
                 return $result;
                 break;
-
-            case "getDialTemplate":
-                $result = $this->get_DP_list();   /* !TODO!: please use DialPlan instead of DP */
+// -------------------------------   Old deviece suport - In the development--- 
+            case 'getDialTemplate':
+                $result = $this->get_DialPlanList();   
                 if (empty($result)) {
                     $result = array();
                 }
                 return $result;
                 break;
+// -------------------------------   Old deviece suport - In the development---                 
         }
     }
 
@@ -1098,7 +1110,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         }
         return;
     }
-
+/*
     function sccp_get_keysetdata($name) {
 
         if ($name == 'default') {
@@ -1110,7 +1122,8 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         $keysetData['name'] = ($keysetData['name'] ? $keysetData['name'] : $name);
         return $keysetData;
     }
-
+*/
+/*
     function sccp_edit_keyset($keysetData) {
         global $amp_conf;
         $key_name = array('onhook', 'connected', 'onhold', 'ringin', 'offhook', 'conntrans', 'digitsfoll', 'connconf', 'ringout', 'offhookfeat', 'onhint', 'onstealable');
@@ -1129,19 +1142,20 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         $file_context = $keysetData['name'];
         if ($file_context != 'default') {
             $confDir = $amp_conf["ASTETCDIR"];
-            if (strlen($confDir) < 1) { /* !TODO!: Can this actually happen, or does it mean amp_conf array is empty ? */
+// !TODO!: -TODO-: Can this actually happen, or does it mean amp_conf array is empty ? 
+            if (strlen($confDir) < 1) { 
                 $confDir = "/etc/asterisk";
             }
-            $inputfile = "$confDir/sccp.conf";
+            $inputfile = $confDir."/sccp.conf";
             if (!file_exists($inputfile)) {
                 $sccpfile = file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/admin/modules/sccp_manager/sccp.conf');
                 file_put_contents($inputfile, $sccpfile);
             }
             $handle = fopen($inputfile, "r");
-            $file_context = "[$file_context]";
+            $file_context = "[".$file_context."]";
             $sccpfile = '';
 
-            $conext_data = "$file_context	; Managed by sccp_manager\n";
+            $conext_data = $file_context."	; Managed by sccp_manager\n";
             $conext_data .= "type=softkeyset\n";
             foreach ($keysetImplode as $field => $value) {
                 echo($field);
@@ -1187,7 +1201,8 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         file_put_contents($inputfile, $sccpfile);
         return $sccpfile;
     }
-
+*/
+    /*
     function sccp_display_keyset($keysetData, $softkey, $option) {
         if ($keysetData['name'] == 'default') {
             $output = "<font size='+1'>";
@@ -1206,7 +1221,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         }
         return $output;
     }
-
+*/
     public function getMyConfig($var = null, $id = "noid") {
 //    $final = false;
         switch ($var) {
@@ -1425,7 +1440,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
     /*
      *    Check file paths and permissions
      */
-    /* !TODO!: This function is getting a little big. Might be possible to sperate tftp work into it's own file/class */
+// !TODO!: -TODO-: This function is getting a little big. Might be possible to sperate tftp work into it's own file/class. Initially, you need to remove the not working section and commented out section
 
     function init_sccp_path() {
         global $db;
@@ -1536,13 +1551,10 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
     }
 
     /*
-     *      
+     *      DialPlan 
      *      
      */
-    /* !TODO!: please use DialPlan instead of DP */
-    /* !TODO!: I think Dialplan stuff can be removed or at least commented out */
-
-    function get_DP_list() {
+    function get_DialPlanList() {
         $dir = $this->sccppath["tftp_DP"] . '/*.xml';
         $base_len = strlen($this->sccppath["tftp_DP"]) + 1;
         $res = glob($dir);

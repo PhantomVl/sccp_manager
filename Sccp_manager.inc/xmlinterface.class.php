@@ -6,7 +6,10 @@
  * 
  * 
  */
-/* !TODO!: Would you like to use my XSD file to check if the provided template file is a correct cisco cnf.xml file ? */
+/* !TODO!: -TODO-: Would you like to use my XSD file to check if the provided template file is a correct cisco cnf.xml file ? 
+ * !TODO!: -TODO-: I just don't understand how to use it here.. To check the incoming pattern ? To check the result of my script ?
+ * !TODO!: -TODO-: The most correct variant is to generate xml based on XSD template.  
+ */
 
 namespace FreePBX\modules\Sccp_manager;
 

@@ -7,12 +7,10 @@
 // vim: set ai ts=4 sw=4 ft=phtml:
 //   print_r($this->sccp_conf_init);
 //   print_r($this->sccpvalues);
-//$core = $this->srvinterface->getCoreSCCPVersion();
-//print_r($core);
 //print_r('<br><br>');
 
 $driver = $this->FreePBX->Core->getAllDriversInfo();
-$core = $this->srvinterface->getChanSCCPVersion();
+$core = $this->srvinterface->getSCCPVersion();
 $info = array();
 $info['srvinterface'] = $this->srvinterface->info();
 $info['extconfigs'] = $this->extconfigs->info();

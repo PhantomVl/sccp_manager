@@ -53,7 +53,10 @@
  *  - restore default Value on page 
  *  - restore default Value on sccp.class
  *  -  'Device SEP ID.[XXXXXXXXXXXX]=MAC'
- *  -  ATA's start with       ATAXXXXXXXXXXXX.
+ *  -  ATA's start with       ATAXXXXXXXXXXXX. 
+ *  - Create ATADefault.cnf.xml
+ *  - Create Second line Use MAC AABBCCDDEEFF rotation MAC BBCCDDEEFF01 (ATA 187 )
+ *  +  Add SEP, ATA, VG prefix.
  *  -  VG248 ports start with VGXXXXXXXXXXXX0. 
  *  * I think this file should be split in 3 parts (as in Model-View-Controller(MVC))
  *    * XML/Database Parts -> Model directory
@@ -518,7 +521,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
 
     public function ajaxRequest($req, &$setting) {
         switch ($req) {
-            case 'savesettings': 
+            case 'savesettings':
             case 'save_hardware':
             case 'save_dialplan_template':
             case 'delete_hardware':
@@ -573,9 +576,9 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 return $this->save_hw_phone($request);
 
                 break;
-/* !TODO!: -TODO-: dialplan templates should be removed (only required for very old devices (like ATA) */ 
+            /* !TODO!: -TODO-: dialplan templates should be removed (only required for very old devices (like ATA) */
 // -------------------------------   Old deviece suport - In the development--- 
-            case 'save_dialplan_template': 
+            case 'save_dialplan_template':
                 $res = $this->save_DialPlant($request);
                 if (empty($res)) {
                     return array('status' => true, 'search' => '?display=sccp_adv', 'hash' => 'sccpdialplan');
@@ -599,8 +602,8 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
             case 'delete_hardware':
                 if (!empty($request['idn'])) {
                     foreach ($request['idn'] as $idv) {
-                        $msg = strpos($idv, 'SEP-');
-                        if (!(strpos($idv, 'SEP') === false)) {
+//                        $msg = strpos($idv, 'SEP-');
+                        if ($this->strpos_array($idv, array('SEP', 'ATA', 'VG')) !== false) {
                             $this->dbinterface->sccp_save_db('sccpdevice', array('name' => $idv), 'delete', "name");
                             $this->dbinterface->sccp_save_db("sccpbuttons", array(), 'delete', '', $idv);
                             $this->sccp_delete_device_XML($idv); // Концы в вводу !!  
@@ -821,7 +824,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 break;
 // -------------------------------   Old deviece suport - In the development--- 
             case 'getDialTemplate':
-                $result = $this->get_DialPlanList();   
+                $result = $this->get_DialPlanList();
                 if (empty($result)) {
                     $result = array();
                 }
@@ -858,6 +861,16 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         $db_field = $this->dbinterface->get_db_SccpTableData("get_colums_sccpdevice");
         $hw_id = (empty($get_settings['sccp_deviceid'])) ? 'new' : $get_settings['sccp_deviceid'];
         $update_hw = ($hw_id == 'new') ? 'update' : 'clear';
+        $hw_prefix = 'SEP';
+        if (!empty($get_settings[$hdr_prefix . 'type'])) {
+            $value = $get_settings[$hdr_prefix . 'type'];
+            if (strpos($value, 'ATA') !== false) {
+                $hw_prefix = 'ATA';
+            }
+            if (strpos($value, 'VG') !== false) {
+                $hw_prefix = 'VG';
+            }
+        }
         foreach ($db_field as $data) {
             $key = (string) $data['Field'];
             $value = "";
@@ -865,8 +878,15 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 case 'name':
                     if (!empty($get_settings[$hdr_prefix . 'mac'])) {
                         $value = $get_settings[$hdr_prefix . 'mac'];
-                        $value = 'SEP' . strtoupper(str_replace(array('.', '-', ':'), '', $value)); // Delete mac Seporated from string
+                        $value = strtoupper(str_replace(array('.', '-', ':'), '', $value)); // Delete mac Seporated from string
+                        $value = sprintf("%012s", $value);
+                        if ($hw_prefix == 'VG') {
+                            $value = $hw_prefix . $value.'0';
+                        } else {
+                            $value = $hw_prefix . $value;
+                        }
                         $name_dev = $value;
+                        
                     }
                     break;
                 case 'disallow':
@@ -900,6 +920,9 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                                 $tmp_data .= $vval . '/';
                             }
                             if (strlen($tmp_data) > 2) {
+                                if (substr($tmp_data,-1)=='/') {
+                                    $tmp_data = substr($tmp_data, 0, -1);
+                                }
                                 $arr_data .= substr($tmp_data, 0, -1) . ';';
                             }
                         }
@@ -1110,118 +1133,120 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         }
         return;
     }
-/*
-    function sccp_get_keysetdata($name) {
 
-        if ($name == 'default') {
-            $keysetData = sccp_get_confData('softkeyset');
-            $keysetData['name'] = 'default';
-        } else {
-            $keysetData = sccp_get_confData($name);
-        }
-        $keysetData['name'] = ($keysetData['name'] ? $keysetData['name'] : $name);
-        return $keysetData;
-    }
-*/
-/*
-    function sccp_edit_keyset($keysetData) {
-        global $amp_conf;
-        $key_name = array('onhook', 'connected', 'onhold', 'ringin', 'offhook', 'conntrans', 'digitsfoll', 'connconf', 'ringout', 'offhookfeat', 'onhint', 'onstealable');
-
-        $keysetImplode['name'] = $keysetData['name'];
-        $keysetImplode['type'] = $keysetData['type'];
-        $keysetImplode['file_context'] = $keysetData['file_context'];
-        foreach ($key_name as $i) {
-            if (isset($keysetData[$i])) {
-                $keysetImplode[$i] = implode(',', $keysetData[$i]);
-            }
-        }
-//
-// Write config file context section.
-//
-        $file_context = $keysetData['name'];
-        if ($file_context != 'default') {
-            $confDir = $amp_conf["ASTETCDIR"];
-// !TODO!: -TODO-: Can this actually happen, or does it mean amp_conf array is empty ? 
-            if (strlen($confDir) < 1) { 
-                $confDir = "/etc/asterisk";
-            }
-            $inputfile = $confDir."/sccp.conf";
-            if (!file_exists($inputfile)) {
-                $sccpfile = file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/admin/modules/sccp_manager/sccp.conf');
-                file_put_contents($inputfile, $sccpfile);
-            }
-            $handle = fopen($inputfile, "r");
-            $file_context = "[".$file_context."]";
-            $sccpfile = '';
-
-            $conext_data = $file_context."	; Managed by sccp_manager\n";
-            $conext_data .= "type=softkeyset\n";
-            foreach ($keysetImplode as $field => $value) {
-                echo($field);
-                if ($field != 'type' && $field != 'name' && $field != 'file_context') {
-                    echo($value);
-                    if (strlen($value) > 1) {
-                        $conext_data .= $field . "=" . $value . "\n";
-                    }
-                }
-            }
-            $conext_data .= "\n";
-
-
-            $new_context = "1";
-            echo($file_context);
-            if ($handle) {
-                while (($input = fgets($handle)) != false) {
-                    if (trim($input) != $file_context) {
-//		    echo($input);
-                        $sccpfile .= $input;
-                    } else {
-                        $new_context = "0";
-                        $sccpfile .= $conext_data;
-//
-//	We don't include the 'name=' directive in sccp.conf contexts.
-//		    $sccpfile .= "name=".$keysetImplode['name']."\n";
-//
-                        $trimmer = true;
-                        while ($trimmer) {
-                            $trimmer = ($input = fgets($handle));
-                            if (substr($input, 0, 1) == '[') {
-                                $trimmer = false;
-                                $sccpfile .= $input;
-                            }
-                        }
-                    }
-                }
-                if ($new_context != "0") {
-                    $sccpfile .= $conext_data;
-                }
-            }
-        }
-        file_put_contents($inputfile, $sccpfile);
-        return $sccpfile;
-    }
-*/
     /*
-    function sccp_display_keyset($keysetData, $softkey, $option) {
-        if ($keysetData['name'] == 'default') {
-            $output = "<font size='+1'>";
-            if (strpos(' ' . $keysetData[$softkey], $option)) {
-                $output .= '&#x2611;';
-            } else {
-                $output .= '&#x2610;';
-            }
-            $output .= "</font>&nbsp;$option<br>";
-        } else {
-            $output = "<input type='checkbox' name='keysetData[$softkey][]' value='$option'";
-            if (strpos(' ' . $keysetData[$softkey], $option)) {
-                $output .= ' checked';
-            }
-            $output .= "> $option<br>";
-        }
-        return $output;
-    }
-*/
+      function sccp_get_keysetdata($name) {
+
+      if ($name == 'default') {
+      $keysetData = sccp_get_confData('softkeyset');
+      $keysetData['name'] = 'default';
+      } else {
+      $keysetData = sccp_get_confData($name);
+      }
+      $keysetData['name'] = ($keysetData['name'] ? $keysetData['name'] : $name);
+      return $keysetData;
+      }
+     */
+    /*
+      function sccp_edit_keyset($keysetData) {
+      global $amp_conf;
+      $key_name = array('onhook', 'connected', 'onhold', 'ringin', 'offhook', 'conntrans', 'digitsfoll', 'connconf', 'ringout', 'offhookfeat', 'onhint', 'onstealable');
+
+      $keysetImplode['name'] = $keysetData['name'];
+      $keysetImplode['type'] = $keysetData['type'];
+      $keysetImplode['file_context'] = $keysetData['file_context'];
+      foreach ($key_name as $i) {
+      if (isset($keysetData[$i])) {
+      $keysetImplode[$i] = implode(',', $keysetData[$i]);
+      }
+      }
+      //
+      // Write config file context section.
+      //
+      $file_context = $keysetData['name'];
+      if ($file_context != 'default') {
+      $confDir = $amp_conf["ASTETCDIR"];
+      // !TODO!: -TODO-: Can this actually happen, or does it mean amp_conf array is empty ?
+      if (strlen($confDir) < 1) {
+      $confDir = "/etc/asterisk";
+      }
+      $inputfile = $confDir."/sccp.conf";
+      if (!file_exists($inputfile)) {
+      $sccpfile = file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/admin/modules/sccp_manager/sccp.conf');
+      file_put_contents($inputfile, $sccpfile);
+      }
+      $handle = fopen($inputfile, "r");
+      $file_context = "[".$file_context."]";
+      $sccpfile = '';
+
+      $conext_data = $file_context."	; Managed by sccp_manager\n";
+      $conext_data .= "type=softkeyset\n";
+      foreach ($keysetImplode as $field => $value) {
+      echo($field);
+      if ($field != 'type' && $field != 'name' && $field != 'file_context') {
+      echo($value);
+      if (strlen($value) > 1) {
+      $conext_data .= $field . "=" . $value . "\n";
+      }
+      }
+      }
+      $conext_data .= "\n";
+
+
+      $new_context = "1";
+      echo($file_context);
+      if ($handle) {
+      while (($input = fgets($handle)) != false) {
+      if (trim($input) != $file_context) {
+      //		    echo($input);
+      $sccpfile .= $input;
+      } else {
+      $new_context = "0";
+      $sccpfile .= $conext_data;
+      //
+      //	We don't include the 'name=' directive in sccp.conf contexts.
+      //		    $sccpfile .= "name=".$keysetImplode['name']."\n";
+      //
+      $trimmer = true;
+      while ($trimmer) {
+      $trimmer = ($input = fgets($handle));
+      if (substr($input, 0, 1) == '[') {
+      $trimmer = false;
+      $sccpfile .= $input;
+      }
+      }
+      }
+      }
+      if ($new_context != "0") {
+      $sccpfile .= $conext_data;
+      }
+      }
+      }
+      file_put_contents($inputfile, $sccpfile);
+      return $sccpfile;
+      }
+     */
+    /*
+      function sccp_display_keyset($keysetData, $softkey, $option) {
+      if ($keysetData['name'] == 'default') {
+      $output = "<font size='+1'>";
+      if (strpos(' ' . $keysetData[$softkey], $option)) {
+      $output .= '&#x2611;';
+      } else {
+      $output .= '&#x2610;';
+      }
+      $output .= "</font>&nbsp;$option<br>";
+      } else {
+      $output = "<input type='checkbox' name='keysetData[$softkey][]' value='$option'";
+      if (strpos(' ' . $keysetData[$softkey], $option)) {
+      $output .= ' checked';
+      }
+      $output .= "> $option<br>";
+      }
+      return $output;
+      }
+     */
+
     public function getMyConfig($var = null, $id = "noid") {
 //    $final = false;
         switch ($var) {
@@ -1440,6 +1465,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
     /*
      *    Check file paths and permissions
      */
+
 // !TODO!: -TODO-: This function is getting a little big. Might be possible to sperate tftp work into it's own file/class. Initially, you need to remove the not working section and commented out section
 
     function init_sccp_path() {
@@ -1554,6 +1580,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
      *      DialPlan 
      *      
      */
+
     function get_DialPlanList() {
         $dir = $this->sccppath["tftp_DP"] . '/*.xml';
         $base_len = strlen($this->sccppath["tftp_DP"]) + 1;
@@ -2026,6 +2053,10 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         if ($dev_id == 'all') {
             $xml_name = $this->sccppath["tftp_path"] . '/SEP*.cnf.xml';
             array_map("unlink", glob($xml_name));
+            $xml_name = $this->sccppath["tftp_path"] . '/ATA*.cnf.xml';
+            array_map("unlink", glob($xml_name));
+            $xml_name = $this->sccppath["tftp_path"] . '/VG*.cnf.xml';
+            array_map("unlink", glob($xml_name));
         } else {
             if (!strpos($dev_id, 'SEP')) {
                 return false;
@@ -2171,4 +2202,21 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
 //        $dom = dom_import_simplexml($node);
 //        $dom->parentNode->removeChild($dom);
 //    }
+private function strpos_array($haystack, $needles) {
+    if (is_array($needles)) {
+        foreach ($needles as $str) {
+            if (is_array($str)) {
+                $pos = strpos_array($haystack, $str);
+            } else {
+                $pos = strpos($haystack, $str);
+            }
+            if ($pos !== FALSE) {
+                return $pos;
+            }
+        }
+    } else {
+        return strpos($haystack, $needles);
+    }
+    return FALSE;
+}
 }

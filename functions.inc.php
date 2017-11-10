@@ -6,21 +6,22 @@
  * and open the template in the editor.
  */
 /*
-function removeSimpleXmlNode($node)
-    {
-        $dom = dom_import_simplexml($node);
-        $dom->parentNode->removeChild($dom);
-    }
+  function removeSimpleXmlNode($node)
+  {
+  $dom = dom_import_simplexml($node);
+  $dom->parentNode->removeChild($dom);
+  }
 
-function replaceSimpleXmlNode($xml, SimpleXMLElement $element) {
-        $dom     = dom_import_simplexml($xml);
-        $import  = $dom->ownerDocument->importNode(
-            dom_import_simplexml($element),TRUE
-        );
-        $dom->parentNode->replaceChild($import, $dom);
-    }    
-  
+  function replaceSimpleXmlNode($xml, SimpleXMLElement $element) {
+  $dom     = dom_import_simplexml($xml);
+  $import  = $dom->ownerDocument->importNode(
+  dom_import_simplexml($element),TRUE
+  );
+  $dom->parentNode->replaceChild($import, $dom);
+  }
+
  */
+
 function after($this, $inthat) {
     if (!is_bool(strpos($inthat, $this)))
         return substr($inthat, strpos($inthat, $this) + strlen($this));
@@ -55,5 +56,22 @@ function strrevpos($instr, $needle) {
         return strlen($instr) - $rev_pos - strlen($needle);
 }
 
+function strpos_array($haystack, $needles) {
+    if (is_array($needles)) {
+        foreach ($needles as $str) {
+            if (is_array($str)) {
+                $pos = strpos_array($haystack, $str);
+            } else {
+                $pos = strpos($haystack, $str);
+            }
+            if ($pos !== FALSE) {
+                return $pos;
+            }
+        }
+    } else {
+        return strpos($haystack, $needles);
+    }
+    return FALSE;
+}
 
 ?>

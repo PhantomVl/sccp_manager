@@ -108,7 +108,7 @@ and open the template in the editor. Base Version before all crash :-)
         <input value="NONE" field="net" nameseparator="/"><options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/></input>
         <input value="NONE" field="mask"><options placeholder="255.255.255.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/> </input>
         <button>Add Alow network</button>
-        <help>Alow network settings. Blank fields will be ignored used Network 0.0.0.0.</help>
+        <help>Alow network settings. Blank fields will be ignored used Network 0.0.0.0/0.0.0.0 to resolve any existing connections. You can use the 'internal' connections only from the networks connected to the server. </help>
       </item>
 
       <item type="IED" id="2" seq="0">

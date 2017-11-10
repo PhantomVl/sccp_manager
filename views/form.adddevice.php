@@ -9,7 +9,7 @@ $dev_id = null;
 $dev_new = null;
 if (!empty($_REQUEST['new_id'])) {
     $dev_id = $_REQUEST['new_id'];
-    $val = str_replace('SEP', '', $dev_id);
+    $val = str_replace(array('SEP','ATA','VG'), '', $dev_id);
     $val = implode('.',sscanf($val, '%4s%4s%4s')); // Convert to Cisco display Format 
     $def_val['mac'] = array("keyword" => 'mac', "data" => $val, "seq" => "99");
     $val = $_REQUEST['type'];
@@ -28,7 +28,7 @@ if (!empty($_REQUEST['id'])) {
             switch ($key) {
                 case 'name':
                     $key = 'mac';
-                    $val = str_replace('SEP', '', $val);
+                    $val = str_replace(array('SEP','ATA','VG'), '', $val);
                     $val = implode('.',sscanf($val, '%4s%4s%4s')); // Convert to Cisco display Format 
                     break;
                 case '_hwlang':

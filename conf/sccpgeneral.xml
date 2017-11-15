@@ -107,7 +107,7 @@ and open the template in the editor. Base Version before all crash :-)
         <default>0.0.0.0/0.0.0.0</default>
         <input value="NONE" field="net" nameseparator="/"><options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/></input>
         <input value="NONE" field="mask"><options placeholder="255.255.255.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/> </input>
-        <button>Add Allow network</button>
+        <addbutton>Add Allow network</addbutton>
         <help>Allow network settings. Blank fields will be ignored, use Network 0.0.0.0.</help>
       </item>
 
@@ -117,7 +117,7 @@ and open the template in the editor. Base Version before all crash :-)
         <default>0.0.0.0/0.0.0.0</default>
         <input value="NONE" field="net" nameseparator="/"><options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/><class></class></input>
         <input value="NONE" field="mask"><options placeholder="255.255.255.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/><class></class></input>
-        <button>Add Deny network</button>
+        <addbutton>Add Deny network</addbutton>
         <help>All RFC 1918 addresses are local networks. Should always be at least '0.0.0.0/0.0.0.0'.</help>
       </item>
 
@@ -127,7 +127,7 @@ and open the template in the editor. Base Version before all crash :-)
         <default>0.0.0.0/0.0.0.0</default>
         <input value="NONE" field="net" nameseparator="/"><options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$" /><class></class></input>
         <input value="NONE" field="mask"><options placeholder="255.255.255.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/> <class></class></input>
-        <button>Add local networks</button>
+        <addbutton>Add local networks</addbutton>
         <help>Local network settings. Blank fields will be ignored used Network 0.0.0.0.</help>
       </item>
 
@@ -855,7 +855,7 @@ and open the template in the editor. Base Version before all crash :-)
             <default>/</default>
             <input value="NONE" field="net" nameseparator="/"><options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/></input>
             <input value="NONE" field="mask"><options placeholder="255.255.255.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/> </input>
-            <button>Add Allow network</button>
+            <addbutton>Add Allow network</addbutton>
             <help>Allow network settings. Blank fields will be ignored used Network 0.0.0.0.</help>
         </item>
 
@@ -865,7 +865,7 @@ and open the template in the editor. Base Version before all crash :-)
             <default>/</default>
             <input value="NONE" field="net" nameseparator="/"><options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/><class></class></input>
             <input value="NONE" field="mask"><options placeholder="255.255.255.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/><class></class></input>
-            <button>Add Deny network</button>
+            <addbutton>Add Deny network</addbutton>
             <help>All RFC 1918 addresses are local networks. Should always be at least '0.0.0.0/0.0.0.0'.</help>
         </item>
         <item type="IS" id="3" seq="99">
@@ -1005,7 +1005,7 @@ and open the template in the editor. Base Version before all crash :-)
             <default>/</default>
             <input value="NONE" field="Addr" nameseparator=":"><options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$" /><class></class></input>
             <input value="NONE" field="port"><options placeholder="2000" pattern="^([0-9]){3,5}$"/> <class></class></input>
-            <button>Add Server</button>
+            <addbutton>Add Server</addbutton>
             <help></help>
         </item>
         <item type="IED-disabled" id="3" seq="20">
@@ -1015,7 +1015,7 @@ and open the template in the editor. Base Version before all crash :-)
             <default>/</default>
             <input value="NONE" field="Addr" nameseparator=":"><options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$" /><class></class></input>
             <input value="NONE" field="port"><options placeholder="2000" pattern="^[0-9]{3,5}$"/> <class></class></input>
-            <button>Add Server</button>
+            <addbutton>Add Server</addbutton>
             <help></help>
         </item>
     </page_group>       

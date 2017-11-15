@@ -309,6 +309,9 @@ $(document).ready(function () {
         var dev_id = $(this).data('vhide');
         var dev_class = $(this).data('clhide');
         var dev_val = $(this).val();
+        if ($(this).data('btn') == 'checkbox') {
+            dev_val = $('input',this).is(":checked");
+        }
         var dev_state = $(this).attr('checked');
         if (dev_state == 'checked'){
             $(dev_class).each(function () {
@@ -321,11 +324,13 @@ $(document).ready(function () {
             });
         }
     });
-    
     $('.sccp_button_hide').on('click', function (e) {
         var dev_id = $(this).data('vhide');
         var dev_class = $(this).data('clhide');
         var dev_val = $(this).val();
+        if ($(this).data('btn') == 'checkbox') {
+            dev_val = $('input',this).is(":checked");
+        }
         $(dev_class).each(function () {
             if (dev_val !=  dev_id) {
                 $(this).removeClass('hidden');
@@ -335,6 +340,56 @@ $(document).ready(function () {
             }
         });
     });
+
+    $('.sccp_button_disabled').each(function () { // On page create !!  
+        var dev_id = $(this).data('vhide');
+        var dev_class = $(this).data('clhide');
+        var dev_val = $(this).val();
+        if ($(this).data('btn') == 'checkbox') {
+            dev_val = $('input',this).is(":checked");
+        }
+        $(dev_class).find('input, select, textarea, button').each(function() {
+                if (dev_val ==  dev_id) {
+                    $(this).removeClass('disabled');
+                    $(this).removeAttr('disabled')
+                } else {
+                    $(this).addClass('disabled', true);         
+                    $(this).attr('disabled', 'disabled');
+                }
+        });
+    });
+    
+    $('.sccp_button_disabled').on('click', function (e) {
+        var dev_id = $(this).data('vhide');
+        var dev_class = $(this).data('clhide');
+        var dev_val = $(this).val();
+        if ($(this).data('btn') == 'checkbox') {
+            dev_val = $('input',this).is(":checked");
+        }
+        $(dev_class).find('input, select, textarea, button').each(function() {
+            if (dev_val !=  dev_id) {
+                $(this).removeClass('disabled');
+                $(this).removeAttr('disabled')
+            } else {
+                $(this).addClass('disabled', true);
+                $(this).attr('disabled', 'disabled');
+            }
+        });
+    });
+
+
+    $('.button-checkbox').on('click', '', function (e) {
+        if ($('button',this).hasClass('active')) {
+            $('input', this).removeAttr('checked');
+            $('button',this).removeClass('active');        
+        } else {
+            $('input', this).attr('checked');
+            $('input', this).prop('checked','true');
+            $('button',this).addClass('active');        
+        }
+    });
+    
+    
     
 // ----------------------- TEST Validate ----------------
     $('.need-validate').on('change', function (e) {

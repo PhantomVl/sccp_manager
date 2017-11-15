@@ -914,20 +914,41 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                     }
                     if (!empty($get_settings[$hdr_arprefix . $key])) {
                         $arr_data = '';
+                        $arr_clear = FALSE;
                         foreach ($get_settings[$hdr_arprefix . $key] as $vkey => $vval) {
                             $tmp_data = '';
                             foreach ($vval as $vkey => $vval) {
-                                $tmp_data .= $vval . '/';
+                                switch ($vkey) {
+                                    case 'inherit':
+                                        if ($vval=='on') {
+                                            $arr_clear = TRUE;                                                ;
+                                        }
+                                        break;
+                                    case 'internal':
+                                        if ($vval=='on') {
+                                            $tmp_data .= 'internal;';
+                                        }
+                                        break;
+                                    default:
+                                        $tmp_data .= $vval . '/';
+                                        break;
+                                }
                             }
                             if (strlen($tmp_data) > 2) {
-                                if (substr($tmp_data,-1)=='/') {
+                                while (substr($tmp_data,-1)=='/') {
                                     $tmp_data = substr($tmp_data, 0, -1);
                                 }
-                                $arr_data .= substr($tmp_data, 0, -1) . ';';
-                            }
+                                $arr_data .= $tmp_data . ';';
+                            }                            
                         }
-                        $arr_data = substr($arr_data, 0, -1);
-                        $value = $arr_data;
+                        while (substr($arr_data,-1)==';') {
+                            $arr_data = substr($arr_data, 0, -1);
+                        }
+                        if ($arr_clear) {
+                            $value = 'NONE';
+                        } else {
+                            $value = $arr_data;
+                        }
                     }
             }
             if (!empty($value)) {
@@ -1078,13 +1099,28 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                     foreach ($value as $vkey => $vval) {
                         $tmp_data = '';
                         foreach ($vval as $vkey => $vval) {
-                            $tmp_data .= $vval . '/';
+                            switch ($vkey) {
+                                case 'inherit':
+                                case 'internal':
+                                    if ($vval=='on') {
+                                        $tmp_data .= 'internal;';
+                                    }
+                                break;
+                                default:
+                                    $tmp_data .= $vval . '/';
+                                break;
+                            }
                         }
                         if (strlen($tmp_data) > 2) {
-                            $arr_data .= substr($tmp_data, 0, -1) . ';';
-                        }
+                            while (substr($tmp_data,-1)=='/') {
+                                $tmp_data = substr($tmp_data, 0, -1);
+                            }
+                            $arr_data .= $tmp_data. ';';
+                        }                            
                     }
-                    $arr_data = substr($arr_data, 0, -1);
+                    while (substr($arr_data,-1)==';') {
+                        $arr_data = substr($arr_data, 0, -1);
+                    }
                     if (!($this->sccpvalues[$key1]['data'] == $arr_data)) {
                         $save_settings[] = array('keyword' => $this->sccpvalues[$key1]['keyword'], 'data' => $arr_data,
                             'seq' => $this->sccpvalues[$key1]['seq'], 'type' => $this->sccpvalues[$key1]['type']);

@@ -186,7 +186,45 @@ foreach ($items as $child) {
                                 <label class="control-label" for="<?php echo $res_id; ?>"><?php echo _($child->label);?></label>
                                 <i class="fa fa-question-circle fpbx-help-icon" data-for="<?php echo $res_id; ?>"></i>
                             </div>
-                            <div class="col-md-9"><div class = "col-sm-7">
+                            
+                            <div class="col-md-9">
+                            <?php 
+                            if (!empty($child->cbutton)) {
+                                echo '<div class="form-group form-inline">';
+                                foreach ($child->xpath('cbutton') as $value) {
+                                    $res_n = $res_id.'[0]['.$value['field'].']';
+                                    $res_vf = '';
+                                    if ($value['value']=='NONE' && empty($res_value)){
+                                        $res_vf = 'active';
+                                    } 
+                                    $ch_key = array_search($value['value'],$res_value);
+                                    if ($ch_key !== false) {
+                                        unset($res_value[$ch_key]);
+                                        $res_vf = 'active';
+                                        $res_value = explode(';', implode(';', $res_value));
+                                    }
+                                    $opt_hide ='';
+                                    $opt_class="button-checkbox";
+                                    if (!empty($value->option_hide)) { 
+                                        $opt_class .= " sccp_button_hide";
+                                        $opt_hide = ' data-vhide="'.$value->option_hide.'" data-btn="checkbox" data-clhide="'.$value->option_hide['class'].'" ';
+                                    }                          
+                                    if (!empty($value->option_disabled)) { 
+                                        $opt_class .= " sccp_button_disabled";
+                                        $opt_hide = ' data-vhide="'.$value->option_disabled.'" data-btn="checkbox" data-clhide="'.$value->option_disabled['class'].'" ';
+                                    }                          
+
+                                    if (!empty($value->class)) { 
+                                        $opt_class .= " ".(string)$value->class;
+                                    }
+                                    
+                                    echo '<span class="'.$opt_class.'"'.$opt_hide.'><button type="button" class="btn '.$res_vf.'" data-color="primary">'.$value.'</button>';
+                                    echo '<input type="checkbox" name="'. $res_n.'" class="hidden" '. (($res_vf == 'active')?'checked="checked"':'') .'/></span>';
+                                }
+                                echo '</div>';
+                            }
+                            ?>
+                                <div class = "col-sm-7 <?php echo $res_id;?>-gr">
                             <?php
                             foreach ($res_value as $dat_v) {
                             ?>
@@ -220,12 +258,12 @@ foreach ($items as $child) {
                             ?>
                                     
                                 </div>
-                                <div class = "col-sm-5">
+                                <div class = "col-sm-5 <?php echo $res_id;?>-gr">
                                 <?php 
 //                                print_r($opt_at);
 //                                print_r(json_encode($opt_at));
 //                                print_r(bin2hex(json_encode($opt_at)));
-                                echo '<input type="button" id="'.$res_id.'-btn" data-id="'.$res_id.'" data-for="'.$res_id.'" data-max="'.$max_row.'"data-json="'.bin2hex(json_encode($opt_at)).'" class="input-js-add" value="'._($child->button).'" />';
+                                echo '<input type="button" id="'.$res_id.'-btn" data-id="'.$res_id.'" data-for="'.$res_id.'" data-max="'.$max_row.'"data-json="'.bin2hex(json_encode($opt_at)).'" class="input-js-add" value="'._($child->addbutton).'" />';
                                 ?>
         			</div>
                             </div>
@@ -276,7 +314,13 @@ foreach ($items as $child) {
                            $opt_hide = ' class="sccp_button_hide" data-vhide="'.$child->option_hide.'" data-clhide="'.$child->option_hide['class'].'" ';
                           }                          
                           foreach ($child->xpath('button') as $value) {
-                            echo '<input type="radio" name="' . $res_id . '" id="' . $res_id. '_' . $i .'" value="' . $value[@value] . '"' . (strtolower((string)$value[@value]) == strtolower($res_v) ? " checked" : "") . $opt_hide.'>';
+                            $val_check = (string)$value[@value];
+                            if ($val_check == '' || $val_check == 'NONE' || $val_check == 'none' ) {
+                                $val_check = (((string)$value[@value] == $res_v) ? " checked" : "");
+                            } else {
+                                $val_check = (strtolower((string)$value[@value]) == strtolower($res_v) ? " checked" : "");
+                            }
+                            echo '<input type="radio" name="' . $res_id . '" id="' . $res_id. '_' . $i .'" value="' . $value[@value] . '"' . $val_check . $opt_hide.'>';
                             echo '<label for="' . $res_id. '_' . $i . '">' . _($value) . '</label>';
                             $i++;
                           }

@@ -11,6 +11,9 @@
 <form autocomplete="off" name="frm_general" id="frm_general" class="fpbx-submit" action="" method="post">
     <input type="hidden" name="category" value="generalform">
     <input type="hidden" name="Submit" value="Submit">
+    <!-- div id="toolbar-all">
+        <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" onclick="load_oncliсk(this,'*new*')" data-target=".new_network"><i class="fa fa-bolt"></i> <?php echo _("Add Keyset"); ?></button>
+    </div -->
     <?php 
     
         echo $this->ShowGroup('sccp_general',1);
@@ -21,3 +24,28 @@
     ?>    
 
 </form>
+
+<!-- Begin Form Input New / Edit  -->
+<div class="modal fade new_network" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel_Net">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="gridSystemModalLabel_Net">Add New Network</h4>
+            </div>
+            <div class="modal-body">
+                <ul class="nav nav-tabs" role="tablist">
+                <?php 
+//                    echo $this->ShowGroup('add_network_1',0);
+                ?>    
+                </ul>
+            </div>    
+                
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary sccp_update" data-id="network_add" data-mode="new" id="network_add" data-dismiss="modal">Save</button>
+            </div>            
+        </div>
+    </div>
+</div>
+

@@ -28,8 +28,6 @@ $day_format = array("D.M.Y", "D.M.YA", "Y.M.D", "YA.M.D", "M-D-Y", "M-D-YA", "D-
         "D/M/Y", "D/M/YA", "Y/M/D", "YA/M/D", "M/D/Y", "M/D/YA");
 $mysql_table = array("sccpdevice","sccpdeviceconfig");
 //$time_zone_name = timezone_identifiers_list();
-//$time_zone = array("-12", "-11", "-10", "-09", "-08", "-07", "-06", "-05", "-04", "-03", "-02", "-01", "00",
-//                   "01","02","03","04","05","06","07","08","09","10","11","12");
 $time_zone = array('-12' => 'GTM -12', '-11' => 'GTM -11', '-10' => 'GTM -10', '-09' => 'GTM -9',
                    '-08' => 'GTM -8',  '-07' => 'GTM -7',  '-06' => 'GTM -6', '-05' => 'GTM -5',
                    '-04' => 'GTM -4',  '-03' => 'GTM -3',  '-02' => 'GTM -2', '-01' => 'GTM -1',
@@ -218,14 +216,18 @@ foreach ($items as $child) {
                                         $opt_class .= " ".(string)$value->class;
                                     }
                                     
-                                    echo '<span class="'.$opt_class.'"'.$opt_hide.'><button type="button" class="btn '.$res_vf.'" data-color="primary">'.$value.'</button>';
-                                    echo '<input type="checkbox" name="'. $res_n.'" class="hidden" '. (($res_vf == 'active')?'checked="checked"':'') .'/></span>';
+                                    echo '<span class="'.$opt_class.'"'.$opt_hide.'><button type="button" class="btn '.$res_vf.'" data-color="primary">';
+                                    echo '<i class="state-icon '. (($res_vf == 'active')?'glyphicon glyphicon-check"':'glyphicon glyphicon-uncheck'). '"></i> ';
+                                    echo $value.'</button><input type="checkbox" name="'. $res_n.'" class="hidden" '. (($res_vf == 'active')?'checked="checked"':'') .'/></span>';
                                 }
                                 echo '</div>';
                             }
-                            ?>
-                                <div class = "col-sm-7 <?php echo $res_id;?>-gr">
-                            <?php
+                            $opt_class = "col-sm-7 ".$res_id."-gr";
+                            if (!empty($child->class)) { 
+                                $opt_class .= " ".(string)$child->class;
+                            }
+                            echo '<div class = "'.$opt_class.'">';
+                                    
                             foreach ($res_value as $dat_v) {
                             ?>
                                 <div class = "<?php echo $res_id;?> form-group form-inline" data-nextid=<?php echo $i+1;?> > 
@@ -252,20 +254,22 @@ foreach ($items as $child) {
                                 $i2 ++;
 
                             }
+                            if (!empty($child->add_pluss)) {
+                                echo '<button type="button" class="btn btn-primary btn-lg input-js-add" id="'.$res_id.'-btn" data-id="'.$res_id.'" data-for="'.$res_id.'" data-max="'.$max_row.'"data-json="'.bin2hex(json_encode($opt_at)).'"><i class="fa fa-plus pull-right"></i></button>';
+                            }
                             echo '</div>';
                             $i++;
                             }
                             ?>
                                     
                                 </div>
-                                <div class = "col-sm-5 <?php echo $res_id;?>-gr">
-                                <?php 
-//                                print_r($opt_at);
-//                                print_r(json_encode($opt_at));
-//                                print_r(bin2hex(json_encode($opt_at)));
-                                echo '<input type="button" id="'.$res_id.'-btn" data-id="'.$res_id.'" data-for="'.$res_id.'" data-max="'.$max_row.'"data-json="'.bin2hex(json_encode($opt_at)).'" class="input-js-add" value="'._($child->addbutton).'" />';
-                                ?>
-        			</div>
+                            <?php 
+                                if (!empty($child->addbutton)) {
+                                    echo '<div class = "col-sm-5 '.$res_id.'-gr">';
+                                    echo '<input type="button" id="'.$res_id.'-btn" data-id="'.$res_id.'" data-for="'.$res_id.'" data-max="'.$max_row.'"data-json="'.bin2hex(json_encode($opt_at)).'" class="input-js-add" value="'._($child->addbutton).'" />';
+                                    echo '</div>';
+                                }
+                            ?>
                             </div>
                         </div>
                     </div>

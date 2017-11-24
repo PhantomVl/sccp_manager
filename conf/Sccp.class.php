@@ -7,7 +7,7 @@
 namespace FreePBX\modules\Core\Drivers;
 class Sccp extends \FreePBX\modules\Core\Driver {
         private $data_fld = array("pin"=>'pin', "label" => 'label', "accountcode" => 'account',
-                                 "context" =>'context',"incominglimit"=>'incominglimit',
+                                 "context" =>'lcontext',"incominglimit"=>'incominglimit',
                                  "callgroup"=>'callgroup',"pickupgroup"=>'pickupgroup',
                                  "transfer" => 'transfer', "echocancel" => 'echocancel',
                                  "language" => 'language', "description" => 'callerid',
@@ -113,7 +113,7 @@ class Sccp extends \FreePBX\modules\Core\Driver {
 				"value" => "",
 				"flag" => $flag++
 			),
-			"context" => array(
+			"lcontext" => array(
 				"value" => "from-internal",
 				"flag" => $flag++
 			),
@@ -183,7 +183,7 @@ class Sccp extends \FreePBX\modules\Core\Driver {
 		$tmparr['incominglimit'] = array('prompttext' => _('Incoming Call Limit'), 'value' => '2', 'tt' => $tt, 'level' => 1);
 
                 $tt = _("Asterisk context which this line will use to send and receive calls (Note: Only change this is you know what you are doing).");
-		$tmparr['context'] = array('prompttext' => _('Line context'), 'value' => 'from-internal', 'tt' => $tt, 'level' => 1);
+		$tmparr['lcontext'] = array('prompttext' => _('Line context'), 'value' => 'from-internal', 'tt' => $tt, 'level' => 1);
 
 // !TODO!: -TODO-: Maybe completely remove support for old numberic callgroup/pickupgroup in favor of the named version ?  See Sccp.class.php.v431 
                 $tt = _("Phone call group (numeric only, example:1,3-4)");

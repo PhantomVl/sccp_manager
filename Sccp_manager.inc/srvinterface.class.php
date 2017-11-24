@@ -305,7 +305,8 @@ class srvinterface {
                 $line_arr = explode(' ', $line);
                 $it = 1;
                 do {
-                    if (strpos($line_arr[$it + 1], 'SEP') === false) {
+                    if ($this->strpos_array($line_arr[$it + 1], array('SEP', 'ATA', 'VG')) === false) {
+//                    if (strpos($line_arr[$it + 1], 'SEP') === false) {
                         $line_arr[0] .= ' ' . $line_arr[$it];
                         unset($line_arr[$it]);
                     } else {
@@ -355,5 +356,23 @@ class srvinterface {
             return false;
         }
     }
+    private function strpos_array($haystack, $needles) {
+        if (is_array($needles)) {
+        foreach ($needles as $str) {
+            if (is_array($str)) {
+                $pos = strpos_array($haystack, $str);
+            } else {
+                $pos = strpos($haystack, $str);
+            }
+            if ($pos !== FALSE) {
+                return $pos;
+            }
+        }
+    } else {
+        return strpos($haystack, $needles);
+    }
+    return FALSE;
+}
+    
 
 }

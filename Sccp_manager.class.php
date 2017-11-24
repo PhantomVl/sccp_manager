@@ -678,7 +678,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                         if (!empty($request[$value])) {
                             $save_settings[$value] = $request[$value];
                         } else {
-                            $save_settings[$value] = $val_null; // null
+                            $save_settings[$value] = $this->val_null; // null
                         }
                     }
                     $this->dbinterface->sccp_save_db('sccpdevmodel', $save_settings, $upd_mode, "model");
@@ -921,7 +921,11 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                                 switch ($vkey) {
                                     case 'inherit':
                                         if ($vval=='on') {
-                                            $arr_clear = TRUE;                                                ;
+                                            $arr_clear = TRUE;
+                                            // Злобный ХАК
+                                            if ($key == 'permit') {
+                                                $save_settings['deny'] = 'NONE';
+                                            }
                                         }
                                         break;
                                     case 'internal':
@@ -2135,7 +2139,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
     }
 
     function getSccp_model_information($get = "all", $validate = false, $format_list = "all", $filter = array()) {
-        $file_ext = array('.loads', '.LOADS', '.sbn', '.SBN', '.bin', '.BIN');
+        $file_ext = array('.loads', '.LOADS', '.sbn', '.SBN', '.bin', '.BIN','.zup','.ZUP');
         $dir = $this->sccppath["tftp_path"];
         $dir_tepl = $this->sccppath["tftp_templates"];
 

@@ -379,14 +379,32 @@ $(document).ready(function () {
 
 
     $('.button-checkbox').on('click', '', function (e) {
-        if ($('button',this).hasClass('active')) {
+        settings = {
+                true: {
+                    icon: 'glyphicon glyphicon-unchecked'
+                },
+                false: {
+                    icon: 'glyphicon glyphicon-check'
+                }
+            };
+        var button_1 = $('button',this);
+        var isChecked = $('input', this).is(':checked');
+
+        if (button_1.find('.state-icon').length == 0) {
+                button_1.prepend('<i class="state-icon ' + settings[isChecked].icon + '"></i> ');
+        } else {
+            button_1.find('.state-icon')
+                .removeClass()
+                .addClass('state-icon ' + settings[isChecked].icon);
+        }     
+        if (isChecked) {
             $('input', this).removeAttr('checked');
-            $('button',this).removeClass('active');        
+            button_1.removeClass('active');
         } else {
             $('input', this).attr('checked');
             $('input', this).prop('checked','true');
-            $('button',this).addClass('active');        
-        }
+            button_1.addClass('active');        
+       }
     });
     
     

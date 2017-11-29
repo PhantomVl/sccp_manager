@@ -1098,13 +1098,13 @@ and open the template in the editor. Base Version before all crash :-)
             <help>You can specifying 'useRedialMenu = yes' in the sccp.conf device section and the redial softkey will cause the "placed calls" list instead of immediately calling the last dialed number.</help>
         </item>
 
-        <item type="IS-disabled" id="6" seq="99">
+        <item type="IS" id="6" seq="99">
             <name>force_dtmfmode</name> 
             <label>Dual-Tone Multi-Frequency (DTMF)</label>
             <default>auto</default>
             <button value="auto">AUTO</button>
-            <button value="RFC2833">RFC2833</button>
-            <button value="SKINNY">SKINNY</button>
+            <button value="rfc2833">RFC2833</button>
+            <button value="skinny">SKINNY</button>
             <help>Some phone models with bad firmware do send dtmf in a messed up order and need to be forced to skinny mode.</help>
         </item>
         <item type="IS" id="14">

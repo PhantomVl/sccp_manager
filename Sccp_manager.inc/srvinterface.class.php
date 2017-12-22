@@ -205,6 +205,7 @@ class srvinterface {
             return $result;
         }
         $metadata = $this->astman_retrieveJSFromMetaData("");
+//        return $metadata;
         if ($metadata && array_key_exists("Version", $metadata)) {
             $result["Version"] = $metadata["Version"];
             $version_parts = explode(".", $metadata["Version"]);
@@ -246,6 +247,11 @@ class srvinterface {
                     $result["vCode"] = 431;
                 }
             }
+            if (array_key_exists("RevisionHash", $metadata)) {
+                $result["RevisionHash"] = $metadata["RevisionHash"];
+            } else {
+                $result["RevisionHash"] = '';
+            }
             if (array_key_exists("RevisionNum", $metadata)) {
                 $result["RevisionNum"] = $metadata["RevisionNum"];
                 if ($metadata["RevisionNum"] >= "10403") { // new method, RevisionNum is incremental
@@ -256,6 +262,7 @@ class srvinterface {
                 $result["futures"] = implode(';', $metadata["ConfigureEnabled"]);
             }
         } else {
+            return null;
             die_freepbx("Version information could not be retrieved from chan-sccp, via astman::SCCPConfigMetaData");
         }
         return $result;

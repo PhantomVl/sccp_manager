@@ -18,7 +18,7 @@ class xmlinterface {
     private $val_null = 'NONE'; /// REPLACE to null Field
 
     public function __construct() {
-        
+
     }
 
     public function info() {
@@ -120,7 +120,7 @@ class xmlinterface {
     }
 
     function create_SEP_XML($data_path = '', $data_values = array(), $dev_config = array(), $dev_id = '', $lang_info = array()) {
-
+        
         $var_xml_general_fields = array('authenticationURL' => 'dev_authenticationURL', 'informationURL' => 'dev_informationURL', 'messagesURL' => 'dev_messagesURL',
             'servicesURL' => 'dev_servicesURL', 'directoryURL' => 'dev_directoryURL', 'proxyServerURL' => 'dev_proxyServerURL', 'idleTimeout' => 'dev_idleTimeout',
             'idleURL' => 'dev_idleURL', 'sshUserId' => 'dev_sshUserId', 'sshPassword' => 'dev_sshPassword', 'deviceProtocol' => 'dev_deviceProtocol'
@@ -128,7 +128,7 @@ class xmlinterface {
         $var_xml_general_vars = array('capfAuthMode' => 'null', 'capfList' => 'null', 'mobility' => 'null',
             'phoneServices' => 'null', 'certHash' => 'null',
             'deviceSecurityMode' => '1');
-
+        
         if (empty($dev_id)) {
             return false;
         }
@@ -293,16 +293,16 @@ class xmlinterface {
                         } else {
                             $lang = (empty($hwlang[1])) ? $data_values['devlang'] : $hwlang[1];
                         }
-                        if (($lang != 'null') && (!empty(trim($lang)))) {
-                            if ($key == 'networkLocale') {
-                                $xml_work->$key = $lang;
-                            } else {
-                                if (isset($lang_info[$lang])) {
-                                    $xml_node->name = $lang_info[$lang]['locale'];
-                                    $xml_node->langCode = $lang_info[$lang]['code'];
-                                    $this->replaceSimpleXmlNode($xml_work->$key, $xml_node);
+                        if (($lang != 'null') && (!empty($lang))) { 
+                                if ($key == 'networkLocale') {
+                                    $xml_work->$key = $lang;
+                                } else {
+                                    if (isset($lang_info[$lang])) {
+                                        $xml_node->name = $lang_info[$lang]['locale'];
+                                        $xml_node->langCode = $lang_info[$lang]['code'];
+                                        $this->replaceSimpleXmlNode($xml_work->$key, $xml_node);
+                                    }
                                 }
-                            }
                         } else {
                             $xml_work->$key = '';
                         }

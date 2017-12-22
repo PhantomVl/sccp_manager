@@ -762,7 +762,7 @@ foreach ($items as $child) {
                             foreach ($value->xpath('row') as $trow) {
                                 echo '<tr>';
                                 foreach ($trow->xpath('col') as $tcol) {
-                                    echo '<td>'.$tcol.'</td>';
+                                    echo '<td>'._((string)$tcol).'</td>';
                                 }
                                 echo '</tr>';
                             }

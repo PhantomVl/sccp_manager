@@ -10,17 +10,33 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-14 13:48+0300\n"
+"POT-Creation-Date: 2017-12-22 11:33+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE Alex\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.3\n"
+"X-Generator: Poedit 2.0.5\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPath-1: ru_RU/LC_MESSAGES\n"
+
+#: module.xml
+msgid "SCCP Connectivity"
+msgstr ""
+
+#: module.xml
+msgid "Server Config"
+msgstr ""
+
+#: module.xml
+msgid "System Parameters"
+msgstr ""
+
+#: module.xml
+msgid "Phones Manager"
+msgstr ""
 
 #: Sccp_manager.class
 msgid "General SCCP Settings"
@@ -107,6 +123,10 @@ msgid "SCCP Server config"
 msgstr ""
 
 #: views/sccpgeneral.xml
+msgid "SCCP Server Name"
+msgstr ""
+
+#: views/sccpgeneral.xml
 msgid "Servername: This is the type of server - usually, it will be Asterisk."
 msgstr ""
 
@@ -115,10 +135,7 @@ msgid "Bind Address : [ Port ]"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid ""
-"Bind Address: The address to bind to for SCCP. In general, it should be set "
-"to '0.0.0.0'. If you find problems with one-way audio, you can set this to a "
-"specific address in the server. Note that '127.0.0.1' is always wrong here."
+msgid "Bind Address: The address to bind to for SCCP. In general, it should be set to '0.0.0.0'. If you find problems with one-way audio, you can set this to a specific address in the server. Note that '127.0.0.1' is always wrong here."
 msgstr ""
 
 #: views/sccpgeneral.xml:
@@ -126,10 +143,7 @@ msgid "External Ip"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid ""
-"External IP Address of the firewall, required in case the PBX is running on "
-"a seperatehost behind it. IP Address that we're going to notify in RTP media "
-"stream as the pbx source address."
+msgid "External IP Address of the firewall, required in case the PBX is running on a seperatehost behind it. IP Address that we're going to notify in RTP media stream as the pbx source address."
 msgstr ""
 
 #: views/sccpgeneral.xml:
@@ -137,9 +151,7 @@ msgid "SCCP SERVER Keepalive"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid ""
-"Time between Keep Alive checks. Valid range is 60-300 seconds. After much "
-"trial-and-error, the minimum (60) seems to work just fine."
+msgid "Time between Keep Alive checks. Valid range is 60-300 seconds. After much trial-and-error, the minimum (60) seems to work just fine."
 msgstr ""
 
 #: views/sccpgeneral.xml:
@@ -155,13 +167,11 @@ msgid "SCCP Networks"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid ""
-"Local network settings. Blank fields will be ignored used Network 0.0.0.0."
+msgid "Local network settings. Blank fields will be ignored used Network 0.0.0.0."
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid ""
-"Alow network settings. Blank fields will be ignored used Network 0.0.0.0."
+msgid "Allow network settings. Blank fields will be ignored used Network 0.0.0.0."
 msgstr ""
 
 #: views/sccpgeneral.xml:
@@ -173,9 +183,7 @@ msgid "Add Deny network"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid ""
-"All RFC 1918 addresses are local networks. Should always be at least "
-"'0.0.0.0/0.0.0.0'."
+msgid "All RFC 1918 addresses are local networks. Should always be at least '0.0.0.0/0.0.0.0'."
 msgstr ""
 
 #: views/sccpgeneral.xml:
@@ -187,9 +195,7 @@ msgid "Add local networks"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid ""
-"All RFC 1918 addresses are local networks, example "
-"'192.168.1.0/255.255.255.0'"
+msgid "All RFC 1918 addresses are local networks, example '192.168.1.0/255.255.255.0'"
 msgstr ""
 
 #: views/sccpgeneral.xml:
@@ -201,10 +207,7 @@ msgid "SCCP System Language"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid ""
-"SCCP Language: This is the language for your hints and other features of the "
-"phone. If you don't have any languages installed or are using a single "
-"language, you can leave this blank."
+msgid "SCCP Language: This is the language for your hints and other features of the phone. If you don't have any languages installed or are using a single language, you can leave this blank."
 msgstr ""
 
 #: views/sccpgeneral.xml:
@@ -212,9 +215,7 @@ msgid "SCCP Network Device Language"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid ""
-"The Network locales allows the phone to play tones (ringing, busy etc.) "
-"native to the phone's country."
+msgid "The Network locales allows the phone to play tones (ringing, busy etc.) native to the phone's country."
 msgstr ""
 
 #: views/sccpgeneral.xml:
@@ -222,9 +223,7 @@ msgid "SCCP Phone Device Language"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid ""
-"The user locale allows the phone to display text (menu items, soft keys "
-"etc.) native to the phone's language."
+msgid "The user locale allows the phone to display text (menu items, soft keys etc.) native to the phone's language."
 msgstr ""
 
 #: views/sccpgeneral.xml:
@@ -236,10 +235,7 @@ msgid "First Digit Timeout"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid ""
-"First Digit Timeout: The amount of time after your first digit to start "
-"dialing automatically. This can be over-ridden with settings in your "
-"dialplan.xml or by using the 'immediate dial' button."
+msgid "First Digit Timeout: The amount of time after your first digit to start dialing automatically. This can be over-ridden with settings in your dialplan.xml or by using the 'immediate dial' button."
 msgstr ""
 
 #: views/sccpgeneral.xml:
@@ -247,9 +243,7 @@ msgid "Digit Timeout"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid ""
-"Digit Timeout: The amount of time to wait after the second (or subsequent) "
-"dialed digit. Override rules are the same as for firstdigittimeout."
+msgid "Digit Timeout: The amount of time to wait after the second (or subsequent) dialed digit. Override rules are the same as for firstdigittimeout."
 msgstr ""
 
 #: views/sccpgeneral.xml:
@@ -257,9 +251,7 @@ msgid "Autoanswer Ring Time"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid ""
-"Autoanswer Ring Time: The amount of time the phones will ring when being "
-"called as Intercom or Paging mode."
+msgid "Autoanswer Ring Time: The amount of time the phones will ring when being called as Intercom or Paging mode."
 msgstr ""
 
 #: views/sccpgeneral.xml:
@@ -267,10 +259,7 @@ msgid "Autoanswer Tone"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid ""
-"Autoanswer Tone: The tone the phone plays back when it picks up the phone in "
-"autoanswer mode. Default is '0x32'. Silence is '0x00'. There are lots of "
-"tones, all expressed as '0XNN' where 'NN' is a hexadecimal number."
+msgid "Autoanswer Tone: The tone the phone plays back when it picks up the phone in autoanswer mode. Default is '0x32'. Silence is '0x00'. There are lots of tones, all expressed as '0XNN' where 'NN' is a hexadecimal number."
 msgstr ""
 
 #: views/sccpgeneral.xml:
@@ -278,9 +267,7 @@ msgid "Remote Hangup Tone"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid ""
-"Remote Hangup Tone: The tone played by the phone when it received a remote "
-"hang-up signal. Use '0' to disable the tone."
+msgid "Remote Hangup Tone: The tone played by the phone when it received a remote hang-up signal. Use '0' to disable the tone."
 msgstr ""
 
 #: views/sccpgeneral.xml:
@@ -288,9 +275,7 @@ msgid "Transfer Tone"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid ""
-"Transfer Tone: The tone played when a call is transferred. Use '0' to "
-"disable the tone."
+msgid "Transfer Tone: The tone played when a call is transferred. Use '0' to disable the tone."
 msgstr ""
 
 #: views/sccpgeneral.xml:
@@ -298,10 +283,7 @@ msgid "Call Waiting Tone"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid ""
-"Call Waiting Tone: The tone played when a call is waiting. If you set this "
-"one to '0', you will not get a tone in your current call if a new call comes "
-"in, so you might want to disable call waiting for this line instead."
+msgid "Call Waiting Tone: The tone played when a call is waiting. If you set this one to '0', you will not get a tone in your current call if a new call comes in, so you might want to disable call waiting for this line instead."
 msgstr ""
 
 #: views/sccpgeneral.xml:
@@ -325,10 +307,7 @@ msgid "Private Calling"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid ""
-"Private Calling Enabled: Place a call with privacy Options (no Caller ID) "
-"turned on. Needs to be supported in Asterisk to work through SIP and DAHDI "
-"trunks."
+msgid "Private Calling Enabled: Place a call with privacy Options (no Caller ID) turned on. Needs to be supported in Asterisk to work through SIP and DAHDI trunks."
 msgstr ""
 
 #: views/sccpgeneral.xml:
@@ -336,9 +315,7 @@ msgid "Directed Pickup"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid ""
-"Directed Pickup Mode (Answer): If a call is sent with the \"directed pickup"
-"\" flag, the phone will answer when set to \"Yes\"."
+msgid "Directed Pickup Mode (Answer): If a call is sent with the \"directed pickup\" flag, the phone will answer when set to \"Yes\"."
 msgstr ""
 
 #: views/sccpgeneral.xml:
@@ -346,9 +323,7 @@ msgid "Call Answer Order"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid ""
-"Call Answer Order: Which call should be answered first? The most common "
-"choice is \"oldestfirst\", but other orders are supported."
+msgid "Call Answer Order: Which call should be answered first? The most common choice is \"oldestfirst\", but other orders are supported."
 msgstr ""
 
 #: views/sccpgeneral.xml:
@@ -361,6 +336,42 @@ msgstr ""
 
 #: views/sccpgeneral.xml:
 msgid "Message Lamp On Call"
+msgstr ""
+
+#: views/sccpgeneral.xml:
+msgid "SCCP Device advanced config"
+msgstr ""
+
+#: views/sccpgeneral.xml:
+msgid "Direct RTP"
+msgstr ""
+
+#: views/sccpgeneral.xml:
+msgid "This option set global allow devices to do direct RTP sessions (default Off)"
+msgstr ""
+
+#: views/sccpgeneral.xml:
+msgid "Early RTP"
+msgstr ""
+
+#: views/sccpgeneral.xml:
+msgid "The audio strem will be open in the progress and connected state. Valid options: NONE, progress, offhook, dial, ringout. Default may be Progress."
+msgstr ""
+
+#: views/sccpgeneral.xml:
+msgid "Global Enable/Disable Softkeys"
+msgstr ""
+
+#: views/sccpgeneral.xml:
+msgid "Call Forward"
+msgstr ""
+
+#: views/sccpgeneral.xml:
+msgid "Call Forward busy"
+msgstr ""
+
+#: views/sccpgeneral.xml:
+msgid "Activate the callforward busy softkeys. Default is On"
 msgstr ""
 
 #: views/sccpgeneral.xml:
@@ -396,10 +407,7 @@ msgid "Display Day Format"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid ""
-"Date Format: The date format for the on-screen display. Can be one of the "
-"following: (D-M-YA, M.D.Y, Y/M/D) where 'D' is Day, 'M' is Month, 'Y' is "
-"Year, 'A' is 24-hour, 'a' is 12-hour, and the separators can be '.','-','/'"
+msgid "Date Format: The date format for the on-screen display. Can be one of the following: (D-M-YA, M.D.Y, Y/M/D) where 'D' is Day, 'M' is Month, 'Y' is Year, 'A' is 24-hour, 'a' is 12-hour, and the separators can be '.','-','/'"
 msgstr ""
 
 #: views/sccpgeneral.xml:
@@ -423,10 +431,7 @@ msgid "Phone authentication URLe"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid ""
-"The above is simply a dummy authentication page.  It literally contains one "
-"word: AUTHORIZED (it receives UserId, Password, and devicename in the url - "
-"if you truly wish to implement special auth)"
+msgid "The above is simply a dummy authentication page.  It literally contains one word: AUTHORIZED (it receives UserId, Password, and devicename in the url - if you truly wish to implement special auth)"
 msgstr ""
 
 #: views/sccpgeneral.xml:
@@ -450,10 +455,7 @@ msgid "Phone directory service URL"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid ""
-"This is the URL for a CiscoIPPhoneMenu which gets appended to the end of the "
-"Missed/Received/Placed calls.  I don't use it (I find it makes more sense to "
-"put my phone book under services)"
+msgid "This is the URL for a CiscoIPPhoneMenu which gets appended to the end of the Missed/Received/Placed calls.  I don't use it (I find it makes more sense to put my phone book under services)"
 msgstr ""
 
 #: views/sccpgeneral.xml:
@@ -473,9 +475,7 @@ msgid "SCCP ToS / CoS"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid ""
-"SCCP Type Of Service / Class Of Service: SCCP Type or Class of Service - "
-"this is modifiable, but don't."
+msgid "SCCP Type Of Service / Class Of Service: SCCP Type or Class of Service - this is modifiable, but don't."
 msgstr ""
 
 #: views/sccpgeneral.xml:
@@ -483,9 +483,7 @@ msgid "SCCP Audio ToS / CoS"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid ""
-"Audio Type Of Service / Class Of Service: Audio Type or Class of Service - "
-"this is modifiable, but don't."
+msgid "Audio Type Of Service / Class Of Service: Audio Type or Class of Service - this is modifiable, but don't."
 msgstr ""
 
 #: views/sccpgeneral.xml:
@@ -493,9 +491,7 @@ msgid "SCCP Video ToS / CoS"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid ""
-"Video Type Of Service / Class Of Service: Video Type or Class of Service - "
-"this is modifiable, but don't."
+msgid "Video Type Of Service / Class Of Service: Video Type or Class of Service - this is modifiable, but don't."
 msgstr ""
 
 #: views/sccpgeneral.xml:
@@ -507,9 +503,7 @@ msgid "Hotline"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid ""
-"Hotline Enabled: This allows unregistered extensions to connect to the "
-"system and dial the number listed below."
+msgid "Hotline Enabled: This allows unregistered extensions to connect to the system and dial the number listed below."
 msgstr ""
 
 #: views/sccpgeneral.xml:
@@ -517,9 +511,11 @@ msgid "Hotline extension"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid ""
-"Hotline Extension: The number that gets called when a hotline is picked up. "
-"hint"
+msgid "Hotline Label"
+msgstr ""
+
+#: views/sccpgeneral.xml:
+msgid "Hotline Extension: The number that gets called when a hotline is picked up. hint"
 msgstr ""
 
 #: views/sccpgeneral.xml:
@@ -527,11 +523,55 @@ msgid "Hotline Context"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid ""
-"Hotline Context: This is the context through which the phone will connect. "
-"It should probably match your other contest. The default is \"from-internal"
-"\" but \"from-internal-xfer\" would also make sense by limiting the options "
-"for the person using the phone."
+msgid "Hotline Context: This is the context through which the phone will connect. It should probably match your other contest. The default is \"from-internal\" but \"from-internal-xfer\" would also make sense by limiting the options for the person using the phone."
+msgstr ""
+
+#: views/sccpgeneral.xml:
+msgid "HELP SCCP HotLine"
+msgstr ""
+
+#: views/sccpgeneral.xml:
+msgid "Setting the hotline Feature on a device, will make it connect to a predefined extension as soon as the Receiver is picked up or the \"New Call\" Button is pressed. No number has to be given. This works even on devices which have no entry in the config file or realtime database."
+msgstr ""
+
+#: views/sccpgeneral.xml:
+msgid "The hotline function can be used in :"
+msgstr ""
+
+#: views/sccpgeneral.xml:
+msgid "First time configuration"
+msgstr ""
+
+#: views/sccpgeneral.xml:
+msgid "This will make it easier to register new devices and assign numbers"
+msgstr ""
+
+#: views/sccpgeneral.xml:
+msgid "At a door"
+msgstr ""
+
+#: views/sccpgeneral.xml:
+msgid "Where you want people to be able to only call one number"
+msgstr ""
+
+#: views/sccpgeneral.xml:
+msgid "For unprovisioned phones"
+msgstr ""
+
+#: views/sccpgeneral.xml:
+msgid "To only be able to call the helpdesk to get their phone set up"
+msgstr ""
+
+#: views/sccpgeneral.xml:
+msgid "Be careful with this function. Especially not to the internet. So i would restring the deny/permit to 'internal' by default in that case."
+msgstr ""
+
+#: views/sccpgeneral.xml:
+msgid "Allow ="
+msgstr ""
+
+#: views/sccpgeneral.xml:
+msgid "Specify a list of your networks, for example: 192.168.1.0"
 msgstr ""
 
 #: views/sccpgeneral.xml:
@@ -539,10 +579,7 @@ msgid "System Context"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid ""
-"Context: This is the context in which your phones will operate. It should "
-"match the context you are using for the rest of your phones (if you have "
-"any). The FreePBX default is 'from-internal'"
+msgid "Context: This is the context in which your phones will operate. It should match the context you are using for the rest of your phones (if you have any). The FreePBX default is 'from-internal'"
 msgstr ""
 
 #: views/sccpgeneral.xml:
@@ -550,11 +587,7 @@ msgid "Dynamically registration Context"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid ""
-"If regcontext is specified in sccp.conf chan-sccp-b will dynamically create "
-"and destroy a NoOp priority 1 extension for a given peer/line which "
-"registers with the server. If the context is not specified in extension."
-"conf, then it will be dynamically created when an chan-sccp-b agent registers"
+msgid "If regcontext is specified in sccp.conf chan-sccp-b will dynamically create and destroy a NoOp priority 1 extension for a given peer/line which registers with the server. If the context is not specified in extension.conf, then it will be dynamically created when an chan-sccp-b agent registers"
 msgstr ""
 
 #: views/sccpgeneral.xml:
@@ -562,9 +595,7 @@ msgid "Music On Hold Class"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid ""
-"Music Class: Available MOH Classes. These are the MOH classes listed in your "
-"current server."
+msgid "Music Class: Available MOH Classes. These are the MOH classes listed in your current server."
 msgstr ""
 
 #: views/sccpgeneral.xml:
@@ -580,9 +611,7 @@ msgid "Meetme Conference"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid ""
-"enable/disable conferencing via meetme (on/off), make sure you have one of "
-"the meetme apps mentioned below activated in module.conf"
+msgid "enable/disable conferencing via meetme (on/off), make sure you have one of the meetme apps mentioned below activated in module.conf"
 msgstr ""
 
 #: views/sccpgeneral.xml:
@@ -590,9 +619,7 @@ msgid "Meetme Options"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid ""
-"Other options (app_meetme: A,a,b,c,C,d,D,E,e,F,i,I,l,L,m,M,o,p,P,q,r,s,S,t,T,"
-"w,x,X,1) see meetme specific documentation"
+msgid "Other options (app_meetme: A,a,b,c,C,d,D,E,e,F,i,I,l,L,m,M,o,p,P,q,r,s,S,t,T,w,x,X,1) see meetme specific documentation"
 msgstr ""
 
 #: views/sccpgeneral.xml:
@@ -604,10 +631,7 @@ msgid "Background Image"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid ""
-"I'm guessing on this one, but on some devices, the background image on the "
-"display can be modified at the device. I think this is the thing that allows "
-"that to take."
+msgid "I'm guessing on this one, but on some devices, the background image on the display can be modified at the device. I think this is the thing that allows that to take."
 msgstr ""
 
 #: views/sccpgeneral.xml:
@@ -627,13 +651,7 @@ msgid "SCCP SERVER MySQL Device Table Name"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid ""
-"Device Table: This is the devicetable for your realtime configuration. Don't "
-"change this unless you know what you are doing and have made all the "
-"appropriate changes in the rest of your Asterisk config files. There are two "
-"reasonable settings for this - the sccpdevice table or the sccpdeviceconfig "
-"view. If you do not want to use the realtime database anymore, you can set "
-"this to blank. NOT RECOMMENDED."
+msgid "Device Table: This is the devicetable for your realtime configuration. Don't change this unless you know what you are doing and have made all the appropriate changes in the rest of your Asterisk config files. There are two reasonable settings for this - the sccpdevice table or the sccpdeviceconfig view. If you do not want to use the realtime database anymore, you can set this to blank. NOT RECOMMENDED."
 msgstr ""
 
 #: views/sccpgeneral.xml:
@@ -645,12 +663,7 @@ msgid "linetable"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid ""
-"Line Table: This is the linetable for your realtime configuration. Don't "
-"change this unless you know what you are doing and have made all the "
-"appropriate changes in the rest of your Asterisk config files. If you do not "
-"want to use the realtime database anymore, you can set this to blank. NOT "
-"RECOMMENDED."
+msgid "Line Table: This is the linetable for your realtime configuration. Don't change this unless you know what you are doing and have made all the appropriate changes in the rest of your Asterisk config files. If you do not want to use the realtime database anymore, you can set this to blank. NOT RECOMMENDED."
 msgstr ""
 
 #: views/sccpgeneral.xml:
@@ -658,9 +671,7 @@ msgid "Create tftp empty language dir"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid ""
-"Say 'yes' if you need to create cisco default language directory in tftp "
-"path."
+msgid "Say 'yes' if you need to create cisco default language directory in tftp path."
 msgstr ""
 
 #: views/sccpgeneral.xml: <!-- Form add/ edit device -->
@@ -680,11 +691,7 @@ msgid "Type"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid ""
-"The type of phone: 7911, 7940, 7960, etc. Important note: the 'G' models are "
-"handled as the base model (e.g., 7962G is handled as 7962). In the Display "
-"mode, this field is read-only because the MAC address and the model number "
-"are a pair."
+msgid "The type of phone: 7911, 7940, 7960, etc. Important note: the 'G' models are handled as the base model (e.g., 7962G is handled as 7962). In the Display mode, this field is read-only because the MAC address and the model number are a pair."
 msgstr ""
 
 #: views/sccpgeneral.xml:
@@ -692,10 +699,7 @@ msgid "Addon"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid ""
-"Addon: Addons are model specific and only work with certain base phones. "
-"This phone model is identified as being a phone that does not accept "
-"sidecars. Update devmodel if this is not correct."
+msgid "Addon: Addons are model specific and only work with certain base phones. This phone model is identified as being a phone that does not accept sidecars. Update devmodel if this is not correct."
 msgstr ""
 
 #: views/sccpgeneral.xml:
@@ -723,9 +727,7 @@ msgid "Time Zone offset"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid ""
-"For phones that can display background images - display this one. Default is "
-"[empty]"
+msgid "For phones that can display background images - display this one. Default is [empty]"
 msgstr ""
 
 #: views/sccpgeneral.xml:
@@ -733,12 +735,7 @@ msgid "Ringtone"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid ""
-"The ringtone that the phone will default to. Can be overridden in the phone. "
-"The files RINGLIST.XML provice the basic phone ring tones, while "
-"DISTINCTIVERINGLIST.XML defines the list of possible ring tones for your "
-"other line types. They, along with the actual 'raw' ringtones, are stored in "
-"the /tftpboot/ directory with the rest of the config files."
+msgid "The ringtone that the phone will default to. Can be overridden in the phone. The files RINGLIST.XML provice the basic phone ring tones, while DISTINCTIVERINGLIST.XML defines the list of possible ring tones for your other line types. They, along with the actual 'raw' ringtones, are stored in the /tftpboot/ directory with the rest of the config files."
 msgstr ""
 
 #: views/sccpgeneral.xml: views/form.buttons: -----------------------------
@@ -774,10 +771,7 @@ msgid "Redial from Menu"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid ""
-"You can specifying 'useRedialMenu = yes' in the sccp.conf device section and "
-"the redial softkey will cause the 'placed calls' list instead of immediately "
-"calling the last dialed number."
+msgid "You can specifying 'useRedialMenu = yes' in the sccp.conf device section and the redial softkey will cause the 'placed calls' list instead of immediately calling the last dialed number."
 msgstr ""
 
 #: views/sccpgeneral.xml:
@@ -805,9 +799,7 @@ msgid "Pickup Mode Answer"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid ""
-"On (Default)= the call has been answered when picked up. Off = call manager "
-"way, the phone who picked up the call rings the call"
+msgid "On (Default)= the call has been answered when picked up. Off = call manager way, the phone who picked up the call rings the call"
 msgstr ""
 
 #: views/sccpgeneral.xml:
@@ -815,9 +807,7 @@ msgid "Pickup Context"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid ""
-"Context where direct pickup search for extensions. if not set current "
-"contect will be use."
+msgid "Context where direct pickup search for extensions. if not set current contect will be use."
 msgstr ""
 
 #: views/sccpgeneral.xml:
@@ -837,9 +827,7 @@ msgid "Playback General Announcements"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid ""
-"Playback General Announcements (like: 'You are Entering/Leaving the "
-"conference')"
+msgid "Playback General Announcements (like: 'You are Entering/Leaving the conference')"
 msgstr ""
 
 #: views/sccpgeneral.xml:
@@ -847,9 +835,7 @@ msgid "Playback Personal Announcements"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid ""
-"Playback Personal/Participant Announcements, (like: 'You have been muted / "
-"You have been kicked')"
+msgid "Playback Personal/Participant Announcements, (like: 'You have been muted / You have been kicked')"
 msgstr ""
 
 #: views/sccpgeneral.xml:
@@ -869,9 +855,7 @@ msgid "Automatically show conference list to the moderator"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid ""
-"Play music on hold of this class when no moderator is listening on the "
-"conference. If set to an empty string, no music on hold will be played."
+msgid "Play music on hold of this class when no moderator is listening on the conference. If set to an empty string, no music on hold will be played."
 msgstr ""
 
 #: views/sccpgeneral.xml:
@@ -879,13 +863,11 @@ msgid "Device Network Function"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid "Alow Networks / Mask"
+msgid "Allow Networks / Mask"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid ""
-"IP deny: IP Address deny netmask. Should always be at least "
-"'0.0.0.0/0.0.0.0'."
+msgid "IP deny: IP Address deny netmask. Should always be at least '0.0.0.0/0.0.0.0'."
 msgstr ""
 
 #: views/sccpgeneral.xml:
@@ -909,9 +891,7 @@ msgid "Early Rtp Device"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid ""
-"The audio strem will be open in the progress and connected state. Valid "
-"options: none, progress, offhook, dial, ringout. Default may be Progress."
+msgid "The audio strem will be open in the progress and connected state. Valid options: none, progress, offhook, dial, ringout. Default may be Progress."
 msgstr ""
 
 #: views/sccpgeneral.xml:
@@ -919,26 +899,7 @@ msgid "Buttons"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid ""
-"buttons come in the following flavours:empty: Empty button (no options)line: "
-"Registers the line with identifier specified as [name]silent:   buttons equal "
-"'Line' with out ringmonitor:  buttons mode speeddial + show statusspeeddial: "
-"Adds a speeddial with label [name] and [option1] as number Optionally, "
-"[option2] can be used to specify a hint by extension@context as usual."
-"service (not implemented): Adds a service url Feature buttons have an on/off "
-"status represented on the device with a tick-box and can be used to set the "
-"device in a particular state. Currently Possible [option1],[option2] "
-"combinations:privacy,callpresent = Make a private call, number is "
-"suppressedprivacy,hint = Make a private call, hint is suppressedcfwdall,"
-"number = Forward all calls cfwbusy,number = Forward on busycfwnoaswer,number "
-"= Forward on no-answer (not implemented yet)DND,busy = Do-not-disturb, "
-"return Busy signal to Caller DND,silent = Do-not-disturb, return nothing to "
-"callermonitor = Record Calls using AutoMon (asterisk 1.6.x only)</"
-"li><li>devstate,custom_devstate = Device State Feature Button (asterisk "
-"1.6.1 and up). custom_devstate is the name of the custom devicestate to be "
-"toggled (How to use devicestate)hold = To be implementedtransfer = To be "
-"implementedmultiblink = To be implementedmobility = To be "
-"implementedconference = To be implemented"
+msgid "buttons come in the following flavours:empty: Empty button (no options)line: Registers the line with identifier specified as [name]silent:   buttons equal 'Line' with out ringmonitor:  buttons mode speeddial + show statusspeeddial: Adds a speeddial with label [name] and [option1] as number Optionally, [option2] can be used to specify a hint by extension@context as usual.service (not implemented): Adds a service url Feature buttons have an on/off status represented on the device with a tick-box and can be used to set the device in a particular state. Currently Possible [option1],[option2] combinations:privacy,callpresent = Make a private call, number is suppressedprivacy,hint = Make a private call, hint is suppressedcfwdall,number = Forward all calls cfwbusy,number = Forward on busycfwnoaswer,number = Forward on no-answer (not implemented yet)DND,busy = Do-not-disturb, return Busy signal to Caller DND,silent = Do-not-disturb, return nothing to callermonitor = Record Calls using AutoMon (asterisk 1.6.x only)</li><li>devstate,custom_devstate = Device State Feature Button (asterisk 1.6.1 and up). custom_devstate is the name of the custom devicestate to be toggled (How to use devicestate)hold = To be implementedtransfer = To be implementedmultiblink = To be implementedmobility = To be implementedconference = To be implemented"
 msgstr ""
 
 #: views/server.model:
@@ -1027,4 +988,20 @@ msgstr ""
 
 #: views/server.model:
 msgid "Status"
+msgstr ""
+
+#: views/server.model:
+msgid "SCCP Phone SRST"
+msgstr ""
+
+#: views/server.model:
+msgid "HELP SRST"
+msgstr ""
+
+#: views/server.model:
+msgid "You can also configure a Survivable Remote Site Telephony (SRST) reference as the last device in the CallManager(CM) list. This proves especially useful in a remote site configuration where the phones and Asterisk are connected over a WAN network. SRST provides users with fallback support for the IP phones that cannot access the primary, secondary, or tertiary Asterisk Node in the CallManager List because of an Asterisk Node failure or loss of connectivity across the WAN. For the remote sites attached to multiple-service routers across the WAN, SRST ensures that your remote users receive continuous (although minimal) service by providing call handling support directly from the SRST router."
+msgstr ""
+
+#: views/server.model:
+msgid "When IP phones lose contact with primary, secondary, and tertiary Asterisk Nodes (CM's), they must establish a connection to a local SRST router to sustain the call-processing capability necessary to place and receive calls. The IP phone retains the IP address of the local SRST router as a default router in the Network Configuration area of the Settings menu. The Settings menu supports a maximum of five default router entries; however, the cnf.xml accommodates a maximum of three entries. When a secondary Asterisk Node is not available on the network, the local SRST Router's IP address is retained as the standby connection for Asterisk Node during normal operation."
 msgstr ""

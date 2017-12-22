@@ -76,7 +76,7 @@ and open the template in the editor. Base Version before all crash :-)
                 <default>2000</default>
                 <class>sccp-custom</class>
             </input>
-            <help>Bind Address: The address to bind to for SCCP. In general, it should be set to '0.0.0.0'. If you find problems with one-way audio, you can set this to a specific address in the server. Note that '127.0.0.1' is always wrong here.</help>
+            <help>Bind Address: The address to bind to for SCCP. In general, it should be set to '0.0.0.0'. If you find problems with one-way audio, you can set this to a specific address in the server. Note that '127.0.0.1' is always wrong here.  Also note that placing in your external IP address will cause the chan_sccp module to not load.  A manual edit of the /etc/asterisk/sccp.conf file will be needed to fix and reload the module.</help>
             <nameseparator> : </nameseparator>
         </item>
         <item type="IE" id="4"> 
@@ -125,7 +125,7 @@ and open the template in the editor. Base Version before all crash :-)
     <page_group name="sccp_net">
         <label>SCCP Networks</label>
         <item type="IED" id="1" seq="0">
-            <label>Alow Networks / Mask</label>
+            <label>Allow Networks / Mask</label>
             <name>permit</name>
             <cbutton field="internal" value="internal">Internal</cbutton>
             <default>0.0.0.0/0.0.0.0</default>
@@ -137,7 +137,7 @@ and open the template in the editor. Base Version before all crash :-)
             </input>
             <add_pluss>+</add_pluss>
             <addbutton-disabled>Add Allow Range</addbutton-disabled>
-            <help>Alow network settings. Blank fields will be ignored used Network 0.0.0.0/0.0.0.0 to resolve any existing connections. You can use the 'internal' connections only from the networks connected to the server. </help>
+            <help>Allow network settings. Blank fields will be ignored used Network 0.0.0.0/0.0.0.0 to resolve any existing connections. You can use the 'internal' connections only from the networks connected to the server. </help>
         </item>
 
 
@@ -334,7 +334,7 @@ and open the template in the editor. Base Version before all crash :-)
         </item>
     </page_group>          
     <page_group name="sccp_dev_advconfig">
-        <label>SCCP Device adv.config</label>
+        <label>SCCP Device advanced config</label>
 
         <item type="IS" id="4" seq="0">
             <name>directrtp</name> 
@@ -438,23 +438,12 @@ and open the template in the editor. Base Version before all crash :-)
     </page_group>        
       
     <page_group name="sccp_srst">
-        <label>SCCP Phone SRST </label>
+        <label>SCCP Phone SRST</label>
         <item type="HLP" id="2">
             <label>HELP SRST</label>        
             <name>Help_srst</name>
-            <element type='p'>You can also configure a Survivable Remote Site Telephony (SRST) reference as the last device in the CallManager(CM) list.
-                This proves especially useful in a remote site configuration where the phones and Asterisk are connected over a WAN network.
-                SRST provides users with fallback support for the IP phones that cannot access the primary, secondary, or tertiary Asterisk Node in the CallManager List because
-                of an Asterisk Node failure or loss of connectivity across the WAN. For the remote sites attached to multiple-service routers across the WAN,
-                SRST ensures that your remote users receive continuous (although minimal) service by providing call handling support directly from the SRST router.
-            </element>
-            <element type='p'>When IP phones lose contact with primary, secondary, and tertiary Asterisk Nodes (CM's), they must establish a connection to a local
-                SRST router to sustain the call-processing capability necessary to place and receive calls. 
-                The IP phone retains the IP address of the local SRST router as a default router in the Network Configuration area of the Settings menu.
-                The Settings menu supports a maximum of five default router entries; however, the cnf.xml accommodates a maximum of three entries. 
-                When a secondary Asterisk Node is not available on the network, the local SRST Router's IP address is retained as the standby 
-                connection for Asterisk Node during normal operation.
-            </element>
+            <element type='p'>You can also configure a Survivable Remote Site Telephony (SRST) reference as the last device in the CallManager(CM) list. This proves especially useful in a remote site configuration where the phones and Asterisk are connected over a WAN network. SRST provides users with fallback support for the IP phones that cannot access the primary, secondary, or tertiary Asterisk Node in the CallManager List because of an Asterisk Node failure or loss of connectivity across the WAN. For the remote sites attached to multiple-service routers across the WAN, SRST ensures that your remote users receive continuous (although minimal) service by providing call handling support directly from the SRST router.</element>
+            <element type='p'>When IP phones lose contact with primary, secondary, and tertiary Asterisk Nodes (CM's), they must establish a connection to a local SRST router to sustain the call-processing capability necessary to place and receive calls. The IP phone retains the IP address of the local SRST router as a default router in the Network Configuration area of the Settings menu. The Settings menu supports a maximum of five default router entries; however, the cnf.xml accommodates a maximum of three entries. When a secondary Asterisk Node is not available on the network, the local SRST Router's IP address is retained as the standby connection for Asterisk Node during normal operation.</element>
         </item>
 
         <item type="IS" id="1" seq="20">
@@ -463,8 +452,8 @@ and open the template in the editor. Base Version before all crash :-)
             <default>off</default>
             <button value="enabled">Yes</button>
             <button value="disable">No</button>
-            <button value="user">TempletDefault</button>
-            <help>You enabled configure a Survivable Remote Site Telephony (SRST) reference as the last device in the CallManager(CM) list.</help>
+            <button value="user">Template Default</button>
+            <help>You enabled/configured a Survivable Remote Site Telephony (SRST) reference as the last device in the CallManager(CM) list.</help>
         </item>
         <item type="IS" id="3" seq="20">
             <name>srst_userModifiable</name> 
@@ -493,7 +482,7 @@ and open the template in the editor. Base Version before all crash :-)
         </item>
 
         <item type="IED" id="3" seq="20">
-            <label>SRSt Server list</label>
+            <label>SRST Server list</label>
             <name>srst_ip</name>
             <max_row>3</max_row>
             <default>/</default>
@@ -534,7 +523,7 @@ and open the template in the editor. Base Version before all crash :-)
                 <name>dev_servicesURL</name> 
                 <default></default>
                 <value></value>
-                <options placeholder="http://x.x.x.x/cisco_menu/authentication.php"></options>
+                <options placeholder="http://x.x.x.x/cisco_menu/service.php"></options>
             
             </input>
             <help></help>
@@ -553,7 +542,7 @@ and open the template in the editor. Base Version before all crash :-)
             <label>Phone Idle information URL</label>
             <input>
                 <name>dev_idleURL</name>
-                <options placeholder="http://x.x.x.x/cisco_menu/authentication.php"></options>
+                <options placeholder="http://x.x.x.x/cisco_menu/idle.php"></options>
                 <default></default>
                 <value></value>
             </input>
@@ -563,7 +552,7 @@ and open the template in the editor. Base Version before all crash :-)
             <label>Phone information URL</label>
             <input>
                 <name>dev_informationURL</name>
-                <options placeholder="http://x.x.x.x/cisco_menu/authentication.php"></options>
+                <options placeholder="http://x.x.x.x/cisco_menu/information.php"></options>
                 <default></default>
             </input>
             <help></help>
@@ -572,7 +561,7 @@ and open the template in the editor. Base Version before all crash :-)
             <label>Phone messages URL</label>
             <input>
                 <name>dev_messagesURL</name>
-                <options placeholder="http://x.x.x.x/cisco_menu/authentication.php"></options>
+                <options placeholder="http://x.x.x.x/cisco_menu/messages.php"></options>
                 <default></default>
             </input>
             <help></help>
@@ -581,7 +570,7 @@ and open the template in the editor. Base Version before all crash :-)
             <label>Phone directory service URL</label>
             <input>
                 <name>dev_directoryURL</name>
-                <options placeholder="http://x.x.x.x/cisco_menu/authentication.php"></options>
+                <options placeholder="http://x.x.x.x/cisco_menu/directories.php"></options>
                 <default></default>
             </input>
             <help>This is the URL for a CiscoIPPhoneMenu which gets appended to the end of the Missed/Received/Placed calls.  I don't use it (I find it makes more sense to put my phone book under services)</help>
@@ -590,7 +579,7 @@ and open the template in the editor. Base Version before all crash :-)
             <label>Phone proxyServer URL</label>
             <input>
                 <name>dev_proxyServerURL</name>
-                <options placeholder="http://x.x.x.x/cisco_menu/authentication.php"></options>
+                <options placeholder="http://x.x.x.x/cisco_menu/proxy.php"></options>
                 <default></default>
                 <value></value>
             </input>
@@ -660,9 +649,7 @@ and open the template in the editor. Base Version before all crash :-)
         <item type="HLP" id="2">
             <name>Help_id2</name>
             <label>HELP SCCP HotLine</label>        
-            <element type='p'>Setting the hotline Feature on a device, will make it connect to a predefined extension as soon as the Receiver 
-                is picked up or the "New Call" Button is pressed. No number has to be given. This works even on devices which have 
-                no entry in the config file or realtime database.</element>
+            <element type='p'>Setting the hotline Feature on a device, will make it connect to a predefined extension as soon as the Receiver is picked up or the "New Call" Button is pressed. No number has to be given. This works even on devices which have no entry in the config file or realtime database.</element>
             <element type='h4'>The hotline function can be used in :</element>
             <element type='table'>
                 <row>
@@ -679,10 +666,10 @@ and open the template in the editor. Base Version before all crash :-)
                 </row>
             </element>
             <element type='p'> </element>
-            <element type='h3'>Be careful with this function. Especially not to the internet. So i would restring the deny/permit to 'internal' by default in that case. </element>
+            <element type='h3'>Be careful with this function. Especially not to the internet. So i would restring the deny/permit to 'internal' by default in that case.</element>
             <element type='table'>
                 <row>
-                    <col>Alow =</col>
+                    <col>Allow =</col>
                     <col>Specify a list of your networks, for example: 192.168.1.0</col>
                 </row>
                 <row>
@@ -780,7 +767,7 @@ and open the template in the editor. Base Version before all crash :-)
             <default>off</default>
             <button value="on">Enabled</button>
             <button value="off">Disabled</button>
-            <help>Enables and disables auto line selection.</help>
+            <help>Enables and Disables auto line selection.</help>
         </item>
         <item type="IS-disabled" id="8" seq="0">
             <name>meetme</name> 
@@ -788,7 +775,7 @@ and open the template in the editor. Base Version before all crash :-)
             <default>off</default>
             <button value="on">Enabled</button>
             <button value="off">Disabled</button>
-            <help>enable/disable conferencing via meetme (on/off), make sure you have one of the meetme apps mentioned below activated in module.conf</help>
+            <help>Enable/Disable conferencing via meetme (on/off), make sure you have one of the meetme apps mentioned below activated in module.conf</help>
         </item>
         <item type="IS-disabled" id="9" seq="0">
             <label>Meetme Options</label>
@@ -951,7 +938,7 @@ and open the template in the editor. Base Version before all crash :-)
             <name>softkeyset</name> 
             <default>default</default>
             <select></select>
-            <help>System default softkey</help>
+            <help>System Default Softkey</help>
         </item>
         <item type="SLZ" id="3" seq="98">
             <label>Time Zone offset</label>
@@ -990,7 +977,7 @@ and open the template in the editor. Base Version before all crash :-)
                 <default></default>
                 <class>sccp-custom</class>
             </input>
-            <help>The ringtone that the phone will default to. Can be overridden in the phone. The files RINGLIST.XML provice the basic phone ring tones, while DISTINCTIVERINGLIST.XML defines the list of possible ring tones for your other line types. They, along with the actual 'raw' ringtones, are stored in the /tftpboot/ directory with the rest of the config files.</help>
+            <help>The ringtone that the phone will default to. Can be overridden in the phone. The files RINGLIST.XML provice the basic phone ring tones, while DISTINCTIVERINGLIST.XML defines the list of possible ring tones for your other line types. They, along with the actual 'raw' ringtones, are stored in the /tftpboot/ringtones directory with the rest of the config files.</help>
         </item>
     
     </page_group>
@@ -1074,7 +1061,7 @@ and open the template in the editor. Base Version before all crash :-)
                 <default></default>
                 <class>sccp-custom</class>
             </input>
-            <help>Context where direct pickup search for extensions. if not set current contect will be use.</help>
+            <help>Context where direct pickup search for extensions. if not set current contact will be use.</help>
         </item>
         <item type="IS" id="9" seq="99">
             <name>directed_pickup_modeanswer</name> 
@@ -1232,8 +1219,8 @@ and open the template in the editor. Base Version before all crash :-)
         </item>        
 
         <item type="IED" id="1" seq="0">
-            <label>Alow Networks / Mask</label>
-            
+            <label>Allow Networks / Mask</label>
+
             <name>permit</name>
             <default>NONE</default>
             <cbutton field="inherit" value="NONE">Inherit
@@ -1249,8 +1236,8 @@ and open the template in the editor. Base Version before all crash :-)
                 <options placeholder="255.255.255.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/> 
             </input>            
             <add_pluss>+</add_pluss>
-            <addbutton-disables>Add Alow network</addbutton-disables>
-            <help>Alow network settings. Blank fields will be ignored used Network 0.0.0.0.</help>
+            <addbutton-disables>Add Allow network</addbutton-disables>
+            <help>Allow network settings. Blank fields will be ignored used Network 0.0.0.0.</help>
         </item>
 
         <item type="IS" id="3" seq="99">
@@ -1285,7 +1272,7 @@ and open the template in the editor. Base Version before all crash :-)
             <button value="ringout">Ringout</button>
             <button value="progress">Progress</button>
             <button value="none">None</button>
-            <help>The audio strem will be open in the progress and connected state. Valid options: NONE, progress, offhook, dial, ringout. Default may be Progress.</help>
+            <help>The audio stream will be open in the progress and connected state. Valid options: none, progress, offhook, dial, ringout. Default may be Progress.</help>
         </item>
     </page_group>
     <page_group name="sccp_dp_new_template">
@@ -1416,7 +1403,8 @@ and open the template in the editor. Base Version before all crash :-)
                 <data>CallWaiting-3</data>
                 <data>CallWaiting-4</data>
             </element>
-            <help>Alow network settings. Blank fields will be ignored used Network 0.0.0.0.</help>
+            <help>Allow network settings. Blank fields will be ignored used Network 0.0.0.0.</help>
+            
         </item>
             
     </page_group>

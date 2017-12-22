@@ -123,7 +123,6 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
             return;
         }
 
-
         $this->getSccpSettingFromDB(); // Overwrite Exist 
 //        $this->getSccpSetingINI(false); // get from sccep.ini
         $this->init_sccp_path();

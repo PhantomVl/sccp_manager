@@ -840,8 +840,8 @@ and open the template in the editor. Base Version before all crash :-)
             <name>createlangdir</name> 
             <label>Create tftp empty language dir</label>
             <default>off</default>
-            <button value="on">Yes</button>
-            <button value="off">No</button>
+            <button value="yes">Yes</button>
+            <button value="no">No</button>
             <help>Say 'yes' if you need to create cisco default language directory in tftp path.</help>
         </item>
     

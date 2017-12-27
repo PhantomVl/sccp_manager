@@ -73,7 +73,12 @@ class xmlinterface {
             foreach ($def_xml_fields as $value) {
                 if (!empty($data_values['dev_' . $value])) {
                     $xml_work->$value = trim($data_values['dev_' . $value]);
+                } else {
+//                    $xml_work->$value = '';
+                    $node = $xml_work->$value;
+                    unset($node[0][0]);
                 }
+
             }
             foreach ($def_xml_locale as $key) {
                 if (!empty($xml_work->$key)) {

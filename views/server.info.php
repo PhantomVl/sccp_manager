@@ -21,8 +21,6 @@ $info['Core_sccp'] = array('Version' => $core['Version'],  'about'=> 'Sccp ver.'
 $info['Asterisk'] = array('Version' => FreePBX::Config()->get('ASTVERSION'),  'about'=> 'Asterisk.');
 $info['Сompatible'] = array('Version' => $this->srvinterface->get_compatible_sccp(),  'about'=> '');
 
-//print_r($this->srvinterface->info());
-//print_r($this->extconfigs->info());
 //print_r($this->dbinterface->info());
 
 //   $lang_arr =  $this->extconfigs->getextConfig('sccp_lang','sk_SK');    

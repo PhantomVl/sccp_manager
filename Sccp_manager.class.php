@@ -36,7 +36,7 @@
  *  + Make DB Acces from separate class
  *  + Make System Acces from separate class
  *  + Make Var elements from separate class
- *  - To make creating XML files in a separate class
+ *  + To make creating XML files in a separate class
  *  - Add Switch to select XML schema (display)
  *  - Bootstrap encodeURI(row['type']) ??????? 
  *  - Check Time zone .... 
@@ -53,8 +53,8 @@
  *  - restore default Value on page 
  *  - restore default Value on sccp.class
  *  -  'Device SEP ID.[XXXXXXXXXXXX]=MAC'
- *  -  ATA's start with       ATAXXXXXXXXXXXX. 
- *  - Create ATADefault.cnf.xml
+ *  +  ATA's start with       ATAXXXXXXXXXXXX. 
+ *  + Create ATADefault.cnf.xml
  *  - Create Second line Use MAC AABBCCDDEEFF rotation MAC BBCCDDEEFF01 (ATA 187 )
  *  +  Add SEP, ATA, VG prefix.
  *  -  VG248 ports start with VGXXXXXXXXXXXX0. 
@@ -63,6 +63,14 @@
  *    * Processing parts -> Controller directory
  *    * Ajax Handler Parts -> Controller directory
  *    * Result parts -> View directory
+ *  + Support TFTP rewrite :
+ *     + dir "settings"
+ *     + dir "templates"
+ *     + dir "firmware"
+ *     + dir "locales"
+ *  - Create Simple User Interface 
+ *       - sccpsimple.xml
+ *
  */
 
 namespace FreePBX\modules;
@@ -75,7 +83,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
 //	const General - sccp.conf[%keyset%]  = '5';  NAME space 
 //	const General - sccp.conf[%keyset%]  = '6';  data
 //	const General - default.xml          = '10';
-//	const General - teplet.xml           = '20';
+//	const General - templet.xml          = '20';
 //	const General - system_path          = '2';
 //	const General - don't store          = '99';
 //    private $SCCP_LANG_DICTIONARY = 'SCCP-dictionary.xml'; // CISCO LANG file search in /tftp-path 
@@ -560,6 +568,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 $this->save_submit($request);
                 $this->sccp_db_save_setting();
 //                $this->sccp_create_sccp_init();
+                $this->sccp_create_tftp_XML();
 
                 $res = $this->srvinterface->sccp_core_commands(array('cmd' => 'sccp_reload'));
                 $msg = 'Config Saved: ' . $res['Response'] . '. Info :' . $res['data'];
@@ -619,6 +628,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 $this->sccp_create_tftp_XML();
                 $models = $this->dbinterface->get_db_SccpTableData("SccpDevice");
                 $ver_id = ' on found active model !';
+//                return array('status' => false, 'message' => print_r($models));
                 foreach ($models as $data) {
                     $ver_id = $this->sccp_create_device_XML($data['name']);
                 };
@@ -1464,7 +1474,11 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
 
     private function initTftpLang() {
         $result = array();
-        $dir = $this->sccppath["tftp_path"];
+        if (empty($this->sccppath["tftp_path"]) || empty($this->sccppath["tftp_lang_path"])  ) {
+            return;
+        }
+        $dir = $this->sccppath["tftp_lang_path"];
+
         $cdir = scandir($dir);
         foreach ($cdir as $key => $value) {
             if (!in_array($value, array(".", ".."))) {
@@ -1490,7 +1504,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
      */
 
     private function init_tftp_lang_path() {
-        $dir = $this->sccppath["tftp_path"];
+        $dir = $this->sccppath["tftp_lang_path"];
         foreach ($this->extconfigs->getextConfig('sccp_lang') as $lang_key => $lang_value) {
             $filename = $dir . DIRECTORY_SEPARATOR . $lang_value['locale'];
             if (!file_exists($filename)) {
@@ -1525,10 +1539,10 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         }
 
         if (empty($this->sccppath["tftp_path"])) {
-            if (!empty($sccpvalues["tftp_path"])) {
-                if (file_exists($this->$sccpvalues["tftp_path"]["data"])) {
-                    $this->sccppath["tftp_path"] = $this->$sccpvalues["tftp_path"]["data"];
-                }
+            if (!empty($this->sccpvalues["tftp_path"])) {
+                if (file_exists($this->sccpvalues["tftp_path"]["data"])) {
+                    $this->sccppath["tftp_path"] = $this->sccpvalues["tftp_path"]["data"];
+                }                    
             }
             if (empty($this->sccppath["tftp_path"])) {
                 if (file_exists($this->extconfigs->getextConfig('sccpDefaults', "tftp_path"))) {
@@ -1543,8 +1557,49 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                     die('Error creating template dir');
                 }
             }
+        } else {
+            return;
         }
-        if (!empty($this->sccppath["tftp_path"])) {
+        $dst = $this->sccppath["tftp_path"];
+        $this->sccppath["tftp_path_store"] = $dst;
+        $this->sccppath["tftp_lang_path"] = $dst;
+        $this->sccppath["tftp_firmware_path"] = $dst;
+  //    TFTP -REWrite        
+        if (!empty($this->sccpvalues["tftp_rewrite"])) { 
+            if ($this->sccpvalues["tftp_rewrite"]["data"]=='on') {
+                $dst = $this->sccppath["tftp_path"] . '/settings';
+                if (!file_exists($dst)) {
+                    if (!mkdir($dst, 0777, true)) {
+                        die('Error creating seting dir');
+                    }
+                }                
+                $this->sccppath["tftp_path_store"] = $dst;
+
+                $dst = $this->sccppath["tftp_path"] . '/locales';
+                if (!file_exists($dst)) {
+                    if (!mkdir($dst, 0777, true)) {
+                        die('Error creating seting dir');
+                    }
+                }                
+                $dst = $this->sccppath["tftp_path"] . '/locales/languages';
+                if (!file_exists($dst)) {
+                    if (!mkdir($dst, 0777, true)) {
+                        die('Error creating seting dir');
+                    }
+                }                
+                $this->sccppath["tftp_lang_path"] = $dst;
+
+                $dst = $this->sccppath["tftp_path"] . '/firmware';
+                if (!file_exists($dst)) {
+                    if (!mkdir($dst, 0777, true)) {
+                        die('Error creating seting dir');
+                    }
+                }                
+                $this->sccppath["tftp_firmware_path"] = $dst;
+            }
+        }
+            
+/*        if (!empty($this->sccppath["tftp_path"])) {
             $this->sccppath["tftp_DP"] = $this->sccppath["tftp_path"] . '/Dialplan';
             if (!file_exists($this->sccppath["tftp_DP"])) {
                 if (!mkdir($this->sccppath["tftp_DP"], 0777, true)) {
@@ -1552,11 +1607,11 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 }
             }
         }
-
+*/
         if (empty($_SERVER['DOCUMENT_ROOT'])) {
             return;
         }
-
+        
         if (!file_exists($this->sccppath["tftp_templates"] . '/XMLDefault.cnf.xml_template')) {
             $src_path = $_SERVER['DOCUMENT_ROOT'] . '/admin/modules/sccp_manager/conf/';
             $dst_path = $this->sccppath["tftp_templates"] . '/';
@@ -1747,8 +1802,9 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
             $model_information = $this->getSccp_model_information($get = "all", $validate = false); // Get All
 
         $lang_data = $this->extconfigs->getextConfig('sccp_lang');
+        $data_value['tftp_path'] = $this->sccppath["tftp_path"];
 
-        $this->xmlinterface->create_default_XML($this->sccppath["tftp_path"], $data_value, $model_information, $lang_data);
+        $this->xmlinterface->create_default_XML($this->sccppath["tftp_path_store"], $data_value, $model_information, $lang_data);
 
         /*
           $def_xml_fields = array('authenticationURL', 'informationURL', 'messagesURL', 'servicesURL', 'directoryURL', 'proxyServerURL', 'idleTimeout', 'idleURL');
@@ -1857,7 +1913,8 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         }
         $data_value['ntp_timezone_id'] = $this->extconfigs->getextConfig('sccp_timezone', $data_value['ntp_timezone']);
         $data_value['server_if_list'] = $this->getIP_information();
-
+        $dev_config['tftp_path'] = $this->sccppath["tftp_path"];
+        
         $dev_config['addon_info'] = array();
         if (!empty($dev_config['addon'])) {
             $hw_addon = explode(',', $dev_config['addon']);
@@ -1867,8 +1924,9 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
             }
         }
         $lang_data = $this->extconfigs->getextConfig('sccp_lang');
-
-        return $this->xmlinterface->create_SEP_XML($this->sccppath["tftp_path"], $data_value, $dev_config, $dev_id, $lang_data);
+//        return $this->sccppath["tftp_path_store"];
+        
+        return $this->xmlinterface->create_SEP_XML($this->sccppath["tftp_path_store"], $data_value, $dev_config, $dev_id, $lang_data);
 
 
         /*
@@ -2090,17 +2148,17 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
             return false;
         }
         if ($dev_id == 'all') {
-            $xml_name = $this->sccppath["tftp_path"] . '/SEP*.cnf.xml';
+            $xml_name = $this->sccppath["tftp_path_store"] . '/SEP*.cnf.xml';
             array_map("unlink", glob($xml_name));
-            $xml_name = $this->sccppath["tftp_path"] . '/ATA*.cnf.xml';
+            $xml_name = $this->sccppath["tftp_path_store"] . '/ATA*.cnf.xml';
             array_map("unlink", glob($xml_name));
-            $xml_name = $this->sccppath["tftp_path"] . '/VG*.cnf.xml';
+            $xml_name = $this->sccppath["tftp_path_store"] . '/VG*.cnf.xml';
             array_map("unlink", glob($xml_name));
         } else {
             if (!strpos($dev_id, 'SEP')) {
                 return false;
             }
-            $xml_name = $this->sccppath["tftp_path"] . '/' . $dev_id . '.cnf.xml';
+            $xml_name = $this->sccppath["tftp_path_store"] . '/' . $dev_id . '.cnf.xml';
             if (file_exists($xml_name)) {
                 unlink($xml_name);
             }
@@ -2138,16 +2196,28 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
     }
 
     function getSccp_model_information($get = "all", $validate = false, $format_list = "all", $filter = array()) {
-        $file_ext = array('.loads', '.LOADS', '.sbn', '.SBN', '.bin', '.BIN','.zup','.ZUP');
-        $dir = $this->sccppath["tftp_path"];
+//        $file_ext = array('.loads', '.LOADS', '.sbn', '.SBN', '.bin', '.BIN','.zup','.ZUP');
+        $file_ext = array('.loads', '.sbn', '.bin', '.zup');
+//        $dir = $this->sccppath["tftp_path"];
+        $dir = $this->sccppath["tftp_firmware_path"];
         $dir_tepl = $this->sccppath["tftp_templates"];
-
+        $dir_list = $this->find_all_files($dir, $file_ext, 'fileonly');
+        
         $raw_settings = $this->dbinterface->getDb_model_info($get, $format_list, $filter);
 
         if ($validate) {
             for ($i = 0; $i < count($raw_settings); $i++) {
                 $raw_settings[$i]['validate'] = '-;-';
                 if (!empty($raw_settings[$i]['loadimage'])) {
+                    $raw_settings[$i]['validate'] = 'no;';
+                    if ((strtolower($raw_settings[$i]['vendor'] == 'cisco')) || !empty($dir_list))  {
+                        foreach ($dir_list as $filek){
+                            if (strpos(strtolower($filek), strtolower($raw_settings[$i]['loadimage'])) !== false) {
+                                $raw_settings[$i]['validate'] = 'yes;';
+                            }
+                        }
+                    }
+/* OLD search                   
                     $file = $dir . '/' . $raw_settings[$i]['loadimage'];
                     if (is_dir($file)) {
                         $file .= '/' . $raw_settings[$i]['loadimage'];
@@ -2165,6 +2235,8 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                             $raw_settings[$i]['validate'] = 'yes;';
                         }
                     }
+ * 
+ */
                 } else {
                     $raw_settings[$i]['validate'] = '-;';
                 }
@@ -2258,4 +2330,47 @@ private function strpos_array($haystack, $needles) {
     }
     return FALSE;
 }
+
+private function find_all_files($dir, $file_mask=null, $mode='full'){
+
+    $result = NULL;
+    if (empty($dir) || (!file_exists($dir))) {
+        return $result;
+    }
+
+    $root = scandir($dir);
+    foreach($root as $value) {
+        if($value === '.' || $value === '..') {continue;}
+        if(is_file("$dir/$value")) {
+            $filter = false;
+            if (!empty($file_mask)) {
+                if (is_array($file_mask)) {
+                    foreach ($file_mask as $k){
+                        if (strpos(strtolower($value), strtolower($k)) !== false) {$filter = true;}
+                    }
+                } else {
+                    if (strpos(strtolower($value), strtolower($file_mask)) !== false) {$filter = true;}
+                }
+              } else {$filter = true;}
+            if ($filter) {
+                if ($mode=='fileonly'){
+                    $result[]="$value";
+                } else {
+                    $result[]="$dir/$value";
+                }
+            } else {$result[]=null;}
+            continue;
+        }
+        $sub_fiend = $this->find_all_files("$dir/$value",$file_mask,$mode);
+        if (!empty($sub_fiend)) {
+            foreach($sub_fiend as $sub_value) {
+                if (!empty($sub_value)) {
+                    $result[]=$sub_value;
+                }
+            }
+        }
+    }
+    return $result;
+} 
+
 }

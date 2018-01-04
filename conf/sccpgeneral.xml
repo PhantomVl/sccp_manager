@@ -445,9 +445,9 @@ and open the template in the editor. Base Version before all crash :-)
     
     
       <item type="IS" id="1"><name>hotline_enabled</name> <label>Hotline</label>
-          <default>no</default>
-          <button value="yes">Enabled</button>
-          <button value="no">Disabled</button>
+          <default>off</default>
+          <button value="on">Enabled</button>
+          <button value="off">Disabled</button>
           <help>Hotline Enabled: This allows unregistered extensions to connect to the system and dial the number listed below.</help>
       </item>
       <item type="IE" id="2"><label>Hotline extension</label>
@@ -552,6 +552,15 @@ and open the template in the editor. Base Version before all crash :-)
             </input>
             <help>Path to tftp home directory</help>
         </item>
+        <item type="IS" id="2" seq="20">
+            <name>tftp_rewrite</name> 
+            <label>TFTP SERVER remapping support</label>
+            <default>off</default>
+            <button value="on">Enabled</button>
+            <button value="off">Disabled</button>
+            <help>Support the use of regular-expression-based filename remapping</help>
+        </item>
+        
         <item type="SL" id="2"><label>SCCP SERVER MySQL Device Table Name</label>
             <name>devicetable</name> 
             <default>sccpdevice</default>
@@ -957,7 +966,7 @@ and open the template in the editor. Base Version before all crash :-)
         </item>
 
         <item type="IS" id="1" seq="20"><name>srst_Option</name> <label>SRST Server Enabled</label>
-          <default>no</default>
+          <default>disable</default>
           <button value="enabled">Yes</button>
           <button value="disable">No</button>
           <button value="user">Template Default</button>

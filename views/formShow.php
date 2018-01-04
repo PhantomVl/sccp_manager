@@ -344,7 +344,7 @@ foreach ($items as $child) {
 /*
  *    Input element Select SLD - Date format 
  *                         SLZ - Time Zone 
- *                         SLT - TFTP Lang
+ *                        
  *                         SLM - Music on hold 
  *                         SLK - System KeySet
  */

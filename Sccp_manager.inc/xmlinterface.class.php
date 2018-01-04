@@ -27,14 +27,15 @@ class xmlinterface {
             'about' => 'Create XML data interface ver: ' . $Ver);
     }
 
-    function create_default_XML($data_path = '', $data_values = array(), $model_information = array(), $lang_info = array()) {
-        if (empty($data_path) || empty($data_values)) {
+    function create_default_XML($store_path = '', $data_values = array(), $model_information = array(), $lang_info = array()) {
+        $data_path = $data_values['tftp_path'];
+        if (empty($store_path) || empty($data_path) || empty($data_values)) {
             return;
         }
         $def_xml_fields = array('authenticationURL', 'informationURL', 'messagesURL', 'servicesURL', 'directoryURL', 'proxyServerURL', 'idleTimeout', 'idleURL');
         $def_xml_locale = array('userLocale', 'networkLocaleInfo', 'networkLocale');
-        $xml_name = $data_path . '/XMLDefault.cnf.xml';
-        $xml_template = $data_path . '/templates/XMLDefault.cnf.xml_template';
+        $xml_name = $store_path . '/XMLDefault.cnf.xml';
+        $xml_template = $data_values['tftp_path'] . '/templates/XMLDefault.cnf.xml_template';
 
         if (file_exists($xml_template)) {
             $xml_work = simplexml_load_file($xml_template);
@@ -124,7 +125,7 @@ class xmlinterface {
         }
     }
 
-    function create_SEP_XML($data_path = '', $data_values = array(), $dev_config = array(), $dev_id = '', $lang_info = array()) {
+    function create_SEP_XML($store_path = '', $data_values = array(), $dev_config = array(), $dev_id = '', $lang_info = array()) {
         
         $var_xml_general_fields = array('authenticationURL' => 'dev_authenticationURL', 'informationURL' => 'dev_informationURL', 'messagesURL' => 'dev_messagesURL',
             'servicesURL' => 'dev_servicesURL', 'directoryURL' => 'dev_directoryURL', 'proxyServerURL' => 'dev_proxyServerURL', 'idleTimeout' => 'dev_idleTimeout',
@@ -134,13 +135,15 @@ class xmlinterface {
             'phoneServices' => 'null', 'certHash' => 'null',
             'deviceSecurityMode' => '1');
         
-        if (empty($dev_id)) {
-            return false;
-        }
 //        $var_hw_config = $this->dbinterface->get_db_SccpTableData("get_sccpdevice_byid", array('id' => $dev_id));
 
         if (empty($dev_config)) {
             return false;
+        }
+        $data_path = $dev_config['tftp_path'];
+
+        if (empty($store_path) || empty($data_path) || empty($data_values) || empty($dev_id)) {
+            return;
         }
 
         if (!empty($dev_config['nametemplate'])) {
@@ -148,7 +151,7 @@ class xmlinterface {
         } else {
             $xml_template = $data_path . '/templates/SEP0000000000.cnf.xml_79df_template';
         }
-        $xml_name = $data_path . '/' . $dev_id . '.cnf.xml';
+        $xml_name = $store_path . '/' . $dev_id . '.cnf.xml';
         if (file_exists($xml_template)) {
             $xml_work = simplexml_load_file($xml_template);
 

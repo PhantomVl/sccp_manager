@@ -194,7 +194,7 @@ class srvinterface {
             $ast_out = substr($matches[0], 9, -1);
             return explode(' ', $ast_out);
         } else {
-            return aray('unknown');
+            return array('unknown');
         }
     }
 

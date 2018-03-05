@@ -340,8 +340,8 @@ and open the template in the editor. Base Version before all crash :-)
             <name>directrtp</name> 
             <label>Direct RTP</label>
             <default>off</default>
-            <button value="off">Off</button>
             <button value="on">On</button>
+            <button value="off">Off</button>
             <help>This option set global allow devices to do direct RTP sessions (default Off)</help>
         </item>
         <item type="IS" id="5" seq="0">
@@ -355,6 +355,14 @@ and open the template in the editor. Base Version before all crash :-)
             <button value="progress">Progress</button>
             <button value="none">None</button>
             <help>The audio strem will be open in the progress and connected state. Valid options: NONE, progress, offhook, dial, ringout. Default may be Progress.</help>
+        </item>
+        <item type="IS" id="5" seq="0">
+            <name>simulate_enbloc</name> 
+            <label>Simulated Enbloc Dialing</label>
+            <default>on</default>
+            <button value="on">On</button>
+            <button value="off">Off</button>
+            <help>Use simulated enbloc dialing to speedup connection when dialing while onhook (older phones)</help>
         </item>
     </page_group>          
     <page_group name="sccp_dev_softkey">

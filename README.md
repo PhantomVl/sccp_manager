@@ -17,8 +17,8 @@ SS   SS    GG    G   UU   UU   II
 ### Hot Link 
 
 [![Download Sccp-Mamager](https://img.shields.io/badge/SccpGUI-build-ff69b4.svg)](https://github.com/PhantomVl/sccp_manager/archive/master.zip)
-[![Download Chan-SCCP channel driver for Asterisk(https://img.shields.io/sourceforge/dt/chan-sccp-b.svg)](https://github.com/chan-sccp/chan-sccp/releases/latest)
-[![Chan-SCCP Documentation (https://img.shields.io/badge/docs-wiki-blue.svg)](https://github.com/chan-sccp/chan-sccp/wiki)
+[![Download Chan-SCCP channel driver for Asterisk] (https://img.shields.io/sourceforge/dt/chan-sccp-b.svg)](https://github.com/chan-sccp/chan-sccp/releases/latest)
+[![Chan-SCCP Documentation] (https://img.shields.io/badge/docs-wiki-blue.svg)](https://github.com/chan-sccp/chan-sccp/wiki)
 
 This module has been developed to help IT Staff with their Asterisk-Cisco infrastructure deployment,
 providing easily provisioning and managing Cisco IP phones and extensions in a similar way as it does with Cisco CallManager.
@@ -33,7 +33,7 @@ You can control phone buttons (depending on the phone model) assigning multiple 
 And you can use the driver functions "sccp_chain" from the GUI module.
 
 ### Wiki
-You can find more information and documentation on our [![Wiki](https://img.shields.io/badge/Wiki-new-blue.svg)](https://github.com/PhantomVl/sccp_manager/wiki)
+You can find more information and documentation on our [![SCCP Manager Wiki](https://img.shields.io/badge/Wiki-new-blue.svg)](https://github.com/PhantomVl/sccp_manager/wiki)
 
 ### Prerequisites
 Make sure you have the following installed on your system:

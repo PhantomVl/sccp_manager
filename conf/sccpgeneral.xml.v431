@@ -3,6 +3,23 @@
 To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor. Base Version before all crash :-)
+ *                          IE - Text Input 
+ *                         IED - Text Input Dynamic
+ *                         ITED- Input Dynamic Table
+ *                          IS - Radio box
+ *                          SL - Select element 
+ *                         SLA - Select element (from - data )
+ *    Input element Select SLD - Date format 
+ *                         SLZ - Time Zone 
+ *                         SLZN - Time Zone List
+ *                         SLT - TFTP Lang
+ *                         SLM - Music on hold 
+ *                         SLK - System KeySet
+ *  * Input element Select SLS - System Language 
+ *    Input element Select SDM - Model List 
+ *                         SDE - Extension List 
+ *    Help elemen          HLP - Help Element
+ 
 -->
 <root>
     <page_group name="sccp_info">
@@ -817,6 +834,7 @@ and open the template in the editor. Base Version before all crash :-)
         <label>SCCP Server Path config</label>
         <item type="IE" id="1" seq="2">
             <label>SCCP TFTP SERVER Path</label>
+            <class>provision_hide</class>
             <input>
                 <name>tftp_path</name> 
                 <default>/tftpboot</default>
@@ -824,15 +842,29 @@ and open the template in the editor. Base Version before all crash :-)
             </input>
             <help>Path to tftp home directory</help>
         </item>
+        <item type="IE" id="1" seq="20">
+            <label>Provision SERVER Path</label>
+            <class>provision_show</class>
+            <input>
+                <name>tftp_rewrite_path</name> 
+                <default>/tftpboot</default>
+                <class>sccp-custom</class>
+            </input>
+            <help>Use path from provision index.cnf file. You must first make sure that you have properly configured the "Provision"</help>
+        </item>
+
         <item type="IS" id="2" seq="20">
             <name>tftp_rewrite</name> 
             <label>TFTP SERVER remapping support</label>
             <default>off</default>
-            <button value="on">Enabled</button>
+            <option_hide class=".provision_hide">pro</option_hide>
+            <option_show class=".provision_show">pro</option_show>
             <button value="off">Disabled</button>
+            <button value="on">Custom</button>
+            <button value="pro">Provision</button>
             <help>Support the use of regular-expression-based filename remapping</help>
         </item>
-        
+
         <item type="SL" id="2">
             <label>SCCP SERVER MySQL Device Table Name</label>
             <name>devicetable</name> 

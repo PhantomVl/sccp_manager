@@ -1520,8 +1520,54 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
      */
 
 // !TODO!: -TODO-: This function is getting a little big. Might be possible to sperate tftp work into it's own file/class. Initially, you need to remove the not working section and commented out section
-
+    
     function init_sccp_path() {
+        global $db;
+        global $amp_conf;
+
+        $confDir = $amp_conf["ASTETCDIR"];
+        if (empty($this->sccppath["asterisk"])) {
+            if (strlen($confDir) < 1) {
+                $this->sccppath["asterisk"] = "/etc/asterisk";
+            } else {
+                $this->sccppath["asterisk"] = $confDir;
+            }
+        }
+
+        $driver = $this->FreePBX->Core->getAllDriversInfo();
+        $sccp_driver_replace= '';
+        if (empty($driver['sccp'])) {
+            $sccp_driver_replace = 'yes';
+        } else {
+            if (empty($driver['sccp']['Version'])) {
+                $sccp_driver_replace = 'yes';
+            } else {
+                if ($driver['sccp']['Version'] != $this->sccp_driver_ver) {
+                    $sccp_driver_replace = 'yes';
+                }
+            }
+        }
+        
+        $this->sccpvalues['sccp_compatible'] = array('keyword' => 'compatible', 'data' => $this->srvinterface->get_compatible_sccp(), 'type' => '1', 'seq' => '99');
+//        $this->sccpvalues['sccp_compatible'] = '11';
+        
+        $this->sccppath = $this->extconfigs->validate_init_path($confDir, $this->sccpvalues, $sccp_driver_replace);
+        
+        $driver = $this->FreePBX->Core->getAllDriversInfo(); // ??????
+
+        $read_config = $this->cnf_read->getConfig('sccp.conf');
+        $this->sccp_conf_init['general'] = $read_config['general'];
+        foreach ($read_config as $key => $value) {
+            if (isset($read_config[$key]['type'])) { // copy soft key
+                if ($read_config[$key]['type'] == 'softkeyset') {
+                    $this->sccp_conf_init[$key] = $read_config[$key];
+                }
+            }
+        }
+      
+    }
+/*   OLD INI 
+    function init_sccp_path1() {
         global $db;
         global $amp_conf;
 
@@ -1599,7 +1645,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
             }
         }
             
-/*        if (!empty($this->sccppath["tftp_path"])) {
+        if (!empty($this->sccppath["tftp_path"])) {
             $this->sccppath["tftp_DP"] = $this->sccppath["tftp_path"] . '/Dialplan';
             if (!file_exists($this->sccppath["tftp_DP"])) {
                 if (!mkdir($this->sccppath["tftp_DP"], 0777, true)) {
@@ -1607,7 +1653,8 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 }
             }
         }
-*/
+
+    
         if (empty($_SERVER['DOCUMENT_ROOT'])) {
             return;
         }
@@ -1666,10 +1713,10 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 }
             }
         }
-
-//        $this->sccp_conf_init = @parse_ini_file($this->sccppath["sccp_conf"], true);
+ 
+ //        $this->sccp_conf_init = @parse_ini_file($this->sccppath["sccp_conf"], true);
     }
-
+*/
     /*
      *      DialPlan 
      *      

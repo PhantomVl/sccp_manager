@@ -83,6 +83,12 @@ foreach ($items as $child) {
         $res_input = '';
         $res_name = '';
         $res_id = $npref.$child->input[0]->name;
+        // --- Add Hiden option
+        $res_sec_class ='';   
+        if (!empty($child ->class)){
+            $res_sec_class = (string)$child ->class;
+        }
+         
         if (empty($child->nameseparator)) {
             $child->nameseparator = ' / ';
         }
@@ -92,7 +98,7 @@ foreach ($items as $child) {
                 
         ?>
         <div class="element-container">
-            <div class="row"> <div class="form-group"> 
+            <div class="row"> <div class="form-group <?php echo $res_sec_class; ?>"> 
                     <div class="col-md-3">
                         <label class="control-label" for="<?php echo $res_id; ?>"><?php echo _($child->label);?></label>
                         <i class="fa fa-question-circle fpbx-help-icon" data-for="<?php echo $res_id; ?>"></i>
@@ -206,7 +212,14 @@ foreach ($items as $child) {
                                     if (!empty($value->option_hide)) { 
                                         $opt_class .= " sccp_button_hide";
                                         $opt_hide = ' data-vhide="'.$value->option_hide.'" data-btn="checkbox" data-clhide="'.$value->option_hide['class'].'" ';
-                                    }                          
+                                    }     
+                                    if (!empty($child->option_show)) { 
+                                        if (empty($opt_hide)) {
+                                            $opt_hide =' class="sccp_button_hide" ';
+                                        }
+                                        $opt_hide .= ' data-vshow="'.$child->option_show.'" data-clshow="'.$child->option_show['class'].'" ';
+                                    }
+                                    
                                     if (!empty($value->option_disabled)) { 
                                         $opt_class .= " sccp_button_disabled";
                                         $opt_hide = ' data-vhide="'.$value->option_disabled.'" data-btn="checkbox" data-clhide="'.$value->option_disabled['class'].'" ';
@@ -287,11 +300,16 @@ foreach ($items as $child) {
     if ($child['type'] == 'IS') {
         $res_n =  (string)$child->name;
         $res_id = $npref.$child->name;
-            
+             // --- Add Hiden option
+        $res_sec_class ='';   
+        if (!empty($child ->class)){
+            $res_sec_class = (string)$child ->class;
+        }
+       
             echo '<!-- Begin '.$child->label.' -->';
         ?>
         <div class="element-container">
-            <div class="row"><div class="form-group"> 
+            <div class="row"><div class="form-group <?php echo $res_sec_class;?>"> 
                     <div class="col-md-3 radioset">
                         <label class="control-label" for="<?php echo $res_id; ?>"><?php echo _($child->label);?></label>
                         <i class="fa fa-question-circle fpbx-help-icon" data-for="<?php echo $res_id; ?>"></i>
@@ -315,8 +333,14 @@ foreach ($items as $child) {
                             }
                           }
                           if (!empty($child->option_hide)) { 
-                           $opt_hide = ' class="sccp_button_hide" data-vhide="'.$child->option_hide.'" data-clhide="'.$child->option_hide['class'].'" ';
+                            $opt_hide = ' class="sccp_button_hide" data-vhide="'.$child->option_hide.'" data-clhide="'.$child->option_hide['class'].'" ';
                           }                          
+                          if (!empty($child->option_show)) { 
+                            if (empty($opt_hide)) {
+                                $opt_hide =' class="sccp_button_hide" ';
+                            }
+                            $opt_hide .= ' data-vshow="'.$child->option_show.'" data-clshow="'.$child->option_show['class'].'" ';
+                          }
                           foreach ($child->xpath('button') as $value) {
                             $val_check = (string)$value[@value];
                             if ($val_check == '' || $val_check == 'NONE' || $val_check == 'none' ) {

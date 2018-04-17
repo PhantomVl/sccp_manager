@@ -211,4 +211,123 @@ class extconfigs {
         'New Zealand' => array('offset' => '720', 'daylight' => 'Daylight')
     );
 
+    
+    public function validate_init_path($confDir = '', $db_vars, $sccp_driver_replace='') {
+//        global $db;
+//        global $amp_conf;
+// *** Setings for Provision Sccp        
+        $adv_config = Array('tftproot' => '', 'firmware' => 'firmware', 'settings' => 'settings', 
+                            'locales' => 'locales', 'languages' => 'languages', 'templates' => 'templates');                
+        $adv_tree['pro']   = Array('templates' => 'tftproot', 'settings' => 'tftproot', 'locales' => 'tftproot',  'firmware' => 'tftproot', 'languages' => 'locales');
+        $adv_tree['def']   = Array('templates' => 'tftproot', 'settings' => 'tftproot', 'locales' => 'tftproot',  'firmware' => 'tftproot', 'languages' => 'tftproot');
+//* **************------ ****        
+        $base_tree = Array('tftp_templates' => 'templates', 'tftp_path_store' => 'settings', 'tftp_lang_path' => 'languages', 'tftp_firmware_path'=>'firmware');
+
+        
+        if (empty($confDir)) {
+            return array('error' => 'empty СonfDir' );
+        }
+        
+        $base_config = Array( 'asterisk' => $confDir, 'sccp_conf' => $confDir . '/sccp.conf', 'tftp_path' => '');
+
+
+        if (!empty($db_vars["tftp_path"])) {
+            if (file_exists($db_vars["tftp_path"]["data"])) {
+                    $base_config["tftp_path"] = $db_vars["tftp_path"]["data"];
+            }
+        }
+        if (empty($base_config["tftp_path"])) {
+            if (file_exists($this->getextConfig('sccpDefaults', "tftp_path"))) {
+                $base_config["tftp_path"] = $this->getextConfig('sccpDefaults', "tftp_path");
+            }
+        }
+        if (empty($base_config["tftp_path"])) {
+            return array('error' => 'empty tftp_path' );
+        }
+        if (!empty($db_vars['tftp_rewrite_path'])) { 
+            $adv_ini = $db_vars['tftp_rewrite_path']["data"];
+        }
+
+        $adv_tree_mode = 'def';
+        if (empty($db_vars["tftp_rewrite"])) { 
+            $db_vars["tftp_rewrite"]["data"] = "off";
+        }
+        
+        $adv_config['tftproot'] = $base_config["tftp_path"];
+        if ($db_vars["tftp_rewrite"]["data"] == 'pro') {
+            $adv_tree_mode = 'pro';
+            if (!empty($adv_ini)) { // something found in external conflicts
+                $adv_ini .= 'index.cnf';
+                if (file_exists($adv_ini)) {
+                    $adv_ini_array = parse_ini_file($adv_ini);
+                    $adv_config = array_merge($adv_config, $adv_ini_array);
+                }
+            }
+        }
+        if ($db_vars["tftp_rewrite"]["data"] == 'on') {
+            $adv_tree_mode = 'pro';
+        }
+        foreach ($adv_tree[$adv_tree_mode] as $key => $value) {
+            if (!empty($adv_config[$key])) {
+                if (substr($adv_config[$key],0,1) != "/") {
+                    $adv_config[$key] = $adv_config[$value].'/'.$adv_config[$key];
+                }
+            }
+        }
+        foreach ($base_tree as $key => $value) {
+            $base_config[$key] = $adv_config[$value];
+            if (!file_exists($base_config[$key])) {
+                if (!mkdir($base_config[$key], 0777, true)) {
+                    die('Error creating dir : '. $base_config[$key]);
+                }
+            }
+        } 
+        
+//        $base_config['External_ini'] = $adv_config;
+//        $base_config['External_mode'] =  $adv_tree_mode;
+
+/*
+        if (!empty($this->sccppath["tftp_path"])) {
+            $this->sccppath["tftp_DP"] = $this->sccppath["tftp_path"] . '/Dialplan';
+            if (!file_exists($this->sccppath["tftp_DP"])) {
+                if (!mkdir($this->sccppath["tftp_DP"], 0777, true)) {
+                    die('Error creating DialPlan template dir');
+                }
+            }
+        }
+*/        
+  //    TFTP -REWrite        double model 
+        if (empty($_SERVER['DOCUMENT_ROOT'])) {
+            $base_config['error'] = 'Empty DOCUMENT_ROOT';
+            return $base_config;
+        }
+        
+        if (!file_exists($base_config["tftp_templates"] . '/XMLDefault.cnf.xml_template')) {
+            $src_path = $_SERVER['DOCUMENT_ROOT'] . '/admin/modules/sccp_manager/conf/';
+            $dst_path = $base_config["tftp_templates"] . '/';
+            foreach (glob($src_path . '*.*_template') as $filename) {
+                copy($filename, $dst_path . basename($filename));
+            }
+        }
+    
+
+        $dst = $_SERVER['DOCUMENT_ROOT'] . '/admin/modules/core/functions.inc/drivers/Sccp.class.php';
+        if (!file_exists($dst) || $sccp_driver_replace == 'yes') {
+            $src_path = $_SERVER['DOCUMENT_ROOT'] . '/admin/modules/sccp_manager/conf/' . basename($dst) . '.v' . $this->sccpvalues['sccp_compatible']['data'];
+            if (file_exists($src_path)) {
+                copy($src_path, $dst);
+            } else {
+                $src_path = $_SERVER['DOCUMENT_ROOT'] . '/admin/modules/sccp_manager/conf/' . basename($dst);
+                copy($src_path, $dst);
+            }
+        } 
+        
+        if (!file_exists($base_config["sccp_conf"])) { // System re Config 
+            $sccpfile = file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/admin/modules/sccp_manager/conf/sccp.conf');
+            file_put_contents($base_config["sccp_conf"], $sccpfile);
+        }
+    
+        return $base_config;
+    }
 }
+

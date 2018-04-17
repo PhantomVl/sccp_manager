@@ -547,12 +547,17 @@ function Setup_RealTime() {
     $def_bd_sec = 'sccp';
 
     $dir = $cnf_int->get('ASTETCDIR');
-
+    $res_conf_sql = ini_get('pdo_mysql.default_socket');
     $res_conf_old = '';
     $res_conf = '';
     $ext_conf = '';
     if (file_exists($dir . '/extconfig.conf')) {
         $ext_conf = $cnf_read->getConfig('extconfig.conf');
+    }
+    if (!empty($res_conf_sql)) {
+        if (!file_exists($res_conf_sql)) {
+            $def_bd_config['dbsock'] = $res_conf_sql;
+        }
     }
 
     if (!empty($ext_conf)) {

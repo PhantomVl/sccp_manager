@@ -19,9 +19,21 @@ $info['XML'] = $this->xmlinterface->info();
 $info['sccp_class'] = $driver['sccp'];
 $info['Core_sccp'] = array('Version' => $core['Version'],  'about'=> 'Sccp ver.'. $core['Version'].' r'.$core['vCode']. ' Revision :'. $core['RevisionNum']. ' Hash :'. $core['RevisionHash']);
 $info['Asterisk'] = array('Version' => FreePBX::Config()->get('ASTVERSION'),  'about'=> 'Asterisk.');
+if (!empty($this->sccpvalues['tftp_rewrite'])) {
+    if ($this->sccpvalues['tftp_rewrite']['data'] == 'pro') {
+        $info['Provision_SCCP'] = array('Version' => 'base',  'about'=> 'Provision Sccp enabled');
+    } else {
+        $info['TFTP_Rewrite'] = array('Version' => 'base',  'about'=> 'Rewrite Supported');
+    }
+}
 $info['Сompatible'] = array('Version' => $this->srvinterface->get_compatible_sccp(),  'about'=> '');
 
 //print_r($this->dbinterface->info());
+//print("</pre>");
+ //print_r("<br> Request:<br><pre>");
+ //$asss = $this->extconfigs->validate_init_path($this->sccppath["asterisk"],$this->sccpvalues,$driver_ver);
+ //print_r($asss);
+ //print("</pre>");
 
 //   $lang_arr =  $this->extconfigs->getextConfig('sccp_lang','sk_SK');    
 //   print_r('<br>');

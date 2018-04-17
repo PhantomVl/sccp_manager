@@ -32,6 +32,8 @@ This module will suit you if you are planing the to migrate from CallManager to 
 You can control phone buttons (depending on the phone model) assigning multiple lines, speeddials and BLF’s.
 And you can use the driver functions "sccp_chain" from the GUI module.
 
+### Wiki
+You can find more information and documentation on our [![Wiki](https://img.shields.io/badge/Wiki-new-blue.svg)](https://github.com/PhantomVl/sccp_manager/wiki)
 
 ### Prerequisites
 Make sure you have the following installed on your system:
@@ -76,6 +78,12 @@ Make sure you have the following installed on your system:
 7. Confirm installation.
 8. Close Status window.
 9. Apply Config to FreePBX.
+
+### Module update to latest state
+1. Goto to module into your local system. (/var/www/html/admin/module/sccp_manager/)
+        cd /var/www/html/admin/module/sccp_manager/
+        git fetch
+        git pull
 
 ### IMPORTANT NOTES: 
 - This system assumes/requires that you are using the Asterisk realtime database. If you are not yet using the realtime database, 

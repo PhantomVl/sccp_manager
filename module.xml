@@ -5,6 +5,7 @@
 	<type>setup</type>
 	<category>SCCP Connectivity</category>
 	<publisher>Alex GP</publisher>
+        <repo>extended</repo>
 	<description>SCCP Phone and Extension Manager</description>
 	<menuitems>
 		<sccpsettings sort="1">Server Config</sccpsettings>
@@ -18,6 +19,8 @@
 	<location></location>
 	<supported>
 		<version>13.0.0.1</version>
-	</supported>        
+	</supported>
+        <info>https://github.com/PhantomVl/sccp_manager</info>
+        <license>GPL</license>
 	<md5sum></md5sum>
 </module>

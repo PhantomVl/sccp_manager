@@ -323,6 +323,19 @@ $(document).ready(function () {
                 }
             });
         }
+        
+        dev_id = $(this).data('vshow');
+        if (dev_state == 'checked'){
+            dev_class = $(this).data('clshow');
+            $(dev_class).each(function () {
+                if (dev_val ==  dev_id) {
+                    $(this).removeClass('hidden');
+                    $(this).removeAttr('hidden')
+                } else {
+                    $(this).addClass('hidden');
+                }
+            });
+        }        
     });
     $('.sccp_button_hide').on('click', function (e) {
         var dev_id = $(this).data('vhide');
@@ -339,6 +352,20 @@ $(document).ready(function () {
                 $(this).addClass('hidden');
             }
         });
+        
+        dev_id = $(this).data('vshow');
+        if (dev_id !== ''){
+            dev_class = $(this).data('clshow');
+            $(dev_class).each(function () {
+                if (dev_val ==  dev_id) {
+                    $(this).removeClass('hidden');
+                    $(this).removeAttr('hidden')
+                } else {
+                    $(this).addClass('hidden');
+                }
+            });
+        }
+        
     });
 
     $('.sccp_button_disabled').each(function () { // On page create !!  

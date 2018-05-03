@@ -219,7 +219,7 @@ class extconfigs {
         $adv_config = Array('tftproot' => '', 'firmware' => 'firmware', 'settings' => 'settings', 
                             'locales' => 'locales', 'languages' => 'languages', 'templates' => 'templates');                
         $adv_tree['pro']   = Array('templates' => 'tftproot', 'settings' => 'tftproot', 'locales' => 'tftproot',  'firmware' => 'tftproot', 'languages' => 'locales');
-        $adv_tree['def']   = Array('templates' => 'tftproot', 'settings' => 'tftproot', 'locales' => 'tftproot',  'firmware' => 'tftproot', 'languages' => 'tftproot');
+        $adv_tree['def']   = Array('templates' => 'tftproot', 'settings' => '', 'locales' => '',  'firmware' => '', 'languages' => '');
 //* **************------ ****        
         $base_tree = Array('tftp_templates' => 'templates', 'tftp_path_store' => 'settings', 'tftp_lang_path' => 'languages', 'tftp_firmware_path'=>'firmware');
 
@@ -269,8 +269,12 @@ class extconfigs {
         }
         foreach ($adv_tree[$adv_tree_mode] as $key => $value) {
             if (!empty($adv_config[$key])) {
-                if (substr($adv_config[$key],0,1) != "/") {
-                    $adv_config[$key] = $adv_config[$value].'/'.$adv_config[$key];
+                if (!empty($value)) { 
+                    if (substr($adv_config[$key],0,1) != "/") {
+                        $adv_config[$key] = $adv_config[$value].'/'.$adv_config[$key];
+                    }
+                } else {
+                    $adv_config[$key] = $adv_config['tftproot'];
                 }
             }
         }

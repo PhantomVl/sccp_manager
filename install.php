@@ -555,7 +555,7 @@ function Setup_RealTime() {
         $ext_conf = $cnf_read->getConfig('extconfig.conf');
     }
     if (!empty($res_conf_sql)) {
-        if (!file_exists($res_conf_sql)) {
+        if (file_exists($res_conf_sql)) {
             $def_bd_config['dbsock'] = $res_conf_sql;
         }
     }
@@ -597,7 +597,7 @@ function Setup_RealTime() {
     }
     if (empty($res_conf)) {
         $res_conf[$def_bd_sec] = $def_bd_config;
-        $res_conf['general']['dbsock'] = $res_conf[$def_bd_sec]['dbsock'];
+        $res_conf['general']['dbsock'] = $def_bd_config['dbsock'];
         $cnf_wr->writeConfig('res_config_mysql.conf', $res_conf, false);
     }
     $cnf_wr->writeConfig('extconfig.conf', $ext_conf, false);

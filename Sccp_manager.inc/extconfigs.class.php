@@ -317,7 +317,7 @@ class extconfigs {
 
         $dst = $_SERVER['DOCUMENT_ROOT'] . '/admin/modules/core/functions.inc/drivers/Sccp.class.php';
         if (!file_exists($dst) || $sccp_driver_replace == 'yes') {
-            $src_path = $_SERVER['DOCUMENT_ROOT'] . '/admin/modules/sccp_manager/conf/' . basename($dst) . '.v' . $this->sccpvalues['sccp_compatible']['data'];
+            $src_path = $_SERVER['DOCUMENT_ROOT'] . '/admin/modules/sccp_manager/conf/' . basename($dst) . '.v' . $db_vars['sccp_compatible']['data'];
             if (file_exists($src_path)) {
                 copy($src_path, $dst);
             } else {

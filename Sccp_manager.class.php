@@ -1524,8 +1524,10 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
     function init_sccp_path() {
         global $db;
         global $amp_conf;
-
-        $confDir = $amp_conf["ASTETCDIR"];
+        $driver_revision  = array('0' => '', '430' => '.v431', '431' => '.v431');
+        
+        
+        $confDir = $amp_conf["ASTETCDIR"];        
         if (empty($this->sccppath["asterisk"])) {
             if (strlen($confDir) < 1) {
                 $this->sccppath["asterisk"] = "/etc/asterisk";
@@ -1533,6 +1535,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 $this->sccppath["asterisk"] = $confDir;
             }
         }
+        $ver_id = $this->srvinterface->get_compatible_sccp();       
 
         $driver = $this->FreePBX->Core->getAllDriversInfo();
         $sccp_driver_replace= '';
@@ -1542,14 +1545,14 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
             if (empty($driver['sccp']['Version'])) {
                 $sccp_driver_replace = 'yes';
             } else {
-                if ($driver['sccp']['Version'] != $this->sccp_driver_ver) {
+                if ($driver['sccp']['Version'] != $this->sccp_driver_ver.$driver_revision[$ver_id]) {
                     $sccp_driver_replace = 'yes';
                 }
             }
         }
         
-        $this->sccpvalues['sccp_compatible'] = array('keyword' => 'compatible', 'data' => $this->srvinterface->get_compatible_sccp(), 'type' => '1', 'seq' => '99');
 //        $this->sccpvalues['sccp_compatible'] = '11';
+        $this->sccpvalues['sccp_compatible'] = array('keyword' => 'compatible', 'data' => $ver_id, 'type' => '1', 'seq' => '99');
         
         $this->sccppath = $this->extconfigs->validate_init_path($confDir, $this->sccpvalues, $sccp_driver_replace);
         

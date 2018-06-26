@@ -81,9 +81,10 @@ Make sure you have the following installed on your system:
 
 ### Module update to latest state
 1. Goto to module into your local system. (/var/www/html/admin/module/sccp_manager/)
-        cd /var/www/html/admin/module/sccp_manager/
-        git fetch
-        git pull
+
+>        cd /var/www/html/admin/module/sccp_manager/
+>        git fetch
+>        git pull
 
 ### IMPORTANT NOTES: 
 - This system assumes/requires that you are using the Asterisk realtime database. If you are not yet using the realtime database, 

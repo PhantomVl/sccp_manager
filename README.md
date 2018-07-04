@@ -69,7 +69,7 @@ Make sure you have the following installed on your system:
 
 ### Module installation
 
-1. Download module into your local system. (/var/www/html/admin/module/)
+1. Download module into your local system. (/var/www/html/admin/modules/)
 2. Goto FreePBX Admin -> Module Admin.
 3. Click Upload Modules.
 4. Browse to the location of the module on your computer and select Upload.
@@ -80,9 +80,9 @@ Make sure you have the following installed on your system:
 9. Apply Config to FreePBX.
 
 ### Module update to latest state
-1. Goto to module into your local system. (/var/www/html/admin/module/sccp_manager/)
+1. Goto to module into your local system. (/var/www/html/admin/modules/sccp_manager/)
 
->        cd /var/www/html/admin/module/sccp_manager/
+>        cd /var/www/html/admin/modules/sccp_manager/
 >        git fetch
 >        git pull
 

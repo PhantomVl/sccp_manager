@@ -27,10 +27,7 @@ if (!empty($this->sccpvalues['tftp_rewrite'])) {
     }
 }
 $info['Сompatible'] = array('Version' => $this->srvinterface->get_compatible_sccp(),  'about'=> '');
-
-//print_r($this->dbinterface->info());
-//print("</pre>");
- //print_r("<br> Request:<br><pre>");
+//print_r("<br> Request:<br><pre>");
  //$asss = $this->extconfigs->validate_init_path($this->sccppath["asterisk"],$this->sccpvalues,$driver_ver);
  //print_r($asss);
  //print("</pre>");
@@ -40,7 +37,26 @@ $info['Сompatible'] = array('Version' => $this->srvinterface->get_compatible_sc
 //   print_r(timezone_identifiers_list());
 //   print_r('<br>');
 
-?>
+//print_r($this->dbinterface->info());
+
+if (!empty($this->class_error)) {
+    ?>    
+    <div class="fpbx-container container-fluid">
+        <div class="row">
+            <div class="container">
+                <h2 style="border:2px solid Tomato;color:Tomato;" >Sccp Manager Error</h2>
+                <div class="table-responsive">          
+                    <br> There are Error in the SCCP Module:<br><pre>
+                        <?php print_r($this->class_error); ?>
+                    </pre>
+                    <br> Correct these problems before continuing to work. <br>
+                    <br> Open 'SCCP Conectivity -> Server Config' to change global settings <br>
+                </div>
+            </div>
+        </div>
+    </div>
+<br>
+<?php  }  ?>
 <div class="fpbx-container container-fluid">
     <div class="row">
         <div class="container">

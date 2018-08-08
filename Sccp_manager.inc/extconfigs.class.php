@@ -8,7 +8,8 @@ namespace FreePBX\modules\Sccp_manager;
 
 class extconfigs {
 
-    public function __construct() {
+    public function __construct($parent_class = null) {
+	$this->paren_class = $parent_class;
         
     }
 
@@ -222,7 +223,6 @@ class extconfigs {
         $adv_tree['def']   = Array('templates' => 'tftproot', 'settings' => '', 'locales' => '',  'firmware' => '', 'languages' => '');
 //* **************------ ****        
         $base_tree = Array('tftp_templates' => 'templates', 'tftp_path_store' => 'settings', 'tftp_lang_path' => 'languages', 'tftp_firmware_path'=>'firmware');
-
         
         if (empty($confDir)) {
             return array('error' => 'empty СonfDir' );
@@ -242,8 +242,18 @@ class extconfigs {
             }
         }
         if (empty($base_config["tftp_path"])) {
+            if (!empty($this->paren_class)) {
+                $this->paren_class->class_error['tftp_path'] = 'Tftp path not defined';
+            }
             return array('error' => 'empty tftp_path' );
-        }
+        } 
+        if  (!is_writeable($base_config["tftp_path"])) {
+            if (!empty($this->paren_class)) {
+                $this->paren_class->class_error['tftp_path'] = 'No write permision on tftp DIR';
+            }
+            return array('error' => 'No write permision on tftp DIR' );
+	}
+        
         if (!empty($db_vars['tftp_rewrite_path'])) { 
             $adv_ini = $db_vars['tftp_rewrite_path']["data"];
         }
@@ -302,6 +312,9 @@ class extconfigs {
 */        
   //    TFTP -REWrite        double model 
         if (empty($_SERVER['DOCUMENT_ROOT'])) {
+            if (!empty($this->paren_class)) {
+                $this->paren_class->class_error['DOCUMENT_ROOT'] = 'Empty DOCUMENT_ROOT';
+            }            
             $base_config['error'] = 'Empty DOCUMENT_ROOT';
             return $base_config;
         }

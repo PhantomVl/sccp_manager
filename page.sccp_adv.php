@@ -13,9 +13,13 @@ if (!defined('FREEPBX_IS_AUTH')) { die('No direct script access allowed'); }
 // is only for DISPLAYING things.  MVC is a cool idea, ya know?
 //
 $spage = FreePBX::create()->Sccp_manager;
-$display_page = $spage->AdvServerShowPage();
-$display_info = _("SCCP Advance Server Configuration");    
-
+if (empty($spage->class_error)) {
+    $display_page = $spage->AdvServerShowPage();
+    $display_info = _("SCCP Advance Server Configuration");    
+} else {
+    $display_page = $spage->InfoServerShowPage();
+    $display_info = _("SCCP Server Configuration");    
+}
 ?>
 
 <div class="container-fluid">

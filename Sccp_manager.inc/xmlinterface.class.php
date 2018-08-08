@@ -17,8 +17,8 @@ class xmlinterface {
 
     private $val_null = 'NONE'; /// REPLACE to null Field
 
-    public function __construct() {
-
+    public function __construct($parent_class = null) {
+	$this->paren_class = $parent_class;
     }
 
     public function info() {

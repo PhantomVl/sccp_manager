@@ -12,8 +12,8 @@ namespace FreePBX\modules\Sccp_manager;
 
 class srvinterface {
 
-    public function __construct() {
-        
+    public function __construct($parent_class = null) {
+	$this->paren_class = $parent_class;
     }
 
     public function info() {

@@ -50,7 +50,7 @@ if (!empty($this->class_error)) {
                         <?php print_r($this->class_error); ?>
                     </pre>
                     <br> Correct these problems before continuing to work. <br>
-                    <br> Open 'SCCP Conectivity -> Server Config' to change global settings <br>
+                    <br><h3 style="border:2px solid Tomato;color:Green;" > Open 'SCCP Conectivity -> Server Config' to change global settings</h3> <br>
                 </div>
             </div>
         </div>

@@ -17,10 +17,12 @@
     <?php 
     
         echo $this->ShowGroup('sccp_general',1);
+        echo $this->ShowGroup('sccp_dev_time_s',1);
         echo $this->ShowGroup('sccp_net',1);
         echo $this->ShowGroup('sccp_lang',1);
         echo $this->ShowGroup('sccp_qos_config',1);
         echo $this->ShowGroup('sccp_extpath_config',1);
+        
     ?>    
 
 </form>

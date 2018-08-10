@@ -37,7 +37,7 @@
  *  + Make System Acces from separate class
  *  + Make Var elements from separate class
  *  + To make creating XML files in a separate class
- *  - Add Switch to select XML schema (display)
+ *  + Add Switch to select XML schema (display)
  *  - Bootstrap encodeURI(row['type']) ??????? 
  *  - Check Time zone .... 
  *  + SRST Config
@@ -68,8 +68,10 @@
  *     + dir "templates"
  *     + dir "firmware"
  *     + dir "locales"
- *  - Create Simple User Interface 
- *       - sccpsimple.xml
+ *  + Create Simple User Interface 
+ *       + sccpsimple.xml
+ *  + Add error information on the server information page (critical display error - the system can not work correctly)
+ *  - Add Warning Information on Server Info Page 
  *
  */
 
@@ -93,7 +95,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
     private $tftpLang = array();
     private $hint_context = '@ext-local'; /// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Get it from Config !!!
     private $val_null = 'NONE'; /// REPLACE to null Field
-    public $sccp_model_list = array();
+    public  $sccp_model_list = array();
     private $cnf_wr = null;
     public $sccppath = array();
     public $sccpvalues = array();
@@ -140,7 +142,11 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
 
 
         // Load Advanced Form Constuctor Data 
-        $xml_vars = __DIR__ . '/conf/sccpgeneral.xml.v' . $this->sccpvalues['sccp_compatible']['data'];
+        if (empty($this->sccpvalues['displayconfig'])) {
+            $xml_vars = __DIR__ . '/conf/sccpgeneral.xml.v' . $this->sccpvalues['sccp_compatible']['data'];
+        } else {
+            $xml_vars = __DIR__ . '/conf/'.$this->sccpvalues['displayconfig']['data'].'.xml.v'.$this->sccpvalues['sccp_compatible']['data'];
+        }
         if (!file_exists($xml_vars)) {
             $xml_vars = __DIR__ . '/conf/sccpgeneral.xml';
         }
@@ -354,10 +360,28 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         $request = $_REQUEST;
         $action = !empty($request['action']) ? $request['action'] : '';
 
+        if (!empty(($this->sccpvalues['displayconfig']))) {
+            if (!empty(($this->sccpvalues['displayconfig']['data'] == 'sccpsimple'))) {
+            $this->pagedata = array(
+                "general" => array(
+                    "name" => _("General SCCP Settings"),
+                    "page" => 'views/server.setting.php'
+                ),
+                "sccpdevice" => array(
+                    "name" => _("SCCP Device"),
+                    "page" => 'views/server.device.php'
+                ),
+                "sccpinfo" => array(
+                    "name" => _("SCCP info"),
+                    "page" => 'views/server.info.php'
+                ),
+            );
+            }
+                
+        } 
 
         if (empty($this->pagedata)) {
 //			$driver = $this->FreePBX->Config->get_conf_setting('ASTSIPDRIVER');
-
             $this->pagedata = array(
                 "general" => array(
                     "name" => _("General SCCP Settings"),
@@ -385,6 +409,8 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 ),
             );
 
+        }
+        if (!empty($this->pagedata)) {
             foreach ($this->pagedata as &$page) {
                 ob_start();
                 include($page['page']);
@@ -392,7 +418,6 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 ob_end_clean();
             }
         }
-
         return $this->pagedata;
     }
     

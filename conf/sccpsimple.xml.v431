@@ -25,9 +25,9 @@ and open the template in the editor. Base Version before all crash :-)
     <page_group name="sccp_info">
         <item type="IS" id="6" seq="99">
             <name>XML_info</name> 
-            <label>XML_Ver 431</label>
+            <label>XML_Ver Simple 431</label>
             <default>NONE</default>
-            <button value="NONE">XML_Ver 431</button>
+            <button value="NONE">XML_Ver Simple 431</button>
             <help></help>
         </item>
         
@@ -67,7 +67,115 @@ and open the template in the editor. Base Version before all crash :-)
             </input>
             <help>Help.</help>
         </item>
+        <item type="IE" id="4">
+            <label>Autoanswer Tone</label>
+            <input>
+                <name>autoanswer_tone</name> 
+                <default>0x32</default>
+                <class>sccp-custom</class>
+            </input>
+            <help>Autoanswer Tone: The tone the phone plays back when it picks up the phone in autoanswer mode. Default is '0x32'. Silence is '0x00'. There are lots of tones, all expressed as '0XNN' where 'NN' is a hexadecimal number.</help>
+        </item>
+        <item type="IE" id="5">
+            <label>Remote Hangup Tone</label>
+            <input>
+                <name>remotehangup_tone</name> 
+                <default>0x32</default>
+                <class>sccp-custom</class>
+            </input>
+            <help>Remote Hangup Tone: The tone played by the phone when it received a remote hang-up signal. Use '0' to disable the tone.</help>
+        </item>
+        <item type="IE" id="6">
+            <label>Transfer Tone</label>
+            <input>
+                <name>transfer_tone</name> 
+                <default>0x32</default>
+                <class>sccp-custom</class>
+            </input>
+            <help>Transfer Tone: The tone played when a call is transferred. Use '0' to disable the tone.</help>
+        </item>
+        <item type="IE" id="7">
+            <label>Call Waiting Tone</label>
+            <input>
+                <name>callwaiting_tone</name> 
+                <default>0x2D</default>
+                <class>sccp-custom</class>
+            </input>
+            <help>Call Waiting Tone: The tone played when a call is waiting. If you set this one to '0', you will not get a tone in your current call if a new call comes in, so you might want to disable call waiting for this line instead.</help>
+        </item>
+
+        <label>SCCP QoS config</label>
+        <item type="IE" id="1"> 
+            <label>SCCP ToS / CoS</label>
+            <input>
+                <name>sccp_tos</name> 
+                <default>0x68</default>
+                <class>sccp-custom</class>
+            </input>
+            <input>
+                <name>sccp_cos</name> 
+                <default>0x4</default>
+                <class>sccp-custom</class>
+            </input>
+            <help>SCCP Type Of Service / Class Of Service: SCCP Type or Class of Service - this is modifiable, but don't.</help>
+        </item>
+        <item type="IE" id="2"> 
+            <label>SCCP Audio ToS / CoS</label>
+            <input>
+                <name>audio_tos</name> 
+                <default>0xB8</default>
+                <class>sccp-custom</class>
+            </input>
+            <input>
+                <name>audio_cos</name> 
+                <default>0x6</default>
+                <class>sccp-custom</class>
+            </input>
+            <help>Audio Type Of Service / Class Of Service: Audio Type or Class of Service - this is modifiable, but don't.</help>
+        </item>
+        <item type="IE" id="3"> 
+            <label>SCCP Video ToS / CoS</label>
+            <input>
+                <name>video_tos</name> 
+                <default>0x88</default>
+                <class>sccp-custom</class>
+            </input>
+            <input>
+                <name>video_cos</name> 
+                <default>0x5</default>
+                <class>sccp-custom</class>
+            </input>
+            <help>Video Type Of Service / Class Of Service: Video Type or Class of Service - this is modifiable, but don't.</help>
+        </item>       
+        
+        <item type="IE" id="3">
+            <label>SCCP SERVER MySQL Line Table Name</label>
+            <input>
+                <name>linetable</name> 
+                <default>sccpline</default>
+                <class>sccp-custom</class>
+            </input>
+            <help>Line Table: This is the linetable for your realtime configuration. Don't change this unless you know what you are doing and have made all the appropriate changes in the rest of your Asterisk config files. If you do not want to use the realtime database anymore, you can set this to blank. NOT RECOMMENDED.</help>
+        </item>
+        <item type="SL" id="2">
+            <label>SCCP SERVER MySQL Device Table Name</label>
+            <name>devicetable</name> 
+            <default>sccpdevice</default>
+            <select>sccpdevice</select>
+            <select>sccpdeviceconfig</select>
+            <class>sccp-custom</class>
+            <help>Device Table: This is the devicetable for your realtime configuration. Don't change this unless you know what you are doing and have made all the appropriate changes in the rest of your Asterisk config files. There are two reasonable settings for this - the sccpdevice table or the sccpdeviceconfig view. If you do not want to use the realtime database anymore, you can set this to blank. NOT RECOMMENDED.</help>
+        </item>
+
+        
     
+
+
+
+
+
+
+
     </page_group>
 
     <page_group name="sccp_general">
@@ -262,42 +370,6 @@ and open the template in the editor. Base Version before all crash :-)
             </input>
             <help>Autoanswer Ring Time: The amount of time the phones will ring when being called as Intercom or Paging mode.</help>
         </item>
-        <item type="IE" id="4">
-            <label>Autoanswer Tone</label>
-            <input>
-                <name>autoanswer_tone</name> 
-                <default>0x32</default>
-                <class>sccp-custom</class>
-            </input>
-            <help>Autoanswer Tone: The tone the phone plays back when it picks up the phone in autoanswer mode. Default is '0x32'. Silence is '0x00'. There are lots of tones, all expressed as '0XNN' where 'NN' is a hexadecimal number.</help>
-        </item>
-        <item type="IE" id="5">
-            <label>Remote Hangup Tone</label>
-            <input>
-                <name>remotehangup_tone</name> 
-                <default>0x32</default>
-                <class>sccp-custom</class>
-            </input>
-            <help>Remote Hangup Tone: The tone played by the phone when it received a remote hang-up signal. Use '0' to disable the tone.</help>
-        </item>
-        <item type="IE" id="6">
-            <label>Transfer Tone</label>
-            <input>
-                <name>transfer_tone</name> 
-                <default>0x32</default>
-                <class>sccp-custom</class>
-            </input>
-            <help>Transfer Tone: The tone played when a call is transferred. Use '0' to disable the tone.</help>
-        </item>
-        <item type="IE" id="7">
-            <label>Call Waiting Tone</label>
-            <input>
-                <name>callwaiting_tone</name> 
-                <default>0x2D</default>
-                <class>sccp-custom</class>
-            </input>
-            <help>Call Waiting Tone: The tone played when a call is waiting. If you set this one to '0', you will not get a tone in your current call if a new call comes in, so you might want to disable call waiting for this line instead.</help>
-        </item>
         <item type="IS" id="8">
             <name>echocancel</name> 
             <label>Echo Cancel</label>
@@ -418,7 +490,7 @@ and open the template in the editor. Base Version before all crash :-)
         </item>
     </page_group>          
 
-    <page_group name="sccp_dev_ntp">
+    <page_group name="sccp_dev_ntp_h">
         <label>SCCP NTP Service config</label>
         <item type="IS" id="1" seq="98">
             <name>ntp_config_enabled</name> 
@@ -449,7 +521,7 @@ and open the template in the editor. Base Version before all crash :-)
         </item>
 
     </page_group>          
-    <page_group name="sccp_dev_time">
+    <page_group name="sccp_dev_time_s">
         <label>SCCP Time Service config</label>
         <item type="SLD" id="1" seq="1">
             <label>Display Day Format</label>
@@ -632,51 +704,7 @@ and open the template in the editor. Base Version before all crash :-)
         </item>
         
     </page_group>          
-    <page_group name="sccp_qos_config"> 
-        <label>SCCP QoS config</label>
-        <item type="IE" id="1"> 
-            <label>SCCP ToS / CoS</label>
-            <input>
-                <name>sccp_tos</name> 
-                <default>0x68</default>
-                <class>sccp-custom</class>
-            </input>
-            <input>
-                <name>sccp_cos</name> 
-                <default>0x4</default>
-                <class>sccp-custom</class>
-            </input>
-            <help>SCCP Type Of Service / Class Of Service: SCCP Type or Class of Service - this is modifiable, but don't.</help>
-        </item>
-        <item type="IE" id="2"> 
-            <label>SCCP Audio ToS / CoS</label>
-            <input>
-                <name>audio_tos</name> 
-                <default>0xB8</default>
-                <class>sccp-custom</class>
-            </input>
-            <input>
-                <name>audio_cos</name> 
-                <default>0x6</default>
-                <class>sccp-custom</class>
-            </input>
-            <help>Audio Type Of Service / Class Of Service: Audio Type or Class of Service - this is modifiable, but don't.</help>
-        </item>
-        <item type="IE" id="3"> 
-            <label>SCCP Video ToS / CoS</label>
-            <input>
-                <name>video_tos</name> 
-                <default>0x88</default>
-                <class>sccp-custom</class>
-            </input>
-            <input>
-                <name>video_cos</name> 
-                <default>0x5</default>
-                <class>sccp-custom</class>
-            </input>
-            <help>Video Type Of Service / Class Of Service: Video Type or Class of Service - this is modifiable, but don't.</help>
-        </item>       
-    </page_group>
+
     <page_group name="sccp_hotline_config">
         <label>SCCP Line config</label>
         <item type="HLP" id="2">
@@ -873,25 +901,6 @@ and open the template in the editor. Base Version before all crash :-)
             <help>Support the use of regular-expression-based filename remapping</help>
         </item>
 
-        <item type="SL" id="2">
-            <label>SCCP SERVER MySQL Device Table Name</label>
-            <name>devicetable</name> 
-            <default>sccpdevice</default>
-            <select>sccpdevice</select>
-            <select>sccpdeviceconfig</select>
-            <class>sccp-custom</class>
-            <help>Device Table: This is the devicetable for your realtime configuration. Don't change this unless you know what you are doing and have made all the appropriate changes in the rest of your Asterisk config files. There are two reasonable settings for this - the sccpdevice table or the sccpdeviceconfig view. If you do not want to use the realtime database anymore, you can set this to blank. NOT RECOMMENDED.</help>
-        </item>
-
-        <item type="IE" id="3">
-            <label>SCCP SERVER MySQL Line Table Name</label>
-            <input>
-                <name>linetable</name> 
-                <default>sccpline</default>
-                <class>sccp-custom</class>
-            </input>
-            <help>Line Table: This is the linetable for your realtime configuration. Don't change this unless you know what you are doing and have made all the appropriate changes in the rest of your Asterisk config files. If you do not want to use the realtime database anymore, you can set this to blank. NOT RECOMMENDED.</help>
-        </item>
 
         <item type="IS" id="4" seq="99">
             <name>createlangdir</name> 

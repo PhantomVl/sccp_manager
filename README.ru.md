@@ -13,18 +13,18 @@
 [![Download Chan-SCCP channel driver for Asterisk](https://img.shields.io/sourceforge/dt/chan-sccp-b.svg)](https://github.com/chan-sccp/chan-sccp/releases/latest)
 [![Chan-SCCP Documentation] (https://img.shields.io/badge/docs-wiki-blue.svg)](https://github.com/chan-sccp/chan-sccp/wiki)
 
-История 
+### История
 Корни идея создания этого проекта лежат в несовершенстве уже существующего и заброшенного проекта.
 Для желающих попробовать себя на просторах программирования ссылка на проект (https://github.com/Cynjut/SCCP_Manager).
 
-Кому это надо...
+### Кому это надо...
 Ну в первую очередь для себя, а заодно и для тех у кого есть куча телефонного хлама от компании Cisco. 
 Если вы планируете использовать Aserisk + FreePBX, то я надеюсь, что данный модуль существенно упростит управление и настройки телефонами от Cisco.
 В интернете, существует замечательный проект (IMHO) который интегрирует проприетарный протокол Cisco в Asterisk, конечно он пока далек от идеала, 
 но все же это замечательная замена серверам CCME, СCM, СUСM !
 Ну и я совершенно не представляю себе, сколько времени данный проект будет поддерживаться.
 
-Если ты еще с нами ...
+### Если ты еще с нами ...
 
 Как я говорил выше, это дополнение к (Aserisk + FreePBX), но нам еще потребуется :
  1. У меня не получилось поставить добиться работы с дисками Aserisk и FreePBX - собираем из исходников 
@@ -35,7 +35,7 @@
 ### Wiki - Основные Инструкции по настройке 
 Вся документация лежит на Вики [![SCCP Manager Wiki](https://img.shields.io/badge/Wiki-new-blue.svg)](https://github.com/PhantomVl/sccp_manager/wiki)
 
-## Prerequisites - как говориться все, что хуже этого возможно работать тоже будет .... но только вопрос как ?
+### Prerequisites - как говориться все, что хуже этого возможно работать тоже будет .... но только вопрос как ?
 Make sure you have the following installed on your system:
 - c-compiler: (мне то он не нужен, но как собирать все остальное ?)
   - gcc >= 4.4  (note: older not supported, higher advised)
@@ -48,29 +48,30 @@ Make sure you have the following installed on your system:
   - freepbx >= 13.0.192 (http://wiki.freepbx.org/display/FOP/Install+FreePBX)
 - standard posix compatible applications like sed, awk, tr
 
-## Installation Очень короткая инструкция 
+### Installation Очень короткая инструкция
+###### [Полная версия инструкции] (https://github.com/PhantomVl/sccp_manager/wiki/step-by-step-instlation)
  - Chan_SCCP module 4.3.0 (or later) [See our WIKI] (https://github.com/chan-sccp/chan-sccp/wiki/Building-and-Installation-Guide)
    - Собираем с флагами и создаем БД для работы:
-    ```./configure --enable-conference --enable-advanced-functions --enable-distributed-devicestate```
-    ```mysql -u root asterisk < mysql-v5_enum.sql```
+>     ./configure --enable-conference --enable-advanced-functions --enable-distributed-devicestate
+>     mysql -u root asterisk < mysql-v5_enum.sql
 
 - Настраиваем TFTP Server, он нужен для телефонов /tftpboot/ [See our WIKI] (https://github.com/chan-sccp/chan-sccp/wiki/setup-tftp-service)
 - Настраиваем DHCP serve, как ни странно он тоже нужен [See our WIKI] (https://github.com/chan-sccp/chan-sccp/wiki/setup-dhcp-service)
 
 - Установка модуля
-    cd /var/www/html/admin/modules/
-    git clone https://github.com/PhantomVl/sccp_manager.git
-    amportal chown
-    amportal a ma install sccp_manager
+>     cd /var/www/html/admin/modules/
+>     git clone https://github.com/PhantomVl/sccp_manager.git
+>     amportal chown
+>     amportal a ma install sccp_manager
     
 - Настройка модуля
     1. Открываем "SCCP Connectivity" -> "Server Config" и делаем все, что вам нужно.
     2. Жмем "Сохранить"  ..... И Все ! Дальше настройки в рамках концепции Freepbx.
 
 - Обновление модуля
->        cd /var/www/html/admin/modules/sccp_manager/
->        git fetch
->        git pull
+>     cd /var/www/html/admin/modules/sccp_manager/
+>     git fetch
+>     git pull
 
 ### Важно:   
    - Желательно иметь Firmware телефонов Cisco, языковые пакеты ну всякое разное.

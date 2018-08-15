@@ -1,20 +1,13 @@
 ## Welcome to Chan_SCCP GUI Manager for FreePBX
 
-```
- SSSSS      CCCCC     CCCCC   PPPP       
-SS   SS    CC    C   CC   CC  PP  P     
-SS    S    CC        CC       PPPP      
-SS         CC   CC   CC   CC  PP       
- SSS        CCCCC     CCCCC   PP       
-   SSS                                 
-     SS     GGGGG    UU   UU  IIII
-     SS    GG        UU   UU   II           
-S    SS    GG  GGG   UU   UU   II
-SS   SS    GG    G   UU   UU   II
- SSSSS      GGGGG     UUUUU   IIII
-```
+![Gif](https://github.com/PhantomVl/sccp_manager/raw/develop/.dok/image/Demo_1.gif)
 
-### Hot Link 
+  * [Installation](https://github.com/PhantomVl/sccp_manager#Installation)
+  * [Prerequisites](https://github.com/PhantomVl/sccp_manager#contributing)
+  * [Links](https://github.com/PhantomVl/sccp_manager/#Link),
+  * [Wiki](https://github.com/PhantomVl/sccp_manager/wiki)
+  
+## Link
 
 [![Download Sccp-Mamager](https://img.shields.io/badge/SccpGUI-build-ff69b4.svg)](https://github.com/PhantomVl/sccp_manager/archive/master.zip)
 [![Download Chan-SCCP channel driver for Asterisk](https://img.shields.io/sourceforge/dt/chan-sccp-b.svg)](https://github.com/chan-sccp/chan-sccp/releases/latest)
@@ -35,7 +28,7 @@ And you can use the driver functions "sccp_chain" from the GUI module.
 ### Wiki
 You can find more information and documentation on our [![SCCP Manager Wiki](https://img.shields.io/badge/Wiki-new-blue.svg)](https://github.com/PhantomVl/sccp_manager/wiki)
 
-### Prerequisites
+## Prerequisites
 Make sure you have the following installed on your system:
 - c-compiler:
   - gcc >= 4.4  (note: older not supported, higher advised)
@@ -67,7 +60,7 @@ Make sure you have the following installed on your system:
 - The sccp_manager module will automatically setup and configure asterisk realtime database for chan-sccp.
   For more information about realtime [See chan-sccp wiki](https://github.com/chan-sccp/chan-sccp/wiki/Realtime-Configuration).
 
-### Module installation
+## Installation
 
 1. Download module into your local system. (/var/www/html/admin/modules/)
 2. Goto FreePBX Admin -> Module Admin.

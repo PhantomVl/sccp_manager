@@ -360,8 +360,8 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         $request = $_REQUEST;
         $action = !empty($request['action']) ? $request['action'] : '';
 
-        if (!empty(($this->sccpvalues['displayconfig']))) {
-            if (!empty(($this->sccpvalues['displayconfig']['data'] == 'sccpsimple'))) {
+        if (!empty($this->sccpvalues['displayconfig'])) {
+            if (!empty($this->sccpvalues['displayconfig']['data']) &&  ($this->sccpvalues['displayconfig']['data']== 'sccpsimple')) {
             $this->pagedata = array(
                 "general" => array(
                     "name" => _("General SCCP Settings"),

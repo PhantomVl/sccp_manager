@@ -85,7 +85,7 @@ if (!empty($_REQUEST['new_id'])) {
             $defaul_tv = (empty($db_buttons[$line_id])) ?  "empty": $db_buttons[$line_id]['type'];
             $defaul_btn = (empty($db_buttons[$line_id])) ?  "": $db_buttons[$line_id]['name'];
             $defaul_opt = (empty($db_buttons[$line_id])) ?  array(''): explode(',',$db_buttons[$line_id]['options']);
-            print_r($defaul_opt);
+//            print_r($defaul_opt);
             
             
             $show_form_mode = $defaul_tv; 
@@ -109,7 +109,7 @@ if (!empty($_REQUEST['new_id'])) {
             if ($defaul_tv == "feature") {
                 $defaul_ftr = $defaul_opt[0];                
                 $defaul_fcod = (empty($defaul_opt[1])) ?  '': $defaul_opt[1];
-                print_r($defaul_fcod);
+//                print_r($defaul_fcod);
             }
             foreach ($defaul_opt as $data_i) {
                 if (strpos($data_i,'@') >0) {

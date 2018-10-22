@@ -93,7 +93,9 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
     private $pagedata = null;
     private $sccp_driver_ver = '11.3';
     private $tftpLang = array();
-    private $hint_context = '@ext-local'; /// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Get it from Config !!!
+//    private $hint_context = '@ext-local'; /// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Get it from Config !!!
+    private $hint_context = array('default' => '@ext-local'); /// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Get it from Config !!!
+    
     private $val_null = 'NONE'; /// REPLACE to null Field
     public  $sccp_model_list = array();
     private $cnf_wr = null;
@@ -360,8 +362,8 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         $request = $_REQUEST;
         $action = !empty($request['action']) ? $request['action'] : '';
 
-        if (!empty(($this->sccpvalues['displayconfig']))) {
-            if (!empty(($this->sccpvalues['displayconfig']['data'] == 'sccpsimple'))) {
+        if (!empty($this->sccpvalues['displayconfig'])) {
+            if (!empty($this->sccpvalues['displayconfig']['data']) && ($this->sccpvalues['displayconfig']['data'] == 'sccpsimple')) {
             $this->pagedata = array(
                 "general" => array(
                     "name" => _("General SCCP Settings"),
@@ -1061,7 +1063,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                         $btn_opt = (string) $get_settings['button' . $it . '_line'];
                         $db_res = $this->dbinterface->get_db_SccpTableData('SccpExtension', array('name' => $btn_opt));
                         $btn_n = $db_res[0]['label'];
-                        $btn_opt .= ',' . $btn_opt . $this->hint_context;
+                        $btn_opt .= ',' . $btn_opt . $this->hint_context['default'];
                         break;
                     case 'speeddial':
                         if (!empty($get_settings['button' . $it . '_input'])) {
@@ -1081,7 +1083,8 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                                     $btn_n = $get_settings['button' . $it . '_hline'] . '!silent';
                                     $btn_opt = '';
                                 } else {
-                                    $btn_opt .= ',' . $get_settings['button' . $it . '_hline'] . $this->hint_context;
+//                                    $btn_opt .= ',' . $get_settings['button' . $it . '_hline'] . $this->hint_context['default'];
+                                    $btn_opt .= ',' . $get_settings['button' . $it . '_hline'];
                                 }
                             }
                         }
@@ -1503,7 +1506,13 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 }
             }
         }
-      
+
+        $hint = $this->srvinterface->sccp_list_hints();
+        foreach ($hint as $key => $value) {
+             if ($this->hint_context['default'] != $value) {
+                $this->hint_context[$key] = $value;
+             }
+        }   
     }
 
     /*
@@ -1790,6 +1799,33 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         return $raw_settings;
     }
 
+    function get_hint_info($get = "all", $format_list = "all", $filter = array()) {
+        $res = array();
+        $default_hint = '@ext-local';
+// get all hints   [101@ext-local] => 101@ext-local
+        $tmp_data  = $this->srvinterface->sccp_list_all_hints();
+        foreach ($tmp_data as $value) {
+/* !TODO!: Add Hint Filtred List */
+           $res[$value] = array('hint' => $value, 'name' => before('@', $value), 'label' => $value );
+        }
+// Update info from sccp_db
+        $tmp_data  = $this->dbinterface->get_db_SccpTableData('SccpExtension');
+        foreach ($tmp_data as $value) {
+            $name_l = $value['name'];
+            if (!empty($res[$name_l.$default_hint])) {
+                $res[$name_l.$default_hint]['name'] = $name_l;
+                $res[$name_l.$default_hint]['label'] = $value['label'];
+            } else { // if not exist in system hints ..... ???????
+                $res[$name_l.$default_hint] = array('hint' => $name_l.$default_hint, 'name' => $name_l, 'label' => $value['label'] );
+            }
+                
+        }
+// Update info from sip DB 
+/* !TODO!: Update Hint info from sip DB ??? */
+
+        return $res;
+    }
+    
     function getIP_information() {
         $interfaces['auto'] = array('0.0.0.0', 'All', '0');
 

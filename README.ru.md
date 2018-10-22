@@ -5,7 +5,7 @@
 
   * [Installation](https://github.com/PhantomVl/sccp_manager#installation)
   * [Prerequisites](https://github.com/PhantomVl/sccp_manager#prerequisites)
-  * [Links](https://github.com/PhantomVl/sccp_manager/#link),
+  * [Links](https://github.com/PhantomVl/sccp_manager#link)
   * [Wiki](https://github.com/PhantomVl/sccp_manager/wiki)
   
 ## Link

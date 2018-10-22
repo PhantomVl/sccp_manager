@@ -26,6 +26,10 @@ class srvinterface {
       Core Access Function
      */
 
+    
+/*
+ *    Replace or dublicate to AMI interface   
+ */  
     public function sccp_core_commands($params = array()) {
         global $astman;
         $cmd_list = array('get_softkey' => array('cmd' => "sccp show softkeyssets", 'param' => ''),
@@ -118,8 +122,20 @@ class srvinterface {
     /*
      * A function should be used in the form of buttons for getting all hint. Not working. I don't know how to use properly.
      */
-
     public function sccp_list_hints() {
+        $hint_key = array();
+        $hint_all = $this->sccp_list_all_hints();
+        foreach ($hint_all as $value) {
+           $res = $this->loc_after('@', $value);
+//           array_search($res, $hint_key)) != NULL) 
+           if (!isset($hint_key[$res])) {
+               $hint_key[$res] = '@'.$res;
+           }
+        }
+        return $hint_key;
+    }
+    
+    public function sccp_list_all_hints() {
         $ast_out = $this->sccp_core_commands(array('cmd' => 'get_hints'));
         $ast_out = preg_split("/[\n]/", $ast_out['data']);
         $ast_key = array();
@@ -379,7 +395,14 @@ class srvinterface {
         return strpos($haystack, $needles);
     }
     return FALSE;
-}
+    }
+
+    private function loc_after($value, $inthat) 
+    {
+        if (!is_bool(strpos($inthat, $value)))
+            return substr($inthat, strpos($inthat, $value) + strlen($value));
+    }
+    
     
 
 }

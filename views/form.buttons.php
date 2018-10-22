@@ -15,8 +15,9 @@ $buttons_type=  array("empty","line","silent","monitor","speeddial","feature","a
 $feature_list=  array('parkinglot'=>'Park Slots','monitor'=> "Record Calls",'devstate'=> "Change Status");
 
 $lines_list = $this->dbinterface->get_db_SccpTableData('SccpExtension');
-$hint_list  = $this->dbinterface->get_db_SccpTableData('SccpExtension');
-//$hint_list = $this->sccp_list_hints();
+//$hint_list  = $this->dbinterface->get_db_SccpTableData('SccpExtension');
+$hint_list  = $this->get_hint_info();
+
 $line_id =0;
 $max_buttons =56;
 $show_buttons =1;
@@ -84,6 +85,7 @@ if (!empty($_REQUEST['new_id'])) {
             $defaul_tv = (empty($db_buttons[$line_id])) ?  "empty": $db_buttons[$line_id]['type'];
             $defaul_btn = (empty($db_buttons[$line_id])) ?  "": $db_buttons[$line_id]['name'];
             $defaul_opt = (empty($db_buttons[$line_id])) ?  array(''): explode(',',$db_buttons[$line_id]['options']);
+            print_r($defaul_opt);
             
             
             $show_form_mode = $defaul_tv; 
@@ -107,6 +109,7 @@ if (!empty($_REQUEST['new_id'])) {
             if ($defaul_tv == "feature") {
                 $defaul_ftr = $defaul_opt[0];                
                 $defaul_fcod = (empty($defaul_opt[1])) ?  '': $defaul_opt[1];
+                print_r($defaul_fcod);
             }
             foreach ($defaul_opt as $data_i) {
                 if (strpos($data_i,'@') >0) {
@@ -115,7 +118,10 @@ if (!empty($_REQUEST['new_id'])) {
                     if ($defaul_btn == $defaul_opt[0]) {
                         $show_form_mode = 'line';
                         $defaul_tv = 'monitor';
+                    } else {
+                        $defaul_btn = $data_i;
                     }
+                        
                 }
             }                                
             
@@ -187,8 +193,8 @@ if (!empty($_REQUEST['new_id'])) {
                                 echo '<select  class="form-control" name="'.$forminfo[1]['name'].$line_id.'_hline" >';
                                 
                                 foreach ($hint_list as $data){
-                                  $select = (($data['name']==$defaul_btn)?"selected":"");
-                                  echo '<option value="'.$data['name'].'" '.$select.' >'.$data['name'].' / '.$data['label'].'</option>';
+                                  $select = (($data['hint']==$defaul_btn)?"selected":"");
+                                  echo '<option value="'.$data['hint'].'" '.$select.' >'.$data['name'].' / '.$data['label'].'</option>';
                                 }
                                 echo '</select>';
                                 echo '</div>';
@@ -202,7 +208,7 @@ if (!empty($_REQUEST['new_id'])) {
                             </div>
                             <div class="col-xs-5">
                             <?php 
-                                echo '<input class="form-control" type="text" id="'.$forminfo[1]['name'].$line_id.'_fvalue"  name="'.$forminfo[1]['name'].$line_id.'_fvalue" placeholder="code" value="'.$defaul_opt.'" >';
+                                echo '<input class="form-control" type="text" id="'.$forminfo[1]['name'].$line_id.'_fvalue"  name="'.$forminfo[1]['name'].$line_id.'_fvalue" placeholder="code" value="'.$defaul_fcod.'" >';
                             ?>
                             </div>
                         </div>

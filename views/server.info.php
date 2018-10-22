@@ -29,8 +29,9 @@ if (!empty($this->sccpvalues['tftp_rewrite'])) {
 $info['Сompatible'] = array('Version' => $this->srvinterface->get_compatible_sccp(),  'about'=> '');
 //print_r("<br> Request:<br><pre>");
  //$asss = $this->extconfigs->validate_init_path($this->sccppath["asterisk"],$this->sccpvalues,$driver_ver);
- //print_r($asss);
- //print("</pre>");
+ //$hint_list  = $this->get_hint_info();
+ //print_r($hint_list);
+//print("</pre>");
 
 //   $lang_arr =  $this->extconfigs->getextConfig('sccp_lang','sk_SK');    
 //   print_r('<br>');

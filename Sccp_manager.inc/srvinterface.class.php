@@ -148,6 +148,9 @@ class srvinterface {
         foreach ($ast_out as $line) {
             if (strlen($line) > 3) {
                 list ($line, $junk) = explode(' ', $line);
+                if (!is_bool(strpos($line,':'))) {
+                    $line = trim(substr($line, 0, strpos($line, ':')));
+                }
                 if (isset($ast_key[$line])) {
                     if (strlen($ast_key[$line]) < 1) {
                         $ast_key[$line] = $line;

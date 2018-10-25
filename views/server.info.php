@@ -27,12 +27,20 @@ if (!empty($this->sccpvalues['tftp_rewrite'])) {
     }
 }
 $info['Сompatible'] = array('Version' => $this->srvinterface->get_compatible_sccp(),  'about'=> '');
-//print_r("<br> Request:<br><pre>");
+/*
+print_r("<br> Request:<br><pre>");
  //$asss = $this->extconfigs->validate_init_path($this->sccppath["asterisk"],$this->sccpvalues,$driver_ver);
- //$hint_list  = $this->get_hint_info();
- //print_r($hint_list);
-//print("</pre>");
 
+ $asss = $this->srvinterface->getеtestChanSCC();
+ $json = '';
+ print_r("<br>");
+ print_r($asss);
+ print_r("<br>");
+ $decode = json_decode($asss['JSON'], true);
+ print_r($decode);
+
+print("</pre>");
+*/
 //   $lang_arr =  $this->extconfigs->getextConfig('sccp_lang','sk_SK');    
 //   print_r('<br>');
 //   print_r(timezone_identifiers_list());

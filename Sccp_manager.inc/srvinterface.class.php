@@ -4,16 +4,25 @@
  * 
  * Core Comsnd Interface 
  * 
- * 
+ *  https://www.voip-info.org/asterisk-manager-example-php/
  */
 /* !TODO!: Re-Indent this file.  -TODO-: What do you mean? coreaccessinterface  ??  */
 
 namespace FreePBX\modules\Sccp_manager;
 
 class srvinterface {
-
+    var $socket;
+    var $error;
+    
     public function __construct($parent_class = null) {
+        global $amp_conf;
 	$this->paren_class = $parent_class;
+/*       
+        $this->socket = FALSE;
+        $this->error = "";
+        $this->astLogin(localhost, $amp_conf[AMPMGRUSER],$amp_conf[AMPMGRPASS]);
+ * 
+ */
     }
 
     public function info() {
@@ -405,7 +414,193 @@ class srvinterface {
         if (!is_bool(strpos($inthat, $value)))
             return substr($inthat, strpos($inthat, $value) + strlen($value));
     }
+/*
+    function getеtestChanSCC() {
+        global $astman;
+        $params = array();
+        $action = 'GetConfigJSON';
+        $metadata['a'] = $response = $astman->send_request($action, $params);
+        $metadata['b'] = $this->astman_retrieveMeta($action, $params, true);
+        return $metadata;
+    }
+  */  
+    private function astLogin($host="localhost", $username="admin", $password="amp111"){
     
+    $this->socket = @fsockopen("127.0.0.1","5038", $errno, $errstr, 1); 
     
+    if (!$this->socket) {
+        $this->error =  "Could not connect - $errstr ($errno)";
+        return FALSE;
+    }else{
+        stream_set_timeout($this->socket, 1); 
+  
+        $wrets = $this->astQuery("Action: Login\r\nUserName: $username\r\nSecret: $password\r\nEvents: off\r\n\r\n"); 
+
+     	if (strpos($wrets['raw'], "Message: Authentication accepted") != FALSE) {
+            return TRUE;
+        }else{
+            $this->error = "Could not login - Authentication failed ";
+            fclose($this->socket); 
+            $this->socket = FALSE;
+            return FALSE;
+   	}
+    }
+  }
+  
+  private function astLogout(){
+    if ($this->socket){
+        fputs($this->socket, "Action: Logoff\r\n\r\n"); 
+        while (!feof($this->socket)) { 
+            $wrets .= fread($this->socket, 8192); 
+        } 
+        fclose($this->socket); 
+        $this->socket = "FALSE";
+    }
+    return; 
+  } 
+  
+  private function astQuery($query){
+        $wrets = "";
+    
+        if ($this->socket === FALSE)
+            return FALSE;
+        $parameters = array();
+        $data_store = 'data';
+        fputs($this->socket, $query); 
+        do
+        {   
+            $line = fgets($this->socket, 4096);
+            $parameters['raw'] .= $line;
+            $a = strpos($line, ':');
+            if($a) {
+                $key = substr($line, 0, $a);
+                switch ($key) {
+                    case 'Response':
+                    case 'Message':
+                    case 'EventList':
+                        $parameters[$key] = trim(substr($line, $a + 2));
+                        break;
+                    case 'JSON':
+                        $parameters[$key] = substr($line, $a + 2);
+                        $data_store = $key;
+                        break;
+                    default:
+                        $parameters[$data_store] .= $line;
+                        break;
+                }
+                // store parameter in $parameters
+            } else {
+                $parameters[$data_store] .= $line;
+            }
+            $info = stream_get_meta_data($this->socket);
+        }while ($line != "\r\n" && $info['timed_out'] == false );
+        
+        return $parameters;
+  }
+  
+  function GetError(){
+    return $this->error;
+  }    
+
+  private function astman_retrieveMeta($action = "", $parameters=array(), $rawdata = false) {
+      // $parameters=array()
+        global $amp_conf;
+        $option = "";
+        $result = array();
+        if ($this->socket === FALSE) {
+            if (!$this->astLogin(localhost, $amp_conf[AMPMGRUSER],$amp_conf[AMPMGRPASS])) {
+              $result["Response"] = "Faild";
+              $result["Error"]  = $this->error; 
+              return $result;
+            }
+        }
+
+        if (empty($action)) {
+            $action = 'SCCPConfigMetaData';
+        }
+        $query = "Action: $action\r\n";
+
+        foreach($parameters as $var=>$val) {
+            if (is_array($val)) {
+                foreach($val as $k => $v) {
+                    $query .= "$var: $k=$v\r\n";
+                }
+            } else {
+                $query .= "$var: $val\r\n";
+            }
+        }
+        
+        $result =  $this->astQuery($query."\r\n");
+        
+        if ($result["Response"] == "Success") {
+            if ($rawdata) {
+                return $result;
+            } else {
+                if (!empty($result["JSON"])) {                    
+                    $decode = json_decode($response["JSON"], true);
+                    return $decode;
+                } else {
+                    return $result;
+                }
+            }
+        } else {
+            return $result;
+            return array();
+        }
+   } 
+   
+/*    
+   function t_get_meta_data() {
+     global $amp_conf;
+    $fp = fsockopen("127.0.0.1", "5038", $errno, $errstr, 10);
+    
+    if (!$fp) {
+        echo "$errstr ($errno)<br />\n";
+    } else {
+        fputs ($fp,"Action: login\r\n");
+        fputs ($fp,"Username: ".$amp_conf[AMPMGRUSER]."\r\n");
+//        fputs ($fp,"Secret: secret\r\n");
+        fputs ($fp,"Secret: ".$amp_conf[AMPMGRPASS]."\r\n");
+        fputs ($fp,"Events: on\r\n\r\n");
+
+        fputs ($fp,"Action: SCCPConfigMetaData\r\n");
+        fputs ($fp,"\r\n");
+
+        fputs ($fp,"Action: SCCPConfigMetaData\r\n");
+        fputs ($fp,"Segment: general\r\n");
+        fputs ($fp,"\r\n");
+
+        fputs ($fp,"Action: SCCPConfigMetaData\r\n");
+        fputs ($fp,"Segment: general\r\n");
+        fputs ($fp,"Option: fallback\r\n");
+        fputs ($fp,"\r\n");
+
+        fputs ($fp,"Action: SCCPConfigMetaData\r\n");
+        fputs ($fp,"Segment: device\r\n");
+        fputs ($fp,"\r\n");
+
+        fputs ($fp,"Action: SCCPConfigMetaData\r\n");
+        fputs ($fp,"Segment: device\r\n");
+        fputs ($fp,"Option: dtmfmode\r\n");
+        fputs ($fp,"\r\n");
+
+        fputs ($fp,"Action: logoff\r\n\r\n");
+//        print_r(fgets($fp));
+        $resp = '';
+        while (!feof($fp)) {
+            $resp .= fgets($fp);
+                    
+        }
+//            print_r(fgets($fp));
+//            print_r('<br>');
+            
+//                echo fgets($fp, 128);
+        }
+        fclose($fp);
+        return $resp;
+    }
+
+    
+  */  
 
 }

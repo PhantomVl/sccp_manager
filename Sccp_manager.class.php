@@ -1463,7 +1463,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
     function init_sccp_path() {
         global $db;
         global $amp_conf;
-        $driver_revision  = array('0' => '', '430' => '.v431', '431' => '.v431');
+        $driver_revision  = array('0' => '', '430' => '.v431', '431' => '.v432');
         
         
         $confDir = $amp_conf["ASTETCDIR"];        

@@ -34,7 +34,7 @@ class Sccp extends \FreePBX\modules\Core\Driver {
 			"prettyName" => _("Sccp Custom Driver"),
 			"shortName" => "SCCP",
 			"description" => _("Sccp Device"),
-			"Version" => "11.3.v431",
+			"Version" => "11.3.v432",
 			"about" => "Sccp mysql class Base ver: 11.3, Sccp ver: 431"
 		);
 	}
@@ -91,7 +91,7 @@ class Sccp extends \FreePBX\modules\Core\Driver {
                         case 'secondary_dialtone_tone':
                         case 'dnd':
                             $sql .= ', '.$key;
-                            if (!empty($settings[$val]['value'])){
+                            if (!$this->is_my_blank($settings[$val]['value'])){
                                 $sqlv .= ", '".$settings[$val]['value']."' ";
                             } else {
                                 $sqlv .= ", NULL ";
@@ -414,5 +414,8 @@ class Sccp extends \FreePBX\modules\Core\Driver {
                         'secret' => array('identifier' => _('Secret'), 'description' => sprintf(_('Secret [Enter "%s" to regenerate]'),"REGEN")),
                 );
         }
+ public function is_my_blank($value) {
+    return empty($value) && !is_numeric($value);
+}        
         
 }

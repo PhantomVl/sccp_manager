@@ -15,7 +15,6 @@
         <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" onclick="load_oncliсk(this,'*new*')" data-target=".new_network"><i class="fa fa-bolt"></i> <?php echo _("Add Keyset"); ?></button>
     </div -->
     <?php 
-    
         echo $this->ShowGroup('sccp_general',1);
         echo $this->ShowGroup('sccp_dev_time_s',1);
         echo $this->ShowGroup('sccp_net',1);

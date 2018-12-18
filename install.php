@@ -208,6 +208,88 @@ function Get_DB_config($sccp_compatible) {
             'dnd' => array('create' => "enum('off','reject','silent','user') NOT NULL default 'reject'", 'modify' => "enum('off','reject','silent','user')", 'def_modify' => "reject")
         )
     );
+
+    $db_config_v4 = array(
+        'sccpdevmodel' => array(
+            'enabled' => array('create' => "INT(2) NULL DEFAULT '0'"),
+            'nametemplate' => array('create' => 'VARCHAR(50) NULL DEFAULT NULL'),
+            'loadinformationid' => array('create' => "VARCHAR(30) NULL DEFAULT NULL")
+        ),
+        'sccpdevice' => array(
+            'pickupexten' => array('drop' => "yes"),
+            'directed_pickup' => array('drop' => "yes"),
+            'directed_pickup_context' => array('drop' => "yes"),
+            'pickupcontext' => array('drop' => "yes"),
+            'directed_pickup_modeanswer' => array('drop' => "yes"),
+            'pickupmodeanswer' => array('drop' => "yes"),
+            'callhistory_answered_elsewhere' => array('create' => "enum('Ignore','Missed Calls','Received Calls', 'Placed Calls') NULL default NULL", 'modify' => "enum('Ignore','Missed Calls','Received Calls','Placed Calls')"),
+            
+            'hwlang' => array('rename' => "_hwlang"),
+            '_hwlang' => array('create' => 'varchar(12) NULL DEFAULT NULL'),
+            'useRedialMenu' => array('create' => "VARCHAR(5) NULL DEFAULT 'no' AFTER `_hwlang`"),
+            //'dtmfmode' => array('create' => "VARCHAR(10) default 'outofband'", 'modify' => "VARCHAR(10)", 'def_modify'=> 'outofband'),
+            'dtmfmode' => array('drop' => "yes"),
+//            'force_dtmfmode' => array('create' => "VARCHAR(10) default 'auto'", 'modify' => "VARCHAR(10)", 'def_modify'=> 'auto'),
+            'force_dtmfmode' => array('create' => "ENUM('auto','rfc2833','skinny') NOT NULL default 'auto'", 'modify' => "ENUM('auto','rfc2833','skinny')", 'def_modify'=> 'auto'),
+            'deny' => array('create' => 'VARCHAR(100) NULL DEFAULT NULL', 'modify' => "VARCHAR(100)"),
+            'permit' => array('create' => 'VARCHAR(100) NULL DEFAULT NULL', 'modify' => "VARCHAR(100)"),
+            'backgroundImage' => array('create' => 'VARCHAR(255) NULL DEFAULT NULL', 'modify' => "VARCHAR(255)"),
+            'ringtone' => array('create' => 'VARCHAR(255) NULL DEFAULT NULL', 'modify' => "VARCHAR(255)"),
+            'transfer' => array('create' => "enum('on','off') NOT NULL default 'on'", 'modify' => "enum('on','off')"),
+            'cfwdall' => array('create' => "enum('on','off') NULL default 'on'", 'modify' => "enum('on','off')"),
+            'cfwdbusy' => array('create' => "enum('on','off') NULL default 'on'", 'modify' => "enum('on','off')"),
+            'directrtp' => array('create' => "enum('on','off') NULL default NULL", 'modify' => "enum('on','off')"),
+            'dndFeature' => array('create' => "enum('on','off') NULL default NULL", 'modify' => "enum('on','off')"),
+            'earlyrtp' => array('create' => "ENUM('immediate','offHook','dialing','ringout','progress','none') NULL default NULL", 'modify' => "ENUM('immediate','offHook','dialing','ringout','progress','none')"),
+            'audio_tos' => array('def_modify' => "0xB8"),
+            'audio_cos' => array('def_modify' => "6"),
+            'video_tos' => array('def_modify' => "0x88"),
+            'video_cos' => array('def_modify' => "5"),
+            'trustphoneip' => array('drop' => "yes"),
+            'mwilamp' => array('create' => "enum('on','off','wink','flash','blink') NULL  default 'on'", 'modify' => "enum('on','off','wink','flash','blink')"),
+            'mwioncall' => array('create' => "enum('on','off') NULL default 'on'", 'modify' => "enum('on','off')"),
+            'private' => array('create' => "enum('on','off') NOT NULL default 'off'", 'modify' => "enum('on','off')"), // Что-то лишенне 
+            'privacy' => array('create' => "enum('full','on','off') NOT NULL default 'full'", 'modify' => "enum('full','on','off')"), // Что-то лишенне 
+            'nat' => array('create' => "enum('on','off','auto') NULL default NULL", 'modify' => "enum('on','off','auto')"),
+            'conf_allow' => array('create' => "enum('on','off') NOT NULL default 'on'", 'modify' => "enum('on','off')"),
+            'conf_play_part_announce' => array('create' => "enum('on','off') NOT NULL default 'on'", 'modify' => "enum('on','off')"),
+            'conf_mute_on_entry' => array('create' => "enum('on','off') NOT NULL default 'off'", 'modify' => "enum('on','off')"),
+            'conf_show_conflist' => array('create' => "enum('on','off') NOT NULL default 'on'", 'modify' => "enum('on','off')"),
+            'type' => array('create' => 'VARCHAR(15) NULL DEFAULT NULL', 'modify' => "VARCHAR(15)"),
+            'imageversion' => array('create' => 'VARCHAR(31) NULL DEFAULT NULL', 'modify' => "VARCHAR(31)"),
+            'softkeyset' => array('def_modify' => "softkeyset")
+        ),
+        'sccpline' => array(
+            'directed_pickup' => array('create' => "enum('on','off') NOT NULL default NULL", 'modify' => "enum('on','off')"),
+            'directed_pickup_context' => array('create' => "VARCHAR(100) NULL DEFAULT NULL"),
+            'pickup_modeanswer' => array('create' => "enum('on','off') NULL default NULL", 'modify' => "enum('on','off')"),
+            'namedcallgroup' => array('create' => "VARCHAR(100) NULL DEFAULT NULL AFTER `setvar`", 'modify' => "VARCHAR(100)"),
+            'namedpickupgroup' => array('create' => "VARCHAR(100) NULL DEFAULT NULL AFTER `namedcallgroup`", 'modify' => "VARCHAR(100)"),
+            'adhocNumber' => array('create' => "VARCHAR(45) NULL DEFAULT NULL AFTER `namedpickupgroup`"),
+            'meetme' => array('create' => "VARCHAR(5) NULL DEFAULT NULL AFTER `adhocNumber`"),
+            'meetmenum' => array('create' => "VARCHAR(45) NULL DEFAULT NULL AFTER `meetme`"),
+            'meetmeopts' => array('create' => "VARCHAR(45) NULL DEFAULT NULL AFTER `meetmenum`"),
+            'regexten' => array('create' => "VARCHAR(45) NULL DEFAULT NULL AFTER `meetmeopts`"),
+            'rtptos' => array('drop' => "yes"),
+            'audio_tos' => array('drop' => "yes"),
+            'audio_cos' => array('drop' => "yes"),
+            'video_tos' => array('drop' => "yes"),
+            'video_cos' => array('drop' => "yes"),
+            'incominglimit' => array('create' => "INT(11) DEFAULT '6'", 'modify' => 'INT(11)', 'def_modify' => "6"),
+            'transfer' => array('create' => "enum('on','off') NOT NULL default 'on'", 'modify' => "enum('on','off')"),
+            'vmnum' => array('def_modify' => "*97"),
+            'musicclass' => array('def_modify' => "default"),
+            'id' => array('create' => 'MEDIUMINT(9) NOT NULL AUTO_INCREMENT, ADD UNIQUE(id);', 'modify' => "MEDIUMINT(9)", 'index' => 'id'),
+//        'id' =>array('create' => 'VARCHAR( 20 ) NULL DEFAULT NULL', 'modify' => "VARCHAR(20)", 'def_modify' =>"NULL"),
+            'echocancel' => array('create' => "enum('on','off') NOT NULL default 'off'", 'modify' => "enum('on','off')"),
+            'silencesuppression' => array('create' => "enum('on','off') NOT NULL default 'off'", 'modify' => "enum('on','off')"),
+            'dnd' => array('create' => "enum('off','reject','silent','user') NOT NULL default 'reject'", 'modify' => "enum('off','reject','silent','user')", 'def_modify' => "reject")
+        )
+    );
+    
+    if ($sccp_compatible >= 433 ) {
+        return $db_config_v4;
+    }
     if ($sccp_compatible >= 430) {
         return $db_config_v3;
     } else {
@@ -487,6 +569,16 @@ function InstallDB_createButtonConfigTrigger() {
     }
     return true;
 }
+function InstallDB_updateDBVer($sccp_compatible) {
+    global $db;
+    outn("<li>" . _("Update DB Ver") . "</li>");
+    $sql = "REPLACE INTO `sccpsettings` (`keyword`, `data`, `seq`, `type`), VALUES ('SccpDBmodel', '"+$sccp_compatible+ "','30','0');";
+    $results = $db->query($sql);
+    if (DB::IsError($check)) {
+        die_freepbx(sprintf(_("Error updating sccpdeviceconfig view. Command was: %s; error was: %s "), $sql, $results->getMessage()));
+    }
+    return true;                  
+}
 
 function InstallDB_CreateSccpDeviceConfigView($sccp_compatible) {
     global $db;
@@ -615,6 +707,7 @@ InstallDB_fillsccpdevmodel();
 InstallDB_updateSccpDevice();
 InstallDB_createButtonConfigTrigger();
 InstallDB_CreateSccpDeviceConfigView($sccp_compatible);
+InstallDB_updateDBVer($sccp_compatible);
 Setup_RealTime();
 outn("<br>");
 

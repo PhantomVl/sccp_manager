@@ -36,6 +36,7 @@
     </srstInfo>
     <connectionMonitorDuration>120</connectionMonitorDuration>
   </devicePool>
+  <versionStamp>{Jan 01 2003 00:00:00}</versionStamp>
   <loadInformation>SCCP11.8-5-2S</loadInformation>
   <vendorConfig>
     <disableSpeaker>false</disableSpeaker>

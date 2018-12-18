@@ -141,8 +141,12 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         $this->init_sccp_path();
         $this->initVarfromDefs();
         $this->initTftpLang();
-
-
+        
+        if (!empty($this->sccpvalues['SccpDBmodel'])) {
+            if ($this->sccpvalues['sccp_compatible']['data'] > $this->sccpvalues['SccpDBmodel']['data']) {
+                $this->sccpvalues['sccp_compatible']['data'] = $this->sccpvalues['SccpDBmodel']['data'] ;
+            }
+        }
         // Load Advanced Form Constuctor Data 
         if (empty($this->sccpvalues['displayconfig'])) {
             $xml_vars = __DIR__ . '/conf/sccpgeneral.xml.v' . $this->sccpvalues['sccp_compatible']['data'];
@@ -1463,7 +1467,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
     function init_sccp_path() {
         global $db;
         global $amp_conf;
-        $driver_revision  = array('0' => '', '430' => '.v431', '431' => '.v432');
+        $driver_revision  = array('0' => '', '430' => '.v431', '431' => '.v432', '432' => '.v432', '433' => '.v433');
         
         
         $confDir = $amp_conf["ASTETCDIR"];        
@@ -1475,6 +1479,9 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
             }
         }
         $ver_id = $this->srvinterface->get_compatible_sccp();       
+        if (!empty($this->sccpvalues['SccpDBmodel'])) {
+            $ver_id =$this->sccpvalues['SccpDBmodel']['data'];
+        }
 
         $driver = $this->FreePBX->Core->getAllDriversInfo();
         $sccp_driver_replace= '';
@@ -1671,7 +1678,24 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         $data_value['ntp_timezone_id'] = $this->extconfigs->getextConfig('sccp_timezone', $data_value['ntp_timezone']);
         $data_value['server_if_list'] = $this->getIP_information();
         $dev_config['tftp_path'] = $this->sccppath["tftp_path"];
-        
+        $dev_config['tftp_firmware'] = '';
+/*        if (!empty($this->sccpvalues['tftp_rewrite'])) {
+            if ( $this->sccpvalues['tftp_rewrite']['data'] == 'internal' ) {      
+                $dir_list = $this->find_all_files($dev_config['tftp_path'], $dev_config['loadimage']);
+                foreach ($dir_list as $filek){
+                    if (!empty($filek)) {
+                        $fnd_path= ''; 
+                        $fnd_path = str_replace($dev_config['tftp_path'],'',$filek);
+                        $fnd_path = substr($fnd_path,1,strpos($fnd_path, $dev_config['loadimage'])-1);
+                        if (!empty($fnd_path)) {
+                            $dev_config['tftp_firmware'] = $fnd_path;
+                        }
+                        break; 
+                    }
+                }
+            }
+        }
+  */      
         $dev_config['addon_info'] = array();
         if (!empty($dev_config['addon'])) {
             $hw_addon = explode(',', $dev_config['addon']);
@@ -1745,8 +1769,19 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
 //        $dir = $this->sccppath["tftp_path"];
         $dir = $this->sccppath["tftp_firmware_path"];
         $dir_tepl = $this->sccppath["tftp_templates"];
-        $dir_list = $this->find_all_files($dir, $file_ext, 'fileonly');
-        
+
+        $search_mode = '';
+        if (!empty($this->sccpvalues['tftp_rewrite'])) {
+            $search_mode = $this->sccpvalues['tftp_rewrite']['data'];
+            if ( $search_mode == 'pro' ) {
+                $dir_list = $this->find_all_files($dir, $file_ext, 'fileonly');
+            } else {
+                $dir_list = $this->find_all_files($dir, $file_ext);
+            }
+        } else {    
+            $dir_list = $this->find_all_files($dir, $file_ext, 'fileonly');
+        }
+
         $raw_settings = $this->dbinterface->getDb_model_info($get, $format_list, $filter);
 
         if ($validate) {
@@ -1756,8 +1791,25 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                     $raw_settings[$i]['validate'] = 'no;';
                     if ((strtolower($raw_settings[$i]['vendor'] == 'cisco')) || !empty($dir_list))  {
                         foreach ($dir_list as $filek){
-                            if (strpos(strtolower($filek), strtolower($raw_settings[$i]['loadimage'])) !== false) {
-                                $raw_settings[$i]['validate'] = 'yes;';
+                            switch ($search_mode) {
+                                case 'pro':
+                                case 'on':
+                                case 'internal':
+                                    if (strpos(strtolower($filek), strtolower($raw_settings[$i]['loadimage'])) !== false) {
+                                        $raw_settings[$i]['validate'] = 'yes;';
+                                    }
+                                    break;
+                                case 'internal2':
+                                    
+                                    break;
+                                case 'off':
+                                default: // Place in root TFTP dir
+//                                    $raw_settings[$i]['buttons'] = $dir.'/'.$raw_settings[$i]['loadimage'];
+                                    if (strpos(strtolower($filek), strtolower($dir.'/'.$raw_settings[$i]['loadimage'])) !== false) {
+//                                    if (strpos(strtolower($filek), strtolower($raw_settings[$i]['loadimage'])) !== false) {
+                                        $raw_settings[$i]['validate'] = 'yes;';
+                                    }
+                                    break;
                             }
                         }
                     }
@@ -1931,7 +1983,7 @@ private function find_all_files($dir, $file_mask=null, $mode='full'){
                 }
             } else {$result[]=null;}
             continue;
-        }
+        } 
         $sub_fiend = $this->find_all_files("$dir/$value",$file_mask,$mode);
         if (!empty($sub_fiend)) {
             foreach($sub_fiend as $sub_value) {

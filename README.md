@@ -1,4 +1,4 @@
-## Welcome to Chan_SCCP GUI Manager for FreePBX
+## Welcome to Develop Chan_SCCP GUI Manager for FreePBX
 | [English](README.md) | [Russian](README.ru.md) |
 
 ![Gif](https://github.com/PhantomVl/sccp_manager/raw/develop/.dok/image/Demo_1s5.gif)
@@ -79,6 +79,7 @@ Make sure you have the following installed on your system:
 >        cd /var/www/html/admin/modules/sccp_manager/
 >        git fetch
 >        git pull
+>        git checkout develop
 
 ### IMPORTANT NOTES: 
 - This system assumes/requires that you are using the Asterisk realtime database. If you are not yet using the realtime database, 

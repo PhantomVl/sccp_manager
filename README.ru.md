@@ -1,4 +1,4 @@
-## Welcome to Chan_SCCP GUI Manager for FreePBX
+## Welcome to Develop Chan_SCCP GUI Manager for FreePBX
 | [English](README.md) | [Russian](README.ru.md) |
 
 ![Gif](https://github.com/PhantomVl/sccp_manager/raw/develop/.dok/image/Demo_1s5.gif)
@@ -33,6 +33,10 @@
  3. Драйвер протокола SCCP страница (https://github.com/chan-sccp/chan-sccp/)
  4. Ну и это модуль.
 
+### Вжно! В этой ветке лежат самые последне нововведения и обновления, и самые последние БАГИ ! 
+    Пользуйся и наслождайся. Так же не забывай писать нам об ошибках, которые ты нашел ! 
+    Это очень нам поможет, Я с радостью исправлю то что ты нашел и добалю новых.
+
 ### Wiki - Основные Инструкции по настройке 
 Вся документация лежит на Вики [![SCCP Manager Wiki](https://img.shields.io/badge/Wiki-new-blue.svg)](https://github.com/PhantomVl/sccp_manager/wiki)
 
@@ -51,7 +55,10 @@ Make sure you have the following installed on your system:
 
 ### Installation Очень короткая инструкция
 ###### [Полная версия инструкции] (https://github.com/PhantomVl/sccp_manager/wiki/step-by-step-instlation)
- - Chan_SCCP module 4.3.0 (or later) [See our WIKI] (https://github.com/chan-sccp/chan-sccp/wiki/Building-and-Installation-Guide)
+ - Chan_SCCP module 4.3.1 (or later) [See our WIKI] (https://github.com/chan-sccp/chan-sccp/wiki/Building-and-Installation-Guide)
+>    git clone https://github.com/chan-sccp/chan-sccp.git
+>    git checkout develop
+
    - Собираем с флагами и создаем БД для работы:
 >     ./configure --enable-conference --enable-advanced-functions --enable-distributed-devicestate
 >     mysql -u root asterisk < mysql-v5_enum.sql
@@ -62,6 +69,8 @@ Make sure you have the following installed on your system:
 - Установка модуля
 >     cd /var/www/html/admin/modules/
 >     git clone https://github.com/PhantomVl/sccp_manager.git
+>     cd /var/www/html/admin/modules/sccp_manager/
+>     git checkout develop
 >     amportal chown
 >     amportal a ma install sccp_manager
     
@@ -73,6 +82,7 @@ Make sure you have the following installed on your system:
 >     cd /var/www/html/admin/modules/sccp_manager/
 >     git fetch
 >     git pull
+>     git checkout develop
 
 ### Важно:   
    - Желательно иметь Firmware телефонов Cisco, языковые пакеты ну всякое разное.

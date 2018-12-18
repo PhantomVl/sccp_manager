@@ -7,6 +7,12 @@
 $def_val = null;
 $dev_id = null;
 $dev_new = null;
+// Default value from Server setings
+
+$def_val['netlang'] =  array("keyword" => 'netlang', "data" => $this->sccpvalues['netlang']['data'], "seq" => "99");
+$def_val['devlang'] =  array("keyword" => 'devlang', "data" => $this->sccpvalues['devlang']['data'], "seq" => "99");
+$def_val['directed_pickup_context'] =  array("keyword" => 'directed_pickup_context', "data" => $this->sccpvalues['directed_pickup_context']['data'], "seq" => "99");
+
 if (!empty($_REQUEST['new_id'])) {
     $dev_id = $_REQUEST['new_id'];
     $val = str_replace(array('SEP','ATA','VG'), '', $dev_id);

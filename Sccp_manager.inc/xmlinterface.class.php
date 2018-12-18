@@ -274,7 +274,12 @@ class xmlinterface {
                         $xml_work->$key = time();
                         break;
                     case 'loadInformation':
-                        $xml_work->$key = (isset($dev_config["loadimage"])) ? $dev_config["loadimage"] : '';
+//                      Set Path Image ???? 
+                        if (isset($dev_config["tftp_firmware"])) {
+                            $xml_work->$key = (isset($dev_config["loadimage"])) ? $dev_config["tftp_firmware"].$dev_config["loadimage"] : '';
+                        } else {
+                            $xml_work->$key = (isset($dev_config["loadimage"])) ? $dev_config["loadimage"] : '';
+                        }
 //                        $xml_work->$key = $dev_config["loadimage"];
                         if (!empty($dev_config['addon'])) {
                             $xnode = $xml_work->addChild('addOnModules');

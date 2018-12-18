@@ -180,11 +180,26 @@ class srvinterface {
         if (empty($res)) {
             return 0;
         }
+        switch ($res["vCode"]) {
+            case 433:
+                return 433;
+
+            case 432:
+            case 431:
+                return 431;
+            default:
+                return 430;
+        }
+/*        if ($res["vCode"] >= 433) {
+            
+        }
         if ($res["vCode"] >= 431) {
             return 431;
         } else {
             return 430;
         }
+ * 
+ */
 //        return $res["vCode"];
     }
 
@@ -284,6 +299,9 @@ class srvinterface {
                 $result["RevisionNum"] = $metadata["RevisionNum"];
                 if ($metadata["RevisionNum"] >= "10403") { // new method, RevisionNum is incremental
                     $result["vCode"] = 432;
+                }
+                if ($metadata["RevisionNum"] >= "10491") { // new method, RevisionNum is incremental
+                    $result["vCode"] = 433;
                 }
             }
             if (array_key_exists("ConfigureEnabled", $metadata)) {

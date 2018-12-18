@@ -57,7 +57,9 @@ if (!empty($_REQUEST['id'])) {
                                 <label class="control-label" for="codecw"><?php echo _("SCCP Audio Codecs (allow)") ?></label>
                             </div>
                             <div class="col-md-9">
-                                <?php echo \show_help(_("This is the default Codec setting for SCCP Device.")) ?>
+                                <div>
+                                <?php echo show_help(_("This is the default Codec setting for SCCP Device.")) ?>
+                                </div>
                                 <?php
                                 $seq = 1;
 

@@ -19,6 +19,9 @@ $info['XML'] = $this->xmlinterface->info();
 $info['sccp_class'] = $driver['sccp'];
 $info['Core_sccp'] = array('Version' => $core['Version'],  'about'=> 'Sccp ver.'. $core['Version'].' r'.$core['vCode']. ' Revision :'. $core['RevisionNum']. ' Hash :'. $core['RevisionHash']);
 $info['Asterisk'] = array('Version' => FreePBX::Config()->get('ASTVERSION'),  'about'=> 'Asterisk.');
+if (!empty($this->sccpvalues['SccpDBmodel'])) {
+    $info['DB Model'] = array('Version' => $this->sccpvalues['SccpDBmodel']['data'],  'about'=> 'SCCP DB Configure');
+}
 if (!empty($this->sccpvalues['tftp_rewrite'])) {
     if ($this->sccpvalues['tftp_rewrite']['data'] == 'pro') {
         $info['Provision_SCCP'] = array('Version' => 'base',  'about'=> 'Provision Sccp enabled');
@@ -26,18 +29,21 @@ if (!empty($this->sccpvalues['tftp_rewrite'])) {
         $info['TFTP_Rewrite'] = array('Version' => 'base',  'about'=> 'Rewrite Supported');
     }
 }
-$info['Сompatible'] = array('Version' => $this->srvinterface->get_compatible_sccp(),  'about'=> '');
+$info['Сompatible'] = array('Version' => $this->srvinterface->get_compatible_sccp(),  'about'=> 'Ok');
+if (!empty($this->sccpvalues['SccpDBmodel'])) {
+    if ($this->srvinterface->get_compatible_sccp()> $this->sccpvalues['SccpDBmodel']['data']){
+        $info['Сompatible']['about'] = '<div class="alert signature alert-danger"> Reinstall SCCP manager required</div>';
+    }
+}
 /*
 print_r("<br> Request:<br><pre>");
  //$asss = $this->extconfigs->validate_init_path($this->sccppath["asterisk"],$this->sccpvalues,$driver_ver);
 
- $asss = $this->srvinterface->getеtestChanSCC();
+ $asss = $this->sccpvalues;
  $json = '';
  print_r("<br>");
  print_r($asss);
  print_r("<br>");
- $decode = json_decode($asss['JSON'], true);
- print_r($decode);
 
 print("</pre>");
 */

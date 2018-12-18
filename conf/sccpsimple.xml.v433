@@ -25,9 +25,9 @@ and open the template in the editor. Base Version before all crash :-)
     <page_group name="sccp_info">
         <item type="IS" id="6" seq="99">
             <name>XML_info</name> 
-            <label>XML_Ver Simple 431</label>
+            <label>XML_Ver Simple 433</label>
             <default>NONE</default>
-            <button value="NONE">XML_Ver Simple 431</button>
+            <button value="NONE">XML_Ver Simple 433</button>
             <help></help>
         </item>
         
@@ -380,16 +380,6 @@ and open the template in the editor. Base Version before all crash :-)
             </input>
             <help>Autoanswer Ring Time: The amount of time the phones will ring when being called as Intercom or Paging mode.</help>
         </item>
-        <item type="IE" id="7">
-            <label>Directed pickup context</label>
-            <input>
-                <name>directed_pickup_context</name> 
-                <default></default>
-                <options placeholder="default"></options>
-                <class>sccp-custom</class>
-            </input>
-            <help>Context where direct pickup search for extensions. if not set current contect will be use.</help>
-        </item>        
         <item type="IS" id="8">
             <name>echocancel</name> 
             <label>Echo Cancel</label>
@@ -414,22 +404,6 @@ and open the template in the editor. Base Version before all crash :-)
             <button value="off">Off</button>
             <help>Private Calling Enabled: Place a call with privacy Options (no Caller ID) turned on. Needs to be supported in Asterisk to work through SIP and DAHDI trunks.</help>
         </item>
-        <item type="IS" id="11">
-            <name>directed_pickup_modeanswer</name> 
-            <label>Directed Pickup</label>
-            <default>off</default>
-            <button value="on">On</button>
-            <button value="off">Off</button>
-            <help>Directed Pickup Mode (Answer): If a call is sent with the "directed pickup" flag, the phone will answer when set to "Yes".</help>
-        </item>
-        <item type="IS" id="12">
-            <name>transfer_on_hangup</name> 
-            <label>Transfer on hangup</label>
-            <default>off</default>
-            <button value="on">On</button>
-            <button value="off">Off</button>
-            <help>Complete transfer on hangup, without pressing transfer a second time. Will complete transfer, when the transferer puts the receiver on hook, after the destination has been reached. To cancel the transfer, either press resume on the transfered channel, press the 'endcall' softkey, or have the receiving party hangup first.</help>
-        </item>        
         <item type="IS" id="12">
             <name>callanswerorder</name> 
             <label>Call Answer Order</label>
@@ -458,6 +432,126 @@ and open the template in the editor. Base Version before all crash :-)
             <help>Set the MWI on call.</help>
         </item>
     </page_group>          
+<page_group name="sccp_dev_group_config">
+        <label>SCCP Line config</label>
+        <item type="IE" id="4">
+            <label>System Context</label>
+            <input>
+                <name>context</name> 
+                <default>from-internal</default>
+                <class>sccp-custom</class>
+            </input>
+            <help>Context: This is the context in which your phones will operate. It should match the context you are using for the rest of your phones (if you have any). The FreePBX default is 'from-internal'</help>
+        </item>
+        <item type="IE" id="5">
+            <label>Dynamically registration Context</label>
+            <input>
+                <name>regcontext</name> 
+                <default>sccpregistration</default>
+                <class>sccp-custom</class>
+            </input>
+            <help>If regcontext is specified in sccp.conf chan-sccp-b will dynamically create and destroy a NoOp priority 1 extension for a given peer/line which registers with the server. If the context is not specified in extension.conf, then it will be dynamically created when an chan-sccp-b agent registers</help>
+        </item>
+        <item type="IE" id="7">
+            <label>Directed pickup context</label>
+            <input>
+                <name>directed_pickup_context</name> 
+                <default></default>
+                <options placeholder="default"></options>
+                <class>sccp-custom</class>
+            </input>
+            <help>Context where direct pickup search for extensions. if not set current contect will be use.</help>
+        </item>
+        <item type="IE" id="7">
+            <label>Default pickup group</label>
+            <input>
+                <name>pickupgroup</name> 
+                <default></default>
+                <options placeholder="default"></options>
+                <class>sccp-custom</class>
+            </input>
+            <help>Context where direct pickup search for extensions. if not set current contect will be use.</help>
+        </item>
+        
+        <item type="IS" id="11">
+            <name>pickup_modeanswer</name> 
+            <label>Directed Pickup</label>
+            <default>off</default>
+            <button value="on">Enabled</button>
+            <button value="off">Disabled</button>
+            <help>Directed Pickup Mode (Answer): If a call is sent with the "directed pickup" flag, the phone will answer when set to "Yes".</help>
+        </item>
+        <item type="IS" id="12">
+            <name>transfer_on_hangup</name> 
+            <label>Transfer on hangup</label>
+            <default>off</default>
+            <button value="on">Enabled</button>
+            <button value="off">Disabled</button>
+            <help>Complete transfer on hangup, without pressing transfer a second time. Will complete transfer, when the transferer puts the receiver on hook, after the destination has been reached. To cancel the transfer, either press resume on the transfered channel, press the 'endcall' softkey, or have the receiving party hangup first.</help>
+        </item>
+
+        <item type="SLA-disabled" id="6">
+            <label>Default Dial Plan</label>
+            <name>dial_template</name> 
+            <default>NONE</default>
+            <select></select>
+            <class>sccp-custom</class>
+            <help>Help.</help>
+        </item>
+        <item type="IS" id="7" seq="98">
+            <name>autoselectline_enabled</name> 
+            <label>Autoselect Line</label>
+            <default>off</default>
+            <button value="on">Enabled</button>
+            <button value="off">Disabled</button>
+            <help>Enables and Disables auto line selection.</help>
+        </item>
+        <item type="IS-disabled" id="8" seq="0">
+            <name>meetme</name> 
+            <label>Meetme Conference</label>
+            <default>off</default>
+            <button value="on">Enabled</button>
+            <button value="off">Disabled</button>
+            <help>Enable/Disable conferencing via meetme (on/off), make sure you have one of the meetme apps mentioned below activated in module.conf</help>
+        </item>
+        <item type="IS-disabled" id="9" seq="0">
+            <label>Meetme Options</label>
+            <input>
+                <name>meetmeopts</name> 
+                <default>qxd</default>
+                <class>sccp-custom</class>
+            </input>
+            <help>Other options (app_meetme: A,a,b,c,C,d,D,E,e,F,i,I,l,L,m,M,o,p,P,q,r,s,S,t,T,w,x,X,1) see meetme specific documentation</help>
+        </item>
+
+        <item type="IS" id="10" seq="98">
+            <name>autocall_select</name> 
+            <label>Auto Call Select</label>
+            <default>off</default>
+            <button value="on">Enabled</button>
+            <button value="off">Disabled</button>
+            <help></help>
+        </item>
+        <item type="IS" id="11" seq="98">
+            <name>backgroundImageAccess</name> 
+            <label>Background Image</label>
+            <default>off</default>
+            <button value="on">Enabled</button>
+            <button value="off">Disabled</button>
+            <help>I'm guessing on this one, but on some devices, the background image on the display can be modified at the device. I think this is the thing that allows that to take.</help>
+        </item>
+        <item type="SLM" id="6">
+            <label>Music On Hold Class</label>
+            <name>musicclass</name> 
+            <default>NONE</default>
+            <select></select>
+            <class>form-control</class>
+            <help>Music Class: Available MOH Classes. These are the MOH classes listed in your current server.</help>
+        </item>
+
+    </page_group>
+    
+    
     <page_group name="sccp_dev_advconfig">
         <label>SCCP Device advanced config</label>
 
@@ -734,7 +828,7 @@ and open the template in the editor. Base Version before all crash :-)
     </page_group>          
 
     <page_group name="sccp_hotline_config">
-        <label>SCCP Line config</label>
+        <label>SCCP Hot Line config</label>
         <item type="HLP" id="2">
             <name>Help_id2</name>
             <label>HELP SCCP HotLine</label>        
@@ -816,32 +910,6 @@ and open the template in the editor. Base Version before all crash :-)
             </input>
             <help>Hotline Context: This is the context through which the phone will connect. It should probably match your other contest. The default is "from-internal" but "from-internal-xfer" would also make sense by limiting the options for the person using the phone.</help>
         </item>
-        <item type="IE" id="4">
-            <label>System Context</label>
-            <input>
-                <name>context</name> 
-                <default>from-internal</default>
-                <class>sccp-custom</class>
-            </input>
-            <help>Context: This is the context in which your phones will operate. It should match the context you are using for the rest of your phones (if you have any). The FreePBX default is 'from-internal'</help>
-        </item>
-        <item type="IE" id="5">
-            <label>Dynamically registration Context</label>
-            <input>
-                <name>regcontext</name> 
-                <default>sccpregistration</default>
-                <class>sccp-custom</class>
-            </input>
-            <help>If regcontext is specified in sccp.conf chan-sccp-b will dynamically create and destroy a NoOp priority 1 extension for a given peer/line which registers with the server. If the context is not specified in extension.conf, then it will be dynamically created when an chan-sccp-b agent registers</help>
-        </item>
-        <item type="SLM" id="6">
-            <label>Music On Hold Class</label>
-            <name>musicclass</name> 
-            <default>NONE</default>
-            <select></select>
-            <class>form-control</class>
-            <help>Music Class: Available MOH Classes. These are the MOH classes listed in your current server.</help>
-        </item>
         <item type="SLA-disabled" id="6">
             <label>Default Dial Plan</label>
             <name>dial_template</name> 
@@ -849,14 +917,6 @@ and open the template in the editor. Base Version before all crash :-)
             <select></select>
             <class>sccp-custom</class>
             <help>Help.</help>
-        </item>
-        <item type="IS" id="7" seq="98">
-            <name>autoselectline_enabled</name> 
-            <label>Autoselect Line</label>
-            <default>off</default>
-            <button value="on">Enabled</button>
-            <button value="off">Disabled</button>
-            <help>Enables and Disables auto line selection.</help>
         </item>
         <item type="IS-disabled" id="8" seq="0">
             <name>meetme</name> 
@@ -876,26 +936,17 @@ and open the template in the editor. Base Version before all crash :-)
             <help>Other options (app_meetme: A,a,b,c,C,d,D,E,e,F,i,I,l,L,m,M,o,p,P,q,r,s,S,t,T,w,x,X,1) see meetme specific documentation</help>
         </item>
 
-        <item type="IS" id="10" seq="98">
-            <name>autocall_select</name> 
-            <label>Auto Call Select</label>
-            <default>off</default>
-            <button value="on">Enabled</button>
-            <button value="off">Disabled</button>
-            <help></help>
-        </item>
-        <item type="IS" id="11" seq="98">
-            <name>backgroundImageAccess</name> 
-            <label>Background Image</label>
-            <default>off</default>
-            <button value="on">Enabled</button>
-            <button value="off">Disabled</button>
-            <help>I'm guessing on this one, but on some devices, the background image on the display can be modified at the device. I think this is the thing that allows that to take.</help>
-        </item>
-
     </page_group>
     <page_group name="sccp_extpath_config">
         <label>SCCP Server Path config</label>
+        <item type="HLP" id="2">
+            <label>Rewrite HELP </label>        
+            <name>Help_tftp_rewrite</name>
+            <element type='p'>This section is responsible for the modes of operation of external services: tftp http.</element>
+            <element type='p'> * off - Flat model cisco. All data is in the directory /tftproot</element>
+            <element type='p'> * Custom - The directory structure is strictly defined in the manager (for internal use). Requires tftpd rewrite support.</element>
+            <element type='p'> * Provision - Directory structure data is read from an external file. This project supports phones that can work on tftp and http. Support rewrite.</element>
+        </item>
         <item type="IE" id="1" seq="2">
             <label>SCCP TFTP SERVER Path</label>
             <class>provision_hide</class>

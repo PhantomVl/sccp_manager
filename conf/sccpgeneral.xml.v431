@@ -138,7 +138,7 @@ and open the template in the editor. Base Version before all crash :-)
             <button value="all">All</button>
             <help>Debug: Enable debugging level in SCCP module.</help>
         </item>
-        <item type="IS" id="6">
+        <item type="IS" id="6" seq="20">
             <name>displayconfig</name> 
             <label>SCCP Config Mode </label>
             <default>sccpgeneral</default>
@@ -298,6 +298,16 @@ and open the template in the editor. Base Version before all crash :-)
             </input>
             <help>Call Waiting Tone: The tone played when a call is waiting. If you set this one to '0', you will not get a tone in your current call if a new call comes in, so you might want to disable call waiting for this line instead.</help>
         </item>
+        <item type="IE" id="7">
+            <label>Directed pickup context</label>
+            <input>
+                <name>directed_pickup_context</name> 
+                <default></default>
+                <options placeholder="default"></options>
+                <class>sccp-custom</class>
+            </input>
+            <help>Context where direct pickup search for extensions. if not set current contect will be use.</help>
+        </item>
         <item type="IS" id="8">
             <name>echocancel</name> 
             <label>Echo Cancel</label>
@@ -331,6 +341,14 @@ and open the template in the editor. Base Version before all crash :-)
             <help>Directed Pickup Mode (Answer): If a call is sent with the "directed pickup" flag, the phone will answer when set to "Yes".</help>
         </item>
         <item type="IS" id="12">
+            <name>transfer_on_hangup</name> 
+            <label>Transfer on hangup</label>
+            <default>off</default>
+            <button value="on">On</button>
+            <button value="off">Off</button>
+            <help>Complete transfer on hangup, without pressing transfer a second time. Will complete transfer, when the transferer puts the receiver on hook, after the destination has been reached. To cancel the transfer, either press resume on the transfered channel, press the 'endcall' softkey, or have the receiving party hangup first.</help>
+        </item>
+        <item type="IS" id="13">
             <name>callanswerorder</name> 
             <label>Call Answer Order</label>
             <default>oldestfirst</default>
@@ -339,6 +357,16 @@ and open the template in the editor. Base Version before all crash :-)
             <help>Call Answer Order: Which call should be answered first? The most common choice is "oldestfirst", but other orders are supported.</help>
         </item>
         <item type="IS" id="13">
+            <name>callhistory_answered_elsewhere</name> 
+            <label>Call history stored book</label>
+            <default>Missed Calls</default>
+            <button value="Placed Calls">Placed Calls</button>
+            <button value="Received Calls">Received Calls</button>
+            <button value="Missed Calls">Missed Calls</button>
+            <button value="Ignore">Ignore</button>
+            <help></help>
+        </item>
+        <item type="IS" id="14">
             <name>mwilamp</name> 
             <label>Message Lamp</label>
             <default>On</default>
@@ -349,7 +377,7 @@ and open the template in the editor. Base Version before all crash :-)
             <button value="blink">Blink</button>
             <help>Set the MWI lamp style when MWI active to on, off, wink, flash or blink</help>
         </item>
-        <item type="IS" id="14">
+        <item type="IS" id="15">
             <name>mwioncall</name> 
             <label>Message Lamp On Call</label>
             <default>off</default>
@@ -360,7 +388,6 @@ and open the template in the editor. Base Version before all crash :-)
     </page_group>          
     <page_group name="sccp_dev_advconfig">
         <label>SCCP Device advanced config</label>
-
         <item type="IS" id="4" seq="0">
             <name>directrtp</name> 
             <label>Direct RTP</label>
@@ -839,6 +866,14 @@ and open the template in the editor. Base Version before all crash :-)
 
     </page_group>
     <page_group name="sccp_extpath_config">
+        <item type="HLP" id="2">
+            <label>Rewrite HELP </label>        
+            <name>Help_tftp_rewrite</name>
+            <element type='p'>This section is responsible for the modes of operation of external services: tftp http.</element>
+            <element type='p'> * off - Flat model cisco. All data is in the directory /tftproot</element>
+            <element type='p'> * Custom  - The directory structure is strictly defined in the manager (for internal use). Requires tftpd rewrite support.</element>
+            <element type='p'> * Provision - Directory structure data is read from an external file. This project supports phones that can work on tftp and http. Support rewrite.</element>
+        </item>
         <label>SCCP Server Path config</label>
         <item type="IE" id="1" seq="2">
             <label>SCCP TFTP SERVER Path</label>
@@ -868,6 +903,7 @@ and open the template in the editor. Base Version before all crash :-)
             <option_hide class=".provision_hide">pro</option_hide>
             <option_show class=".provision_show">pro</option_show>
             <button value="off">Disabled</button>
+            <button-d value="internal">Internal</button-d>
             <button value="on">Custom</button>
             <button value="pro">Provision</button>
             <help>Support the use of regular-expression-based filename remapping</help>
@@ -1141,7 +1177,6 @@ and open the template in the editor. Base Version before all crash :-)
             <button value="off">Off</button>
             <help>You can specifying 'useRedialMenu = yes' in the sccp.conf device section and the redial softkey will cause the "placed calls" list instead of immediately calling the last dialed number.</help>
         </item>
-
         <item type="IS" id="6" seq="99">
             <name>force_dtmfmode</name> 
             <label>Dual-Tone Multi-Frequency (DTMF)</label>

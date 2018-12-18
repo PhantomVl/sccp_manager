@@ -767,8 +767,9 @@ foreach ($items as $child) {
         ?>
             
         <div class="panel panel-default">
-            <div class="panel-heading"><?php echo _($child->label);?>
-                <a data-toggle="collapse" href="<?php echo '#'.$res_id;?>"><i class="fa fa-plus pull-right"></i></a>
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-info-circle"></i> <nbsp> <?php echo _($child->label);?> 
+                <a data-toggle="collapse" href="<?php echo '#'.$res_id;?>"><i class="fa fa-plus pull-right"></i></a></h3>
             </div>
             <div class="panel-body collapse" id="<?php echo $res_id;?>">
         <?php

@@ -220,7 +220,9 @@ class extconfigs {
         $adv_config = Array('tftproot' => '', 'firmware' => 'firmware', 'settings' => 'settings', 
                             'locales' => 'locales', 'languages' => 'languages', 'templates' => 'templates');                
         $adv_tree['pro']   = Array('templates' => 'tftproot', 'settings' => 'tftproot', 'locales' => 'tftproot',  'firmware' => 'tftproot', 'languages' => 'locales');
-        $adv_tree['def']   = Array('templates' => 'tftproot', 'settings' => '', 'locales' => '',  'firmware' => '', 'languages' => '');
+
+//        $adv_tree['def']   = Array('templates' => 'tftproot', 'settings' => '', 'locales' => 'tftproot',  'firmware' => 'tftproot', 'languages' => '');
+        $adv_tree['def']   = Array('templates' => 'tftproot', 'settings' => '', 'locales' => 'tftproot',  'firmware' => 'tftproot', 'languages' => 'tftproot');
 //* **************------ ****        
         $base_tree = Array('tftp_templates' => 'templates', 'tftp_path_store' => 'settings', 'tftp_lang_path' => 'languages', 'tftp_firmware_path'=>'firmware');
         
@@ -230,7 +232,7 @@ class extconfigs {
         
         $base_config = Array( 'asterisk' => $confDir, 'sccp_conf' => $confDir . '/sccp.conf', 'tftp_path' => '');
 
-
+//      Test Base dir (/tftproot)
         if (!empty($db_vars["tftp_path"])) {
             if (file_exists($db_vars["tftp_path"]["data"])) {
                     $base_config["tftp_path"] = $db_vars["tftp_path"]["data"];
@@ -253,6 +255,7 @@ class extconfigs {
             }
             return array('error' => 'No write permision on tftp DIR' );
 	}
+//      END Test Base dir (/tftproot)
         
         if (!empty($db_vars['tftp_rewrite_path'])) { 
             $adv_ini = $db_vars['tftp_rewrite_path']["data"];
@@ -275,7 +278,7 @@ class extconfigs {
             }
         }
         if ($db_vars["tftp_rewrite"]["data"] == 'on') {
-            $adv_tree_mode = 'pro';
+            $adv_tree_mode = 'def';
         }
         foreach ($adv_tree[$adv_tree_mode] as $key => $value) {
             if (!empty($adv_config[$key])) {

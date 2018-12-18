@@ -1,5 +1,5 @@
 ## Welcome to Develop Chan_SCCP GUI Manager for FreePBX
-| [English](README.md) | [Russian](README.ru.md) |
+| [English](README.md) | [Russian](README.ru.md) | [OLD Stable Release](https://github.com/PhantomVl/sccp_manager/tree/master)
 
 ![Gif](https://github.com/PhantomVl/sccp_manager/raw/develop/.dok/image/Demo_1s5.gif)
 
@@ -43,7 +43,7 @@ Make sure you have the following installed on your system:
 - standard posix compatible applications like sed, awk, tr
 
 ### Requirements
-- Chan_SCCP module 4.3.0 (or later) channel driver for Asterisk: [See our WIKI] (https://github.com/chan-sccp/chan-sccp/wiki/Building-and-Installation-Guide)
+- Chan_SCCP module 4.3.1 (or later) channel driver for Asterisk: [See our WIKI] (https://github.com/chan-sccp/chan-sccp/wiki/Building-and-Installation-Guide)
   - expected configure flags: 
     ```./configure --enable-conference --enable-advanced-functions --enable-distributed-devicestate```
   - Creating mysql DB from sorce 
@@ -54,6 +54,8 @@ Make sure you have the following installed on your system:
     ```cp /usr/src/chan-sccp/conf/tftp/\*.xml\* /tftpboot/templates/```
 
 - configure DHCP server [See our WIKI] (https://github.com/chan-sccp/chan-sccp/wiki/setup-dhcp-service)
+ Important!
+
 
 ### Setup
 - [Setting up a FreePBX system](http://wiki.freepbx.org/display/FOP/Install+FreePBX)
@@ -81,7 +83,10 @@ Make sure you have the following installed on your system:
 >        git pull
 >        git checkout develop
 
+
 ### IMPORTANT NOTES: 
+- !!! If something stops working, use the master branch [master](https://github.com/PhantomVl/sccp_manager/tree/master) 
+  !!! master branch does not support changes into chan-sccp made after October 2018.
 - This system assumes/requires that you are using the Asterisk realtime database. If you are not yet using the realtime database, 
 you will have to set it up for this module to work ([See](https://github.com/chan-sccp/chan-sccp/wiki/Realtime-Configuration)).
 - For the cisco phones to work correctly, they should be provisioned with the latest firmware (v8.1 or higher)

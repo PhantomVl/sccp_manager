@@ -602,6 +602,14 @@ $(document).ready(function () {
                             data.message.forEach(function (entry) {
                                 fpbxToast(entry, 'error', 'error');
                             });
+                        } else {
+                            if (data.message) {
+                                alert(data.message);
+                            } else {
+                                if (data) {
+                                    alert(data);
+                                }
+                            }
                         }
                     }
                 }

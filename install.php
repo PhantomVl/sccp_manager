@@ -260,7 +260,7 @@ function Get_DB_config($sccp_compatible) {
             'softkeyset' => array('def_modify' => "softkeyset")
         ),
         'sccpline' => array(
-            'directed_pickup' => array('create' => "enum('on','off') NOT NULL default NULL", 'modify' => "enum('on','off')"),
+            'directed_pickup' => array('create' => "enum('on','off') NULL default NULL", 'modify' => "enum('on','off')"),
             'directed_pickup_context' => array('create' => "VARCHAR(100) NULL DEFAULT NULL"),
             'pickup_modeanswer' => array('create' => "enum('on','off') NULL default NULL", 'modify' => "enum('on','off')"),
             'namedcallgroup' => array('create' => "VARCHAR(100) NULL DEFAULT NULL AFTER `setvar`", 'modify' => "VARCHAR(100)"),

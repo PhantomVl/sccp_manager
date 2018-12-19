@@ -678,11 +678,12 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 }
                 break;
             case 'create_hw_tftp':
+                $ver_id = ' Test !';
                 $this->sccp_delete_device_XML('all'); // Концы в вводу !!  
                 $this->sccp_create_tftp_XML();
                 $models = $this->dbinterface->get_db_SccpTableData("SccpDevice");
                 $ver_id = ' on found active model !';
-//                return array('status' => false, 'message' => print_r($models));
+                //return array('status' => false, 'message' => 'Error :'. print_r($models,1));
                 foreach ($models as $data) {
                     $ver_id = $this->sccp_create_device_XML($data['name']);
                 };

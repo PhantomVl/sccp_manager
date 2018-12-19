@@ -17,12 +17,14 @@ class srvinterface {
     public function __construct($parent_class = null) {
         global $amp_conf;
 	$this->paren_class = $parent_class;
-/*       
         $this->socket = FALSE;
         $this->error = "";
-        $this->astLogin(localhost, $amp_conf[AMPMGRUSER],$amp_conf[AMPMGRPASS]);
- * 
- */
+/*       
+        if (isset($amp_conf[AMPMGRUSER])) { 
+            $this->astLogin('localhost', $amp_conf[AMPMGRUSER],$amp_conf[AMPMGRPASS]);
+        }
+ 
+*/
     }
 
     public function info() {
@@ -432,16 +434,18 @@ class srvinterface {
         if (!is_bool(strpos($inthat, $value)))
             return substr($inthat, strpos($inthat, $value) + strlen($value));
     }
-/*
+
     function getеtestChanSCC() {
         global $astman;
-        $params = array();
-        $action = 'GetConfigJSON';
-        $metadata['a'] = $response = $astman->send_request($action, $params);
-        $metadata['b'] = $this->astman_retrieveMeta($action, $params, true);
+        $action = 'SCCPConfigMetaData';
+        $params = array('Segment' => 'device', 'ResultFormat'=>'command' );
+//        $params = array('Segment' => 'device');
+ //       $params = array();
+        $metadata['a'] = $astman->send_request($action, $params);
+  //      $metadata['b'] = $this->astman_retrieveMeta($action, $params, true);
         return $metadata;
     }
-  */  
+  /*
     private function astLogin($host="localhost", $username="admin", $password="amp111"){
     
     $this->socket = @fsockopen("127.0.0.1","5038", $errno, $errstr, 1); 
@@ -477,7 +481,7 @@ class srvinterface {
     return; 
   } 
   
-  private function astQuery($query){
+  private function astQuery($query, $rawdata = false){
         $wrets = "";
     
         if ($this->socket === FALSE)
@@ -485,30 +489,33 @@ class srvinterface {
         $parameters = array();
         $data_store = 'data';
         fputs($this->socket, $query); 
+        $parameters['raw_q'] = $query;
         do
         {   
             $line = fgets($this->socket, 4096);
             $parameters['raw'] .= $line;
-            $a = strpos($line, ':');
-            if($a) {
-                $key = substr($line, 0, $a);
-                switch ($key) {
-                    case 'Response':
-                    case 'Message':
-                    case 'EventList':
-                        $parameters[$key] = trim(substr($line, $a + 2));
-                        break;
-                    case 'JSON':
-                        $parameters[$key] = substr($line, $a + 2);
-                        $data_store = $key;
-                        break;
-                    default:
-                        $parameters[$data_store] .= $line;
-                        break;
-                }
+            if (!$rawdata) {
+                $a = strpos($line, ':');
+                if($a) {
+                    $key = substr($line, 0, $a);
+                    switch ($key) {
+                        case 'Response':
+                        case 'Message':
+                        case 'EventList':
+                            $parameters[$key] = trim(substr($line, $a + 2));
+                            break;
+                        case 'JSON':
+                            $parameters[$key] = substr($line, $a + 2);
+                            $data_store = $key;
+                            break;
+                        default:
+                            $parameters[$data_store] .= $line;
+                            break;
+                    }
                 // store parameter in $parameters
-            } else {
-                $parameters[$data_store] .= $line;
+                } else {
+                    $parameters[$data_store] .= $line;
+                }
             }
             $info = stream_get_meta_data($this->socket);
         }while ($line != "\r\n" && $info['timed_out'] == false );
@@ -548,7 +555,7 @@ class srvinterface {
             }
         }
         
-        $result =  $this->astQuery($query."\r\n");
+        $result =  $this->astQuery($query."\r\n",$rawdata);
         
         if ($result["Response"] == "Success") {
             if ($rawdata) {
@@ -567,6 +574,7 @@ class srvinterface {
         }
    } 
    
+    */
 /*    
    function t_get_meta_data() {
      global $amp_conf;
@@ -580,7 +588,7 @@ class srvinterface {
 //        fputs ($fp,"Secret: secret\r\n");
         fputs ($fp,"Secret: ".$amp_conf[AMPMGRPASS]."\r\n");
         fputs ($fp,"Events: on\r\n\r\n");
-
+            
         fputs ($fp,"Action: SCCPConfigMetaData\r\n");
         fputs ($fp,"\r\n");
 
@@ -590,16 +598,19 @@ class srvinterface {
 
         fputs ($fp,"Action: SCCPConfigMetaData\r\n");
         fputs ($fp,"Segment: general\r\n");
+        fputs ($fp,"ListResult: yes\r\n");
         fputs ($fp,"Option: fallback\r\n");
         fputs ($fp,"\r\n");
 
         fputs ($fp,"Action: SCCPConfigMetaData\r\n");
         fputs ($fp,"Segment: device\r\n");
+        fputs ($fp,"ListResult: freepbx\r\n");
         fputs ($fp,"\r\n");
 
         fputs ($fp,"Action: SCCPConfigMetaData\r\n");
         fputs ($fp,"Segment: device\r\n");
         fputs ($fp,"Option: dtmfmode\r\n");
+        fputs ($fp,"ListResult: yes\r\n");        
         fputs ($fp,"\r\n");
 
         fputs ($fp,"Action: logoff\r\n\r\n");
@@ -618,7 +629,7 @@ class srvinterface {
         return $resp;
     }
 
-    
-  */  
+*/    
+   
 
 }

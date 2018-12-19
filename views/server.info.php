@@ -37,14 +37,23 @@ if (!empty($this->sccpvalues['SccpDBmodel'])) {
 }
 /*
 print_r("<br> Request:<br><pre>");
- //$asss = $this->extconfigs->validate_init_path($this->sccppath["asterisk"],$this->sccpvalues,$driver_ver);
-
- $asss = $this->sccpvalues;
+// $asss = $this->extconfigs->validate_init_path($this->sccppath["asterisk"],$this->sccpvalues,$driver_ver);
+        global $amp_conf;
+print_r($amp_conf);
+ 
+/*
+ $asss = $this->srvinterface->getеtestChanSCC();
+// $asss = $this->sccpvalues;
  $json = '';
  print_r("<br>");
  print_r($asss);
  print_r("<br>");
-
+ print_r($asss['a']['JSON']);
+ print_r("<br>");
+ print_r("DIRECT START");
+ print_r("<br>");
+ print_r($this->srvinterface->t_get_meta_data());
+ 
 print("</pre>");
 */
 //   $lang_arr =  $this->extconfigs->getextConfig('sccp_lang','sk_SK');    

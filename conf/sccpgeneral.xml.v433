@@ -135,6 +135,7 @@ and open the template in the editor. Base Version before all crash :-)
             <button value="core">Core</button>
             <button value="sccp">SCCP</button>
             <button value="device">Device</button>
+            <button value="core,channel,pbx,rtp,codec,indicate,features">Develop</button>
             <button value="all">All</button>
             <help>Debug: Enable debugging level in SCCP module.</help>
         </item>

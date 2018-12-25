@@ -437,12 +437,13 @@ class srvinterface {
 
     function getеtestChanSCC() {
         global $astman;
-        $action = 'SCCPConfigMetaData';
-        $params = array('Segment' => 'device', 'ResultFormat'=>'command' );
+//        $action = Array('SCCPShowGlobals',);
+        $params = array();
+        $action = 'SCCPShowSoftkeySets';
+//        $params = array('Segment' => 'device', 'ResultFormat'=>'command' );
 //        $params = array('Segment' => 'device');
- //       $params = array();
-        $metadata['a'] = $astman->send_request($action, $params);
-  //      $metadata['b'] = $this->astman_retrieveMeta($action, $params, true);
+//        $params = array();
+        $metadata = $astman->send_request($action, $params);
         return $metadata;
     }
   /*
@@ -575,7 +576,7 @@ class srvinterface {
    } 
    
     */
-/*    
+    
    function t_get_meta_data() {
      global $amp_conf;
     $fp = fsockopen("127.0.0.1", "5038", $errno, $errstr, 10);
@@ -588,8 +589,14 @@ class srvinterface {
 //        fputs ($fp,"Secret: secret\r\n");
         fputs ($fp,"Secret: ".$amp_conf[AMPMGRPASS]."\r\n");
         fputs ($fp,"Events: on\r\n\r\n");
+
+        fputs ($fp,"Action: SCCPShowDevices\r\n");
+        fputs ($fp,"ResultFormat: command\r\n");
+//        $params = array('Segment' => 'device', 'ResultFormat'=>'command' );
+        fputs ($fp,"\r\n");
             
-        fputs ($fp,"Action: SCCPConfigMetaData\r\n");
+/*
+         fputs ($fp,"Action: SCCPConfigMetaData\r\n");
         fputs ($fp,"\r\n");
 
         fputs ($fp,"Action: SCCPConfigMetaData\r\n");
@@ -612,7 +619,8 @@ class srvinterface {
         fputs ($fp,"Option: dtmfmode\r\n");
         fputs ($fp,"ListResult: yes\r\n");        
         fputs ($fp,"\r\n");
-
+*/
+        
         fputs ($fp,"Action: logoff\r\n\r\n");
 //        print_r(fgets($fp));
         $resp = '';
@@ -629,7 +637,7 @@ class srvinterface {
         return $resp;
     }
 
-*/    
+
    
 
 }

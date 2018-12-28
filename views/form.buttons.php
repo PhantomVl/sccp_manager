@@ -116,8 +116,13 @@ if (!empty($_REQUEST['new_id'])) {
                     $defaul_btn = strtok($data_i,'@');
                     $def_hint = 'checked';
                     if ($defaul_btn == $defaul_opt[0]) {
-                        $show_form_mode = 'line';
-                        $defaul_tv = 'monitor';
+                        foreach ($lines_list as $data){
+                           if ($data['name']==$defaul_btn) {
+                                $show_form_mode = 'line';
+                                $defaul_tv = 'monitor';
+                                break;
+                           }
+                        }
                     } else {
                         $defaul_btn = $data_i;
                     }

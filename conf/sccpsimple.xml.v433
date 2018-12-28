@@ -176,12 +176,14 @@ and open the template in the editor. Base Version before all crash :-)
             <button value="Ignore">Ignore</button>
             <help></help>
         </item>
-
-        
-    
-
-
-
+        <item type="IS" id="11" seq="98">
+            <name>callLogBlfEnabled</name> 
+            <label>Allow BLF in Phone Directory</label>
+            <default>2</default>
+            <button value="3">Enabled</button>
+            <button value="2">Disabled</button>
+            <help>Which does show numbers you can redial, but also include their current device state, so you know when they are currently busy. Note that the other phonebook entries will now also monitor the remove device state and show the current device state</help>
+        </item>
 
 
 
@@ -534,11 +536,19 @@ and open the template in the editor. Base Version before all crash :-)
         </item>
         <item type="IS" id="11" seq="98">
             <name>backgroundImageAccess</name> 
-            <label>Background Image</label>
-            <default>off</default>
-            <button value="on">Enabled</button>
-            <button value="off">Disabled</button>
+            <label>Allow change Background Image</label>
+            <default>true</default>
+            <button value="true">Enabled</button>
+            <button value="false">Disabled</button>
             <help>I'm guessing on this one, but on some devices, the background image on the display can be modified at the device. I think this is the thing that allows that to take.</help>
+        </item>
+        <item type="IS" id="11" seq="98">
+            <name>phonePersonalization</name> 
+            <label>Allow push background from server </label>
+            <default>0</default>
+            <button value="1">Enabled</button>
+            <button value="0">Disabled</button>
+            <help>Phone personalization needs to be set to allow the server to push background or ringtones to the phone in the SEPXXXXXXXXXX.cnf.xml of each phone:</help>
         </item>
         <item type="SLM" id="6">
             <label>Music On Hold Class</label>

@@ -129,7 +129,8 @@ class xmlinterface {
         
         $var_xml_general_fields = array('authenticationURL' => 'dev_authenticationURL', 'informationURL' => 'dev_informationURL', 'messagesURL' => 'dev_messagesURL',
             'servicesURL' => 'dev_servicesURL', 'directoryURL' => 'dev_directoryURL', 'proxyServerURL' => 'dev_proxyServerURL', 'idleTimeout' => 'dev_idleTimeout',
-            'idleURL' => 'dev_idleURL', 'sshUserId' => 'dev_sshUserId', 'sshPassword' => 'dev_sshPassword', 'deviceProtocol' => 'dev_deviceProtocol'
+            'idleURL' => 'dev_idleURL', 'sshUserId' => 'dev_sshUserId', 'sshPassword' => 'dev_sshPassword', 'deviceProtocol' => 'dev_deviceProtocol',
+            'phonePersonalization' => 'phonePersonalization'
         );
         $var_xml_general_vars = array('capfAuthMode' => 'null', 'capfList' => 'null', 'mobility' => 'null',
             'phoneServices' => 'null', 'certHash' => 'null',
@@ -293,6 +294,12 @@ class xmlinterface {
 //                            $this->appendSimpleXmlNode($xml_work , $xnode_obj);
                         }
                         break;
+                    case 'commonProfile':
+                        $xml_node->phonePassword = $data_values['dev_sshPassword'];
+                        $xml_node->backgroundImageAccess = $data_values['backgroundImageAccess'];
+                        $xml_node->callLogBlfEnabled = $data_values['callLogBlfEnabled'];
+                        break;
+                        
                     case 'userLocale':
                     case 'networkLocaleInfo':
                     case 'networkLocale':

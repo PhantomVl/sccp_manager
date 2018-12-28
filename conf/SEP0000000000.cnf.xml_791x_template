@@ -66,6 +66,7 @@
     <uid>64</uid>
     <version>4.0(1)</version>
   </networkLocaleInfo>
+  <phonePersonalization>1</phonePersonalization>
   <deviceSecurityMode>0</deviceSecurityMode>
   <idleTimeout>3600</idleTimeout>
   <authenticationURL>http://x.x.x.x/cisco_menu/authentication.php</authenticationURL>

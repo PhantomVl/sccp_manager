@@ -22,7 +22,7 @@ class xmlinterface {
     }
 
     public function info() {
-        $Ver = '13.0.2';
+        $Ver = '13.0.3';
         return Array('Version' => $Ver,
             'about' => 'Create XML data interface ver: ' . $Ver);
     }

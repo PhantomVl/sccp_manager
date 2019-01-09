@@ -92,6 +92,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
     private $SCCP_LANG_DICTIONARY = 'be-sccp.jar'; // CISCO LANG file search in /tftp-path 
     private $pagedata = null;
     private $sccp_driver_ver = '11.3';
+    public $sccp_manager_ver = '13.0.0.4';
     private $tftpLang = array();
 //    private $hint_context = '@ext-local'; /// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Get it from Config !!!
     private $hint_context = array('default' => '@ext-local'); /// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Get it from Config !!!

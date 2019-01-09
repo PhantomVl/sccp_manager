@@ -28,7 +28,7 @@ class srvinterface {
     }
 
     public function info() {
-        $Ver = '13.0.2';
+        $Ver = '13.0.3';
         return Array('Version' => $Ver,
             'about' => 'Server interface data ver: ' . $Ver);
     }
@@ -52,6 +52,7 @@ class srvinterface {
             'reset_phone' => array('cmd' => "sccp reset ", 'param' => 'name'), // Жесткая перезагрузка 
             'reload_phone' => array('cmd' => "sccp reload device ", 'param' => 'name'),
             'reset_token' => array('cmd' => "sccp tokenack ", 'param' => 'name'),
+            'get_realtime_status' => array('cmd' => "realtime mysql status", 'param' => ''),
         );
         $result = true;
         if (!empty($params['cmd'])) {
@@ -172,6 +173,22 @@ class srvinterface {
             }
         }
         return $ast_key;
+    }
+
+    public function sccp_realtime_status() {
+        $ast_res = array();
+        $ast_out = $this->sccp_core_commands(array('cmd'=>'get_realtime_status'));
+        $ast_out = preg_split("/[\n]/", $ast_out['data']);  
+        if (strpos($ast_out[0], 'Privilege') !== false){
+            $ast_out[0] = "";
+        }
+        foreach ($ast_out as $line) {
+            if (strlen($line) > 3) {
+               $ast_key = strstr(trim($line), ' ', true);
+               $ast_res[$ast_key] = array('message' => $line, 'status'=> strpos($line, 'connected') ? 'OK' : 'ERROR');
+            }
+        }
+        return $ast_res;
     }
 
 // !TODO!: -TODO-: install.php is still using the other version number. This is actually where I use another method ? 

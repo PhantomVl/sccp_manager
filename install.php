@@ -656,7 +656,6 @@ function Setup_RealTime() {
 
     $dir = $cnf_int->get('ASTETCDIR');
     $res_conf_sql = ini_get('pdo_mysql.default_socket');
-    $res_conf_old = '';
     $res_conf = '';
     $ext_conf = '';
     if (file_exists($dir . '/extconfig.conf')) {
@@ -698,14 +697,14 @@ function Setup_RealTime() {
     }
     if (file_exists($dir . '/res_config_mysql.conf')) {
         $res_conf = $cnf_read->getConfig('res_config_mysql.conf');
-        if (empty($res_conf_old[$def_bd_sec])) {
+        if (empty($res_conf[$def_bd_sec])) {
             $res_conf[$def_bd_sec] = $def_bd_config;
         }
         $cnf_wr->writeConfig('res_config_mysql.conf', $res_conf, false);
     }
     if (empty($res_conf)) {
         $res_conf[$def_bd_sec] = $def_bd_config;
-        $res_conf['general']['dbsock'] = $def_bd_config['dbsock'];
+//        $res_conf['general']['dbsock'] = $def_bd_config['dbsock'];
         $cnf_wr->writeConfig('res_config_mysql.conf', $res_conf, false);
     }
     $cnf_wr->writeConfig('extconfig.conf', $ext_conf, false);

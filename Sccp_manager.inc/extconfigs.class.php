@@ -14,7 +14,7 @@ class extconfigs {
     }
 
     public function info() {
-        $Ver = '13.0.2';
+        $Ver = '13.0.3';
         return Array('Version' => $Ver,
             'about' => 'Default Setings and Enums ver: ' . $Ver);
     }
@@ -349,5 +349,79 @@ class extconfigs {
     
         return $base_config;
     }
+    
+    public function validate_RealTime() {
+        global $amp_conf;
+        $res  = Array();
+        
+        $cnf_int = \FreePBX::Config();
+        $cnf_wr = \FreePBX::WriteConfig();
+        $cnf_read = \FreePBX::LoadConfig();
+        $def_config = array('sccpdevice' => 'mysql,sccp,sccpdeviceconfig', 'sccpline' => ' mysql,sccp,sccpline');
+        $def_bd_config = array('dbhost' => $amp_conf['AMPDBHOST'], 'dbname' => $amp_conf['AMPDBNAME'],
+            'dbuser' => $amp_conf['AMPDBUSER'], 'dbpass' => $amp_conf['AMPDBPASS'],
+            'dbport' => '3306', 'dbsock' => '/var/lib/mysql/mysql.sock');
+        $def_bd_sec = 'sccp';
+
+        $dir = $cnf_int->get('ASTETCDIR');
+        $res_conf_sql = ini_get('pdo_mysql.default_socket');
+        $res_conf_old = '';
+        $res_conf = '';
+        $ext_conf = '';
+
+        if (file_exists($dir . '/extconfig.conf')) {
+            $ext_conf = $cnf_read->getConfig('extconfig.conf');
+            if (empty($ext_conf['settings']['sccpdevice'])) {
+                $res['extconfig'] = ' Options "Sccpdevice" not config ';
+            }
+            if (empty($ext_conf['settings']['sccpline'])) {
+                $res['extconfig'] .= ' Options "Sccpline" not config ';
+            }
+            if (empty($res['extconfig'])) {
+                $res['extconfig'] = 'OK';
+            }
+        } else {
+            $res['extconfig'] = 'File extconfig.conf not exist';
+        }
+
+        if (!empty($res_conf_sql)) {            
+            if (file_exists($res_conf_sql)) {
+                $def_bd_config['dbsock'] = $res_conf_sql;
+            }
+        }
+        if (file_exists($dir . '/res_mysql.conf')) {
+            $res_conf = $cnf_read->getConfig('res_mysql.conf');
+            if (empty($res_conf[$def_bd_sec])) {
+                $res['mysqlconfig'] = 'Not Config in file: res_mysql.conf';
+            } else {
+                if  ($res_conf[$def_bd_sec]['dbsock'] != $def_bd_config['dbsock']) {
+                    $res['mysqlconfig'] = 'Mysql Soket Error in file: res_mysql.conf';
+                }
+            }
+            if (empty($res['mysqlconfig'])) {
+                $res['mysqlconfig'] = 'OK';
+            }
+        }
+        if (file_exists($dir . '/res_config_mysql.conf')) {
+            $res_conf = $cnf_read->getConfig('res_config_mysql.conf');
+            if (empty($res_conf[$def_bd_sec])) {
+                $res['mysqlconfig'] = 'Not Config in file: res_config_mysql.conf';
+            } else {
+                if  ($res_conf[$def_bd_sec]['dbsock'] != $def_bd_config['dbsock']) {
+                    $res['mysqlconfig'] = 'Mysql Soket Error in file: res_config_mysql.conf';
+                }
+            }
+            if (empty($res['mysqlconfig'])) {
+                $res['mysqlconfig'] = 'OK';
+            }
+            
+        }
+        if (empty($res['mysqlconfig'])) {
+            $res['mysqlconfig'] = 'Realtime Error: not found  res_config_mysql.conf or res_mysql.conf configutation on the path :'. $dir ;
+        }
+    return $res;
+}
+
+    
 }
 

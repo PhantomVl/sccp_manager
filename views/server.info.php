@@ -11,6 +11,8 @@
 
 $driver = $this->FreePBX->Core->getAllDriversInfo();
 $core = $this->srvinterface->getSCCPVersion();
+$ast_realtime = $this->srvinterface->sccp_realtime_status();
+$conf_realtime = $this->extconfigs->validate_RealTime();
 $info = array();
 $info['srvinterface'] = $this->srvinterface->info();
 $info['extconfigs'] = $this->extconfigs->info();
@@ -35,16 +37,50 @@ if (!empty($this->sccpvalues['SccpDBmodel'])) {
         $info['Сompatible']['about'] = '<div class="alert signature alert-danger"> Reinstall SCCP manager required</div>';
     }
 }
+if (empty($ast_realtime)) {
+    $info['RealTime'] = array('Version' => 'Error',  'about'=> '<div class="alert signature alert-danger"> No found Real Time connections</div>');
+} else {
+    $rt_info = '';
+    $rt_sccp = 'Failed';
+    foreach ($ast_realtime as $key => $value) {
+        if ($key == 'sccp') {
+            if ($value['status'] == 'OK') {
+                $rt_sccp = 'TEST OK'; 
+                $rt_info .= 'SCCP conettions found';
+            } else {
+                $rt_sccp = 'SCCP ERROR';
+                $rt_info .= '<div class="alert signature alert-danger"> Error : '. $value['message']. '</div>';
+            }
+        } else if ($value['status'] == 'ERROR') {
+            $rt_info .= '<div> Found error in realtime sectoin ['.$key.'] : '.  $value['message']. '</div>';
+        }
+    }
+    $info['RealTime'] = array('Version' => $rt_sccp,  'about'=> $rt_info);
+}
+if (empty($conf_realtime)) {
+    $info['ConfigsRealTime'] = array('Version' => 'Error',  'about'=> '<div class="alert signature alert-danger"> No found Real Time Configs</div>');
+} else {
+    $rt_info = '';
+    foreach ($conf_realtime as $key => $value) {
+        if ($value != 'OK') {
+            $rt_info .= '<div> Found error in section '.$key.' :'.  $value. '</div>';
+        }
+    } 
+    if (!empty($rt_info)) {
+        $info['ConfigsRealTime'] = array('Version' => 'Error',  'about'=> $rt_info);
+    }
+}
 /*
 print_r("<br> Request:<br><pre>");
  $json = '';
  print_r("<br>");
  print_r("<br>");
  print_r("<br>");
+ print_r($this->srvinterface->sccp_realtime_status());
  print_r("DIRECT START");
  print_r("<br>");
- print_r($this->srvinterface->t_get_meta_data());
- 
+// print_r($this->srvinterface->t_get_meta_data());
+ print_r($this->extconfigs->validate_RealTime());
 print("</pre>");
 */
 //   $lang_arr =  $this->extconfigs->getextConfig('sccp_lang','sk_SK');    
@@ -75,7 +111,7 @@ if (!empty($this->class_error)) {
 <div class="fpbx-container container-fluid">
     <div class="row">
         <div class="container">
-            <h2>Sccp Manager Info </h2>
+            <h2>Sccp Manager V.<?php print_r($this->sccp_manager_ver); ?> Info </h2>
             <div class="table-responsive">          
                 <table class="table">
                     <thead>

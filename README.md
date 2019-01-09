@@ -92,3 +92,6 @@ you will have to set it up for this module to work ([See](https://github.com/cha
 - For the cisco phones to work correctly, they should be provisioned with the latest firmware (v8.1 or higher)
 - You can use cisco language profiles (localization) to switch the phones to your locale.
 
+### Chat
+[![Gitter](https://badges.gitter.im/chan-sccp/chan-sccp.svg)](https://gitter.im/sccp_manager/community)
+

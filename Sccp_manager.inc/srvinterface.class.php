@@ -587,7 +587,7 @@ class srvinterface {
                 }
             }
         } else {
-            return $result;
+                    return $result;
             return array();
         }
    } 

@@ -419,6 +419,14 @@ and open the template in the editor. Base Version before all crash :-)
             <button value="off">Off</button>
             <help>Do Not Disturb. Default is Off</help>
         </item>
+        <item type="IS" id="1" seq="0">
+            <name>transfer</name> 
+            <label>Transfer</label>
+            <default>on</default>
+            <button value="on">On</button>
+            <button value="off">Off</button>
+            <help>Allow the use of the transfer feature</help>
+        </item>        
     </page_group>          
 
     <page_group name="sccp_dev_ntp">
@@ -1127,7 +1135,8 @@ and open the template in the editor. Base Version before all crash :-)
         <item type="IS" id="1" seq="99">
             <name>transfer</name> 
             <label>Transfer</label>
-            <default>off</default>
+            <default>NONE</default>
+            <button value="NONE">Inherit</button>
             <button value="on">On</button>
             <button value="off">Off</button>
             <help>Transfer allowed</help>

@@ -91,7 +91,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
 //    private $SCCP_LANG_DICTIONARY = 'SCCP-dictionary.xml'; // CISCO LANG file search in /tftp-path 
     private $SCCP_LANG_DICTIONARY = 'be-sccp.jar'; // CISCO LANG file search in /tftp-path 
     private $pagedata = null;
-    private $sccp_driver_ver = '11.3';
+    private $sccp_driver_ver = '11.3';             // Ver fore SCCP.CLASS.PHP 
     public $sccp_manager_ver = '13.0.0.4';
     private $tftpLang = array();
 //    private $hint_context = '@ext-local'; /// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Get it from Config !!!
@@ -583,6 +583,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
 
     public function ajaxRequest($req, &$setting) {
         switch ($req) {
+            case 'backupsettings':
             case 'savesettings':
             case 'save_hardware':
             case 'save_dialplan_template':
@@ -896,6 +897,35 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 return $result;
                 break;
 // -------------------------------   Old deviece suport - In the development---                 
+            case 'backupsettings':
+                global $amp_conf;
+                $backup_files = array( $amp_conf['ASTETCDIR'].'/sccp.conf', $amp_conf['ASTETCDIR'].'/extensions_additional.conf', $amp_conf['ASTETCDIR'].'/extconfig.conf');
+                
+                $result = $this->dbinterface->dump_sccp_tables($this->sccppath["tftp_path"],$amp_conf['AMPDBNAME'], $amp_conf['AMPDBUSER'], $amp_conf['AMPDBPASS']);
+                $backup_files[] = $result;
+                
+                $zip = new \ZipArchive();
+                $filename = $result.".zip";
+                if ($zip->open($filename, \ZIPARCHIVE::CREATE)) {
+                    foreach ($backup_files as $file) {
+                        $zip->addFile($file);   
+                    }   
+                    $zip->close();
+                }
+                
+                $file_name = basename($filename);
+
+                header("Content-Type: application/zip");
+                header("Content-Disposition: attachment; filename=$file_name");
+                header("Content-Length: " . filesize($filename));
+
+                readfile($filename);
+                unlink($result);
+                unlink($filename);
+//                return array('status' => false, 'message' => $result);
+  //              return $result;
+                break;
+                
         }
     }
 

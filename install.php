@@ -1,5 +1,11 @@
 <?php
-
+/*
+ *   Hand DB Change :
+  ALTER TABLE `sccpline` CHANGE COLUMN `transfer` `transfer` ENUM('on','off') NULL DEFAULT NULL ;
+  ALTER TABLE `sccpdevice` CHANGE COLUMN `transfer` `transfer` ENUM('on','off') NULL DEFAULT NULL;
+ * 
+ * 
+ */
 
 if (!defined('FREEPBX_IS_AUTH')) {
     die_freepbx('No direct script access allowed');
@@ -235,7 +241,7 @@ function Get_DB_config($sccp_compatible) {
             'permit' => array('create' => 'VARCHAR(100) NULL DEFAULT NULL', 'modify' => "VARCHAR(100)"),
             'backgroundImage' => array('create' => 'VARCHAR(255) NULL DEFAULT NULL', 'modify' => "VARCHAR(255)"),
             'ringtone' => array('create' => 'VARCHAR(255) NULL DEFAULT NULL', 'modify' => "VARCHAR(255)"),
-            'transfer' => array('create' => "enum('on','off') NOT NULL default 'on'", 'modify' => "enum('on','off')"),
+            'transfer' => array('create' => "enum('on','off') NULL default NULL", 'modify' => "enum('on','off')"),
             'cfwdall' => array('create' => "enum('on','off') NULL default 'on'", 'modify' => "enum('on','off')"),
             'cfwdbusy' => array('create' => "enum('on','off') NULL default 'on'", 'modify' => "enum('on','off')"),
             'directrtp' => array('create' => "enum('on','off') NULL default NULL", 'modify' => "enum('on','off')"),
@@ -276,7 +282,7 @@ function Get_DB_config($sccp_compatible) {
             'video_tos' => array('drop' => "yes"),
             'video_cos' => array('drop' => "yes"),
             'incominglimit' => array('create' => "INT(11) DEFAULT '6'", 'modify' => 'INT(11)', 'def_modify' => "6"),
-            'transfer' => array('create' => "enum('on','off') NOT NULL default 'on'", 'modify' => "enum('on','off')"),
+            'transfer' => array('create' => "enum('on','off') NULL default NULL", 'modify' => "enum('on','off')"),
             'vmnum' => array('def_modify' => "*97"),
             'musicclass' => array('def_modify' => "default"),
             'id' => array('create' => 'MEDIUMINT(9) NOT NULL AUTO_INCREMENT, ADD UNIQUE(id);', 'modify' => "MEDIUMINT(9)", 'index' => 'id'),

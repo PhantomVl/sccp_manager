@@ -210,5 +210,14 @@ class dbinterface {
         }
         return $result;
     }
+    /*
+     *  Replace by SccpTables !!!!
+     * 
+     */
+    public function dump_sccp_tables($data_path,  $database, $user, $pass ) {
+        $filename = $data_path.'/sccp_backup_'.date('G_a_m_d_y').'.sql';
+        $result = exec('mysqldump '.$database.' --password='.$pass.' --user='.$user.' --single-transaction >'.$filename ,$output);
+        return $filename;
+    }
 
 }

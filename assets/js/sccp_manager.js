@@ -24,6 +24,37 @@ $(document).ready(function () {
         }
     });
 
+/*
+    $('#ajaxbackup').on('click', function (e) {        
+        var vdata = '';
+        var snd_command = 'backupsettings';
+        $('.fpbx-submit').each(function () {
+            vdata = vdata + $(this).serialize() + '&';
+        });
+        
+        $.ajax({
+            type: 'POST',
+            url: 'ajax.php?module=sccp_manager&command=' + snd_command,
+            data: vdata,
+            success: function (data) {
+                if (data.status === true) {
+                    if (data.message) {
+                        alert(data.message);
+                    } else {
+                        alert('Data Save');                        
+                    }
+                } else {
+                    if (Array.isArray(data.message)) {
+                        data.message.forEach(function (entry) {
+                            fpbxToast(entry, 'error', 'error');
+                        });
+                    }
+                }
+            }
+        });
+
+    });
+*/
     $('#ajaxsubmit2').on('click', function (e) {
         var vdata = '';
         var snd_command = 'savesettings';

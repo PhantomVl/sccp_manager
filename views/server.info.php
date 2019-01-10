@@ -71,18 +71,20 @@ if (empty($conf_realtime)) {
     }
 }
 /*
+ global $amp_conf;
 print_r("<br> Request:<br><pre>");
  $json = '';
  print_r("<br>");
  print_r("<br>");
  print_r("<br>");
- print_r($this->srvinterface->sccp_realtime_status());
+ print_r($amp_conf);
  print_r("DIRECT START");
  print_r("<br>");
 // print_r($this->srvinterface->t_get_meta_data());
- print_r($this->extconfigs->validate_RealTime());
+ //print_r($this->extconfigs->validate_RealTime());
 print("</pre>");
 */
+
 //   $lang_arr =  $this->extconfigs->getextConfig('sccp_lang','sk_SK');    
 //   print_r('<br>');
 //   print_r(timezone_identifiers_list());
@@ -130,7 +132,9 @@ if (!empty($this->class_error)) {
                     </tbody>
                 </table>
             </div>
+            <a class="btn btn-default" href="ajax.php?module=sccp_manager&command=backupsettings"><i class="fa fa-plane">&nbsp;</i><?php echo _("BackUp Config") ?></a>
         </div>
+
     </div>
 </div>
 <?php  echo $this->ShowGroup('sccp_info',0); ?>

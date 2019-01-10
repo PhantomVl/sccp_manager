@@ -16,8 +16,23 @@ $feature_list=  array('parkinglot'=>'Park Slots','monitor'=> "Record Calls",'dev
 
 $lines_list = $this->dbinterface->get_db_SccpTableData('SccpExtension');
 //$hint_list  = $this->dbinterface->get_db_SccpTableData('SccpExtension');
-$hint_list  = $this->get_hint_info();
+$data_sort = Array();
+$hint_list1  = $this->get_hint_info();
+foreach ($hint_list1 as $key => $value) {
+    $data_sort[$value['name']] = $key;
+}
+ksort($data_sort);
+//print_r(count($data_sort));
+//print_r(count($hint_list1));
+foreach ($data_sort as $key => $value) {
+    $hint_list[$value] = $hint_list1[$value];
+}
 
+
+
+//print_r($hint_list);
+//ksort($hint_list);
+//natsort($hint_list);
 $line_id =0;
 $max_buttons =56;
 $show_buttons =1;
@@ -125,8 +140,7 @@ if (!empty($_REQUEST['new_id'])) {
                         }
                     } else {
                         $defaul_btn = $data_i;
-                    }
-                        
+                    }                        
                 }
             }                                
             

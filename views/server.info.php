@@ -62,7 +62,7 @@ if (empty($conf_realtime)) {
 } else {
     $rt_info = '';
     foreach ($conf_realtime as $key => $value) {
-        if ($value != 'OK') {
+        if (($value != 'OK') && ($key != 'extconfigfile')) {
             $rt_info .= '<div> Found error in section '.$key.' :'.  $value. '</div>';
         }
     } 
@@ -71,20 +71,19 @@ if (empty($conf_realtime)) {
     }
 }
 /*
- global $amp_conf;
+ //global $amp_conf;
 print_r("<br> Request:<br><pre>");
  $json = '';
  print_r("<br>");
+ //print_r($conf_realtime);
  print_r("<br>");
  print_r("<br>");
- print_r($amp_conf);
- print_r("DIRECT START");
+ //print_r($amp_conf);
+// print_r("DIRECT START");
  print_r("<br>");
 // print_r($this->srvinterface->t_get_meta_data());
- //print_r($this->extconfigs->validate_RealTime());
-print("</pre>");
+ print("</pre>");
 */
-
 //   $lang_arr =  $this->extconfigs->getextConfig('sccp_lang','sk_SK');    
 //   print_r('<br>');
 //   print_r(timezone_identifiers_list());

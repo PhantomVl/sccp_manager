@@ -96,15 +96,13 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
     private $tftpLang = array();
 //    private $hint_context = '@ext-local'; /// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Get it from Config !!!
     private $hint_context = array('default' => '@ext-local'); /// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Get it from Config !!!
-    
     private $val_null = 'NONE'; /// REPLACE to null Field
-    public  $sccp_model_list = array();
+    public $sccp_model_list = array();
     private $cnf_wr = null;
     public $sccppath = array();
     public $sccpvalues = array();
     public $sccp_conf_init = array();
     public $xml_data;
-
     public $class_error; //error construct
 
     public function __construct($freepbx = null) {
@@ -142,17 +140,17 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         $this->init_sccp_path();
         $this->initVarfromDefs();
         $this->initTftpLang();
-        
+
         if (!empty($this->sccpvalues['SccpDBmodel'])) {
             if ($this->sccpvalues['sccp_compatible']['data'] > $this->sccpvalues['SccpDBmodel']['data']) {
-                $this->sccpvalues['sccp_compatible']['data'] = $this->sccpvalues['SccpDBmodel']['data'] ;
+                $this->sccpvalues['sccp_compatible']['data'] = $this->sccpvalues['SccpDBmodel']['data'];
             }
         }
         // Load Advanced Form Constuctor Data 
         if (empty($this->sccpvalues['displayconfig'])) {
             $xml_vars = __DIR__ . '/conf/sccpgeneral.xml.v' . $this->sccpvalues['sccp_compatible']['data'];
         } else {
-            $xml_vars = __DIR__ . '/conf/'.$this->sccpvalues['displayconfig']['data'].'.xml.v'.$this->sccpvalues['sccp_compatible']['data'];
+            $xml_vars = __DIR__ . '/conf/' . $this->sccpvalues['displayconfig']['data'] . '.xml.v' . $this->sccpvalues['sccp_compatible']['data'];
         }
         if (!file_exists($xml_vars)) {
             $xml_vars = __DIR__ . '/conf/sccpgeneral.xml';
@@ -369,23 +367,22 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
 
         if (!empty($this->sccpvalues['displayconfig'])) {
             if (!empty($this->sccpvalues['displayconfig']['data']) && ($this->sccpvalues['displayconfig']['data'] == 'sccpsimple')) {
-            $this->pagedata = array(
-                "general" => array(
-                    "name" => _("General SCCP Settings"),
-                    "page" => 'views/server.setting.php'
-                ),
-                "sccpdevice" => array(
-                    "name" => _("SCCP Device"),
-                    "page" => 'views/server.device.php'
-                ),
-                "sccpinfo" => array(
-                    "name" => _("SCCP info"),
-                    "page" => 'views/server.info.php'
-                ),
-            );
+                $this->pagedata = array(
+                    "general" => array(
+                        "name" => _("General SCCP Settings"),
+                        "page" => 'views/server.setting.php'
+                    ),
+                    "sccpdevice" => array(
+                        "name" => _("SCCP Device"),
+                        "page" => 'views/server.device.php'
+                    ),
+                    "sccpinfo" => array(
+                        "name" => _("SCCP info"),
+                        "page" => 'views/server.info.php'
+                    ),
+                );
             }
-                
-        } 
+        }
 
         if (empty($this->pagedata)) {
 //			$driver = $this->FreePBX->Config->get_conf_setting('ASTSIPDRIVER');
@@ -415,7 +412,6 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                     "page" => 'views/server.info.php'
                 ),
             );
-
         }
         if (!empty($this->pagedata)) {
             foreach ($this->pagedata as &$page) {
@@ -427,27 +423,25 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         }
         return $this->pagedata;
     }
-    
+
     public function InfoServerShowPage() {
         $request = $_REQUEST;
         $action = !empty($request['action']) ? $request['action'] : '';
         $this->pagedata = array(
-                "general" => array(
-                    "name" => _("General SCCP Settings"),
-                    "page" => 'views/server.info.php'
-                ),
-            
-            );
+            "general" => array(
+                "name" => _("General SCCP Settings"),
+                "page" => 'views/server.info.php'
+            ),
+        );
 
-            foreach ($this->pagedata as &$page) {
-                ob_start();
-                include($page['page']);
-                $page['content'] = ob_get_contents();
-                ob_end_clean();
-            }
+        foreach ($this->pagedata as &$page) {
+            ob_start();
+            include($page['page']);
+            $page['content'] = ob_get_contents();
+            ob_end_clean();
+        }
 
         return $this->pagedata;
-        
     }
 
     public function AdvServerShowPage() {
@@ -898,21 +892,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 break;
 // -------------------------------   Old deviece suport - In the development---                 
             case 'backupsettings':
-                global $amp_conf;
-                $backup_files = array( $amp_conf['ASTETCDIR'].'/sccp.conf', $amp_conf['ASTETCDIR'].'/extensions_additional.conf', $amp_conf['ASTETCDIR'].'/extconfig.conf');
-                
-                $result = $this->dbinterface->dump_sccp_tables($this->sccppath["tftp_path"],$amp_conf['AMPDBNAME'], $amp_conf['AMPDBUSER'], $amp_conf['AMPDBPASS']);
-                $backup_files[] = $result;
-                
-                $zip = new \ZipArchive();
-                $filename = $result.".zip";
-                if ($zip->open($filename, \ZIPARCHIVE::CREATE)) {
-                    foreach ($backup_files as $file) {
-                        $zip->addFile($file);   
-                    }   
-                    $zip->close();
-                }
-                
+                $filename = $this->sccp_create_sccp_backup();
                 $file_name = basename($filename);
 
                 header("Content-Type: application/zip");
@@ -920,12 +900,11 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 header("Content-Length: " . filesize($filename));
 
                 readfile($filename);
-                unlink($result);
                 unlink($filename);
-//                return array('status' => false, 'message' => $result);
-  //              return $result;
-                break;
                 
+//                return array('status' => false, 'message' => $result);
+                //              return $result;
+                break;
         }
     }
 
@@ -976,12 +955,11 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                         $value = strtoupper(str_replace(array('.', '-', ':'), '', $value)); // Delete mac Seporated from string
                         $value = sprintf("%012s", $value);
                         if ($hw_prefix == 'VG') {
-                            $value = $hw_prefix . $value.'0';
+                            $value = $hw_prefix . $value . '0';
                         } else {
                             $value = $hw_prefix . $value;
                         }
                         $name_dev = $value;
-                        
                     }
                     break;
                 case 'disallow':
@@ -1015,7 +993,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                             foreach ($vval as $vkey => $vval) {
                                 switch ($vkey) {
                                     case 'inherit':
-                                        if ($vval=='on') {
+                                        if ($vval == 'on') {
                                             $arr_clear = TRUE;
                                             // Злобный ХАК
                                             if ($key == 'permit') {
@@ -1024,7 +1002,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                                         }
                                         break;
                                     case 'internal':
-                                        if ($vval=='on') {
+                                        if ($vval == 'on') {
                                             $tmp_data .= 'internal;';
                                         }
                                         break;
@@ -1034,13 +1012,13 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                                 }
                             }
                             if (strlen($tmp_data) > 2) {
-                                while (substr($tmp_data,-1)=='/') {
+                                while (substr($tmp_data, -1) == '/') {
                                     $tmp_data = substr($tmp_data, 0, -1);
                                 }
                                 $arr_data .= $tmp_data . ';';
-                            }                            
+                            }
                         }
-                        while (substr($arr_data,-1)==';') {
+                        while (substr($arr_data, -1) == ';') {
                             $arr_data = substr($arr_data, 0, -1);
                         }
                         if ($arr_clear) {
@@ -1202,23 +1180,23 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                             switch ($vkey) {
                                 case 'inherit':
                                 case 'internal':
-                                    if ($vval=='on') {
+                                    if ($vval == 'on') {
                                         $tmp_data .= 'internal;';
                                     }
-                                break;
+                                    break;
                                 default:
                                     $tmp_data .= $vval . '/';
-                                break;
+                                    break;
                             }
                         }
                         if (strlen($tmp_data) > 2) {
-                            while (substr($tmp_data,-1)=='/') {
+                            while (substr($tmp_data, -1) == '/') {
                                 $tmp_data = substr($tmp_data, 0, -1);
                             }
-                            $arr_data .= $tmp_data. ';';
-                        }                            
+                            $arr_data .= $tmp_data . ';';
+                        }
                     }
-                    while (substr($arr_data,-1)==';') {
+                    while (substr($arr_data, -1) == ';') {
                         $arr_data = substr($arr_data, 0, -1);
                     }
                     if (!($this->sccpvalues[$key1]['data'] == $arr_data)) {
@@ -1270,7 +1248,6 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         return;
     }
 
-    
     public function getMyConfig($var = null, $id = "noid") {
 //    $final = false;
         switch ($var) {
@@ -1419,25 +1396,27 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
     function Sccp_manager_get_config($engine) {
         $this->debugdata($engine);
     }
-/*
-    function soundlang_hookGet_config($engine) {
 
-        global $core_conf;
-        $this->debugdata($engine);
+    /*
+      function soundlang_hookGet_config($engine) {
 
-        switch ($engine) {
-            case "asterisk":
-//                if (isset($core_conf) && is_a($core_conf, "core_conf")) {
-//                    $language = FreePBX::Soundlang()->getLanguage();
-//                    if ($language != "") {
-//                        $core_conf->addSipGeneral('language', $language);
-//                        $core_conf->addIaxGeneral('language', $language);
-//                    }
-//                }
-                break;
-        }
-    }
-*/
+      global $core_conf;
+      $this->debugdata($engine);
+
+      switch ($engine) {
+      case "asterisk":
+      //                if (isset($core_conf) && is_a($core_conf, "core_conf")) {
+      //                    $language = FreePBX::Soundlang()->getLanguage();
+      //                    if ($language != "") {
+      //                        $core_conf->addSipGeneral('language', $language);
+      //                        $core_conf->addIaxGeneral('language', $language);
+      //                    }
+      //                }
+      break;
+      }
+      }
+     */
+
     /**
      * Retrieve Active Codecs
      * return fiends Lag pack
@@ -1449,7 +1428,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
 
     private function initTftpLang() {
         $result = array();
-        if (empty($this->sccppath["tftp_path"]) || empty($this->sccppath["tftp_lang_path"])  ) {
+        if (empty($this->sccppath["tftp_path"]) || empty($this->sccppath["tftp_lang_path"])) {
             return;
         }
         $dir = $this->sccppath["tftp_lang_path"];
@@ -1495,14 +1474,14 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
      */
 
 // !TODO!: -TODO-: This function is getting a little big. Might be possible to sperate tftp work into it's own file/class. Initially, you need to remove the not working section and commented out section
-    
+
     function init_sccp_path() {
         global $db;
         global $amp_conf;
-        $driver_revision  = array('0' => '', '430' => '.v431', '431' => '.v432', '432' => '.v432', '433' => '.v433');
-        
-        
-        $confDir = $amp_conf["ASTETCDIR"];        
+        $driver_revision = array('0' => '', '430' => '.v431', '431' => '.v432', '432' => '.v432', '433' => '.v433');
+
+
+        $confDir = $amp_conf["ASTETCDIR"];
         if (empty($this->sccppath["asterisk"])) {
             if (strlen($confDir) < 1) {
                 $this->sccppath["asterisk"] = "/etc/asterisk";
@@ -1510,30 +1489,30 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 $this->sccppath["asterisk"] = $confDir;
             }
         }
-        $ver_id = $this->srvinterface->get_compatible_sccp();       
+        $ver_id = $this->srvinterface->get_compatible_sccp();
         if (!empty($this->sccpvalues['SccpDBmodel'])) {
-            $ver_id =$this->sccpvalues['SccpDBmodel']['data'];
+            $ver_id = $this->sccpvalues['SccpDBmodel']['data'];
         }
 
         $driver = $this->FreePBX->Core->getAllDriversInfo();
-        $sccp_driver_replace= '';
+        $sccp_driver_replace = '';
         if (empty($driver['sccp'])) {
             $sccp_driver_replace = 'yes';
         } else {
             if (empty($driver['sccp']['Version'])) {
                 $sccp_driver_replace = 'yes';
             } else {
-                if ($driver['sccp']['Version'] != $this->sccp_driver_ver.$driver_revision[$ver_id]) {
+                if ($driver['sccp']['Version'] != $this->sccp_driver_ver . $driver_revision[$ver_id]) {
                     $sccp_driver_replace = 'yes';
                 }
             }
         }
-        
+
 //        $this->sccpvalues['sccp_compatible'] = '11';
         $this->sccpvalues['sccp_compatible'] = array('keyword' => 'compatible', 'data' => $ver_id, 'type' => '1', 'seq' => '99');
-        
+
         $this->sccppath = $this->extconfigs->validate_init_path($confDir, $this->sccpvalues, $sccp_driver_replace);
-        
+
         $driver = $this->FreePBX->Core->getAllDriversInfo(); // ??????
 
         $read_config = $this->cnf_read->getConfig('sccp.conf');
@@ -1548,10 +1527,10 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
 
         $hint = $this->srvinterface->sccp_list_hints();
         foreach ($hint as $key => $value) {
-             if ($this->hint_context['default'] != $value) {
+            if ($this->hint_context['default'] != $value) {
                 $this->hint_context[$key] = $value;
-             }
-        }   
+            }
+        }
     }
 
     /*
@@ -1689,7 +1668,6 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         $data_value['tftp_path'] = $this->sccppath["tftp_path"];
 
         $this->xmlinterface->create_default_XML($this->sccppath["tftp_path_store"], $data_value, $model_information, $lang_data);
-
     }
 
     /*
@@ -1711,23 +1689,23 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         $data_value['server_if_list'] = $this->getIP_information();
         $dev_config['tftp_path'] = $this->sccppath["tftp_path"];
         $dev_config['tftp_firmware'] = '';
-/*        if (!empty($this->sccpvalues['tftp_rewrite'])) {
-            if ( $this->sccpvalues['tftp_rewrite']['data'] == 'internal' ) {      
-                $dir_list = $this->find_all_files($dev_config['tftp_path'], $dev_config['loadimage']);
-                foreach ($dir_list as $filek){
-                    if (!empty($filek)) {
-                        $fnd_path= ''; 
-                        $fnd_path = str_replace($dev_config['tftp_path'],'',$filek);
-                        $fnd_path = substr($fnd_path,1,strpos($fnd_path, $dev_config['loadimage'])-1);
-                        if (!empty($fnd_path)) {
-                            $dev_config['tftp_firmware'] = $fnd_path;
-                        }
-                        break; 
-                    }
-                }
-            }
-        }
-  */      
+        /*        if (!empty($this->sccpvalues['tftp_rewrite'])) {
+          if ( $this->sccpvalues['tftp_rewrite']['data'] == 'internal' ) {
+          $dir_list = $this->find_all_files($dev_config['tftp_path'], $dev_config['loadimage']);
+          foreach ($dir_list as $filek){
+          if (!empty($filek)) {
+          $fnd_path= '';
+          $fnd_path = str_replace($dev_config['tftp_path'],'',$filek);
+          $fnd_path = substr($fnd_path,1,strpos($fnd_path, $dev_config['loadimage'])-1);
+          if (!empty($fnd_path)) {
+          $dev_config['tftp_firmware'] = $fnd_path;
+          }
+          break;
+          }
+          }
+          }
+          }
+         */
         $dev_config['addon_info'] = array();
         if (!empty($dev_config['addon'])) {
             $hw_addon = explode(',', $dev_config['addon']);
@@ -1738,9 +1716,8 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         }
         $lang_data = $this->extconfigs->getextConfig('sccp_lang');
 //        return $this->sccppath["tftp_path_store"];
-        
+
         return $this->xmlinterface->create_SEP_XML($this->sccppath["tftp_path_store"], $data_value, $dev_config, $dev_id, $lang_data);
-        
     }
 
     function sccp_delete_device_XML($dev_id = '') {
@@ -1763,6 +1740,31 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 unlink($xml_name);
             }
         }
+    }
+
+    private function sccp_create_sccp_backup() {
+        global $amp_conf;
+        $backup_files = array($amp_conf['ASTETCDIR'] . '/sccp', $amp_conf['ASTETCDIR'] . '/extensions', $amp_conf['ASTETCDIR'] . '/extconfig',
+            $amp_conf['ASTETCDIR'] . '/res_config_mysql', $amp_conf['ASTETCDIR'] . '/res_mysql');
+        $backup_ext = array('.conf', '_additional.conf', '_custom.conf');
+
+        $result = $this->dbinterface->dump_sccp_tables($this->sccppath["tftp_path"], $amp_conf['AMPDBNAME'], $amp_conf['AMPDBUSER'], $amp_conf['AMPDBPASS']);
+
+        $zip = new \ZipArchive();
+        $filename = $result . ".zip";
+        if ($zip->open($filename, \ZIPARCHIVE::CREATE)) {
+            $zip->addFile($result);
+            foreach ($backup_files as $file) {
+                foreach ($backup_ext as $b_ext) {
+                    if (file_exists($file . $b_ext)) {
+                        $zip->addFile($file . $b_ext);
+                    }
+                }
+            }
+            $zip->close();
+        }
+        unlink($result);
+        return $filename;
     }
 
     function sccp_create_sccp_init() {
@@ -1805,12 +1807,12 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         $search_mode = '';
         if (!empty($this->sccpvalues['tftp_rewrite'])) {
             $search_mode = $this->sccpvalues['tftp_rewrite']['data'];
-            if ( $search_mode == 'pro' ) {
+            if ($search_mode == 'pro') {
                 $dir_list = $this->find_all_files($dir, $file_ext, 'fileonly');
             } else {
                 $dir_list = $this->find_all_files($dir, $file_ext);
             }
-        } else {    
+        } else {
             $dir_list = $this->find_all_files($dir, $file_ext, 'fileonly');
         }
 
@@ -1821,8 +1823,8 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 $raw_settings[$i]['validate'] = '-;-';
                 if (!empty($raw_settings[$i]['loadimage'])) {
                     $raw_settings[$i]['validate'] = 'no;';
-                    if ((strtolower($raw_settings[$i]['vendor'] == 'cisco')) || !empty($dir_list))  {
-                        foreach ($dir_list as $filek){
+                    if ((strtolower($raw_settings[$i]['vendor'] == 'cisco')) || !empty($dir_list)) {
+                        foreach ($dir_list as $filek) {
                             switch ($search_mode) {
                                 case 'pro':
                                 case 'on':
@@ -1832,12 +1834,12 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                                     }
                                     break;
                                 case 'internal2':
-                                    
+
                                     break;
                                 case 'off':
                                 default: // Place in root TFTP dir
 //                                    $raw_settings[$i]['buttons'] = $dir.'/'.$raw_settings[$i]['loadimage'];
-                                    if (strpos(strtolower($filek), strtolower($dir.'/'.$raw_settings[$i]['loadimage'])) !== false) {
+                                    if (strpos(strtolower($filek), strtolower($dir . '/' . $raw_settings[$i]['loadimage'])) !== false) {
 //                                    if (strpos(strtolower($filek), strtolower($raw_settings[$i]['loadimage'])) !== false) {
                                         $raw_settings[$i]['validate'] = 'yes;';
                                     }
@@ -1845,26 +1847,26 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                             }
                         }
                     }
-/* OLD search                   
-                    $file = $dir . '/' . $raw_settings[$i]['loadimage'];
-                    if (is_dir($file)) {
-                        $file .= '/' . $raw_settings[$i]['loadimage'];
-                    }
-                    $raw_settings[$i]['validate'] = 'no;';
-                    if (strtolower($raw_settings[$i]['vendor']) == 'cisco') {
-                        foreach ($file_ext as $value) {
-                            if (file_exists($file . $value)) {
-                                $raw_settings[$i]['validate'] = 'yes;';
-                                break;
-                            }
-                        }
-                    } else {
-                        if (file_exists($file)) {
-                            $raw_settings[$i]['validate'] = 'yes;';
-                        }
-                    }
- * 
- */
+                    /* OLD search                   
+                      $file = $dir . '/' . $raw_settings[$i]['loadimage'];
+                      if (is_dir($file)) {
+                      $file .= '/' . $raw_settings[$i]['loadimage'];
+                      }
+                      $raw_settings[$i]['validate'] = 'no;';
+                      if (strtolower($raw_settings[$i]['vendor']) == 'cisco') {
+                      foreach ($file_ext as $value) {
+                      if (file_exists($file . $value)) {
+                      $raw_settings[$i]['validate'] = 'yes;';
+                      break;
+                      }
+                      }
+                      } else {
+                      if (file_exists($file)) {
+                      $raw_settings[$i]['validate'] = 'yes;';
+                      }
+                      }
+                     * 
+                     */
                 } else {
                     $raw_settings[$i]['validate'] = '-;';
                 }
@@ -1887,29 +1889,28 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         $res = array();
         $default_hint = '@ext-local';
 // get all hints   [101@ext-local] => 101@ext-local
-        $tmp_data  = $this->srvinterface->sccp_list_all_hints();
+        $tmp_data = $this->srvinterface->sccp_list_all_hints();
         foreach ($tmp_data as $value) {
-/* !TODO!: Add Hint Filtred List */
-           $res[$value] = array('hint' => $value, 'name' => before('@', $value), 'label' => $value );
+            /* !TODO!: Add Hint Filtred List */
+            $res[$value] = array('hint' => $value, 'name' => before('@', $value), 'label' => $value);
         }
 // Update info from sccp_db
-        $tmp_data  = $this->dbinterface->get_db_SccpTableData('SccpExtension');
+        $tmp_data = $this->dbinterface->get_db_SccpTableData('SccpExtension');
         foreach ($tmp_data as $value) {
             $name_l = $value['name'];
-            if (!empty($res[$name_l.$default_hint])) {
-                $res[$name_l.$default_hint]['name'] = $name_l;
-                $res[$name_l.$default_hint]['label'] = $value['label'];
+            if (!empty($res[$name_l . $default_hint])) {
+                $res[$name_l . $default_hint]['name'] = $name_l;
+                $res[$name_l . $default_hint]['label'] = $value['label'];
             } else { // if not exist in system hints ..... ???????
-                $res[$name_l.$default_hint] = array('hint' => $name_l.$default_hint, 'name' => $name_l, 'label' => $value['label'] );
+                $res[$name_l . $default_hint] = array('hint' => $name_l . $default_hint, 'name' => $name_l, 'label' => $value['label']);
             }
-                
         }
 // Update info from sip DB 
-/* !TODO!: Update Hint info from sip DB ??? */
+        /* !TODO!: Update Hint info from sip DB ??? */
 
         return $res;
     }
-    
+
     function getIP_information() {
         $interfaces['auto'] = array('0.0.0.0', 'All', '0');
 
@@ -1968,64 +1969,74 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
 //        $dom = dom_import_simplexml($node);
 //        $dom->parentNode->removeChild($dom);
 //    }
-private function strpos_array($haystack, $needles) {
-    if (is_array($needles)) {
-        foreach ($needles as $str) {
-            if (is_array($str)) {
-                $pos = strpos_array($haystack, $str);
-            } else {
-                $pos = strpos($haystack, $str);
+    private function strpos_array($haystack, $needles) {
+        if (is_array($needles)) {
+            foreach ($needles as $str) {
+                if (is_array($str)) {
+                    $pos = strpos_array($haystack, $str);
+                } else {
+                    $pos = strpos($haystack, $str);
+                }
+                if ($pos !== FALSE) {
+                    return $pos;
+                }
             }
-            if ($pos !== FALSE) {
-                return $pos;
-            }
+        } else {
+            return strpos($haystack, $needles);
         }
-    } else {
-        return strpos($haystack, $needles);
-    }
-    return FALSE;
-}
-
-private function find_all_files($dir, $file_mask=null, $mode='full'){
-
-    $result = NULL;
-    if (empty($dir) || (!file_exists($dir))) {
-        return $result;
+        return FALSE;
     }
 
-    $root = scandir($dir);
-    foreach($root as $value) {
-        if($value === '.' || $value === '..') {continue;}
-        if(is_file("$dir/$value")) {
-            $filter = false;
-            if (!empty($file_mask)) {
-                if (is_array($file_mask)) {
-                    foreach ($file_mask as $k){
-                        if (strpos(strtolower($value), strtolower($k)) !== false) {$filter = true;}
+    private function find_all_files($dir, $file_mask = null, $mode = 'full') {
+
+        $result = NULL;
+        if (empty($dir) || (!file_exists($dir))) {
+            return $result;
+        }
+
+        $root = scandir($dir);
+        foreach ($root as $value) {
+            if ($value === '.' || $value === '..') {
+                continue;
+            }
+            if (is_file("$dir/$value")) {
+                $filter = false;
+                if (!empty($file_mask)) {
+                    if (is_array($file_mask)) {
+                        foreach ($file_mask as $k) {
+                            if (strpos(strtolower($value), strtolower($k)) !== false) {
+                                $filter = true;
+                            }
+                        }
+                    } else {
+                        if (strpos(strtolower($value), strtolower($file_mask)) !== false) {
+                            $filter = true;
+                        }
                     }
                 } else {
-                    if (strpos(strtolower($value), strtolower($file_mask)) !== false) {$filter = true;}
+                    $filter = true;
                 }
-              } else {$filter = true;}
-            if ($filter) {
-                if ($mode=='fileonly'){
-                    $result[]="$value";
+                if ($filter) {
+                    if ($mode == 'fileonly') {
+                        $result[] = "$value";
+                    } else {
+                        $result[] = "$dir/$value";
+                    }
                 } else {
-                    $result[]="$dir/$value";
+                    $result[] = null;
                 }
-            } else {$result[]=null;}
-            continue;
-        } 
-        $sub_fiend = $this->find_all_files("$dir/$value",$file_mask,$mode);
-        if (!empty($sub_fiend)) {
-            foreach($sub_fiend as $sub_value) {
-                if (!empty($sub_value)) {
-                    $result[]=$sub_value;
+                continue;
+            }
+            $sub_fiend = $this->find_all_files("$dir/$value", $file_mask, $mode);
+            if (!empty($sub_fiend)) {
+                foreach ($sub_fiend as $sub_value) {
+                    if (!empty($sub_value)) {
+                        $result[] = $sub_value;
+                    }
                 }
             }
         }
+        return $result;
     }
-    return $result;
-} 
 
 }

@@ -27,9 +27,6 @@ ksort($data_sort);
 foreach ($data_sort as $key => $value) {
     $hint_list[$value] = $hint_list1[$value];
 }
-
-
-
 //print_r($hint_list);
 //ksort($hint_list);
 //natsort($hint_list);
@@ -100,9 +97,9 @@ if (!empty($_REQUEST['new_id'])) {
             $defaul_tv = (empty($db_buttons[$line_id])) ?  "empty": $db_buttons[$line_id]['type'];
             $defaul_btn = (empty($db_buttons[$line_id])) ?  "": $db_buttons[$line_id]['name'];
             $defaul_opt = (empty($db_buttons[$line_id])) ?  array(''): explode(',',$db_buttons[$line_id]['options']);
+//            print_r($defaul_btn);
 //            print_r($defaul_opt);
-            
-            
+
             $show_form_mode = $defaul_tv; 
             $def_hint = '';
             $def_silent = '';
@@ -127,19 +124,18 @@ if (!empty($_REQUEST['new_id'])) {
 //                print_r($defaul_fcod);
             }
             foreach ($defaul_opt as $data_i) {
-                if (strpos($data_i,'@') >0) {
-                    $defaul_btn = strtok($data_i,'@');
+                if (strpos($data_i,'@')>0) {
+                    $test_btn = strtok($data_i,'@');
                     $def_hint = 'checked';
-                    if ($defaul_btn == $defaul_opt[0]) {
+                    $defaul_btn = $data_i;
+                    if ($test_btn == $defaul_opt[0]) {
                         foreach ($lines_list as $data){
-                           if ($data['name']==$defaul_btn) {
+                           if ($data['name']==$test_btn) {
                                 $show_form_mode = 'line';
                                 $defaul_tv = 'monitor';
                                 break;
                            }
                         }
-                    } else {
-                        $defaul_btn = $data_i;
                     }                        
                 }
             }                                

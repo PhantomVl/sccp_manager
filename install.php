@@ -1,8 +1,8 @@
 <?php
 /*
  *   Hand DB Change :
-  ALTER TABLE `sccpline` CHANGE COLUMN `transfer` `transfer` ENUM('on','off') NULL DEFAULT NULL ;
-  ALTER TABLE `sccpdevice` CHANGE COLUMN `transfer` `transfer` ENUM('on','off') NULL DEFAULT NULL;
+ ALTER TABLE `asterisk`.`sccpline` CHANGE COLUMN `transfer` `transfer` ENUM('on','off') NULL DEFAULT NULL ;
+ ALTER TABLE `asterisk`.`sccpdevice` CHANGE COLUMN `transfer` `transfer` ENUM('on','off') NULL DEFAULT NULL;
  * 
  * 
  */
@@ -654,6 +654,8 @@ function Setup_RealTime() {
     $cnf_int = \FreePBX::Config();
     $cnf_wr = \FreePBX::WriteConfig();
     $cnf_read = \FreePBX::LoadConfig();
+    $backup_ext = array('_custom.conf', '.conf');
+    
     $def_config = array('sccpdevice' => 'mysql,sccp,sccpdeviceconfig', 'sccpline' => ' mysql,sccp,sccpline');
     $def_bd_config = array('dbhost' => $amp_conf['AMPDBHOST'], 'dbname' => $amp_conf['AMPDBNAME'],
         'dbuser' => $amp_conf['AMPDBUSER'], 'dbpass' => $amp_conf['AMPDBPASS'],
@@ -664,8 +666,13 @@ function Setup_RealTime() {
     $res_conf_sql = ini_get('pdo_mysql.default_socket');
     $res_conf = '';
     $ext_conf = '';
-    if (file_exists($dir . '/extconfig.conf')) {
-        $ext_conf = $cnf_read->getConfig('extconfig.conf');
+    $ext_conf_file = 'extconfig.conf';
+    foreach ($backup_ext as $value) {
+        if (file_exists($dir . '/extconfig' . $value)) {
+            $ext_conf_file =  'extconfig' . $value;
+            $ext_conf = $cnf_read->getConfig($ext_conf_file);
+            break;
+        }
     }
     if (!empty($res_conf_sql)) {
         if (file_exists($res_conf_sql)) {
@@ -713,7 +720,7 @@ function Setup_RealTime() {
 //        $res_conf['general']['dbsock'] = $def_bd_config['dbsock'];
         $cnf_wr->writeConfig('res_config_mysql.conf', $res_conf, false);
     }
-    $cnf_wr->writeConfig('extconfig.conf', $ext_conf, false);
+    $cnf_wr->writeConfig($ext_conf_file, $ext_conf, false);
 }
 
 CheckSCCPManagerDBTables($table_req);

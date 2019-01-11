@@ -138,7 +138,7 @@ and open the template in the editor. Base Version before all crash :-)
             <button value="all">All</button>
             <help>Debug: Enable debugging level in SCCP module.</help>
         </item>
-        <item type="IS" id="6" seq="20">
+        <item type="IS" id="6" seq="98">
             <name>displayconfig</name> 
             <label>SCCP Config Mode </label>
             <default>sccpgeneral</default>

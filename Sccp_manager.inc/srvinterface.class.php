@@ -587,7 +587,7 @@ class srvinterface {
                 }
             }
         } else {
-                    return $result;
+                return $result;
             return array();
         }
    } 
@@ -608,8 +608,10 @@ class srvinterface {
         fputs ($fp,"Events: on\r\n\r\n");
 
         fputs ($fp,"Action: SCCPShowDevices\r\n");
-        fputs ($fp,"ResultFormat: command\r\n");
-//        $params = array('Segment' => 'device', 'ResultFormat'=>'command' );
+
+//        fputs ($fp,"Action: SCCPConfigMetaData\r\n");
+//        fputs ($fp,"Segment: device\r\n");
+//        fputs ($fp,"ResultFormat: command\r\n");
         fputs ($fp,"\r\n");
             
 /*

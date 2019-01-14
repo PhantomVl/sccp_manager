@@ -348,14 +348,17 @@ class extconfigs {
         return $base_config;
     }
 
-    public function validate_RealTime() {
+    public function validate_RealTime($realm = '') {
         global $amp_conf;
         $res = Array();
-
+        if (empty($realm) ) {
+            $realm = 'sccp';
+        }
         $cnf_int = \FreePBX::Config();
         $cnf_wr = \FreePBX::WriteConfig();
         $cnf_read = \FreePBX::LoadConfig();
-        $def_config = array('sccpdevice' => 'mysql,sccp,sccpdeviceconfig', 'sccpline' => 'mysql,sccp,sccpline');
+        
+        $def_config = array('sccpdevice' => 'mysql,'.$realm.',sccpdeviceconfig', 'sccpline' => 'mysql,'.$realm.',sccpline');
         $backup_ext = array('_custom.conf', '.conf', '_additional.conf');
         $def_bd_config = array('dbhost' => $amp_conf['AMPDBHOST'], 'dbname' => $amp_conf['AMPDBNAME'],
             'dbuser' => $amp_conf['AMPDBUSER'], 'dbpass' => $amp_conf['AMPDBPASS'],
@@ -372,11 +375,18 @@ class extconfigs {
             if (file_exists($dir . '/extconfig' . $fext)) {
                 $ext_conf = $cnf_read->getConfig('extconfig' . $fext);
                 if (!empty($ext_conf['settings']['sccpdevice'])) {
-                    $res['sccpdevice'] = 'OK';
-                    $res['extconfigfile'] = 'extconfigfile'. $fext;
+                    // Add chek line
+                    if (strtolower($ext_conf['settings']['sccpdevice']) == strtolower($def_config['sccpdevice'])){
+                        $res['sccpdevice'] = 'OK';
+                        $res['extconfigfile'] = 'extconfig'. $fext;
+                    } else {
+                        $res['sccpdevice'] = 'Error in line sccpdevice '. $res['sccpdevice'];
+                    }
                 }
-                if (empty($ext_conf['settings']['sccpline'])) {
-                    $res['sccpline'] = 'OK';
+                if (!empty($ext_conf['settings']['sccpline'])) {
+                    if (strtolower($ext_conf['settings']['sccpline']) == strtolower($def_config['sccpline'])){
+                        $res['sccpline'] = 'OK';
+                    } else {$res['sccpline'] = 'Error in line sccpline';}
                 }
             }
         }
@@ -402,10 +412,10 @@ class extconfigs {
         }
         if (file_exists($dir . '/res_mysql.conf')) {
             $res_conf = $cnf_read->getConfig('res_mysql.conf');
-            if (empty($res_conf[$def_bd_sec])) {
+            if (empty($res_conf[$realm])) {
                 $res['mysqlconfig'] = 'Not Config in file: res_mysql.conf';
             } else {
-                if ($res_conf[$def_bd_sec]['dbsock'] != $def_bd_config['dbsock']) {
+                if ($res_conf[$realm]['dbsock'] != $def_bd_config['dbsock']) {
                     $res['mysqlconfig'] = 'Mysql Soket Error in file: res_mysql.conf';
                 }
             }
@@ -413,12 +423,13 @@ class extconfigs {
                 $res['mysqlconfig'] = 'OK';
             }
         }
+        
         if (file_exists($dir . '/res_config_mysql.conf')) {
             $res_conf = $cnf_read->getConfig('res_config_mysql.conf');
-            if (empty($res_conf[$def_bd_sec])) {
+            if (empty($res_conf[$realm])) {
                 $res['mysqlconfig'] = 'Not Config in file: res_config_mysql.conf';
             } else {
-                if ($res_conf[$def_bd_sec]['dbsock'] != $def_bd_config['dbsock']) {
+                if ($res_conf[$realm]['dbsock'] != $def_bd_config['dbsock']) {
                     $res['mysqlconfig'] = 'Mysql Soket Error in file: res_config_mysql.conf';
                 }
             }

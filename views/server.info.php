@@ -12,7 +12,17 @@
 $driver = $this->FreePBX->Core->getAllDriversInfo();
 $core = $this->srvinterface->getSCCPVersion();
 $ast_realtime = $this->srvinterface->sccp_realtime_status();
-$conf_realtime = $this->extconfigs->validate_RealTime();
+
+$ast_realm = (empty($ast_realtime['sccp']) ? '':'sccp');
+
+foreach ($ast_realtime as $key => $value) {
+    if (empty($ast_realm)) {
+       if ($value['status'] == 'OK') {
+           $ast_realm = $key;
+       }
+    }
+}
+$conf_realtime = $this->extconfigs->validate_RealTime($ast_realm);
 $info = array();
 $info['srvinterface'] = $this->srvinterface->info();
 $info['extconfigs'] = $this->extconfigs->info();
@@ -43,7 +53,7 @@ if (empty($ast_realtime)) {
     $rt_info = '';
     $rt_sccp = 'Failed';
     foreach ($ast_realtime as $key => $value) {
-        if ($key == 'sccp') {
+        if ($key == $ast_realm) {
             if ($value['status'] == 'OK') {
                 $rt_sccp = 'TEST OK'; 
                 $rt_info .= 'SCCP conettions found';

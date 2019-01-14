@@ -464,6 +464,38 @@ class srvinterface {
         return $metadata;
     }
   /*
+   *    [Segments] => ( [0] => general  [1] => device  [2] => line [3] => softkey  )
+   */  
+    function getеtestChanSCCP_GlablsInfo($Segment='') {
+        global $astman;
+        $params = array();
+        $response = $astman->send_request('SCCPConfigMetaData', $params);
+
+        $action = 'SCCPConfigMetaData';
+        if (empty($Segment)) {
+            $Segment = 'general';
+        }
+        $params = array('Segment' => $Segment, 'ResultFormat'=>'command' );
+        $metadata = $astman->send_request($action, $params);
+        if (!empty($metadata['data'])) {
+            $tmp_data =  $metadata['data'];
+            if (strpos($tmp_data, 'JSON:')!==false ) {
+                $decode = json_decode(substr ($tmp_data,strpos($tmp_data, 'JSON:') + 5), true);
+                $result = array();
+                if (!empty($decode['Options'])) {
+                    foreach ($decode['Options'] as $value) {
+                       $result[$value['Name']] = $value;
+                    }
+                    return $result;
+                }
+                return $decode;
+            }
+            
+        }
+        return $metadata;
+    }
+    
+  /*
     private function astLogin($host="localhost", $username="admin", $password="amp111"){
     
     $this->socket = @fsockopen("127.0.0.1","5038", $errno, $errstr, 1); 
@@ -607,11 +639,13 @@ class srvinterface {
         fputs ($fp,"Secret: ".$amp_conf[AMPMGRPASS]."\r\n");
         fputs ($fp,"Events: on\r\n\r\n");
 
-        fputs ($fp,"Action: SCCPShowDevices\r\n");
+//        fputs ($fp,"Action: SCCPShowDevices\r\n");
 
-//        fputs ($fp,"Action: SCCPConfigMetaData\r\n");
-//        fputs ($fp,"Segment: device\r\n");
-//        fputs ($fp,"ResultFormat: command\r\n");
+        fputs ($fp,"Action: SCCPConfigMetaData\r\n");
+//        fputs ($fp,"Segment: general\r\n");
+//        "Segments":["general","device","line","softkey"]}
+        fputs ($fp,"Segment: device\r\n");
+        fputs ($fp,"ResultFormat: command\r\n");
         fputs ($fp,"\r\n");
             
 /*

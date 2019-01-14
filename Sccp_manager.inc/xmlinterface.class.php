@@ -44,15 +44,26 @@ class xmlinterface {
             $xnode = &$xml_work->callManagerGroup->members;
             if ($data_values['bindaddr'] == '0.0.0.0') {
                 $ifc = 0;
+//                $xnode->member['priority'] = print_r($data_values['server_if_list'], true);
                 foreach ($data_values['server_if_list'] as $value) {
-                    if (!empty($value[0])) {
-                        if (!in_array($value[0], array('0.0.0.0', '127.0.0.1'), true)) {
+                    if (!empty($value['ip'])) {
+                        $ip_valid = true;
+                        if (!empty($data_values['ccm_address'])) {
+                            if (strpos($data_values['ccm_address'], 'internal') !== false || strpos($data_values['ccm_address'], '0.0.0.0') !== false ) {
+                                // Skip
+                            } else {
+                                if (strpos($data_values['ccm_address'], $value['ip']) === false) {
+                                    $ip_valid = false;
+                                }
+                            }
+                        }
+                        if (!in_array($value['ip'], array('0.0.0.0', '127.0.0.1'), true) && ($ip_valid)) {
                             $xnode_obj = clone $xnode->member;
                             $xnode_obj['priority'] = $ifc;
                             //$xnode_obj =  &$xnode -> member -> callManager;
                             $xnode_obj->callManager->name = $data_values['servername'];
                             $xnode_obj->callManager->ports->ethernetPhonePort = $data_values['port'];
-                            $xnode_obj->callManager->processNodeName = $value[0];
+                            $xnode_obj->callManager->processNodeName = $value['ip'];
                             if ($ifc === 0) {
                                 $this->replaceSimpleXmlNode($xnode->member, $xnode_obj);
                             } else {
@@ -240,16 +251,28 @@ class xmlinterface {
                                     if ($data_values['bindaddr'] == '0.0.0.0') {
                                         $ifc = 0;
                                         foreach ($data_values['server_if_list'] as $value) {
-                                            if (!empty($value[0])) {
-                                                if (!in_array($value[0], array('0.0.0.0', '127.0.0.1'), true)) {
-                                                    $xnode_obj = clone $xnode->member;
+
+                                            if (!empty($value['ip'])) {
+                                                $ip_valid = true;
+                                                if (!empty($data_values['ccm_address'])) {
+                                                    if (strpos($data_values['ccm_address'], 'internal') !== false || strpos($data_values['ccm_address'], '0.0.0.0') !== false ) {
+                                                        // Skip
+                                                    } else {
+                                                        if (strpos($data_values['ccm_address'], $value['ip']) === false) {
+                                                            $ip_valid = false;
+                                                        }
+                                                    }
+                                                }
+                                                if (!in_array($value['ip'], array('0.0.0.0', '127.0.0.1'), true) && ($ip_valid)) {
+
+                                                $xnode_obj = clone $xnode->member;
 //                                                $xnode_obj = $xnode -> member;
 //                                                $xnode_obj = $xnode -> addChild($xnode->member);
                                                     $xnode_obj['priority'] = $ifc;
                                                     //$xnode_obj =  &$xnode -> member -> callManager;
                                                     $xnode_obj->callManager->name = $data_values['servername'];
                                                     $xnode_obj->callManager->ports->ethernetPhonePort = $data_values['port'];
-                                                    $xnode_obj->callManager->processNodeName = $value[0];
+                                                    $xnode_obj->callManager->processNodeName = $value['ip'];
                                                     if ($ifc === 0) {
                                                         $this->replaceSimpleXmlNode($xnode->member, $xnode_obj);
                                                     } else {

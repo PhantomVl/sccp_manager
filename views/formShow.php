@@ -38,6 +38,7 @@ $time_zone = array('-12' => 'GTM -12', '-11' => 'GTM -11', '-10' => 'GTM -10', '
 $time_zone_name = \FreePBX::Sccp_manager()-> extconfigs-> getextConfig('cisco_timezone');
 //$time_zone = \FreePBX::Sccp_manager()-> extconfigs-> getextConfig('cisco_time');
 //$system_time_zone = \FreePBX::Sccp_manager()->getSysnemTimeZone();
+//print_r($metainfo);
 
 if (\FreePBX::Modules()->checkStatus("soundlang")) {
     $syslangs = \FreePBX::Soundlang()->getLanguages();
@@ -76,13 +77,22 @@ if ($h_show==1) {
 }
 foreach ($items as $child) {
     if (empty($child->help)) {
-        $child->help = 'Help is not available.';
+        $child->help = 'Help is not available.';        
+        $child->meta_help = '1';
     }
+//    $child->meta_help = '1';          // Remove comments to see original help ! 
 
     if ($child['type'] == 'IE') {
         $res_input = '';
         $res_name = '';
-        $res_id = $npref.$child->input[0]->name;
+        $res_oid = (string)$child->input[0]->name;
+        $res_id = $npref.$res_oid;
+        if (!empty($metainfo[$res_oid])){
+            if ($child->meta_help == '1' || $child->help == 'Help!') {
+                $child->help = $metainfo[$res_oid]['Description'];
+            }
+        }
+
         // --- Add Hiden option
         $res_sec_class ='';   
         if (!empty($child ->class)){
@@ -158,8 +168,14 @@ foreach ($items as $child) {
         $res_input = '';
         $res_name = '';
         $res_value = '';
+        $opt_at = array();
         $res_n =  (string)$child->name;
 
+        if (!empty($metainfo[$res_n])){
+            if ($child->meta_help == '1' || $child->help == 'Help!') {
+                $child->help = $metainfo[$res_n]['Description'];
+            }
+        }
 //        $res_value
         $lnhtm = '';
         $res_id = $napref.$child->name;
@@ -300,6 +316,12 @@ foreach ($items as $child) {
     if ($child['type'] == 'IS') {
         $res_n =  (string)$child->name;
         $res_id = $npref.$child->name;
+        if (!empty($metainfo[$res_n])){
+            if ($child->meta_help == '1' || $child->help == 'Help!') {
+                $child->help = $metainfo[$res_n]['Description'];
+            }
+        }
+        
              // --- Add Hiden option
         $res_sec_class ='';   
         if (!empty($child ->class)){
@@ -377,6 +399,12 @@ foreach ($items as $child) {
 //        $value = $child -> select;
         $res_n =  (string)$child ->name;       
         $res_id = $npref.$res_n;
+        if (!empty($metainfo[$res_n])){
+            if ($child->meta_help == '1' || $child->help == 'Help!') {
+                $child->help = $metainfo[$res_n]['Description'];
+            }
+        }
+        
         if (empty($child->class)) {
            $child->class = 'form-control';
         }
@@ -440,6 +468,11 @@ foreach ($items as $child) {
         $res_id = $npref.$res_n;
         $child->value ='';
 
+        if (!empty($metainfo[$res_n])){
+            if ($child->meta_help == '1' || $child->help == 'Help!') {
+                $child->help = $metainfo[$res_n]['Description'];
+            }
+        }
 
         if ($child['type'] == 'SLS') {
             $select_opt= $syslangs;
@@ -530,6 +563,12 @@ foreach ($items as $child) {
     if ($child['type'] == 'SL') {
         $res_n =  (string)$child->name;
         $res_id = $npref.$child->name;
+
+        if (!empty($metainfo[$res_n])){
+            if ($child->meta_help == '1' || $child->help == 'Help!') {
+                $child->help = $metainfo[$res_n]['Description'];
+            }
+        }
         
         if (empty($child ->class)) {
            $child->class = 'form-control';
@@ -584,6 +623,13 @@ foreach ($items as $child) {
 //        $value = $child -> select;
         $res_n =  (string)$child ->name;       
         $res_id = $npref.$res_n;
+
+        if (!empty($metainfo[$res_n])){
+            if ($child->meta_help == '1' || $child->help == 'Help!') {
+                $child->help = $metainfo[$res_n]['Description'];
+            }
+        }
+        
         if (empty($child->class)) {
            $child->class = 'form-control';
         }

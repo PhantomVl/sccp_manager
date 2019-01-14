@@ -57,6 +57,7 @@ if (empty($ast_realtime)) {
     }
     $info['RealTime'] = array('Version' => $rt_sccp,  'about'=> $rt_info);
 }
+
 if (empty($conf_realtime)) {
     $info['ConfigsRealTime'] = array('Version' => 'Error',  'about'=> '<div class="alert signature alert-danger"> No found Real Time Configs</div>');
 } else {
@@ -70,18 +71,21 @@ if (empty($conf_realtime)) {
         $info['ConfigsRealTime'] = array('Version' => 'Error',  'about'=> $rt_info);
     }
 }
-/*
  //global $amp_conf;
+/*
 print_r("<br> Request:<br><pre>");
  $json = '';
  print_r("<br>");
- //print_r($conf_realtime);
+ print_r($conf_realtime);
  print_r("<br>");
  print_r("<br>");
- //print_r($amp_conf);
+ print_r($ast_realtime);
 // print_r("DIRECT START");
+  print_r($this->sccpvalues['ccm_address']);
  print_r("<br>");
-// print_r($this->srvinterface->t_get_meta_data());
+//  print_r($this->getIP_information2());
+//  print_r($this->srvinterface->getеtestChanSCCP_GlablsInfo());
+//  print_r($this->sccp_metainfo);
  print("</pre>");
 */
 //   $lang_arr =  $this->extconfigs->getextConfig('sccp_lang','sk_SK');    

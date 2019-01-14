@@ -97,11 +97,10 @@ if (!empty($_REQUEST['new_id'])) {
             $defaul_tv = (empty($db_buttons[$line_id])) ?  "empty": $db_buttons[$line_id]['type'];
             $defaul_btn = (empty($db_buttons[$line_id])) ?  "": $db_buttons[$line_id]['name'];
             $defaul_opt = (empty($db_buttons[$line_id])) ?  array(''): explode(',',$db_buttons[$line_id]['options']);
-//            print_r($defaul_btn);
-//            print_r($defaul_opt);
 
             $show_form_mode = $defaul_tv; 
-            $def_hint = '';
+            $def_hint = '';       // Hint check Box
+            $def_hint_btn = '';   // Hint Combo Box
             $def_silent = '';
             $defaul_advline = '';
             if (strpos($defaul_btn,'@') >0) {
@@ -128,17 +127,21 @@ if (!empty($_REQUEST['new_id'])) {
                     $test_btn = strtok($data_i,'@');
                     $def_hint = 'checked';
                     $defaul_btn = $data_i;
+                    $def_hint_btn = $data_i;
                     if ($test_btn == $defaul_opt[0]) {
                         foreach ($lines_list as $data){
                            if ($data['name']==$test_btn) {
                                 $show_form_mode = 'line';
                                 $defaul_tv = 'monitor';
+                                $defaul_btn = $test_btn;
                                 break;
                            }
                         }
                     }                        
                 }
             }                                
+//            print_r($defaul_btn);
+//            print_r($defaul_opt);
             
             echo '<!-- Begin button :'.$line_id.' -->';
             echo '<div class="line_button element-container" '.(($line_id < $show_buttons)?"":"hidden ").'data-id="'.$line_id.'">';
@@ -208,7 +211,7 @@ if (!empty($_REQUEST['new_id'])) {
                                 echo '<select  class="form-control" name="'.$forminfo[1]['name'].$line_id.'_hline" >';
                                 
                                 foreach ($hint_list as $data){
-                                  $select = (($data['hint']==$defaul_btn)?"selected":"");
+                                  $select = (($data['hint']==$def_hint_btn)?"selected":"");
                                   echo '<option value="'.$data['hint'].'" '.$select.' >'.$data['name'].' / '.$data['label'].'</option>';
                                 }
                                 echo '</select>';

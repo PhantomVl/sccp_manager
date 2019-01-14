@@ -98,6 +98,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
     private $hint_context = array('default' => '@ext-local'); /// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Get it from Config !!!
     private $val_null = 'NONE'; /// REPLACE to null Field
     public $sccp_model_list = array();
+    public $sccp_metainfo = array();    
     private $cnf_wr = null;
     public $sccppath = array();
     public $sccpvalues = array();
@@ -175,7 +176,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 $htmlret .= load_view(__DIR__ . '/views/formShow.php', array(
                     'itm' => $item, 'h_show' => $heder_show,
                     'form_prefix' => $form_prefix, 'fvalues' => $form_values,
-                    'tftp_lang' => $this->getTftpLang())
+                    'tftp_lang' => $this->getTftpLang(), 'metainfo' => $this->sccp_metainfo)
                 );
             }
         } else {
@@ -364,6 +365,9 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
     public function myShowPage() {
         $request = $_REQUEST;
         $action = !empty($request['action']) ? $request['action'] : '';
+        if ($this->sccpvalues['sccp_compatible']['data'] >= '433') {
+            $this->sccp_metainfo = $this->srvinterface->getеtestChanSCCP_GlablsInfo('general');
+        }
 
         if (!empty($this->sccpvalues['displayconfig'])) {
             if (!empty($this->sccpvalues['displayconfig']['data']) && ($this->sccpvalues['displayconfig']['data'] == 'sccpsimple')) {
@@ -492,6 +496,9 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         $request = $_REQUEST;
         $action = !empty($request['action']) ? $request['action'] : '';
         $inputform = !empty($request['tech_hardware']) ? $request['tech_hardware'] : '';
+        if ($this->sccpvalues['sccp_compatible']['data'] >= '433') {
+            $this->sccp_metainfo = $this->srvinterface->getеtestChanSCCP_GlablsInfo('device');
+        }
 
 //        print_r($inputform);
         if (empty($this->pagedata)) {
@@ -1658,7 +1665,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         foreach ($this->sccpvalues as $key => $value) {
             $data_value[$key] = $value['data'];
         }
-        $data_value['server_if_list'] = $this->getIP_information();
+        $data_value['server_if_list'] = $this->getIP_information2('ip4');
         $model_information = $this->getSccp_model_information($get = "enabled", $validate = false); // Get Active
 
         if (empty($model_information))
@@ -1686,7 +1693,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
             $data_value[$key] = $value['data'];
         }
         $data_value['ntp_timezone_id'] = $this->extconfigs->getextConfig('sccp_timezone', $data_value['ntp_timezone']);
-        $data_value['server_if_list'] = $this->getIP_information();
+        $data_value['server_if_list'] = $this->getIP_information2('ip4');
         $dev_config['tftp_path'] = $this->sccppath["tftp_path"];
         $dev_config['tftp_firmware'] = '';
         /*        if (!empty($this->sccpvalues['tftp_rewrite'])) {
@@ -1911,10 +1918,42 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         return $res;
     }
 
-    function getIP_information() {
+    function getIP_information2($type = '') {
+        $interfaces= array();
+        switch ($type) {
+            case 'ip4':
+                exec("/sbin/ip -4 -o addr", $result, $ret);
+                break;
+            case 'ip6':
+                exec("/sbin/ip -6 -o addr", $result, $ret);
+                break;
+
+            default:
+                exec("/sbin/ip -o addr", $result, $ret);
+                break;
+        }
+        foreach ($result as $line) {
+            $vals = preg_split("/\s+/", $line);
+            if ($vals[3] == "mtu")
+                continue;
+            if ($vals[2] != "inet" && $vals[2] != "inet6")
+                continue;
+            if (preg_match("/(.+?)(?:@.+)?:$/", $vals[1], $res)) { 
+                continue;
+            }
+           $ret = preg_match("/(\d*+.\d*+.\d*+.\d*+)[\/(\d*+)]*/", $vals[3], $ip);
+            
+            $interfaces[$vals[1].':'.$vals[2]] = Array('name' => $vals[1],'type' => $vals[2], 'ip' => ((empty($ip[1]) ? '' : $ip[1])));
+        }
+        return $interfaces;
+    }
+
+
+
+    function getIP_information_old() {
         $interfaces['auto'] = array('0.0.0.0', 'All', '0');
 
-        exec("/sbin/ip -o addr", $result, $ret);
+        exec("/sbin/ip -4 -o addr", $result, $ret);
         foreach ($result as $line) {
             $vals = preg_split("/\s+/", $line);
 

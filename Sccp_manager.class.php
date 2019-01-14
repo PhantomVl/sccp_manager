@@ -1760,10 +1760,20 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         $result = $this->dbinterface->dump_sccp_tables($this->sccppath["tftp_path"], $amp_conf['AMPDBNAME'], $amp_conf['AMPDBUSER'], $amp_conf['AMPDBPASS']);
         $dir_info['asterisk'] =  $this->find_all_files($amp_conf['ASTETCDIR']);
         $dir_info['tftpdir'] = $this-> find_all_files($this->sccppath["tftp_path"]);
+        $dir_info['driver'] = $this->FreePBX->Core->getAllDriversInfo();
+        $dir_info['core'] = $this->srvinterface->getSCCPVersion();
+        $dir_info['realtime'] = $this->srvinterface->sccp_realtime_status();
+        $dir_info['srvinterface'] = $this->srvinterface->info();
+        $dir_info['extconfigs'] = $this->extconfigs->info();
+        $dir_info['dbinterface'] = $this->dbinterface->info();
+        $dir_info['XML'] = $this->xmlinterface->info();
+
         
         $fh = fopen($backup_info, 'w');
+        $dir_str = "Begin JSON data ------------\r\n";
+        fwrite($fh,$dir_str);
         fwrite($fh,json_encode($dir_info));
-        $dir_str = "\r\n";
+        $dir_str = "\r\n\r\nBegin TEXT data ------------\r\n";
         foreach ($dir_info['asterisk'] as $data) {
             $dir_str .= $data."\r\n";
         }

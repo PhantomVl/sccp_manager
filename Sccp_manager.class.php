@@ -1751,16 +1751,33 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
 
     private function sccp_create_sccp_backup() {
         global $amp_conf;
+        $dir_info = array();
         $backup_files = array($amp_conf['ASTETCDIR'] . '/sccp', $amp_conf['ASTETCDIR'] . '/extensions', $amp_conf['ASTETCDIR'] . '/extconfig',
             $amp_conf['ASTETCDIR'] . '/res_config_mysql', $amp_conf['ASTETCDIR'] . '/res_mysql');
         $backup_ext = array('.conf', '_additional.conf', '_custom.conf');
+        $backup_info = $this->sccppath["tftp_path"].'/sccp_dir.info';
 
         $result = $this->dbinterface->dump_sccp_tables($this->sccppath["tftp_path"], $amp_conf['AMPDBNAME'], $amp_conf['AMPDBUSER'], $amp_conf['AMPDBPASS']);
-
+        $dir_info['asterisk'] =  $this->find_all_files($amp_conf['ASTETCDIR']);
+        $dir_info['tftpdir'] = $this-> find_all_files($this->sccppath["tftp_path"]);
+        
+        $fh = fopen($backup_info, 'w');
+        fwrite($fh,json_encode($dir_info));
+        $dir_str = "\r\n";
+        foreach ($dir_info['asterisk'] as $data) {
+            $dir_str .= $data."\r\n";
+        }
+        foreach ($dir_info['tftpdir'] as $data) {
+            $dir_str .= $data."\r\n";
+        }
+        fputs($fh, $dir_str);
+        fclose($fh);
+        
         $zip = new \ZipArchive();
-        $filename = $result . ".zip";
+        $filename = $result .".". gethostname().".zip";
         if ($zip->open($filename, \ZIPARCHIVE::CREATE)) {
             $zip->addFile($result);
+            $zip->addFile($backup_info);
             foreach ($backup_files as $file) {
                 foreach ($backup_ext as $b_ext) {
                     if (file_exists($file . $b_ext)) {
@@ -1770,6 +1787,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
             }
             $zip->close();
         }
+        unlink($backup_info);
         unlink($result);
         return $filename;
     }

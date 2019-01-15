@@ -210,14 +210,54 @@ class dbinterface {
         }
         return $result;
     }
+
     /*
-     *  Replace by SccpTables !!!!
+     *  My be Replace by SccpTables ??!
      * 
      */
     public function dump_sccp_tables($data_path,  $database, $user, $pass ) {
         $filename = $data_path.'/sccp_backup_'.date('G_a_m_d_y').'.sql';
         $result = exec('mysqldump '.$database.' --password='.$pass.' --user='.$user.' --single-transaction >'.$filename ,$output);
         return $filename;
+    }
+    
+/*
+ *  Check Table structure 
+ */
+    public function validate() {
+        global $db;
+        $check_fields = array('430' => array('_hwlang' => "varchar(12)"), '431' => array('private'=> "enum('on','off')"), '433' => array('directed_pickup'=>'') );
+        $sql = "DESCRIBE `sccpdevice`;";
+        $raw_result = sql($sql, "getAll", DB_FETCHMODE_ASSOC);
+        $result = 0;
+        foreach ($raw_result as $value) {
+           $id_result[$value['Field']] = $value['Type'];
+        }
+        foreach ($check_fields as $key => $value) {
+            $sub_result = true;                    
+            foreach($value as $skey => $svalue) {
+              if (!empty($svalue) ) {
+                if (empty($id_result[$skey])) {
+                    $sub_result = false;
+                } else {
+                    if (strtolower($id_result[$skey]) != strtolower($svalue)) {
+                        $sub_result = false;
+                    }
+                }                
+              } else {
+                if (!empty($id_result[$skey])) {
+                    $sub_result = false;
+                }
+              }
+            }
+            if ($sub_result) {
+                $result = $key;
+            } else {
+                break;
+            }
+        }
+        
+        return $result;
     }
 
 }

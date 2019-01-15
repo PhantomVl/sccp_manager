@@ -27,6 +27,8 @@ $info = array();
 $info['srvinterface'] = $this->srvinterface->info();
 $info['extconfigs'] = $this->extconfigs->info();
 $info['dbinterface'] = $this->dbinterface->info();
+$db_Schema = $this->dbinterface->validate();
+
 $info['XML'] = $this->xmlinterface->info();
 $info['sccp_class'] = $driver['sccp'];
 $info['Core_sccp'] = array('Version' => $core['Version'],  'about'=> 'Sccp ver.'. $core['Version'].' r'.$core['vCode']. ' Revision :'. $core['RevisionNum']. ' Hash :'. $core['RevisionHash']);
@@ -47,6 +49,12 @@ if (!empty($this->sccpvalues['SccpDBmodel'])) {
         $info['Сompatible']['about'] = '<div class="alert signature alert-danger"> Reinstall SCCP manager required</div>';
     }
 }
+if ($db_Schema == 0) {
+    $info['DB_Schema'] = array('Version' => 'Error',  'about'=> '<div class="alert signature alert-danger"> ERROR DB Version </div>');
+} else {
+    $info['DB_Schema'] = array('Version' => $db_Schema,  'about'=> (($this->srvinterface->get_compatible_sccp() == $db_Schema ) ? 'Ok' : 'Incompatable Version'));
+}
+
 if (empty($ast_realtime)) {
     $info['RealTime'] = array('Version' => 'Error',  'about'=> '<div class="alert signature alert-danger"> No found Real Time connections</div>');
 } else {
@@ -86,25 +94,25 @@ if (empty($conf_realtime)) {
 print_r("<br> Request:<br><pre>");
  $json = '';
  print_r("<br>");
- print_r($conf_realtime);
+// print_r($conf_realtime);
  print_r("<br>");
  print_r("<br>");
- print_r($ast_realtime);
+ print_r($this->dbinterface->validate());
 // print_r("DIRECT START");
-  print_r($this->sccpvalues['ccm_address']);
+//  print_r($this->sccpvalues['ccm_address']);
  print_r("<br>");
 //  print_r($this->getIP_information2());
 //  print_r($this->srvinterface->getеtestChanSCCP_GlablsInfo());
 //  print_r($this->sccp_metainfo);
  print("</pre>");
-*/
+
 //   $lang_arr =  $this->extconfigs->getextConfig('sccp_lang','sk_SK');    
 //   print_r('<br>');
 //   print_r(timezone_identifiers_list());
 //   print_r('<br>');
 
 //print_r($this->dbinterface->info());
-
+*/
 if (!empty($this->class_error)) {
     ?>    
     <div class="fpbx-container container-fluid">

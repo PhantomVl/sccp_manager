@@ -319,7 +319,7 @@ class xmlinterface {
                         break;
                     case 'commonProfile':
                         $xml_node->phonePassword = $data_values['dev_sshPassword'];
-                        $xml_node->backgroundImageAccess = $data_values['backgroundImageAccess'];
+                        $xml_node->backgroundImageAccess = (($data_values['backgroundImageAccess'] =='on') || ($data_values['backgroundImageAccess'] =='true') ) ? 'true':'false';
                         $xml_node->callLogBlfEnabled = $data_values['callLogBlfEnabled'];
                         break;
                         

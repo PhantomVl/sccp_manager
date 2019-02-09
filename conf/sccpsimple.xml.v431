@@ -261,7 +261,7 @@ and open the template in the editor. Base Version before all crash :-)
             <label>SCCP Config Mode </label>
             <default>sccpgeneral</default>
             <button value="sccpgeneral">Advanced</button>
-            <button value="sccpsimple">Silmpe</button>
+            <button value="sccpsimple">Simple</button>
             <help>Help!</help>
         </item>
     </page_group>

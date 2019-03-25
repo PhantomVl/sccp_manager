@@ -159,7 +159,7 @@ function Get_DB_config($sccp_compatible) {
             'hwlang' => array('rename' => "_hwlang"),
             '_hwlang' => array('create' => 'varchar(12) NULL DEFAULT NULL'),
             '_loginname' => array('create' => 'varchar(20) NULL DEFAULT NULL AFTER `_hwlang`'),
-            '_profileid' => array('create' => 'varchar(20) NULL DEFAULT NULL AFTER `_loginname`'),
+            '_profileid' => array('create' => "INT(11) NOT NULL DEFAULT '0' AFTER `_loginname`"),
             
             'useRedialMenu' => array('create' => "VARCHAR(5) NULL DEFAULT 'no' AFTER `_profileid`"),
             //'dtmfmode' => array('create' => "VARCHAR(10) default 'outofband'", 'modify' => "VARCHAR(10)", 'def_modify'=> 'outofband'),
@@ -241,7 +241,7 @@ function Get_DB_config($sccp_compatible) {
             'hwlang' => array('rename' => "_hwlang"),
             '_hwlang' => array('create' => 'varchar(12) NULL DEFAULT NULL'),
             '_loginname' => array('create' => 'varchar(20) NULL DEFAULT NULL AFTER `_hwlang`'),
-            '_profileid' => array('create' => 'varchar(20) NULL DEFAULT NULL AFTER `_loginname`'),
+            '_profileid' => array('create' => "INT(11) NOT NULL DEFAULT '0' AFTER `_loginname`"),
             
             'useRedialMenu' => array('create' => "VARCHAR(5) NULL DEFAULT 'no' AFTER `_profileid`"),
             //'dtmfmode' => array('create' => "VARCHAR(10) default 'outofband'", 'modify' => "VARCHAR(10)", 'def_modify'=> 'outofband'),

@@ -1,9 +1,9 @@
 <?php
 
 /**
- * 
- * Core Comsnd Interface 
- * 
+ *
+ * Core Comsnd Interface
+ *
  *  https://www.voip-info.org/asterisk-manager-example-php/
  */
 /* !TODO!: Re-Indent this file.  -TODO-: What do you mean? coreaccessinterface  ??  */
@@ -31,7 +31,7 @@ class srvinterface {
 
 
     /*
-     *    Replace or dublicate to AMI interface   
+     *    Replace or dublicate to AMI interface
      */
 
     public function sccp_core_commands($params = array()) {
@@ -42,7 +42,8 @@ class srvinterface {
             'get_dev_info' => array('cmd' => "sccp show device", 'param' => 'name'),
             'get_hints' => array('cmd' => "core show hints", 'param' => ''),
             'sccp_reload' => array('cmd' => "sccp reload force", 'param' => ''),
-            'reset_phone' => array('cmd' => "sccp reset ", 'param' => 'name'), // Жесткая перезагрузка 
+            'reset_phone' => array('cmd' => "sccp reset ", 'param' => 'name'), // Жесткая перезагрузка
+            'restart_phone' => array('cmd' => "sccp restart ", 'param' => 'name'),
             'reload_phone' => array('cmd' => "sccp reload device ", 'param' => 'name'),
             'reset_token' => array('cmd' => "sccp tokenack ", 'param' => 'name'),
             'get_realtime_status' => array('cmd' => "realtime mysql status", 'param' => ''),
@@ -75,7 +76,7 @@ class srvinterface {
                         if (!empty($params['name'])) {
                             $astman->Command('sccp device ' . $params['name'] . ' ' . $msg);
                         } else {
-                            
+
                         }
                         break;
                     default:
@@ -133,7 +134,7 @@ class srvinterface {
         $hint_all = $this->sccp_list_all_hints();
         foreach ($hint_all as $value) {
             $res = $this->loc_after('@', $value);
-//           array_search($res, $hint_key)) != NULL) 
+//           array_search($res, $hint_key)) != NULL)
             if (!isset($hint_key[$res])) {
                 $hint_key[$res] = '@' . $res;
             }
@@ -185,7 +186,7 @@ class srvinterface {
         return $ast_res;
     }
 
-// !TODO!: -TODO-: install.php is still using the other version number. This is actually where I use another method ? 
+// !TODO!: -TODO-: install.php is still using the other version number. This is actually where I use another method ?
 
 
     public function get_compatible_sccp() {
@@ -211,7 +212,7 @@ class srvinterface {
           } else {
           return 430;
           }
-         * 
+         *
          */
 //        return $res["vCode"];
     }
@@ -233,7 +234,7 @@ class srvinterface {
         if (!empty($ast_out[1]) && $ast_out[1] == 'develop') {
             $result["develop"] = $ast_out[1];
             $res = 10;
-// !TODO!: This does not work as you might expect 
+// !TODO!: This does not work as you might expect
             if (base_convert($ast_out[3], 16, 10) == base_convert('702487a', 16, 10)) {
                 $result["vCode"] = 431;
             }
@@ -383,7 +384,7 @@ class srvinterface {
                 explode(";|", implode(";|", $line_arr));
                 list ($descr, $adress, $devname, $status, $token, $junk) = explode(";|", implode(";|", $line_arr));
 
-//                list ($descr, $adress, $devname, $status, $junk) = $line_arr;                
+//                list ($descr, $adress, $devname, $status, $junk) = $line_arr;
 //                if (strlen($ast_key[$devname]) < 1) {
                 if (strlen($devname) > 1) {
                     $ast_key[$devname] = Array('name' => $devname, 'status' => $status, 'address' => $adress, 'descr' => $descr, 'token' => $token);
@@ -396,7 +397,7 @@ class srvinterface {
                   } else {
                   $ast_key[$devname] = Array('name' => $devname, 'status' => $status, 'address' => $adress, 'descr' => $descr, 'token' => $token);
                   }
-                 * 
+                 *
                  */
             }
         }

@@ -15,6 +15,7 @@
 	<changelog>
          * Version 13.0.0.1 * - Alfa Release tested on freepbx v.13.0.192.16, v.14.0.1.5
          * Version 13.0.0.2 * - Release tested 
+         * Version 14.0.0.1 * - Alfa Release new DB structure Add User mobility 
 	</changelog>
 	<location></location>
 	<supported>

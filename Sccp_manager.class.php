@@ -514,12 +514,13 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                         "buttons" => array(
                             "name" => _("Device Buttons"),
                             "page" => 'views/form.buttons.php'
-                        ),
-                        "sccpcodec" => array(
-                            "name" => _("Device SCCP Codec"),
-                            "page" => 'views/server.codec.php'
-                        ),
-                    );
+                        ));
+                    if ($this->sccpvalues['sccp_compatible']['data'] < '433') {
+                        $this->pagedata["sccpcodec"] = array(
+                                "name" => _("Device SCCP Codec"),
+                                "page" => 'views/server.codec.php'
+                            );
+                    }
 
                     break;
 
@@ -1124,6 +1125,15 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                     };
                     $value = implode(";", $save_codec);
                     break;
+                case 'phonecodepage':
+                    $value = 'null';
+                    if (!empty($get_settings[$hdr_prefix . 'devlang'])) {
+                        $lang_data = $this->extconfigs->getextConfig('sccp_lang',$get_settings[$hdr_prefix . 'devlang']);
+                        if (!empty($lang_data)) {
+                            $value = $lang_data['codepage'];
+                        }
+                    }
+                    break;
                 case '_hwlang':
                     if (empty($get_settings[$hdr_prefix . 'netlang']) || empty($get_settings[$hdr_prefix . 'devlang'])) {
                         $value = 'null';
@@ -1197,7 +1207,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         if ($hw_id == 'new') {
             $this->srvinterface->sccp_core_commands(array('cmd' => 'reset_phone', 'name' => $name_dev));
         } else {
-            $this->srvinterface->sccp_core_commands(array('cmd' => 'reload_phone', 'name' => $name_dev));
+            $this->srvinterface->sccp_core_commands(array('cmd' => 'restart_phone', 'name' => $name_dev));
         }
 
         return $save_settings;
@@ -1966,8 +1976,13 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                     case "permit":
                         $this->sccp_conf_init['general'][$key] = explode(';', $value['data']);
                         break;
+                    case "devlang": 
+                        $lang_data = $this->extconfigs->getextConfig('sccp_lang',$value['data']);
+                        if (!empty($lang_data)) {
+                            $this->sccp_conf_init['general']['phonecodepage'] = $lang_data['codepage'];
+                        }
+                        break;
                     case "netlang": // Remove Key 
-                    case "devlang":
                     case "tftp_path":
                     case "sccp_compatible":
                         break;

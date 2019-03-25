@@ -711,7 +711,8 @@ DELIMITER ;";*/
     if (DB::IsError($check)) {
         die_freepbx("Can not modify sccpdevice table\n");
     }
-    outn("<li>" . $sql . "</li>");
+    outn("<li>" . _("(Re)Create trigger Ok") . "</li>");
+//    outn("<li>" . $sql . "</li>");
     return true;
 }
 function InstallDB_updateDBVer($sccp_compatible) {
@@ -790,6 +791,29 @@ function InstallDB_CreateSccpDeviceConfigView($sccp_compatible) {
     }
     return true;
 }
+function CreateBackUpConfig() {
+    global $amp_conf;
+    outn("<li>" . _("Create Config BackUp") . "</li>");
+    $cnf_int = \FreePBX::Config();
+    $backup_files = array('extconfig','extconfig','res_mysql', 'res_config_mysql','sccp');
+    $backup_ext = array('_custom.conf', '.conf');
+    $dir = $cnf_int->get('ASTETCDIR');
+    $zip = new \ZipArchive();
+    $filename = $dir . "/sccp_instal_backup" . date("Ymd"). ".zip";
+    if ($zip->open($filename, \ZIPARCHIVE::CREATE)) {
+        foreach ($backup_files as $file) {
+            foreach ($backup_ext as $b_ext) {
+                if (file_exists($dir . '/'.$file . $b_ext)) {
+                    $zip->addFile($dir . '/'.$file . $b_ext);
+                }
+            }
+        }
+        $zip->close();
+    } else {
+        outn("<li>" . _("Error Create BackUp: ") . $filename ."</li>");
+    }
+    outn("<li>" . _("Create Config BackUp: ") . $filename ."</li>");
+}
 
 function Setup_RealTime() {
     global $amp_conf;
@@ -802,7 +826,7 @@ function Setup_RealTime() {
     $def_config = array('sccpdevice' => 'mysql,sccp,sccpdeviceconfig', 'sccpline' => ' mysql,sccp,sccpline');
     $def_bd_config = array('dbhost' => $amp_conf['AMPDBHOST'], 'dbname' => $amp_conf['AMPDBNAME'],
         'dbuser' => $amp_conf['AMPDBUSER'], 'dbpass' => $amp_conf['AMPDBPASS'],
-        'dbport' => '3306', 'dbsock' => '/var/lib/mysql/mysql.sock');
+        'dbport' => '3306', 'dbsock' => '/var/lib/mysql/mysql.sock','dbcharset'=>'utf8');
     $def_bd_sec = 'sccp';
 
     $dir = $cnf_int->get('ASTETCDIR');
@@ -872,6 +896,9 @@ CheckAsteriskVersion();
 $sccp_compatible = CheckChanSCCPCompatible();
 $db_config   = Get_DB_config($sccp_compatible);
 $sccp_db_ver = CheckSCCPManagerDBVersion();
+
+// BackUp Old config
+CreateBackUpConfig();
 
 InstallDB_sccpusers();
 InstallDB_Buttons();

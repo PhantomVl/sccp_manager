@@ -27,6 +27,7 @@ $info = array();
 $info['srvinterface'] = $this->srvinterface->info();
 $info['extconfigs'] = $this->extconfigs->info();
 $info['dbinterface'] = $this->dbinterface->info();
+$info['aminterface'] = $this->aminterface->info();
 $db_Schema = $this->dbinterface->validate();
 
 $info['XML'] = $this->xmlinterface->info();
@@ -90,21 +91,41 @@ if (empty($conf_realtime)) {
     }
 }
  //global $amp_conf;
-/*
+// ************************************************************************************
 print_r("<br> Request:<br><pre>");
  $json = '';
  print_r("<br>");
 // print_r($conf_realtime);
  print_r("<br>");
  print_r("<br>");
- print_r($this->dbinterface->validate());
 // print_r("DIRECT START");
 //  print_r($this->sccpvalues['ccm_address']);
+ //print_r($this->get_php_classes('\\FreePBX\\modules\\'));
+/*
+ print_r(get_declared_classes());
+  print_r($this->aminterface->open());
+ 
+ 
+ print_r($this->aminterface->_error);
  print_r("<br>");
-//  print_r($this->getIP_information2());
+ 
+ */
+ 
+ 
+ 
+ //print_r($this->dbinterface->get_db_SccpTableData('SccpExtension'));
 //  print_r($this->srvinterface->getеtestChanSCCP_GlablsInfo());
+//  $test_data = $this->srvinterface-> astman_GetRaw('ExtensionStateList');
+//  print_r($test_data);
+//  print_r($this->srvinterface-> core_list_all_exten());
+//  print_r($this->get_hint_info());
+//  print_r($this->aminterface-> core_list_all_exten('exten'));
+//  print_r($this->aminterface->Sok_param['total']);
+//  print_r($this->srvinterface->t_get_meta_data());
 //  print_r($this->sccp_metainfo);
  print("</pre>");
+
+// ************************************************************************************
 
 //   $lang_arr =  $this->extconfigs->getextConfig('sccp_lang','sk_SK');    
 //   print_r('<br>');
@@ -112,7 +133,7 @@ print_r("<br> Request:<br><pre>");
 //   print_r('<br>');
 
 //print_r($this->dbinterface->info());
-*/
+
 if (!empty($this->class_error)) {
     ?>    
     <div class="fpbx-container container-fluid">

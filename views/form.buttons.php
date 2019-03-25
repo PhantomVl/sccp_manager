@@ -16,20 +16,9 @@ $feature_list=  array('parkinglot'=>'Park Slots','monitor'=> "Record Calls",'dev
 
 $lines_list = $this->dbinterface->get_db_SccpTableData('SccpExtension');
 //$hint_list  = $this->dbinterface->get_db_SccpTableData('SccpExtension');
-$data_sort = Array();
-$hint_list1  = $this->get_hint_info();
-foreach ($hint_list1 as $key => $value) {
-    $data_sort[$value['name']] = $key;
-}
-ksort($data_sort);
-//print_r(count($data_sort));
-//print_r(count($hint_list1));
-foreach ($data_sort as $key => $value) {
-    $hint_list[$value] = $hint_list1[$value];
-}
-//print_r($hint_list);
-//ksort($hint_list);
-//natsort($hint_list);
+$hint_list  = $this->get_hint_info(true,array('context'=>'park-hints')) ;
+
+// print_r($hint_list);
 $line_id =0;
 $max_buttons =56;
 $show_buttons =1;
@@ -55,6 +44,11 @@ if (!empty($_REQUEST['new_id'])) {
         $max_buttons += $dev_schema[0]['buttons'];
     }
     $show_buttons = $max_buttons;   
+}
+if (!empty($_REQUEST['ru_id'])) {
+    $dev_id = $_REQUEST['ru_id'];
+    $db_buttons = $this->dbinterface->get_db_SccpTableData('get_sccpdevice_buttons', array("id" => $dev_id));
+    $show_buttons = $max_buttons;
 }
 
 ?>
@@ -94,7 +88,7 @@ if (!empty($_REQUEST['new_id'])) {
         for ($line_id = 0; $line_id <=$max_buttons; $line_id ++){
 //          print_r($db_buttons[$line_id]);
             $show_form_mode = '';
-            $defaul_tv = (empty($db_buttons[$line_id])) ?  "empty": $db_buttons[$line_id]['type'];
+            $defaul_tv = (empty($db_buttons[$line_id])) ?  "empty": $db_buttons[$line_id]['buttontype'];
             $defaul_btn = (empty($db_buttons[$line_id])) ?  "": $db_buttons[$line_id]['name'];
             $defaul_opt = (empty($db_buttons[$line_id])) ?  array(''): explode(',',$db_buttons[$line_id]['options']);
 
@@ -122,6 +116,7 @@ if (!empty($_REQUEST['new_id'])) {
                 $defaul_fcod = (empty($defaul_opt[1])) ?  '': $defaul_opt[1];
 //                print_r($defaul_fcod);
             }
+
             foreach ($defaul_opt as $data_i) {
                 if (strpos($data_i,'@')>0) {
                     $test_btn = strtok($data_i,'@');
@@ -140,7 +135,7 @@ if (!empty($_REQUEST['new_id'])) {
                     }                        
                 }
             }                                
-//            print_r($defaul_btn);
+//            print_r($def_hint_btn);
 //            print_r($defaul_opt);
             
             echo '<!-- Begin button :'.$line_id.' -->';
@@ -211,8 +206,8 @@ if (!empty($_REQUEST['new_id'])) {
                                 echo '<select  class="form-control" name="'.$forminfo[1]['name'].$line_id.'_hline" >';
                                 
                                 foreach ($hint_list as $data){
-                                  $select = (($data['hint']==$def_hint_btn)?"selected":"");
-                                  echo '<option value="'.$data['hint'].'" '.$select.' >'.$data['name'].' / '.$data['label'].'</option>';
+                                  $select = (($data['key']==$def_hint_btn)?"selected":"");
+                                  echo '<option value="'.$data['key'].'" '.$select.' >'.$data['exten'].' / '.$data['label'].'</option>';
                                 }
                                 echo '</select>';
                                 echo '</div>';

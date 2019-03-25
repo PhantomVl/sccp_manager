@@ -155,9 +155,13 @@ function Get_DB_config($sccp_compatible) {
             'directed_pickup_context' => array('create' => "VARCHAR(100) NULL DEFAULT NULL"),
             'pickupmodeanswer' => array('rename' => "directed_pickup_modeanswer"),
             'directed_pickup_modeanswer' => array('create' => "enum('on','off') NOT NULL default 'on'", 'modify' => "enum('on','off')"),
+            'description' => array('rename' => "_description"),
             'hwlang' => array('rename' => "_hwlang"),
             '_hwlang' => array('create' => 'varchar(12) NULL DEFAULT NULL'),
-            'useRedialMenu' => array('create' => "VARCHAR(5) NULL DEFAULT 'no' AFTER `_hwlang`"),
+            '_loginname' => array('create' => 'varchar(20) NULL DEFAULT NULL AFTER `_hwlang`'),
+            '_profileid' => array('create' => 'varchar(20) NULL DEFAULT NULL AFTER `_loginname`'),
+            
+            'useRedialMenu' => array('create' => "VARCHAR(5) NULL DEFAULT 'no' AFTER `_profileid`"),
             //'dtmfmode' => array('create' => "VARCHAR(10) default 'outofband'", 'modify' => "VARCHAR(10)", 'def_modify'=> 'outofband'),
             'dtmfmode' => array('drop' => "yes"),
 //            'force_dtmfmode' => array('create' => "VARCHAR(10) default 'auto'", 'modify' => "VARCHAR(10)", 'def_modify'=> 'auto'),
@@ -203,6 +207,7 @@ function Get_DB_config($sccp_compatible) {
             'audio_cos' => array('drop' => "yes"),
             'video_tos' => array('drop' => "yes"),
             'video_cos' => array('drop' => "yes"),
+            'phonecodepage' => array('create' => 'VARCHAR(50) NULL DEFAULT NULL', 'modify' => "VARCHAR(50)"),
             'incominglimit' => array('create' => "INT(11) DEFAULT '6'", 'modify' => 'INT(11)', 'def_modify' => "6"),
             'transfer' => array('create' => "enum('on','off') NOT NULL default 'on'", 'modify' => "enum('on','off')"),
             'vmnum' => array('def_modify' => "*97"),
@@ -228,11 +233,17 @@ function Get_DB_config($sccp_compatible) {
             'pickupcontext' => array('drop' => "yes"),
             'directed_pickup_modeanswer' => array('drop' => "yes"),
             'pickupmodeanswer' => array('drop' => "yes"),
+            'disallow' => array('drop' => "yes"),
+            'disallow' => array('drop' => "yes"),
             'callhistory_answered_elsewhere' => array('create' => "enum('Ignore','Missed Calls','Received Calls', 'Placed Calls') NULL default NULL", 'modify' => "enum('Ignore','Missed Calls','Received Calls','Placed Calls')"),
             
+            'description' => array('rename' => "_description"),
             'hwlang' => array('rename' => "_hwlang"),
             '_hwlang' => array('create' => 'varchar(12) NULL DEFAULT NULL'),
-            'useRedialMenu' => array('create' => "VARCHAR(5) NULL DEFAULT 'no' AFTER `_hwlang`"),
+            '_loginname' => array('create' => 'varchar(20) NULL DEFAULT NULL AFTER `_hwlang`'),
+            '_profileid' => array('create' => 'varchar(20) NULL DEFAULT NULL AFTER `_loginname`'),
+            
+            'useRedialMenu' => array('create' => "VARCHAR(5) NULL DEFAULT 'no' AFTER `_profileid`"),
             //'dtmfmode' => array('create' => "VARCHAR(10) default 'outofband'", 'modify' => "VARCHAR(10)", 'def_modify'=> 'outofband'),
             'dtmfmode' => array('drop' => "yes"),
 //            'force_dtmfmode' => array('create' => "VARCHAR(10) default 'auto'", 'modify' => "VARCHAR(10)", 'def_modify'=> 'auto'),
@@ -252,6 +263,7 @@ function Get_DB_config($sccp_compatible) {
             'video_tos' => array('def_modify' => "0x88"),
             'video_cos' => array('def_modify' => "5"),
             'trustphoneip' => array('drop' => "yes"),
+            'phonecodepage' => array('create' => 'VARCHAR(50) NULL DEFAULT NULL', 'modify' => "VARCHAR(50)"),
             'mwilamp' => array('create' => "enum('on','off','wink','flash','blink') NULL  default 'on'", 'modify' => "enum('on','off','wink','flash','blink')"),
             'mwioncall' => array('create' => "enum('on','off') NULL default 'on'", 'modify' => "enum('on','off')"),
             'private' => array('create' => "enum('on','off') NOT NULL default 'off'", 'modify' => "enum('on','off')"), // Что-то лишенне 
@@ -285,6 +297,8 @@ function Get_DB_config($sccp_compatible) {
             'transfer' => array('create' => "enum('on','off') NULL default NULL", 'modify' => "enum('on','off')"),
             'vmnum' => array('def_modify' => "*97"),
             'musicclass' => array('def_modify' => "default"),
+            'disallow' => array('create' => "VARCHAR(255) NULL DEFAULT NULL"),
+            'allow' => array('create' => "VARCHAR(255) NULL DEFAULT NULL"),
             'id' => array('create' => 'MEDIUMINT(9) NOT NULL AUTO_INCREMENT, ADD UNIQUE(id);', 'modify' => "MEDIUMINT(9)", 'index' => 'id'),
 //        'id' =>array('create' => 'VARCHAR( 20 ) NULL DEFAULT NULL', 'modify' => "VARCHAR(20)", 'def_modify' =>"NULL"),
             'echocancel' => array('create' => "enum('on','off') NOT NULL default 'off'", 'modify' => "enum('on','off')"),
@@ -305,7 +319,7 @@ function Get_DB_config($sccp_compatible) {
 
 $autoincrement = (($amp_conf["AMPDBENGINE"] == "sqlite") || ($amp_conf["AMPDBENGINE"] == "sqlite3")) ? "AUTOINCREMENT" : "AUTO_INCREMENT";
 
-$table_req = array('sccpdevice', 'sccpline', 'buttonconfig');
+$table_req = array('sccpdevice', 'sccpline');
 $ss = FreePBX::create()->Sccp_manager;
 $astman = FreePBX::create()->astman;
 $sccp_compatible = 0;
@@ -381,6 +395,64 @@ function CheckChanSCCPCompatible() {
     return $sccp_compatible;
 }
 
+function InstallDB_Buttons() {
+    global $db;
+    outn("<li>" . _("Creating buttons table...") . "</li>");
+//    $check = $db->getRow("SELECT 1 FROM buttonconfig LIMIT 0", DB_FETCHMODE_ASSOC);
+//        if (DB::IsError($check)) {
+    $sql = "DROP TABLE IF EXISTS `buttonconfig`;
+             CREATE TABLE IF NOT EXISTS `sccpbuttonconfig` (
+            `ref` varchar(15) NOT NULL default '',
+            `reftype` enum('sccpdevice', 'sccpuser') NOT NULL default 'sccpdevice',
+            `instance` tinyint(4) NOT NULL default 0,
+            `buttontype` enum('line','speeddial','service','feature','empty') NOT NULL default 'line',
+            `name` varchar(36) default NULL,
+            `options` varchar(100) default NULL,
+            PRIMARY KEY  (`ref`,`reftype`,`instance`,`buttontype`),
+            KEY `ref` (`ref`,`reftype`)
+            ) ENGINE=MyISAM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;";
+    $check = $db->query($sql);
+    if (db::IsError($check)) {
+            die_freepbx("Can not create sccpbuttonconfig table, error:$check\n");
+    }
+/*        
+    } else {
+        $db_result = $db->getAll("SELECT TABLE_NAME, COLUMN_NAME, CONSTRAINT_NAME FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE "
+                . "WHERE TABLE_SCHEMA = 'asterisk' AND TABLE_NAME = 'buttonconfig' AND REFERENCED_COLUMN_NAME IS NOT NULL;");
+
+        if (DB::IsError($db_result)) {
+            die_freepbx("Can not get informations TABLE_SCHEMA\n");
+        }
+
+        $sql = '';
+        $sql = 'RENAME TABLE `buttonconfig` TO `sccpbuttonconfig`;';
+        $sql .= "ALTER TABLE `sccpbuttonconfig` ADD COLUMN `user` VARCHAR(20) NOT NULL DEFAULT '' AFTER `device`;";
+        $check = $db->query($sql);
+        if (db::IsError($check)) {
+            die_freepbx("Can not create sccpsettings table, error:$check\n");
+        }
+        $sql = '';
+        foreach ($db_result as $tabl_data) {
+            $fld_id = $tabl_data[2];
+            if (!empty($fld_id)) {
+                $sql .= "ALTER TABLE `sccpbuttonconfig` DROP FOREIGN KEY `".$fld_id."`\n";
+            }
+        }
+	
+        $sql .= "ALTER TABLE `sccpbuttonconfig` CHANGE COLUMN `device` `device` varchar(15) NULL default NULL";
+        $sql .= "ALTER TABLE `sccpbuttonconfig` ADD  FOREIGN KEY (device) REFERENCES sccpdevice(name) ON DELETE CASCADE;";
+
+        $check = $db->query($sql);
+        if (DB::IsError($db_result)) {
+            die_freepbx("Can not get drop old FOREIGN KEY \n");
+        
+        }
+    }
+    */
+    return true;
+    
+}
+
 function InstallDB_sccpsettings() {
     global $db;
     outn("<li>" . _("Creating sccpsettings table...") . "</li>");
@@ -412,7 +484,29 @@ function InstallDB_sccpdevmodel() {
         `nametemplate` VARCHAR(50) NULL DEFAULT NULL,
         PRIMARY KEY (`model`),
         KEY `model` (`model`)
-    ) ENGINE=MyISAM DEFAULT CHARSET=latin1;";
+    ) ENGINE=MyISAM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;";
+    $check = $db->query($sql);
+    if (db::IsError($check)) {
+        die_freepbx("Can not create sccpdevmodel table, error:$check\n");
+    }
+    return true;
+}
+
+function InstallDB_sccpusers() {
+    global $db;
+    outn("<li>" . _("Creating sccpusers table...") . "</li>");
+    $sql = "CREATE TABLE IF NOT EXISTS `sccpusers` (
+	`name` VARCHAR(20) NULL DEFAULT NULL,
+	`pin` VARCHAR(7) NULL DEFAULT NULL,
+	`password` VARCHAR(7) NULL DEFAULT NULL,
+	`description` VARCHAR(45) NULL DEFAULT NULL,
+	`rouminglogin` ENUM('on','off','multi') NULL DEFAULT 'off',
+	`devicegroup` VARCHAR(20) NULL DEFAULT 'all',
+ 	`auto_logout` ENUM('on','off') NULL DEFAULT 'off',
+        `homedevice` VARCHAR(20) NULL DEFAULT NULL,
+        UNIQUE INDEX (`name`),
+	PRIMARY KEY (`name`)
+    ) ENGINE=MyISAM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;";
     $check = $db->query($sql);
     if (db::IsError($check)) {
         die_freepbx("Can not create sccpdevmodel table, error:$check\n");
@@ -569,26 +663,55 @@ function InstallDB_updateSccpDevice() {
 function InstallDB_createButtonConfigTrigger() {
     global $db;
     outn("<li>" . _("(Re)Create buttonconfig trigger") . "</li>");
-    $sql = "
-    DROP TRIGGER IF EXISTS trg_buttonconfig;
-    DELIMITER $$
-    CREATE TRIGGER trg_buttonconfig BEFORE INSERT ON buttonconfig
-    FOR EACH ROW
-    BEGIN
-    IF NEW.`type` = 'line' THEN
-        SET @line_x = SUBSTRING_INDEX(NEW.`name`,'!',1);
-        SET @line_x = SUBSTRING_INDEX(@line_x,'@',1);            
-        IF (SELECT COUNT(*) FROM `sccpline` WHERE `sccpline`.`name` = @line_x ) = 0
-        THEN
-                UPDATE `Foreign key contraint violated: line does not exist in sccpline` SET x=1;
+    $sql = "DROP TRIGGER IF EXISTS sccp_trg_buttonconfig;";
+/*    $sql = "DELIMITER $$
+CREATE TRIGGER sccp_trg_buttonconfig BEFORE INSERT ON sccpbuttonconfig
+FOR EACH ROW
+BEGIN
+    IF NEW.`reftype` = 'sccpdevice' THEN
+        IF (SELECT COUNT(*) FROM `sccpdevice` WHERE `sccpdevice`.`name` = NEW.`ref` ) = 0 THEN
+	    UPDATE `Foreign key contraint violated: ref does not exist in sccpdevice` SET x=1;
         END IF;
     END IF;
-    END $$
-    DELIMITER ;";
+    IF NEW.`reftype` = 'sccpline' THEN
+        IF (SELECT COUNT(*) FROM `sccpline` WHERE `sccpline`.`name` = NEW.`ref`) = 0 THEN
+            UPDATE `Foreign key contraint violated: ref does not exist in sccpline` SET x=1;
+        END IF;
+    END IF;
+    IF NEW.`buttontype` = 'line' THEN
+        SET @line_x = SUBSTRING_INDEX(NEW.`name`,'!',1);
+        SET @line_x = SUBSTRING_INDEX(@line_x,'@',1);
+        IF (SELECT COUNT(*) FROM `sccpline` WHERE `sccpline`.`name` = @line_x ) = 0 THEN
+            UPDATE `Foreign key contraint violated: line does not exist in sccpline` SET x=1;
+        END IF;
+    END IF;
+END $$
+DELIMITER ;";*/
+    $sql .= "    
+    CREATE TRIGGER `sccp_trg_buttonconfig` BEFORE INSERT ON `sccpbuttonconfig` FOR EACH ROW BEGIN
+    IF NEW.`reftype` = 'sccpdevice' THEN
+        IF (SELECT COUNT(*) FROM `sccpdevice` WHERE `sccpdevice`.`name` = NEW.`ref` ) = 0 THEN
+	    UPDATE `Foreign key contraint violated: ref does not exist in sccpdevice` SET x=1;
+        END IF;
+    END IF;
+    IF NEW.`reftype` = 'sccpline' THEN
+        IF (SELECT COUNT(*) FROM `sccpline` WHERE `sccpline`.`name` = NEW.`ref`) = 0 THEN
+            UPDATE `Foreign key contraint violated: ref does not exist in sccpline` SET x=1;
+        END IF;
+    END IF;
+    IF NEW.`buttontype` = 'line' THEN
+        SET @line_x = SUBSTRING_INDEX(NEW.`name`,'!',1);
+        SET @line_x = SUBSTRING_INDEX(@line_x,'@',1);
+        IF (SELECT COUNT(*) FROM `sccpline` WHERE `sccpline`.`name` = @line_x ) = 0 THEN
+            UPDATE `Foreign key contraint violated: line does not exist in sccpline` SET x=1;
+        END IF;
+    END IF;
+    END";
     $check = $db->query($sql);
     if (DB::IsError($check)) {
         die_freepbx("Can not modify sccpdevice table\n");
     }
+    outn("<li>" . $sql . "</li>");
     return true;
 }
 function InstallDB_updateDBVer($sccp_compatible) {
@@ -627,18 +750,38 @@ function InstallDB_CreateSccpDeviceConfigView($sccp_compatible) {
         `sccpdevice`.`conf_show_conflist` AS `conf_show_conflist`,`sccpdevice`.`setvar` AS `setvar`,`sccpdevice`.`disallow` AS `disallow`,
         `sccpdevice`.`allow` AS `allow`,`sccpdevice`.`backgroundImage` AS `backgroundImage`,`sccpdevice`.`ringtone` AS `ringtone`,`sccpdevice`.`name` AS `name`
         FROM sccpdevice
-        LEFT JOIN buttonconfig ON ( buttonconfig.device = sccpdevice.name )
+        LEFT JOIN sccpbuttonconfig buttonconfig ON ( buttonconfig.device = sccpdevice.name )
         GROUP BY sccpdevice.name;";
     } else {
+  /*      $sql = "
+        CREATE OR REPLACE 
+            ALGORITHM = MERGE
+            VIEW sccpdeviceconfig AS
+        SELECT  IF(sccpdevice._profileid = 0, 
+            GROUP_CONCAT(CONCAT_WS( ',', defbutton.buttontype, defbutton.name, defbutton.options )  ORDER BY defbutton.instance ASC SEPARATOR ';' ), 
+            GROUP_CONCAT( CONCAT_WS( ',', userbutton.buttontype, userbutton.name, userbutton.options )  ORDER BY userbutton.instance ASC SEPARATOR ';' )
+            ) AS button,
+            sccpdevice.*
+        FROM sccpdevice
+           LEFT JOIN sccpbuttonconfig defbutton ON ( defbutton.ref = sccpdevice.name )
+           LEFT JOIN sccpbuttonconfig userbutton ON ( userbutton.ref = sccpdevice._loginname )
+           LEFT JOIN sccpline ON ( sccpline.name = sccpdevice._loginname)
+        GROUP BY sccpdevice.name;";
+*/        
         $sql = "
         CREATE OR REPLACE 
             ALGORITHM = MERGE
             VIEW sccpdeviceconfig AS
-        SELECT GROUP_CONCAT( CONCAT_WS( ',', buttonconfig.type, buttonconfig.name, buttonconfig.options )
-        ORDER BY instance ASC
-        SEPARATOR ';' ) AS button, sccpdevice.*
+        SELECT  case sccpdevice._profileid 
+                when 0 then 
+			(select GROUP_CONCAT(CONCAT_WS( ',', defbutton.buttontype, defbutton.name, defbutton.options ) SEPARATOR ';') from `sccpbuttonconfig` as defbutton where defbutton.ref = sccpdevice.name ORDER BY defbutton.instance )
+		when 1 then 			
+			(select GROUP_CONCAT(CONCAT_WS( ',', userbutton.buttontype, userbutton.name, userbutton.options ) SEPARATOR ';') from `sccpbuttonconfig` as userbutton where userbutton.ref = sccpdevice._loginname ORDER BY userbutton.instance ) 
+		when 2 then 			
+			(select GROUP_CONCAT(CONCAT_WS( ',', homebutton.buttontype, homebutton.name, homebutton.options ) SEPARATOR ';') from `sccpbuttonconfig` as homebutton where homebutton.ref = sccpusers.homedevice  ORDER BY homebutton.instance ) 
+                end as button, sccpdevice.*, if(sccpdevice._profileid = 0, sccpdevice._description, sccpusers.description) as description
         FROM sccpdevice
-        LEFT JOIN buttonconfig ON ( buttonconfig.device = sccpdevice.name )
+          LEFT JOIN sccpusers sccpusers ON ( sccpusers.name = sccpdevice._loginname )
         GROUP BY sccpdevice.name;";
     }
     $results = $db->query($sql);
@@ -729,6 +872,10 @@ CheckAsteriskVersion();
 $sccp_compatible = CheckChanSCCPCompatible();
 $db_config   = Get_DB_config($sccp_compatible);
 $sccp_db_ver = CheckSCCPManagerDBVersion();
+
+InstallDB_sccpusers();
+InstallDB_Buttons();
+
 InstallDB_sccpsettings();
 InstallDB_sccpdevmodel();
 InstallDB_updateSchema($db_config);
@@ -738,6 +885,7 @@ if (!$sccp_db_ver) {
 } else {
     outn("Skip update Device model");
 }
+
 InstallDB_createButtonConfigTrigger();
 InstallDB_CreateSccpDeviceConfigView($sccp_compatible);
 InstallDB_updateDBVer($sccp_compatible);

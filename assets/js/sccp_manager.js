@@ -58,11 +58,15 @@ $(document).ready(function () {
     $('#ajaxsubmit2').on('click', function (e) {
         var vdata = '';
         var snd_command = 'savesettings';
+        console.log($('.fpbx-submit').data('id'));
         $('.fpbx-submit').each(function () {
             vdata = vdata + $(this).serialize() + '&';
         });
         if ($('.fpbx-submit').data('id') == "hw_edit") {
             snd_command = 'save_hardware';
+        }
+        if ($('.fpbx-submit').data('id') == "ruser_edit") {
+            snd_command = 'save_ruser';
         }
         if ($('.fpbx-submit').data('id') == "dial_template") {
             snd_command = 'save_dialplan_template';
@@ -98,6 +102,9 @@ $(document).ready(function () {
         });
         if ($('.fpbx-submit').data('id') == "hw_edit") {
             snd_command = 'save_hardware';
+        }
+        if ($('.fpbx-submit').data('id') == "ruser_edit") {
+            snd_command = 'save_ruser';
         }
         if ($('.fpbx-submit').data('id') == "dial_template") {
             snd_command = 'save_dialplan_template';

@@ -56,8 +56,11 @@ if (!is_array($moh_list)){
 $sofkey_list = \FreePBX::Sccp_manager()-> srvinterface -> sccp_list_keysets();
 $model_list = \FreePBX::Sccp_manager()->dbinterface->get_db_SccpTableData("HWDevice");
 $extension_list = \FreePBX::Sccp_manager()->dbinterface->get_db_SccpTableData("HWextension");
+$device_list = \FreePBX::Sccp_manager()->dbinterface->get_db_SccpTableData("SccpDevice");
 
 $extension_list[]=array(model=>'NONE', vendor=>'CISCO', dns=>'0');
+$device_list[]=array(name=>'NONE', description=>'No Device');
+
 
 $items = $itm -> children();
 
@@ -619,7 +622,7 @@ foreach ($items as $child) {
  *                         SDE - Extension List 
  */
 
-    if ($child['type'] == 'SDM' || $child['type'] == 'SDE' ) {
+    if ($child['type'] == 'SDM' || $child['type'] == 'SDE' || $child['type'] == 'SDD') {
 //        $value = $child -> select;
         $res_n =  (string)$child ->name;       
         $res_id = $npref.$res_n;
@@ -638,6 +641,9 @@ foreach ($items as $child) {
         }
         if ($child['type'] == 'SDE') {
             $select_opt= $extension_list;            
+        }
+        if ($child['type'] == 'SDD') {
+            $select_opt = $device_list;
         }
 
         echo '<!-- Begin '.$child->label.' -->';
@@ -659,11 +665,12 @@ foreach ($items as $child) {
                             }
                             echo  '>';
 
-                            $fld = (string)$child->select['name'];
-                            $flv = (string)$child->select;
-                            $flk = (string)$child->select['dataid'];
-                            $flkv= (string)$child->select['dataval'];
-                            $key = (string)$child->default;
+                            $fld  = (string)$child->select['name'];
+                            $flv  = (string)$child->select;
+                            $flv2 = (string)$child->select['addlabel'];
+                            $flk  = (string)$child->select['dataid'];
+                            $flkv = (string)$child->select['dataval'];
+                            $key  = (string)$child->default;
                             if (!empty($fvalues[$res_n])) {
                                 if (!empty($fvalues[$res_n]['data'])) {
                                     $child->value = $fvalues[$res_n]['data'];
@@ -682,7 +689,11 @@ foreach ($items as $child) {
                                 if (!empty($flkv)){
                                     echo ' data-val="'.$data[$flkv].'"';
                                 }
-                                echo '>' . $data[$flv] . '</option>';
+                                echo '>' . $data[$flv];
+                                if (!empty($flv2)){
+                                    echo ' / '.$data[$flv2];
+                                }
+                                echo '</option>';
                             }
 
                             ?> </select>

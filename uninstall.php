@@ -10,13 +10,18 @@ if (!defined('FREEPBX_IS_AUTH')) { die('No direct script access allowed'); }
     global $db;
     $version = FreePBX::Config()->get('ASTVERSION');
 
-    echo "dropping table sccpdevmodel..";
-    sql("DROP TABLE IF EXISTS `sccpdevmodel`");
-    echo "dropping table sccpsettings..";
-    sql("DROP TABLE IF EXISTS `sccpsettings`");
+    out('Remove all SCCP tables');
+    $tables = array('sccpdevmodel', 'sccpsettings');
+    foreach ($tables as $table) {
+        $sql = "DROP TABLE IF EXISTS {$table}";
+        $result = $db->query($sql);
+        if (DB::IsError($result)) {
+            die_freepbx($result->getDebugInfo());
+        }
+        unset($result);
+    }
     if (!empty($version)) {
      // Woo, we have a version
-    
         $check = $db->getRow("SELECT 1 FROM `kvstore` LIMIT 0", DB_FETCHMODE_ASSOC);
         if (!(DB::IsError($check))) {
             //print_r("none, creating table :". $value);
@@ -29,7 +34,7 @@ if (!defined('FREEPBX_IS_AUTH')) { die('No direct script access allowed'); }
 /* So that you know if it is save to drop/delete them */
 
 /*      DROP VIEW `sccpdeviceconfig`;
-        DROP TABLE `buttonconfig`;
+        DROP TABLE `sccpbuttonconfig`;
         DROP TABLE `sccpdevice`;
         DROP TABLE `sccpdevmodel`;
         DROP TABLE `sccpline`;

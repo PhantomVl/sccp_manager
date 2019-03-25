@@ -106,10 +106,10 @@ ri ^(cmterm_7936.3-3-21-0.bin)$ firmware/7936/\1
 ri ^(apps37sccp.1-4-5-7.bin)$ firmware/7937/\1
 
 # 7940_7960 firmware (ancient)
-ri ^(P0030801SR01.bin)$ firmware/7940/\1
-ri ^(P0030801SR01.loads)$ firmware/7940/\1
-ri ^(P0030801SR01.sb2)$ firmware/7940/\1
-ri ^(P0030801SR01.sbn)$ firmware/7940/\1
+ri ^(P0030801SR)(+\.bin)$ firmware/7940/\1
+ri ^(P0030801SR)(+\.loads)$ firmware/7940/\1
+ri ^(P0030801SR)(+\.sb2)$ firmware/7940/\1
+ri ^(P0030801SR)(+\.sbn)$ firmware/7940/\1
 
 # 7941_7961 firmware (java-based)
 ri ^(apps41)(.+\.sbn)$ firmware/7941/\1\2
@@ -187,6 +187,11 @@ ri ^\/((SPA504G-cfg.xml)(\.enc)?(\.sgn)?)$ settings/\1
 # Keep locales in a separate directory (optional)
 ri ^(.+)\/(.+-sccp.jar)$ locales/\1/\2
 ri ^(.+)\/(.+-dictionary.xml)$ locales/\1/\2
+ri ^(.+)\/(.+-dictionary-ext.xml)$ languages/\1/\2
+ri ^(.+)\/(.+-tones.xml)$ languages/\1/\2
+ri ^(.+)\/(.+-font.xml)$ languages/\1/\2
+ri ^(.+)\/(.+-kate.xml)$ languages/\1/\2
+
 #ri ^(.+)\/(.+-tones.xml)$ locales/countries/\1/\2
 
 # Keep ring-tones in a separate directory (optional)

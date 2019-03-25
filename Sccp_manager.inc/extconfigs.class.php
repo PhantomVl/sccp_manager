@@ -100,45 +100,45 @@ class extconfigs {
         'holdconf' => 'resume,newcall,endcall,join',
         'uriaction' => 'default');
 //   Cisco  Language Code / Directory  
-
-    private $cisco_language = array('ar_SA' => array('code' => 'ar', 'language' => 'Arabic', 'locale' => 'Arabic_Saudi_Arabia'),
-        'bg_BG' => array('code' => 'bg', 'language' => 'Bulgarian', 'locale' => 'Bulgarian_Bulgaria'),
-        'cz_CZ' => array('code' => 'cz', 'language' => 'Czech', 'locale' => 'Czech_Czech_Republic'),
-        'da_DK' => array('code' => 'da', 'language' => 'Danish', 'locale' => 'Danish_Denmark'),
-        'de_DE' => array('code' => 'de', 'language' => 'German', 'locale' => 'German_Germany'),
-        'el_GR' => array('code' => 'el', 'language' => 'Greek', 'locale' => 'Greek_Greece'),
-        'en_AU' => array('code' => 'en', 'language' => 'English', 'locale' => 'AU_English_United_States'),
-        'en_GB' => array('code' => 'en', 'language' => 'English', 'locale' => 'English_United_Kingdom'),
-        'en_US' => array('code' => 'en', 'language' => 'English', 'locale' => 'English_United_States'),
-        'es_ES' => array('code' => 'es', 'language' => 'Spanish', 'locale' => 'Spanish_Spain'),
-        'et_EE' => array('code' => 'et', 'language' => 'Estonian', 'locale' => 'Estonian_Estonia'),
-        'fi_FI' => array('code' => 'fi', 'language' => 'Finnish', 'locale' => 'Finnish_Finland'),
-        'fr_CA' => array('code' => 'fr', 'language' => 'French', 'locale' => 'French_Canada'),
-        'fr_FR' => array('code' => 'fr', 'language' => 'French', 'locale' => 'French_France'),
-        'he_IL' => array('code' => 'he', 'language' => 'Hebrew', 'locale' => 'Hebrew_Israel'),
-        'hr_HR' => array('code' => 'hr', 'language' => 'Croatian', 'locale' => 'Croatian_Croatia'),
-        'hu_HU' => array('code' => 'hu', 'language' => 'Hungarian', 'locale' => 'Hungarian_Hungary'),
-        'it_IT' => array('code' => 'it', 'language' => 'Italian', 'locale' => 'Italian_Italy'),
-        'ja_JP' => array('code' => 'ja', 'language' => 'Japanese', 'locale' => 'Japanese_Japan'),
-        'ko_KO' => array('code' => 'ko', 'language' => 'Korean', 'locale' => 'Korean_Korea_Republic'),
-        'lt_LT' => array('code' => 'lt', 'language' => 'Lithuanian', 'locale' => 'Lithuanian_Lithuania'),
-        'lv_LV' => array('code' => 'lv', 'language' => 'Latvian', 'locale' => 'Latvian_Latvia'),
-        'nl_NL' => array('code' => 'nl', 'language' => 'Dutch', 'locale' => 'Dutch_Netherlands'),
-        'no_NO' => array('code' => 'no', 'language' => 'Norwegian', 'locale' => 'Norwegian_Norway'),
-        'pl_PL' => array('code' => 'pl', 'language' => 'Polish', 'locale' => 'Polish_Poland'),
-        'pt_BR' => array('code' => 'pt', 'language' => 'Portuguese', 'locale' => 'Portuguese_Brazil'),
-        'pt_PT' => array('code' => 'pt', 'language' => 'Portuguese', 'locale' => 'Portuguese_Portugal'),
-        'ro_RO' => array('code' => 'ro', 'language' => 'Romanian', 'locale' => 'Romanian_Romania'),
-        'ru_RU' => array('code' => 'ru', 'language' => 'Russian', 'locale' => 'Russian_Russian_Federation'),
-        'sk_SK' => array('code' => 'sk', 'language' => 'Slovakian', 'locale' => 'Slovak_Slovakia'),
-        'sl_SL' => array('code' => 'sl', 'language' => 'Slovenian', 'locale' => 'Slovenian_Slovenia'),
-        'sr_ME' => array('code' => 'sr', 'language' => 'Serbian', 'locale' => 'Serbian_Republic_of_Montenegro'),
-        'sr_RS' => array('code' => 'rs', 'language' => 'Serbian', 'locale' => 'Serbian_Republic_of_Serbia'),
-        'sv_SE' => array('code' => 'sv', 'language' => 'Swedish', 'locale' => 'Swedish_Sweden'),
-        'th_TH' => array('code' => 'th', 'language' => 'Thailand', 'locale' => 'Thai_Thailand'),
-        'tr_TR' => array('code' => 'tr', 'language' => 'Turkish', 'locale' => 'Turkish_Turkey'),
-        'zh_CN' => array('code' => 'cn', 'language' => 'Chinese', 'locale' => 'Chinese_China'),
-        'zh_TW' => array('code' => 'zh', 'language' => 'Chinese', 'locale' => 'Chinese_Taiwan')
+//
+    private $cisco_language = array('ar_SA' => array('code' => 'ar', 'language' => 'Arabic', 'locale' => 'Arabic_Saudi_Arabia', 'codepage' => 'ISO8859-1'),
+        'bg_BG' => array('code' => 'bg', 'language' => 'Bulgarian', 'locale' => 'Bulgarian_Bulgaria', 'codepage' => 'ISO8859-1'),
+        'cz_CZ' => array('code' => 'cz', 'language' => 'Czech', 'locale' => 'Czech_Czech_Republic', 'codepage' => 'ISO8859-1'),
+        'da_DK' => array('code' => 'da', 'language' => 'Danish', 'locale' => 'Danish_Denmark', 'codepage' => 'ISO8859-1'),
+        'de_DE' => array('code' => 'de', 'language' => 'German', 'locale' => 'German_Germany', 'codepage' => 'ISO8859-1'),
+        'el_GR' => array('code' => 'el', 'language' => 'Greek', 'locale' => 'Greek_Greece', 'codepage' => 'ISO8859-1'),
+        'en_AU' => array('code' => 'en', 'language' => 'English', 'locale' => 'AU_English_United_States', 'codepage' => 'ISO8859-1'),
+        'en_GB' => array('code' => 'en', 'language' => 'English', 'locale' => 'English_United_Kingdom', 'codepage' => 'ISO8859-1'),
+        'en_US' => array('code' => 'en', 'language' => 'English', 'locale' => 'English_United_States', 'codepage' => 'ISO8859-1'),
+        'es_ES' => array('code' => 'es', 'language' => 'Spanish', 'locale' => 'Spanish_Spain', 'codepage' => 'ISO8859-1'),
+        'et_EE' => array('code' => 'et', 'language' => 'Estonian', 'locale' => 'Estonian_Estonia', 'codepage' => 'ISO8859-1'),
+        'fi_FI' => array('code' => 'fi', 'language' => 'Finnish', 'locale' => 'Finnish_Finland', 'codepage' => 'ISO8859-1'),
+        'fr_CA' => array('code' => 'fr', 'language' => 'French', 'locale' => 'French_Canada', 'codepage' => 'ISO8859-1'),
+        'fr_FR' => array('code' => 'fr', 'language' => 'French', 'locale' => 'French_France', 'codepage' => 'ISO8859-1'),
+        'he_IL' => array('code' => 'he', 'language' => 'Hebrew', 'locale' => 'Hebrew_Israel', 'codepage' => 'ISO8859-1'),
+        'hr_HR' => array('code' => 'hr', 'language' => 'Croatian', 'locale' => 'Croatian_Croatia', 'codepage' => 'ISO8859-1'),
+        'hu_HU' => array('code' => 'hu', 'language' => 'Hungarian', 'locale' => 'Hungarian_Hungary', 'codepage' => 'ISO8859-1'),
+        'it_IT' => array('code' => 'it', 'language' => 'Italian', 'locale' => 'Italian_Italy', 'codepage' => 'ISO8859-1'),
+        'ja_JP' => array('code' => 'ja', 'language' => 'Japanese', 'locale' => 'Japanese_Japan', 'codepage' => 'ISO8859-1'),
+        'ko_KO' => array('code' => 'ko', 'language' => 'Korean', 'locale' => 'Korean_Korea_Republic', 'codepage' => 'ISO8859-1'),
+        'lt_LT' => array('code' => 'lt', 'language' => 'Lithuanian', 'locale' => 'Lithuanian_Lithuania', 'codepage' => 'ISO8859-1'),
+        'lv_LV' => array('code' => 'lv', 'language' => 'Latvian', 'locale' => 'Latvian_Latvia', 'codepage' => 'ISO8859-1'),
+        'nl_NL' => array('code' => 'nl', 'language' => 'Dutch', 'locale' => 'Dutch_Netherlands', 'codepage' => 'ISO8859-1'),
+        'no_NO' => array('code' => 'no', 'language' => 'Norwegian', 'locale' => 'Norwegian_Norway', 'codepage' => 'ISO8859-1'),
+        'pl_PL' => array('code' => 'pl', 'language' => 'Polish', 'locale' => 'Polish_Poland', 'codepage' => 'ISO8859-1'),
+        'pt_BR' => array('code' => 'pt', 'language' => 'Portuguese', 'locale' => 'Portuguese_Brazil', 'codepage' => 'ISO8859-1'),
+        'pt_PT' => array('code' => 'pt', 'language' => 'Portuguese', 'locale' => 'Portuguese_Portugal', 'codepage' => 'ISO8859-1'),
+        'ro_RO' => array('code' => 'ro', 'language' => 'Romanian', 'locale' => 'Romanian_Romania', 'codepage' => 'ISO8859-1'),
+        'ru_RU' => array('code' => 'ru', 'language' => 'Russian', 'locale' => 'Russian_Russian_Federation', 'codepage' => 'CP1251'),
+        'sk_SK' => array('code' => 'sk', 'language' => 'Slovakian', 'locale' => 'Slovak_Slovakia', 'codepage' => 'ISO8859-1'),
+        'sl_SL' => array('code' => 'sl', 'language' => 'Slovenian', 'locale' => 'Slovenian_Slovenia', 'codepage' => 'ISO8859-1'),
+        'sr_ME' => array('code' => 'sr', 'language' => 'Serbian', 'locale' => 'Serbian_Republic_of_Montenegro', 'codepage' => 'ISO8859-1'),
+        'sr_RS' => array('code' => 'rs', 'language' => 'Serbian', 'locale' => 'Serbian_Republic_of_Serbia', 'codepage' => 'ISO8859-1'),
+        'sv_SE' => array('code' => 'sv', 'language' => 'Swedish', 'locale' => 'Swedish_Sweden', 'codepage' => 'ISO8859-1'),
+        'th_TH' => array('code' => 'th', 'language' => 'Thailand', 'locale' => 'Thai_Thailand', 'codepage' => 'ISO8859-1'),
+        'tr_TR' => array('code' => 'tr', 'language' => 'Turkish', 'locale' => 'Turkish_Turkey', 'codepage' => 'ISO8859-1'),
+        'zh_CN' => array('code' => 'cn', 'language' => 'Chinese', 'locale' => 'Chinese_China', 'codepage' => 'ISO8859-1'),
+        'zh_TW' => array('code' => 'zh', 'language' => 'Chinese', 'locale' => 'Chinese_Taiwan', 'codepage' => 'ISO8859-1')
     );
     private $cisco_timezone = array(
         'Dateline' => array('offset' => '-720', 'daylight' => ''),
@@ -217,10 +217,22 @@ class extconfigs {
 // *** Setings for Provision Sccp        
         $adv_config = Array('tftproot' => '', 'firmware' => 'firmware', 'settings' => 'settings',
             'locales' => 'locales', 'languages' => 'languages', 'templates' => 'templates');
+// 'pro' /tftpboot - root dir 
+//       /tftpboot/locales/locales/%Languge_name%
+//       /tftpboot/settings/XMLdefault.cnf.xml
+//       /tftpboot/settings/SEP[MAC].cnf.xml
+//       /tftpboot/firmware/79xx/SCCPxxxx.loads
         $adv_tree['pro'] = Array('templates' => 'tftproot', 'settings' => 'tftproot', 'locales' => 'tftproot', 'firmware' => 'tftproot', 'languages' => 'locales');
 
+// 'def' /tftpboot - root dir 
+//       /tftpboot/languages/%Languge_name%
+//       /tftpboot/XMLdefault.cnf.xml
+//       /tftpboot/SEP[MAC].cnf.xml
+//       /tftpboot/SCCPxxxx.loads
+        $adv_tree['def'] = Array('templates' => 'tftproot', 'settings' => '', 'locales' => '', 'firmware' => '', 'languages' => 'tftproot');
 //        $adv_tree['def']   = Array('templates' => 'tftproot', 'settings' => '', 'locales' => 'tftproot',  'firmware' => 'tftproot', 'languages' => '');
-        $adv_tree['def'] = Array('templates' => 'tftproot', 'settings' => '', 'locales' => 'tftproot', 'firmware' => 'tftproot', 'languages' => 'tftproot');
+//        $adv_tree['def'] = Array('templates' => 'tftproot', 'settings' => '', 'locales' => 'tftproot', 'firmware' => 'tftproot', 'languages' => 'tftproot');
+        
 //* **************------ ****        
         $base_tree = Array('tftp_templates' => 'templates', 'tftp_path_store' => 'settings', 'tftp_lang_path' => 'languages', 'tftp_firmware_path' => 'firmware');
 

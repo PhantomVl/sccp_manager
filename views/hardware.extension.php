@@ -5,7 +5,12 @@
  * and open the template in the editor.
  */
 // vim: set ai ts=4 sw=4 ft=phtml:
-
+$roming_enable = '';
+if (!empty($this->sccpvalues['system_rouminguser'])) {
+    if ($this->sccpvalues['system_rouminguser']['data'] == 'yes'){
+        $roming_enable = 'yes';
+    }
+}
 ?>
 <div class="fpbx-container container-fluid">
     <div class="row">
@@ -24,6 +29,7 @@
 <!--                            <th data-checkbox="true"></th> -->
                             <th data-sortable="true" data-field="name"><?php echo _('Extension') ?></th>
                             <th data-sortable="true" data-field="label"><?php echo _('Display Name') ?></th>
+                            <th data-sortable="true" data-field="line_statustext"><?php echo _('Status') ?></th>
                             <th data-field="actions" data-formatter="DispayPhoneActionsKeyFormatter"><?php echo _('Actions') ?></th>
                         </tr>
                     </thead>
@@ -34,6 +40,14 @@
 </div>
 <script>
     function DispayPhoneActionsKeyFormatter(value, row, index) {
+        var exp_dev = '';
+        var rmn_dev = '<?php echo $roming_enable ?>';
+        exp_dev += '<a href="config.php?display=extensions&amp;extdisplay=' + row['name'] + '"><i class="fa fa-pencil"></i></a> &nbsp;';
+        exp_dev += '<a class="clickable delete" data-id="' + row['name'] + '"><i class="fa fa-trash"></i></a>';
+        if (rmn_dev == 'yes') {
+            exp_dev += '<a href="config.php?display=sccp_phone&amp;tech_hardware=r_user&amp;ru_id=' + row['name'] + '"><i class="fa fa-bicycle"></i></a> &nbsp;';
+        }
+        return  exp_dev;        
         return  '<a href="config.php?display=extensions&amp;extdisplay=' + row['name'] + '"><i class="fa fa-pencil"></i></a> &nbsp;<a class="clickable delete" data-id="' + row['name'] + '"><i class="fa fa-trash"></i></a>';
     }
 </script>

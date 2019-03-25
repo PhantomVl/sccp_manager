@@ -199,7 +199,7 @@ class xmlinterface {
                                     }
                                     $xnode->name = $tz_id;
                                     $xnode->dateTemplate = $data_values['dateformat'];
-                                    $xnode->timeZone = $TZdata['cisco_code'];
+                                    $xnode->timeZone = $TZdata['cisco_code'];   
 //                                    $xnode->timeZone = $tz_id.' Standard'.((empty($TZdata['daylight']))? '': '/'.$TZdata['daylight']).' Time';
 
                                     if ($data_values['ntp_config_enabled'] == 'yes') {

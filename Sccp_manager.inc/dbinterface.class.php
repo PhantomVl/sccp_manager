@@ -43,7 +43,7 @@ class dbinterface {
                 break;
             case "SccpDevice":
 //                $sql = "SELECT * FROM `sccpdeviceconfig` ORDER BY `name`";
-                $sql = "select `name`,`name` as `mac`, `type`, `button`, `addon` from `sccpdeviceconfig` ORDER BY `name`";
+                $sql = "select `name`,`name` as `mac`, `type`, `button`, `addon`, `_description` as description from `sccpdeviceconfig` ORDER BY `name`";
                 $raw_settings = sql($sql, "getAll", DB_FETCHMODE_ASSOC);
                 break;
             case "HWDevice":
@@ -56,6 +56,10 @@ class dbinterface {
                 $sql = "DESCRIBE sccpdevice";
                 $raw_settings = sql($sql, "getAll", DB_FETCHMODE_ASSOC);
                 break;
+            case "get_colums_sccpusers":
+                $sql = "DESCRIBE sccpusers";
+                $raw_settings = sql($sql, "getAll", DB_FETCHMODE_ASSOC);
+                break;
             case "get_sccpdevice_byid":
                 $sql = 'SELECT t1.*, types.dns,  types.buttons, types.loadimage, types.nametemplate as nametemplate, '
                         . 'addon.buttons as addon_buttons FROM sccpdevice AS t1 '
@@ -63,8 +67,16 @@ class dbinterface {
                         . 'LEFT JOIN sccpdevmodel as addon ON t1.addon=addon.model WHERE name="' . $data['id'] . '";';
                 $raw_settings = sql($sql, "getRow", DB_FETCHMODE_ASSOC);
                 break;
+            case "get_sccpdusers":
+                $sql = "SELECT * FROM `sccpusers` ";
+                if (!empty($data['id'])) {
+                    $sql .= 'WHERE name="' . $data['id'] . '" ';
+                }
+                $sql .= "ORDER BY `name`;";
+                $raw_settings = sql($sql, "getRow", DB_FETCHMODE_ASSOC);
+                break;
             case "get_sccpdevice_buttons":
-                $sql = 'SELECT * FROM buttonconfig WHERE  device="' . $data['id'] . '";';
+                $sql = 'SELECT * FROM sccpbuttonconfig WHERE  ref="' . $data['id'] . '" ORDER BY `instance`;';
                 $raw_settings = sql($sql, "getAll", DB_FETCHMODE_ASSOC);
                 break;
         }
@@ -161,6 +173,7 @@ class dbinterface {
                 break;
             case 'sccpdevmodel':
             case 'sccpdevice':
+            case 'sccpusers':
                 $sql_db = $db_name;
                 $sql_key = "";
                 $sql_var = "";
@@ -193,7 +206,7 @@ class dbinterface {
                 break;
             case 'sccpbuttons':
                 if (($mode == 'clear') || ($mode == 'delete')) {
-                    $sql = 'DELETE FROM `buttonconfig` WHERE device="' . $hwid . '";';
+                    $sql = 'DELETE FROM `sccpbuttonconfig` WHERE ref="' . $hwid . '";';
                     $stmt = $db->prepare($sql);
                     $stmt->execute();
                 }
@@ -201,7 +214,8 @@ class dbinterface {
                     break;
                 }
                 if (!empty($save_value)) {
-                    $sql = 'INSERT INTO `buttonconfig` (`device`, `instance`, `type`, `name`, `options`) VALUES (?,?,?,?,?);';
+                    $sql = 'INSERT INTO `sccpbuttonconfig` (`ref`, `reftype`,`instance`, `buttontype`, `name`, `options`) VALUES (?,?,?,?,?,?);';
+//                    die(print_r($save_value,1));
                     $stmt = $db->prepare($sql);
                     $res = $db->executeMultiple($stmt, $save_value);
                 }

@@ -17,7 +17,7 @@ and open the template in the editor. Base Version before all crash :-)
  *                         SLK - System KeySet
  *  * Input element Select SLS - System Language 
  *    Input element Select SDM - Model List 
- *                         SDE - Extension List 
+ *                         SDE - Extension List tftp_rewrite
  *    Help elemen          HLP - Help Element
  
 -->
@@ -995,6 +995,15 @@ and open the template in the editor. Base Version before all crash :-)
             <button value="no">No</button>
             <help>Say 'yes' if you need to create cisco default language directory in tftp path.</help>
         </item>
+
+        <item type="IS" id="4" seq="90">
+            <name>system_rouminguser</name> 
+            <label>User Rouming</label>
+            <default>no</default>
+            <button value="yes">Yes</button>
+            <button value="no">No</button>
+            <help>Experemental Function Rouming Users</help>
+        </item>
     
     </page_group>
     <!--  Form   add/ edit device -->  
@@ -1078,7 +1087,7 @@ and open the template in the editor. Base Version before all crash :-)
         <item type="IE" id="1" seq="99">
             <label>Device Label</label>
             <input>
-                <name>description</name> 
+                <name>_description</name> 
                 <default>000000000</default>
                 <class>sccp-custom</class>
             </input>
@@ -1540,4 +1549,106 @@ and open the template in the editor. Base Version before all crash :-)
         </item>
             
     </page_group>
+ <!--   
+    Rouming User Pages
+     -->
+    <page_group name="sccp_ruser">
+        <label>Rouming User configuration</label>
+        <item type="IE" id="1" seq="99">
+            <label>User ID</label>
+            <input>
+                <name>id</name> 
+                <default>000000000</default>
+                <class>sccp-custom</class>
+                <options readonly="readonly"></options>
+            </input>
+            <help>Help!</help>
+        </item>      
+
+        <item type="IE" id="2" seq="99">
+            <label>User Display Name</label>
+            <input>
+                <name>description</name> 
+                <default></default>
+            </input>
+            <help>Help!</help>
+        </item>
+        <item type="IE" id="2" seq="99">
+            <label>User Pincode</label>
+            <input>
+                <name>pin</name> 
+                <default></default>
+            </input>
+            <help>Help!</help>
+        </item>
+        <item type="IE-D" id="2" seq="99">
+            <label>User password</label>
+            <input>
+                <name>pin</name> 
+                <default></default>
+            </input>
+            <help>Help!</help>
+        </item>
+        <item type="IS" id="13" seq="99">
+            <name>rouminglogin</name> 
+            <label>Rouming</label>
+            <default>off</default>
+            <button value="off">Disabled</button>
+            <button value="on">Enable Single</button>
+            <button value="multi">Multi Device</button>
+            <help></help>
+        </item>
+        <item type="IS" id="13" seq="99">
+            <name>auto_logout</name> 
+            <label>Auto Logout</label>
+            <default>off</default>
+            <button value="off">Ask User</button>
+            <button value="on">Enable</button>
+            <button value="block">User must Logoff</button>
+            <help></help>
+        </item>
+        <item type="SDD" id="3" seq="99">
+            <label>Link Buttons from Home Device</label>
+            <name>homedevice</name> 
+            <default>NONE</default>
+            <select name="name" addlabel='description'>name</select>
+            <class>sccp-custom</class>
+            <help>Help!</help>
+        </item>
+    </page_group>
+ <!--   
+    Rouming User Pages
+     -->
+    <page_group name="sccp_ruser_time">
+        <label>Time Work configuration</label>
+        <item type="IS" id="13" seq="99">
+            <name>work_time</name> 
+            <label>Logof after Work Time</label>
+            <default>off</default>
+            <button value="off">Disabled</button>
+            <button value="on">Gneneral logoff</button>
+            <button value="group">Time Group</button>
+            <help></help>
+        </item>
+        <item type="IE" id="2" seq="99">
+            <label>Time Group</label>
+            <input>
+                <name>work_group</name> 
+                <default></default>
+            </input>
+            <help>Help!</help>
+        </item>
+        <item type="IE" id="2" seq="99">
+            <label>Out of time session length</label>
+            <input>
+                <name>time_extend</name> 
+                <default>30</default>
+            </input>
+            <help>Help!</help>
+        </item>
+        
+    </page_group>
+    
+    
+    
 </root>

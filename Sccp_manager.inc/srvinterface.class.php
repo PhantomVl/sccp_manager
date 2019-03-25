@@ -11,24 +11,16 @@
 namespace FreePBX\modules\Sccp_manager;
 
 class srvinterface {
-    var $socket;
+
     var $error;
-    
+
     public function __construct($parent_class = null) {
-        global $amp_conf;
-	$this->paren_class = $parent_class;
-        $this->socket = FALSE;
+        $this->paren_class = $parent_class;
         $this->error = "";
-/*       
-        if (isset($amp_conf[AMPMGRUSER])) { 
-            $this->astLogin('localhost', $amp_conf[AMPMGRUSER],$amp_conf[AMPMGRPASS]);
-        }
- 
-*/
     }
 
     public function info() {
-        $Ver = '13.0.3';
+        $Ver = '13.0.4';
         return Array('Version' => $Ver,
             'about' => 'Server interface data ver: ' . $Ver);
     }
@@ -37,10 +29,11 @@ class srvinterface {
       Core Access Function
      */
 
-    
-/*
- *    Replace or dublicate to AMI interface   
- */  
+
+    /*
+     *    Replace or dublicate to AMI interface   
+     */
+
     public function sccp_core_commands($params = array()) {
         global $astman;
         $cmd_list = array('get_softkey' => array('cmd' => "sccp show softkeyssets", 'param' => ''),
@@ -134,19 +127,20 @@ class srvinterface {
     /*
      * A function should be used in the form of buttons for getting all hint. Not working. I don't know how to use properly.
      */
+
     public function sccp_list_hints() {
         $hint_key = array();
         $hint_all = $this->sccp_list_all_hints();
         foreach ($hint_all as $value) {
-           $res = $this->loc_after('@', $value);
+            $res = $this->loc_after('@', $value);
 //           array_search($res, $hint_key)) != NULL) 
-           if (!isset($hint_key[$res])) {
-               $hint_key[$res] = '@'.$res;
-           }
+            if (!isset($hint_key[$res])) {
+                $hint_key[$res] = '@' . $res;
+            }
         }
         return $hint_key;
     }
-    
+
     public function sccp_list_all_hints() {
         $ast_out = $this->sccp_core_commands(array('cmd' => 'get_hints'));
         $ast_out = preg_split("/[\n]/", $ast_out['data']);
@@ -160,7 +154,7 @@ class srvinterface {
         foreach ($ast_out as $line) {
             if (strlen($line) > 3) {
                 list ($line, $junk) = explode(' ', $line);
-                if (!is_bool(strpos($line,':'))) {
+                if (!is_bool(strpos($line, ':'))) {
                     $line = trim(substr($line, 0, strpos($line, ':')));
                 }
                 if (isset($ast_key[$line])) {
@@ -177,15 +171,15 @@ class srvinterface {
 
     public function sccp_realtime_status() {
         $ast_res = array();
-        $ast_out = $this->sccp_core_commands(array('cmd'=>'get_realtime_status'));
-        $ast_out = preg_split("/[\n]/", $ast_out['data']);  
-        if (strpos($ast_out[0], 'Privilege') !== false){
+        $ast_out = $this->sccp_core_commands(array('cmd' => 'get_realtime_status'));
+        $ast_out = preg_split("/[\n]/", $ast_out['data']);
+        if (strpos($ast_out[0], 'Privilege') !== false) {
             $ast_out[0] = "";
         }
         foreach ($ast_out as $line) {
             if (strlen($line) > 3) {
-               $ast_key = strstr(trim($line), ' ', true);
-               $ast_res[$ast_key] = array('message' => $line, 'status'=> strpos($line, 'connected') ? 'OK' : 'ERROR');
+                $ast_key = strstr(trim($line), ' ', true);
+                $ast_res[$ast_key] = array('message' => $line, 'status' => strpos($line, 'connected') ? 'OK' : 'ERROR');
             }
         }
         return $ast_res;
@@ -209,16 +203,16 @@ class srvinterface {
             default:
                 return 430;
         }
-/*        if ($res["vCode"] >= 433) {
-            
-        }
-        if ($res["vCode"] >= 431) {
-            return 431;
-        } else {
-            return 430;
-        }
- * 
- */
+        /*        if ($res["vCode"] >= 433) {
+
+          }
+          if ($res["vCode"] >= 431) {
+          return 431;
+          } else {
+          return 430;
+          }
+         * 
+         */
 //        return $res["vCode"];
     }
 
@@ -226,7 +220,7 @@ class srvinterface {
         $res = $this->getChanSCCPVersion();
         if (empty($res)) {
             $res = $this->getCoreSCCPVersion();
-        }        
+        }
         return $res;
     }
 
@@ -240,7 +234,7 @@ class srvinterface {
             $result["develop"] = $ast_out[1];
             $res = 10;
 // !TODO!: This does not work as you might expect 
-            if (base_convert($ast_out[3], 16, 10) == base_convert('702487a', 16, 10)) { 
+            if (base_convert($ast_out[3], 16, 10) == base_convert('702487a', 16, 10)) {
                 $result["vCode"] = 431;
             }
             if (base_convert($ast_out[3], 16, 10) >= "10403") { // new method, RevisionNum is incremental
@@ -428,26 +422,26 @@ class srvinterface {
             return false;
         }
     }
+
     private function strpos_array($haystack, $needles) {
         if (is_array($needles)) {
-        foreach ($needles as $str) {
-            if (is_array($str)) {
-                $pos = strpos_array($haystack, $str);
-            } else {
-                $pos = strpos($haystack, $str);
+            foreach ($needles as $str) {
+                if (is_array($str)) {
+                    $pos = strpos_array($haystack, $str);
+                } else {
+                    $pos = strpos($haystack, $str);
+                }
+                if ($pos !== FALSE) {
+                    return $pos;
+                }
             }
-            if ($pos !== FALSE) {
-                return $pos;
-            }
+        } else {
+            return strpos($haystack, $needles);
         }
-    } else {
-        return strpos($haystack, $needles);
-    }
-    return FALSE;
+        return FALSE;
     }
 
-    private function loc_after($value, $inthat) 
-    {
+    private function loc_after($value, $inthat) {
         if (!is_bool(strpos($inthat, $value)))
             return substr($inthat, strpos($inthat, $value) + strlen($value));
     }
@@ -463,234 +457,35 @@ class srvinterface {
         $metadata = $astman->send_request($action, $params);
         return $metadata;
     }
-  /*
-   *    [Segments] => ( [0] => general  [1] => device  [2] => line [3] => softkey  )
-   */  
-    function getеtestChanSCCP_GlablsInfo($Segment='') {
+
+    /*
+     *    [Segments] => ( [0] => general  [1] => device  [2] => line [3] => softkey  )
+     */
+    function getеtestChanSCCP_GlablsInfo($Segment = '') {
         global $astman;
         $params = array();
-        $response = $astman->send_request('SCCPConfigMetaData', $params);
 
         $action = 'SCCPConfigMetaData';
         if (empty($Segment)) {
             $Segment = 'general';
         }
-        $params = array('Segment' => $Segment, 'ResultFormat'=>'command' );
+        $params = array('Segment' => $Segment, 'ResultFormat' => 'command');
         $metadata = $astman->send_request($action, $params);
         if (!empty($metadata['data'])) {
-            $tmp_data =  $metadata['data'];
-            if (strpos($tmp_data, 'JSON:')!==false ) {
-                $decode = json_decode(substr ($tmp_data,strpos($tmp_data, 'JSON:') + 5), true);
+            $tmp_data = $metadata['data'];
+            if (strpos($tmp_data, 'JSON:') !== false) {
+                $decode = json_decode(substr($tmp_data, strpos($tmp_data, 'JSON:') + 5), true);
                 $result = array();
                 if (!empty($decode['Options'])) {
                     foreach ($decode['Options'] as $value) {
-                       $result[$value['Name']] = $value;
+                        $result[$value['Name']] = $value;
                     }
                     return $result;
                 }
                 return $decode;
             }
-            
         }
         return $metadata;
     }
-    
-  /*
-    private function astLogin($host="localhost", $username="admin", $password="amp111"){
-    
-    $this->socket = @fsockopen("127.0.0.1","5038", $errno, $errstr, 1); 
-    
-    if (!$this->socket) {
-        $this->error =  "Could not connect - $errstr ($errno)";
-        return FALSE;
-    }else{
-        stream_set_timeout($this->socket, 1); 
-  
-        $wrets = $this->astQuery("Action: Login\r\nUserName: $username\r\nSecret: $password\r\nEvents: off\r\n\r\n"); 
-
-     	if (strpos($wrets['raw'], "Message: Authentication accepted") != FALSE) {
-            return TRUE;
-        }else{
-            $this->error = "Could not login - Authentication failed ";
-            fclose($this->socket); 
-            $this->socket = FALSE;
-            return FALSE;
-   	}
-    }
-  }
-  
-  private function astLogout(){
-    if ($this->socket){
-        fputs($this->socket, "Action: Logoff\r\n\r\n"); 
-        while (!feof($this->socket)) { 
-            $wrets .= fread($this->socket, 8192); 
-        } 
-        fclose($this->socket); 
-        $this->socket = "FALSE";
-    }
-    return; 
-  } 
-  
-  private function astQuery($query, $rawdata = false){
-        $wrets = "";
-    
-        if ($this->socket === FALSE)
-            return FALSE;
-        $parameters = array();
-        $data_store = 'data';
-        fputs($this->socket, $query); 
-        $parameters['raw_q'] = $query;
-        do
-        {   
-            $line = fgets($this->socket, 4096);
-            $parameters['raw'] .= $line;
-            if (!$rawdata) {
-                $a = strpos($line, ':');
-                if($a) {
-                    $key = substr($line, 0, $a);
-                    switch ($key) {
-                        case 'Response':
-                        case 'Message':
-                        case 'EventList':
-                            $parameters[$key] = trim(substr($line, $a + 2));
-                            break;
-                        case 'JSON':
-                            $parameters[$key] = substr($line, $a + 2);
-                            $data_store = $key;
-                            break;
-                        default:
-                            $parameters[$data_store] .= $line;
-                            break;
-                    }
-                // store parameter in $parameters
-                } else {
-                    $parameters[$data_store] .= $line;
-                }
-            }
-            $info = stream_get_meta_data($this->socket);
-        }while ($line != "\r\n" && $info['timed_out'] == false );
-        
-        return $parameters;
-  }
-  
-  function GetError(){
-    return $this->error;
-  }    
-
-  private function astman_retrieveMeta($action = "", $parameters=array(), $rawdata = false) {
-      // $parameters=array()
-        global $amp_conf;
-        $option = "";
-        $result = array();
-        if ($this->socket === FALSE) {
-            if (!$this->astLogin(localhost, $amp_conf[AMPMGRUSER],$amp_conf[AMPMGRPASS])) {
-              $result["Response"] = "Faild";
-              $result["Error"]  = $this->error; 
-              return $result;
-            }
-        }
-
-        if (empty($action)) {
-            $action = 'SCCPConfigMetaData';
-        }
-        $query = "Action: $action\r\n";
-
-        foreach($parameters as $var=>$val) {
-            if (is_array($val)) {
-                foreach($val as $k => $v) {
-                    $query .= "$var: $k=$v\r\n";
-                }
-            } else {
-                $query .= "$var: $val\r\n";
-            }
-        }
-        
-        $result =  $this->astQuery($query."\r\n",$rawdata);
-        
-        if ($result["Response"] == "Success") {
-            if ($rawdata) {
-                return $result;
-            } else {
-                if (!empty($result["JSON"])) {                    
-                    $decode = json_decode($response["JSON"], true);
-                    return $decode;
-                } else {
-                    return $result;
-                }
-            }
-        } else {
-                return $result;
-            return array();
-        }
-   } 
-   
-    */
-    
-   function t_get_meta_data() {
-     global $amp_conf;
-    $fp = fsockopen("127.0.0.1", "5038", $errno, $errstr, 10);
-    
-    if (!$fp) {
-        echo "$errstr ($errno)<br />\n";
-    } else {
-        fputs ($fp,"Action: login\r\n");
-        fputs ($fp,"Username: ".$amp_conf[AMPMGRUSER]."\r\n");
-//        fputs ($fp,"Secret: secret\r\n");
-        fputs ($fp,"Secret: ".$amp_conf[AMPMGRPASS]."\r\n");
-        fputs ($fp,"Events: on\r\n\r\n");
-
-//        fputs ($fp,"Action: SCCPShowDevices\r\n");
-
-        fputs ($fp,"Action: SCCPConfigMetaData\r\n");
-//        fputs ($fp,"Segment: general\r\n");
-//        "Segments":["general","device","line","softkey"]}
-        fputs ($fp,"Segment: device\r\n");
-        fputs ($fp,"ResultFormat: command\r\n");
-        fputs ($fp,"\r\n");
-            
-/*
-         fputs ($fp,"Action: SCCPConfigMetaData\r\n");
-        fputs ($fp,"\r\n");
-
-        fputs ($fp,"Action: SCCPConfigMetaData\r\n");
-        fputs ($fp,"Segment: general\r\n");
-        fputs ($fp,"\r\n");
-
-        fputs ($fp,"Action: SCCPConfigMetaData\r\n");
-        fputs ($fp,"Segment: general\r\n");
-        fputs ($fp,"ListResult: yes\r\n");
-        fputs ($fp,"Option: fallback\r\n");
-        fputs ($fp,"\r\n");
-
-        fputs ($fp,"Action: SCCPConfigMetaData\r\n");
-        fputs ($fp,"Segment: device\r\n");
-        fputs ($fp,"ListResult: freepbx\r\n");
-        fputs ($fp,"\r\n");
-
-        fputs ($fp,"Action: SCCPConfigMetaData\r\n");
-        fputs ($fp,"Segment: device\r\n");
-        fputs ($fp,"Option: dtmfmode\r\n");
-        fputs ($fp,"ListResult: yes\r\n");        
-        fputs ($fp,"\r\n");
-*/
-        
-        fputs ($fp,"Action: logoff\r\n\r\n");
-//        print_r(fgets($fp));
-        $resp = '';
-        while (!feof($fp)) {
-            $resp .= fgets($fp);
-                    
-        }
-//            print_r(fgets($fp));
-//            print_r('<br>');
-            
-//                echo fgets($fp, 128);
-        }
-        fclose($fp);
-        return $resp;
-    }
-
-
-   
 
 }

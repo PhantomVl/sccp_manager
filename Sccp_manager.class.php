@@ -512,12 +512,15 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                         "buttons" => array(
                             "name" => _("Device Buttons"),
                             "page" => 'views/form.buttons.php'
-                        ),
-                        "sccpcodec" => array(
+                        ));
+                    if ($this->sccpvalues['sccp_compatible']['data'] < '433') {
+                        $this->pagedata["sccpcodec"] = array(                        
+                            "sccpcodec" => array(
                             "name" => _("Device SCCP Codec"),
                             "page" => 'views/server.codec.php'
                         ),
-                    );
+                        );
+                    }
 
                     break;
 
@@ -980,6 +983,15 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                         $i++;
                     };
                     $value = implode(";", $save_codec);
+                    break;
+                case 'phonecodepage':
+                    $value = 'null';
+                    if (!empty($get_settings[$hdr_prefix . 'devlang'])) {
+                        $lang_data = $this->extconfigs->getextConfig('sccp_lang',$get_settings[$hdr_prefix . 'devlang']);
+                        if (!empty($lang_data)) {
+                            $value = $lang_data['codepage'];
+                        }
+                    }
                     break;
                 case '_hwlang':
                     if (empty($get_settings[$hdr_prefix . 'netlang']) || empty($get_settings[$hdr_prefix . 'devlang'])) {
@@ -1815,8 +1827,13 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                     case "permit":
                         $this->sccp_conf_init['general'][$key] = explode(';', $value['data']);
                         break;
+                    case "devlang": 
+                        $lang_data = $this->extconfigs->getextConfig('sccp_lang',$value['data']);
+                        if (!empty($lang_data)) {
+                            $this->sccp_conf_init['general']['phonecodepage'] = $lang_data['codepage'];
+                        }
+                        break;
                     case "netlang": // Remove Key 
-                    case "devlang":
                     case "tftp_path":
                     case "sccp_compatible":
                         break;

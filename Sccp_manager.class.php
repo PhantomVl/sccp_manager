@@ -1945,7 +1945,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         fclose($fh);
 
         $zip = new \ZipArchive();
-        $filename = $result . "." . gethostname() . ".zip";
+        $filename = $result . "." . gethostname() .  ".zip";
         if ($zip->open($filename, \ZIPARCHIVE::CREATE)) {
             $zip->addFile($result);
             $zip->addFile($backup_info);

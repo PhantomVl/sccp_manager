@@ -1590,7 +1590,7 @@ and open the template in the editor. Base Version before all crash :-)
             <help>Help!</help>
         </item>
         <item type="IS" id="13" seq="99">
-            <name>rouminglogin</name> 
+            <name>roaminglogin</name> 
             <label>Rouming</label>
             <default>off</default>
             <button value="off">Disabled</button>

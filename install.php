@@ -500,7 +500,7 @@ function InstallDB_sccpusers() {
 	`pin` VARCHAR(7) NULL DEFAULT NULL,
 	`password` VARCHAR(7) NULL DEFAULT NULL,
 	`description` VARCHAR(45) NULL DEFAULT NULL,
-	`rouminglogin` ENUM('on','off','multi') NULL DEFAULT 'off',
+	`roaminglogin` ENUM('on','off','multi') NULL DEFAULT 'off',
 	`devicegroup` VARCHAR(20) NULL DEFAULT 'all',
  	`auto_logout` ENUM('on','off') NULL DEFAULT 'off',
         `homedevice` VARCHAR(20) NULL DEFAULT NULL,

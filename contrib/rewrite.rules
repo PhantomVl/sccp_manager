@@ -106,10 +106,10 @@ ri ^(cmterm_7936.3-3-21-0.bin)$ firmware/7936/\1
 ri ^(apps37sccp.1-4-5-7.bin)$ firmware/7937/\1
 
 # 7940_7960 firmware (ancient)
-ri ^(P0030801SR)(+\.bin)$ firmware/7940/\1
-ri ^(P0030801SR)(+\.loads)$ firmware/7940/\1
-ri ^(P0030801SR)(+\.sb2)$ firmware/7940/\1
-ri ^(P0030801SR)(+\.sbn)$ firmware/7940/\1
+ri ^(P0030801SR)(.+\.bin)$ firmware/7940/\1
+ri ^(P0030801SR)(.+\.loads)$ firmware/7940/\1
+ri ^(P0030801SR)(.+\.sb2)$ firmware/7940/\1
+ri ^(P0030801SR)(.+\.sbn)$ firmware/7940/\1
 
 # 7941_7961 firmware (java-based)
 ri ^(apps41)(.+\.sbn)$ firmware/7941/\1\2
@@ -174,11 +174,11 @@ ri ^(ATA030204SCCP090202A.zup)$ firmware/ata186/\1
 # Sub-Directory Handling
 
 # settings
-ri ^(.+\.tlv)?$ settings/\1
-ri ^\/(.+\.tlv)?$ settings/\1
-ri ^((.+\.cnf.xml)(\.enc)?(\.sgn)?)$ settings/\1
-ri ^\/((.+\-cnf.xml)(\.enc)?(\.sgn)?)$ settings/\1
-ri ^\/((SPA504G-cfg.xml)(\.enc)?(\.sgn)?)$ settings/\1
+#ri ^(.+\.tlv)?$ settings/\1
+#ri ^\/(.+\.tlv)?$ settings/\1
+#ri ^((.+\.cnf.xml)(\.enc)?(\.sgn)?)$ settings/\1
+#ri ^\/((.+\-cnf.xml)(\.enc)?(\.sgn)?)$ settings/\1
+#ri ^\/((SPA504G-cfg.xml)(\.enc)?(\.sgn)?)$ settings/\1
 
 # Keep firmware in a separate directory (optional)
 #ri ^(.+\.loads)$ firmware/\1
@@ -197,7 +197,7 @@ ri ^(.+)\/(.+-kate.xml)$ languages/\1/\2
 # Keep ring-tones in a separate directory (optional)
 ri ^([R|r]ing[L|l]ist)(\.xml|-wb\.xml)(\.sgn)?$ ringtones/ringlist.xml
 ri ^(Distinctive[R|r]ing[L|l]ist)(\.xml|-wb\.xml)(\.sgn)?$ ringtones/ringlist.xml
-ri ^(.+)(\.raw|\.rwb)(\.sgn)?$ ringtones/\1\2\3
+ri ^(.+)(\.raw|\.rwb|\.pcm)(\.sgn)?$ ringtones/\1\2\3
 
 # Rename Desktops to wallpapers (optional)
 #ri ^Desktops/(.+)/(List\.xml)(\.sgn)?$ wallpapers/\1/\2\3

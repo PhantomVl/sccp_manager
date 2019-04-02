@@ -415,7 +415,7 @@ function InstallDB_sccpdevmodel() {
         `nametemplate` VARCHAR(50) NULL DEFAULT NULL,
         PRIMARY KEY (`model`),
         KEY `model` (`model`)
-    ) ENGINE=MyISAM DEFAULT CHARSET=latin1;";
+    ) ENGINE=MyISAM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;";
     $check = $db->query($sql);
     if (db::IsError($check)) {
         die_freepbx("Can not create sccpdevmodel table, error:$check\n");

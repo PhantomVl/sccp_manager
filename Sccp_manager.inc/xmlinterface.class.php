@@ -343,6 +343,9 @@ class xmlinterface {
                                     if (isset($lang_info[$lang])) {
                                         $xml_node->name = $lang_info[$lang]['locale'];
                                         $xml_node->langCode = $lang_info[$lang]['code'];
+                                        if (isset($xml_node->winCharSet) ){
+                                            $xml_node->winCharSet = $lang_info[$lang]['codepage'];
+                                        }
                                         $this->replaceSimpleXmlNode($xml_work->$key, $xml_node);
                                     }
                                 }

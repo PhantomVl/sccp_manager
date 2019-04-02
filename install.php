@@ -265,6 +265,7 @@ function Get_DB_config($sccp_compatible) {
             'conf_show_conflist' => array('create' => "enum('on','off') NOT NULL default 'on'", 'modify' => "enum('on','off')"),
             'type' => array('create' => 'VARCHAR(15) NULL DEFAULT NULL', 'modify' => "VARCHAR(15)"),
             'imageversion' => array('create' => 'VARCHAR(31) NULL DEFAULT NULL', 'modify' => "VARCHAR(31)"),
+            'phonecodepage' => array('create' => 'VARCHAR(50) NULL DEFAULT NULL', 'modify' => "VARCHAR(50)"),
             'softkeyset' => array('def_modify' => "softkeyset")
         ),
         'sccpline' => array(
@@ -285,7 +286,6 @@ function Get_DB_config($sccp_compatible) {
             'video_cos' => array('drop' => "yes"),
             'incominglimit' => array('create' => "INT(11) DEFAULT '6'", 'modify' => 'INT(11)', 'def_modify' => "6"),
             'transfer' => array('create' => "enum('on','off') NULL default NULL", 'modify' => "enum('on','off')"),
-            'phonecodepage' => array('create' => 'VARCHAR(50) NULL DEFAULT NULL', 'modify' => "VARCHAR(50)"),
             'vmnum' => array('def_modify' => "*97"),
             'musicclass' => array('def_modify' => "default"),
             'id' => array('create' => 'MEDIUMINT(9) NOT NULL AUTO_INCREMENT, ADD UNIQUE(id);', 'modify' => "MEDIUMINT(9)", 'index' => 'id'),

@@ -327,7 +327,9 @@ $sccp_compatible = 0;
 $db_config = '';
 
 function CheckSCCPManagerDBTables($table_req) {
-    global $db;
+global $amp_conf;
+global $astman;
+    global $db;    
     outn("<li>" . _("Checking for Sccp_manager database tables..") . "</li>");
     foreach ($table_req as $value) {
         $check = $db->getRow("SELECT 1 FROM `$value` LIMIT 0", DB_FETCHMODE_ASSOC);
@@ -545,7 +547,12 @@ function InstallDB_updateSchema($db_config) {
                 if (!empty($tab_modify[$fld_id]['rename'])) {
                     $fld_id_source = $tab_modify[$fld_id]['rename'];
                     $db_config[$tabl_name][$fld_id_source]['status'] = 'yes';
-                    $db_config[$tabl_name][$fld_id]['create'] = $db_config[$tabl_name][$fld_id_source]['create'];
+                    if (!empty($db_config[$tabl_name][$fld_id_source]['create'])) {
+                        $db_config[$tabl_name][$fld_id]['create'] = $db_config[$tabl_name][$fld_id_source]['create'];
+                    } else {
+                        $db_config[$tabl_name][$fld_id]['create'] = strtoupper($tabl_data[1]).(($tabl_data[2] == 'NO') ?' NOT NULL': ' NULL');
+                        $db_config[$tabl_name][$fld_id]['create'] .= ' DEFAULT '. ((empty($tabl_data[4]))?'NULL': "'". $tabl_data[4]."'" );
+                    }
                 }
             }
         }

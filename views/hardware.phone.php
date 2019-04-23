@@ -32,7 +32,7 @@
                     <thead>
                         <tr>
                             <th data-checkbox="true"></th>
-                            <th data-sortable="true" data-field="mac"><?php echo _('Device SEP ID') ?></th>
+                            <th data-sortable="true" data-field="mac"><?php echo _('Device SEP ID') ?></th>                            
                             <th data-sortable="true" data-field="description"><?php echo _('Device  Descriptions') ?></th>
                             <th data-sortable="true" data-formatter="DispayTypeFormatter" data-field="type"><?php echo _('Device type') ?></th>
                             <th data-sortable="false" data-field="button" data-formatter="LineFormatter"><?php echo _('Line') ?></th>
@@ -73,6 +73,9 @@
 }
 
     function LineFormatter(value, row, index) {
+        if (value === null)  {
+            return  '-- EMPTY --';
+        }
         var data = value.split(";"); 
         result = '';
         for (var i = 0; i < data.length; i++) {

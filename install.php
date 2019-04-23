@@ -16,7 +16,8 @@ global $amp_conf;
 global $astman;
 global $version;
 global $srvinterface;
-
+global $mobile_hw;
+$mobile_hw = '0';
 
 $class = "\\FreePBX\\Modules\\Sccp_manager\\srvinterface";
 if (!class_exists($class, false)) {
@@ -27,6 +28,7 @@ if (class_exists($class, false)) {
 }
 
 function Get_DB_config($sccp_compatible) {
+    global $mobile_hw;
     $db_config_v0 = array(
         'sccpdevmodel' => array(
             'enabled' => array('create' => "INT(2) NULL DEFAULT '0'"),
@@ -220,6 +222,7 @@ function Get_DB_config($sccp_compatible) {
         )
     );
 
+    // Software mobile 
     $db_config_v4 = array(
         'sccpdevmodel' => array(
             'enabled' => array('create' => "INT(2) NULL DEFAULT '0'"),
@@ -304,10 +307,44 @@ function Get_DB_config($sccp_compatible) {
             'echocancel' => array('create' => "enum('on','off') NOT NULL default 'off'", 'modify' => "enum('on','off')"),
             'silencesuppression' => array('create' => "enum('on','off') NOT NULL default 'off'", 'modify' => "enum('on','off')"),
             'dnd' => array('create' => "enum('off','reject','silent','user') NOT NULL default 'reject'", 'modify' => "enum('off','reject','silent','user')", 'def_modify' => "reject")
+        ),
+        'sccpuser' => array(
+            'name' => array('create' => "varchar(20) NOT NULL", 'modify' => "VARCHAR(20)" ),
+            'pin' => array('create' => "varchar(7) NOT NULL", 'modify' => "VARCHAR(7)" ),
+            'password' => array('create' => "varchar(7) NOT NULL", 'modify' => "VARCHAR(7)" ),
+            'description' => array('create' => "varchar(45) NOT NULL", 'modify' => "VARCHAR(45)" ),
+            'roaminglogin' => array('create' => "ENUM('on','off','multi') NULL DEFAULT 'off'", 'modify' => "ENUM('on','off','multi')" ),
+            'auto_logout' => array('create' => "ENUM('on','off') NULL DEFAULT 'off'", 'modify' => "ENUM('on','off')" ),
+            'homedevice' => array('create' => "varchar(20) NOT NULL", 'modify' => "VARCHAR(20)" ),
+            'devicegroup' => array('create' => "varchar(7) NOT NULL", 'modify' => "VARCHAR(7)" ),
+        )
+    );
+//  Hardware Mobile.  Can switch Softwate to Hardware
+    $db_config_v4M = array(
+        'sccpdevmodel' => array(
+            'loadinformationid' => array('create' => "VARCHAR(30) NULL DEFAULT NULL")
+        ),
+        'sccpdevice' => array(
+            'pickupexten' => array('drop' => "yes"),
+            'directed_pickup' => array('drop' => "yes"),
+            '_description' => array('rename' => "description"),
+            '_loginname' => array('drop' => "yes"),
+            '_profileid' => array('drop' => "yes"),
+            
+        ),
+        'sccpline' => array(
+            'directed_pickup' => array('create' => "enum('on','off') NULL default NULL", 'modify' => "enum('on','off')"),
+        ),
+        'sccpuser' => array(
+            'id' => array('create' => "varchar(20) NOT NULL", 'modify' => "VARCHAR(20)" ),
+            'name' => array('create' => "varchar(45) NOT NULL", 'modify' => "VARCHAR(45)" ),
         )
     );
     
     if ($sccp_compatible >= 433 ) {
+        if ($mobile_hw == '1') {
+            return $db_config_v4M;
+        }
         return $db_config_v4;
     }
     if ($sccp_compatible >= 430) {
@@ -417,40 +454,6 @@ function InstallDB_Buttons() {
     if (db::IsError($check)) {
             die_freepbx("Can not create sccpbuttonconfig table, error:$check\n");
     }
-/*        
-    } else {
-        $db_result = $db->getAll("SELECT TABLE_NAME, COLUMN_NAME, CONSTRAINT_NAME FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE "
-                . "WHERE TABLE_SCHEMA = 'asterisk' AND TABLE_NAME = 'buttonconfig' AND REFERENCED_COLUMN_NAME IS NOT NULL;");
-
-        if (DB::IsError($db_result)) {
-            die_freepbx("Can not get informations TABLE_SCHEMA\n");
-        }
-
-        $sql = '';
-        $sql = 'RENAME TABLE `buttonconfig` TO `sccpbuttonconfig`;';
-        $sql .= "ALTER TABLE `sccpbuttonconfig` ADD COLUMN `user` VARCHAR(20) NOT NULL DEFAULT '' AFTER `device`;";
-        $check = $db->query($sql);
-        if (db::IsError($check)) {
-            die_freepbx("Can not create sccpsettings table, error:$check\n");
-        }
-        $sql = '';
-        foreach ($db_result as $tabl_data) {
-            $fld_id = $tabl_data[2];
-            if (!empty($fld_id)) {
-                $sql .= "ALTER TABLE `sccpbuttonconfig` DROP FOREIGN KEY `".$fld_id."`\n";
-            }
-        }
-	
-        $sql .= "ALTER TABLE `sccpbuttonconfig` CHANGE COLUMN `device` `device` varchar(15) NULL default NULL";
-        $sql .= "ALTER TABLE `sccpbuttonconfig` ADD  FOREIGN KEY (device) REFERENCES sccpdevice(name) ON DELETE CASCADE;";
-
-        $check = $db->query($sql);
-        if (DB::IsError($db_result)) {
-            die_freepbx("Can not get drop old FOREIGN KEY \n");
-        
-        }
-    }
-    */
     return true;
     
 }
@@ -494,10 +497,10 @@ function InstallDB_sccpdevmodel() {
     return true;
 }
 
-function InstallDB_sccpusers() {
+function InstallDB_sccpuser() {
     global $db;
-    outn("<li>" . _("Creating sccpusers table...") . "</li>");
-    $sql = "CREATE TABLE IF NOT EXISTS `sccpusers` (
+    outn("<li>" . _("Creating sccpuser table...") . "</li>");
+    $sql = "CREATE TABLE IF NOT EXISTS `sccpuser` (
 	`name` VARCHAR(20) NULL DEFAULT NULL,
 	`pin` VARCHAR(7) NULL DEFAULT NULL,
 	`password` VARCHAR(7) NULL DEFAULT NULL,
@@ -671,49 +674,26 @@ function InstallDB_createButtonConfigTrigger() {
     global $db;
     outn("<li>" . _("(Re)Create buttonconfig trigger") . "</li>");
     $sql = "DROP TRIGGER IF EXISTS sccp_trg_buttonconfig;";
-/*    $sql = "DELIMITER $$
-CREATE TRIGGER sccp_trg_buttonconfig BEFORE INSERT ON sccpbuttonconfig
-FOR EACH ROW
-BEGIN
-    IF NEW.`reftype` = 'sccpdevice' THEN
-        IF (SELECT COUNT(*) FROM `sccpdevice` WHERE `sccpdevice`.`name` = NEW.`ref` ) = 0 THEN
-	    UPDATE `Foreign key contraint violated: ref does not exist in sccpdevice` SET x=1;
+    
+    $sql .= "CREATE TRIGGER `sccp_trg_buttonconfig` BEFORE INSERT ON `sccpbuttonconfig` FOR EACH ROW BEGIN
+        IF NEW.`reftype` = 'sccpdevice' THEN
+            IF (SELECT COUNT(*) FROM `sccpdevice` WHERE `sccpdevice`.`name` = NEW.`ref` ) = 0 THEN
+                UPDATE `Foreign key contraint violated: ref does not exist in sccpdevice` SET x=1;
+            END IF;
         END IF;
-    END IF;
-    IF NEW.`reftype` = 'sccpline' THEN
-        IF (SELECT COUNT(*) FROM `sccpline` WHERE `sccpline`.`name` = NEW.`ref`) = 0 THEN
-            UPDATE `Foreign key contraint violated: ref does not exist in sccpline` SET x=1;
+        IF NEW.`reftype` = 'sccpline' THEN
+            IF (SELECT COUNT(*) FROM `sccpline` WHERE `sccpline`.`name` = NEW.`ref`) = 0 THEN
+                UPDATE `Foreign key contraint violated: ref does not exist in sccpline` SET x=1;
+            END IF;
         END IF;
-    END IF;
-    IF NEW.`buttontype` = 'line' THEN
-        SET @line_x = SUBSTRING_INDEX(NEW.`name`,'!',1);
-        SET @line_x = SUBSTRING_INDEX(@line_x,'@',1);
-        IF (SELECT COUNT(*) FROM `sccpline` WHERE `sccpline`.`name` = @line_x ) = 0 THEN
-            UPDATE `Foreign key contraint violated: line does not exist in sccpline` SET x=1;
+        IF NEW.`buttontype` = 'line' THEN
+            SET @line_x = SUBSTRING_INDEX(NEW.`name`,'!',1);
+            SET @line_x = SUBSTRING_INDEX(@line_x,'@',1);
+            IF (SELECT COUNT(*) FROM `sccpline` WHERE `sccpline`.`name` = @line_x ) = 0 THEN
+                UPDATE `Foreign key contraint violated: line does not exist in sccpline` SET x=1;
+            END IF;
         END IF;
-    END IF;
-END $$
-DELIMITER ;";*/
-    $sql .= "    
-    CREATE TRIGGER `sccp_trg_buttonconfig` BEFORE INSERT ON `sccpbuttonconfig` FOR EACH ROW BEGIN
-    IF NEW.`reftype` = 'sccpdevice' THEN
-        IF (SELECT COUNT(*) FROM `sccpdevice` WHERE `sccpdevice`.`name` = NEW.`ref` ) = 0 THEN
-	    UPDATE `Foreign key contraint violated: ref does not exist in sccpdevice` SET x=1;
-        END IF;
-    END IF;
-    IF NEW.`reftype` = 'sccpline' THEN
-        IF (SELECT COUNT(*) FROM `sccpline` WHERE `sccpline`.`name` = NEW.`ref`) = 0 THEN
-            UPDATE `Foreign key contraint violated: ref does not exist in sccpline` SET x=1;
-        END IF;
-    END IF;
-    IF NEW.`buttontype` = 'line' THEN
-        SET @line_x = SUBSTRING_INDEX(NEW.`name`,'!',1);
-        SET @line_x = SUBSTRING_INDEX(@line_x,'@',1);
-        IF (SELECT COUNT(*) FROM `sccpline` WHERE `sccpline`.`name` = @line_x ) = 0 THEN
-            UPDATE `Foreign key contraint violated: line does not exist in sccpline` SET x=1;
-        END IF;
-    END IF;
-    END";
+        END;";
     $check = $db->query($sql);
     if (DB::IsError($check)) {
         die_freepbx("Can not modify sccpdevice table\n");
@@ -775,22 +755,42 @@ function InstallDB_CreateSccpDeviceConfigView($sccp_compatible) {
            LEFT JOIN sccpbuttonconfig userbutton ON ( userbutton.ref = sccpdevice._loginname )
            LEFT JOIN sccpline ON ( sccpline.name = sccpdevice._loginname)
         GROUP BY sccpdevice.name;";
-*/        
-        $sql = "
-        CREATE OR REPLACE 
-            ALGORITHM = MERGE
-            VIEW sccpdeviceconfig AS
-        SELECT  case sccpdevice._profileid 
-                when 0 then 
-			(select GROUP_CONCAT(CONCAT_WS( ',', defbutton.buttontype, defbutton.name, defbutton.options ) SEPARATOR ';') from `sccpbuttonconfig` as defbutton where defbutton.ref = sccpdevice.name ORDER BY defbutton.instance )
-		when 1 then 			
-			(select GROUP_CONCAT(CONCAT_WS( ',', userbutton.buttontype, userbutton.name, userbutton.options ) SEPARATOR ';') from `sccpbuttonconfig` as userbutton where userbutton.ref = sccpdevice._loginname ORDER BY userbutton.instance ) 
-		when 2 then 			
-			(select GROUP_CONCAT(CONCAT_WS( ',', homebutton.buttontype, homebutton.name, homebutton.options ) SEPARATOR ';') from `sccpbuttonconfig` as homebutton where homebutton.ref = sccpusers.homedevice  ORDER BY homebutton.instance ) 
-                end as button, sccpdevice.*, if(sccpdevice._profileid = 0, sccpdevice._description, sccpusers.description) as description
-        FROM sccpdevice
-          LEFT JOIN sccpusers sccpusers ON ( sccpusers.name = sccpdevice._loginname )
-        GROUP BY sccpdevice.name;";
+*/      
+        $sql = "DROP VIEW IF EXISTS `sccpdeviceconfig`;
+                DROP VIEW IF EXISTS `sccpuserconfig`;";
+        ///    global $hw_mobil;
+        
+        global $mobile_hw;
+        if ($mobile_hw == '1') {
+         $sql .= "CREATE OR REPLACE ALGORITHM = MERGE VIEW sccpdeviceconfig AS
+            SELECT GROUP_CONCAT( CONCAT_WS( ',', sccpbuttonconfig.buttontype, sccpbuttonconfig.name, sccpbuttonconfig.options )
+            ORDER BY instance ASC SEPARATOR ';' ) AS sccpbutton, sccpdevice.*
+            FROM sccpdevice
+            LEFT JOIN sccpbuttonconfig ON (sccpbuttonconfig.reftype = 'sccpdevice' AND sccpbuttonconfig.ref = sccpdevice.name )
+            GROUP BY sccpdevice.name; ";
+        $sql .=  "CREATE OR REPLACE ALGORITHM = MERGE VIEW sccpuserconfig AS
+            SELECT GROUP_CONCAT( CONCAT_WS( ',', sccpbuttonconfig.buttontype, sccpbuttonconfig.name, sccpbuttonconfig.options )
+            ORDER BY instance ASC SEPARATOR ';' ) AS button, sccpuser.*
+            FROM sccpuser
+            LEFT JOIN sccpbuttonconfig ON ( sccpbuttonconfig.reftype = 'sccpuser' AND sccpbuttonconfig.ref = sccpuser.id)
+            GROUP BY sccpuser.name; ";
+         
+        } else {
+         $sql .= "CREATE OR REPLACE 
+                ALGORITHM = MERGE
+                VIEW sccpdeviceconfig AS
+            SELECT  case sccpdevice._profileid 
+                    when 0 then 
+            		(select GROUP_CONCAT(CONCAT_WS( ',', defbutton.buttontype, defbutton.name, defbutton.options ) SEPARATOR ';') from `sccpbuttonconfig` as defbutton where defbutton.ref = sccpdevice.name ORDER BY defbutton.instance )
+            	when 1 then 			
+            		(select GROUP_CONCAT(CONCAT_WS( ',', userbutton.buttontype, userbutton.name, userbutton.options ) SEPARATOR ';') from `sccpbuttonconfig` as userbutton where userbutton.ref = sccpdevice._loginname ORDER BY userbutton.instance ) 
+            	when 2 then 			
+			(select GROUP_CONCAT(CONCAT_WS( ',', homebutton.buttontype, homebutton.name, homebutton.options ) SEPARATOR ';') from `sccpbuttonconfig` as homebutton where homebutton.ref = sccpuser.homedevice  ORDER BY homebutton.instance ) 
+                    end as button,  if(sccpdevice._profileid = 0, sccpdevice._description, sccpuser.description) as description, sccpdevice.*
+            FROM sccpdevice
+            LEFT JOIN sccpuser sccpuser ON ( sccpuser.name = sccpdevice._loginname )
+            GROUP BY sccpdevice.name;";
+        } 
     }
     $results = $db->query($sql);
     if (DB::IsError($check)) {
@@ -907,7 +907,7 @@ $sccp_db_ver = CheckSCCPManagerDBVersion();
 // BackUp Old config
 CreateBackUpConfig();
 
-InstallDB_sccpusers();
+InstallDB_sccpuser();
 InstallDB_Buttons();
 
 InstallDB_sccpsettings();

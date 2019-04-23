@@ -1584,7 +1584,7 @@ and open the template in the editor. Base Version before all crash :-)
         <item type="IE-D" id="2" seq="99">
             <label>User password</label>
             <input>
-                <name>pin</name> 
+                <name>password</name> 
                 <default></default>
             </input>
             <help>Help!</help>

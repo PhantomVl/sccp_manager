@@ -1319,7 +1319,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
  * 
  */
         $name_dev = '';
-        $db_field = $this->dbinterface->get_db_SccpTableData("get_colums_sccpusers");
+        $db_field = $this->dbinterface->get_db_SccpTableData("get_colums_sccpuser");
 //        $hw_id = (empty($get_settings['sccp_deviceid'])) ? 'new' : $get_settings['sccp_deviceid'];
 //        $update_hw = ($hw_id == 'new') ? 'update' : 'clear';
         $hw_prefix = 'SEP';
@@ -1394,7 +1394,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
 //        return $save_settings;
         // $update_hw = ($hw_id == 'new') ? 'update' : 'clear';
         
-        $this->dbinterface->sccp_save_db("sccpusers", $save_settings, 'replace', 'name');
+        $this->dbinterface->sccp_save_db("sccpuser", $save_settings, 'replace', 'name');
 
         $save_buttons = $this-> get_buttons_phone($get_settings,$name_dev, 'sccpline');
 //      Sace Buttons config

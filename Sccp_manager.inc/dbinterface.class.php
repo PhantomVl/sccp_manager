@@ -56,8 +56,8 @@ class dbinterface {
                 $sql = "DESCRIBE sccpdevice";
                 $raw_settings = sql($sql, "getAll", DB_FETCHMODE_ASSOC);
                 break;
-            case "get_colums_sccpusers":
-                $sql = "DESCRIBE sccpusers";
+            case "get_colums_sccpuser":
+                $sql = "DESCRIBE sccpuser";
                 $raw_settings = sql($sql, "getAll", DB_FETCHMODE_ASSOC);
                 break;
             case "get_sccpdevice_byid":
@@ -67,8 +67,8 @@ class dbinterface {
                         . 'LEFT JOIN sccpdevmodel as addon ON t1.addon=addon.model WHERE name="' . $data['id'] . '";';
                 $raw_settings = sql($sql, "getRow", DB_FETCHMODE_ASSOC);
                 break;
-            case "get_sccpdusers":
-                $sql = "SELECT * FROM `sccpusers` ";
+            case "get_sccpuser":
+                $sql = "SELECT * FROM `sccpuser` ";
                 if (!empty($data['id'])) {
                     $sql .= 'WHERE name="' . $data['id'] . '" ';
                 }
@@ -173,7 +173,7 @@ class dbinterface {
                 break;
             case 'sccpdevmodel':
             case 'sccpdevice':
-            case 'sccpusers':
+            case 'sccpuser':
                 $sql_db = $db_name;
                 $sql_key = "";
                 $sql_var = "";

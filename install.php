@@ -662,7 +662,7 @@ function Setup_RealTime() {
     $def_config = array('sccpdevice' => 'mysql,sccp,sccpdeviceconfig', 'sccpline' => ' mysql,sccp,sccpline');
     $def_bd_config = array('dbhost' => $amp_conf['AMPDBHOST'], 'dbname' => $amp_conf['AMPDBNAME'],
         'dbuser' => $amp_conf['AMPDBUSER'], 'dbpass' => $amp_conf['AMPDBPASS'],
-        'dbport' => '3306', 'dbsock' => '/var/lib/mysql/mysql.sock');
+        'dbport' => '3306', 'dbsock' => '/var/lib/mysql/mysql.sock', 'dbcharset'=>'utf8');
     $def_bd_sec = 'sccp';
 
     $dir = $cnf_int->get('ASTETCDIR');

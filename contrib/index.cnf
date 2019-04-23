@@ -1,0 +1,15 @@
+; Ini File to Provision Sccp 
+; https://github.com/dkgroot/provision_sccp
+;
+[main]
+debug = on ; The output in the browser window for more information
+tftproot = /tftpboot
+;default_language = English_United_States
+
+firmware = firmware
+settings = /tftpboot
+wallpapers = /tftpboot/Desktops
+ringtones = ringtones
+locales = locales
+countries = countries
+languages = /tftpboot/languages

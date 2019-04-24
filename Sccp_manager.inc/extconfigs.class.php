@@ -280,7 +280,7 @@ class extconfigs {
         if ($db_vars["tftp_rewrite"]["data"] == 'pro') {
             $adv_tree_mode = 'pro';
             if (!empty($adv_ini)) { // something found in external conflicts
-                $adv_ini .= 'index.cnf';
+                $adv_ini .= '/index.cnf';
                 if (file_exists($adv_ini)) {
                     $adv_ini_array = parse_ini_file($adv_ini);
                     $adv_config = array_merge($adv_config, $adv_ini_array);

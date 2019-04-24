@@ -805,6 +805,10 @@ function CreateBackUpConfig() {
     $backup_files = array('extconfig','extconfig','res_mysql', 'res_config_mysql','sccp');
     $backup_ext = array('_custom.conf', '.conf');
     $dir = $cnf_int->get('ASTETCDIR');
+
+    $filename = $dir.'/sccp_backup_'.date("Ymd").'.sql';
+    $result = exec('mysqldump '.$amp_conf['AMPDBNAME'].' --password='.$amp_conf['AMPDBPASS'].' --user='.$amp_conf['AMPDBUSER'].' --single-transaction >'.$filename ,$output);
+    
     $zip = new \ZipArchive();
     $filename = $dir . "/sccp_instal_backup" . date("Ymd"). ".zip";
     if ($zip->open($filename, \ZIPARCHIVE::CREATE)) {

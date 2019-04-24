@@ -195,6 +195,8 @@ class srvinterface {
             return 0;
         }
         switch ($res["vCode"]) {
+            case 0:
+                return 0;
             case 433:
                 return 433;
 
@@ -229,6 +231,10 @@ class srvinterface {
         $result = array();
         $ast_out = $this->sccp_version();
         $result["Version"] = $ast_out[0];
+        if ($ast_out[0] == '-1') {
+            $result["vCode"] = 0;
+            return $result;
+        }
         $version_parts = explode(".", $ast_out[0]);
         $result["vCode"] = implode('', $version_parts);
         if (!empty($ast_out[1]) && $ast_out[1] == 'develop') {
@@ -247,6 +253,9 @@ class srvinterface {
 
     private function sccp_version() {
         $ast_out = $this->sccp_core_commands(array('cmd' => 'get_version'));
+        if ( ($ast_out['Response'] == 'Error') ||  (strpos($ast_out['data'], 'No such command') != false) ) {
+            return array('-1');
+        }
         if (preg_match("/Release.*\(/", $ast_out['data'], $matches)) {
             $ast_out = substr($matches[0], 9, -1);
             return explode(' ', $ast_out);

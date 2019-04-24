@@ -802,12 +802,12 @@ function CreateBackUpConfig() {
     global $amp_conf;
     outn("<li>" . _("Create Config BackUp") . "</li>");
     $cnf_int = \FreePBX::Config();
-    $backup_files = array('extconfig','extconfig','res_mysql', 'res_config_mysql','sccp');
+    $backup_files = array('extensions','extconfig','res_mysql', 'res_config_mysql','sccp');
     $backup_ext = array('_custom.conf', '.conf');
     $dir = $cnf_int->get('ASTETCDIR');
 
-    $filename = $dir.'/sccp_backup_'.date("Ymd").'.sql';
-    $result = exec('mysqldump '.$amp_conf['AMPDBNAME'].' --password='.$amp_conf['AMPDBPASS'].' --user='.$amp_conf['AMPDBUSER'].' --single-transaction >'.$filename ,$output);
+    $fsql = $dir.'/sccp_backup_'.date("Ymd").'.sql';
+    $result = exec('mysqldump '.$amp_conf['AMPDBNAME'].' --password='.$amp_conf['AMPDBPASS'].' --user='.$amp_conf['AMPDBUSER'].' --single-transaction >'.$fsql ,$output);
     
     $zip = new \ZipArchive();
     $filename = $dir . "/sccp_instal_backup" . date("Ymd"). ".zip";
@@ -819,10 +819,14 @@ function CreateBackUpConfig() {
                 }
             }
         }
+        if (file_exists($fsql)) {
+            $zip->addFile($fsql);
+        }
         $zip->close();
     } else {
         outn("<li>" . _("Error Create BackUp: ") . $filename ."</li>");
     }
+    unlink($fsql);
     outn("<li>" . _("Create Config BackUp: ") . $filename ."</li>");
 }
 
@@ -905,14 +909,21 @@ CheckSCCPManagerDBTables($table_req);
 #CheckPermissions();
 CheckAsteriskVersion();
 $sccp_compatible = CheckChanSCCPCompatible();
+if ($sccp_compatible == 0)  {
+//    die_freepbx('Chan Sccp not Found. Install it before continuing');
+    outn("<br>");
+    outn("<font color='red'>Chan Sccp not Found. Install it before continuing !</font>");
+    die();
+}
 $db_config   = Get_DB_config($sccp_compatible);
 $sccp_db_ver = CheckSCCPManagerDBVersion();
 
 // BackUp Old config
 CreateBackUpConfig();
-
-InstallDB_sccpuser();
-InstallDB_Buttons();
+if ($sccp_compatible > 431) {
+    InstallDB_sccpuser();
+    InstallDB_Buttons();
+}
 
 InstallDB_sccpsettings();
 InstallDB_sccpdevmodel();

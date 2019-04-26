@@ -11,7 +11,7 @@
 
 [![Download Sccp-Mamager](https://img.shields.io/badge/SccpGUI-build-ff69b4.svg)](https://github.com/PhantomVl/sccp_manager/archive/master.zip)
 [![Download Chan-SCCP channel driver for Asterisk](https://img.shields.io/sourceforge/dt/chan-sccp-b.svg)](https://github.com/chan-sccp/chan-sccp/releases/latest)
-[![Chan-SCCP Documentation] (https://img.shields.io/badge/docs-wiki-blue.svg)](https://github.com/chan-sccp/chan-sccp/wiki)
+[![Chan-SCCP Documentation](https://img.shields.io/badge/docs-wiki-blue.svg)](https://github.com/chan-sccp/chan-sccp/wiki)
 
 This module has been developed to help IT Staff with their Asterisk-Cisco infrastructure deployment,
 providing easily provisioning and managing Cisco IP phones and extensions in a similar way as it does with Cisco CallManager.
@@ -42,17 +42,17 @@ Make sure you have the following installed on your system:
 - standard posix compatible applications like sed, awk, tr
 
 ### Requirements
-- Chan_SCCP module 4.3.0 (or later) channel driver for Asterisk: [See our WIKI] (https://github.com/chan-sccp/chan-sccp/wiki/Building-and-Installation-Guide)
+- Chan_SCCP module 4.3.0 (or later) channel driver for Asterisk: [See our WIKI](https://github.com/chan-sccp/chan-sccp/wiki/Building-and-Installation-Guide)
   - expected configure flags: 
     ```./configure --enable-conference --enable-advanced-functions --enable-distributed-devicestate```
   - Creating mysql DB from sorce 
     ```mysql -u root asterisk < mysql-v5_enum.sql```
 
-- TFTP Server running under (recomended) /tftpboot/ [See our WIKI] (https://github.com/chan-sccp/chan-sccp/wiki/setup-tftp-service)
+- TFTP Server running under (recomended) /tftpboot/ [See our WIKI](https://github.com/chan-sccp/chan-sccp/wiki/setup-tftp-service)
   - You will need the phone settings templates. You can use the templates taken from the distribution "chan-sccp" 
     ```cp /usr/src/chan-sccp/conf/tftp/\*.xml\* /tftpboot/templates/```
 
-- configure DHCP server [See our WIKI] (https://github.com/chan-sccp/chan-sccp/wiki/setup-dhcp-service)
+- configure DHCP server [See our WIKI](https://github.com/chan-sccp/chan-sccp/wiki/setup-dhcp-service)
 
 ### Setup
 - [Setting up a FreePBX system](http://wiki.freepbx.org/display/FOP/Install+FreePBX)

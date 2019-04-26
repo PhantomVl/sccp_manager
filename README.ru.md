@@ -1,5 +1,5 @@
 ## Welcome to Develop Chan_SCCP GUI Manager for FreePBX
-| [English](README.md) | [Russian](README.ru.md) | [OLD Stable Release](https://github.com/PhantomVl/sccp_manager/tree/master)
+| [English :gb:/:us:](README.md) | [Russian :ru:](README.ru.md) | [OLD Stable Release](https://github.com/PhantomVl/sccp_manager/tree/master)
 
 ![Gif](https://github.com/PhantomVl/sccp_manager/raw/develop/.dok/image/Demo_1s5.gif)
 
@@ -12,7 +12,7 @@
 
 [![Download Sccp-Mamager](https://img.shields.io/badge/SccpGUI-build-ff69b4.svg)](https://github.com/PhantomVl/sccp_manager/archive/master.zip)и традиционно добалены новые баги 
 [![Download Chan-SCCP channel driver for Asterisk](https://img.shields.io/sourceforge/dt/chan-sccp-b.svg)](https://github.com/chan-sccp/chan-sccp/releases/latest)
-[![Chan-SCCP Documentation] (https://img.shields.io/badge/docs-wiki-blue.svg)](https://github.com/chan-sccp/chan-sccp/wiki)
+[![Chan-SCCP Documentation](https://img.shields.io/badge/docs-wiki-blue.svg)](https://github.com/chan-sccp/chan-sccp/wiki)
 
 ### История
 Корни идея создания этого проекта лежат в несовершенстве уже существующего и заброшенного проекта.
@@ -55,8 +55,8 @@ Make sure you have the following installed on your system:
 - standard posix compatible applications like sed, awk, tr
 
 ### Installation Очень короткая инструкция
-###### [Полная версия инструкции] (https://github.com/PhantomVl/sccp_manager/wiki/step-by-step-instlation)
- - Chan_SCCP module 4.3.1 (or later) [See our WIKI] (https://github.com/chan-sccp/chan-sccp/wiki/Building-and-Installation-Guide)
+###### [Полная версия инструкции](https://github.com/PhantomVl/sccp_manager/wiki/step-by-step-instlation)
+ - Chan_SCCP module 4.3.1 (or later) [See our WIKI](https://github.com/chan-sccp/chan-sccp/wiki/Building-and-Installation-Guide)
 >    git clone https://github.com/chan-sccp/chan-sccp.git
 >    git checkout develop
 
@@ -64,8 +64,8 @@ Make sure you have the following installed on your system:
 >     ./configure --enable-conference --enable-advanced-functions --enable-distributed-devicestate
 >     mysql -u root asterisk < mysql-v5_enum.sql
 
-- Настраиваем TFTP Server, он нужен для телефонов /tftpboot/ [See our WIKI] (https://github.com/chan-sccp/chan-sccp/wiki/setup-tftp-service)
-- Настраиваем DHCP serve, как ни странно он тоже нужен [See our WIKI] (https://github.com/chan-sccp/chan-sccp/wiki/setup-dhcp-service)
+- Настраиваем TFTP Server, он нужен для телефонов /tftpboot/ [See our WIKI](https://github.com/chan-sccp/chan-sccp/wiki/setup-tftp-service)
+- Настраиваем DHCP serve, как ни странно он тоже нужен [See our WIKI](https://github.com/chan-sccp/chan-sccp/wiki/setup-dhcp-service)
 
 - Установка модуля
 >     cd /var/www/html/admin/modules/
@@ -90,7 +90,7 @@ Make sure you have the following installed on your system:
      !!! Но есть ограничение - ветка master не поддерживает изменения в chan-sccp сделаные после октября 2018 г.
    - Желательно иметь Firmware телефонов Cisco, языковые пакеты ну всякое разное.
    - Возможно, ты найдешь, то что ищешь, в проекте  (https://github.com/dkgroot/provision_sccp)
-   - Если что-то не так [Wiki GUI] (https://github.com/PhantomVl/sccp_manager), [Wiki chan-sccp] (https://github.com/chan-sccp/chan-sccp/wiki),
-[Wiki FreePbx] (https://wiki.freepbx.org/display/FOP/Install+FreePBX)
+   - Если что-то не так [Wiki GUI](https://github.com/PhantomVl/sccp_manager), [Wiki chan-sccp](https://github.com/chan-sccp/chan-sccp/wiki),
+[Wiki FreePbx](https://wiki.freepbx.org/display/FOP/Install+FreePBX)
 
 

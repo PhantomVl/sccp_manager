@@ -266,6 +266,7 @@ function Get_DB_config($sccp_compatible) {
             'video_tos' => array('def_modify' => "0x88"),
             'video_cos' => array('def_modify' => "5"),
             'trustphoneip' => array('drop' => "yes"),
+            'transfer_on_hangup' => array('create' => "enum('on','off') NULL DEFAULT NULL", 'modify' => "enum('on','off')"),
             'phonecodepage' => array('create' => 'VARCHAR(50) NULL DEFAULT NULL', 'modify' => "VARCHAR(50)"),
             'mwilamp' => array('create' => "enum('on','off','wink','flash','blink') NULL  default 'on'", 'modify' => "enum('on','off','wink','flash','blink')"),
             'mwioncall' => array('create' => "enum('on','off') NULL default 'on'", 'modify' => "enum('on','off')"),
@@ -330,7 +331,7 @@ function Get_DB_config($sccp_compatible) {
             '_description' => array('rename' => "description"),
             '_loginname' => array('drop' => "yes"),
             '_profileid' => array('drop' => "yes"),
-            
+            'transfer_on_hangup' => array('create' => "enum('on','off') NULL DEFAULT NULL", 'modify' => "enum('on','off')"),
         ),
         'sccpline' => array(
             'directed_pickup' => array('create' => "enum('on','off') NULL default NULL", 'modify' => "enum('on','off')"),

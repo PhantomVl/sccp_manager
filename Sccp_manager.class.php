@@ -106,6 +106,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
     public $sccp_conf_init = array();
     public $xml_data;
     public $class_error; //error construct
+    public $info_warning;
 
     public function __construct($freepbx = null) {
         if ($freepbx == null) {
@@ -621,6 +622,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
             case 'model_update':
             case 'model_add':
             case 'model_delete':
+            case 'update_button_label':
             case 'updateSoftKey':
             case 'deleteSoftKey':
             case 'delete_dialplan':
@@ -646,6 +648,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 $this->sccp_create_tftp_XML();
 
                 $res = $this->srvinterface->sccp_core_commands(array('cmd' => 'sccp_reload'));
+//                $res = $this->srvinterface->sccp_core_commands(array('cmd' => 'restart_phone'));
                 $msg = 'Config Saved: ' . $res['Response'] . '. Info :' . $res['data'];
 //                needreload();
 // !TODO!: It is necessary in the future to check, and replace all server responses on correct messages. Use _(msg)                 
@@ -755,6 +758,24 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 return array('status' => true, 'message' => 'Reset command send ' . $msg, 'reload' => true);
 //                }
                 break;
+            case 'update_button_label':
+                $msg = '';
+                $hw_list = array();
+//                return array('status' => false, 'message' => 'update_button_label send ' . $msg, 'reload' => false);
+                if (!empty($request['name'])) {
+                    foreach ($request['name'] as $idv) {
+                        if (!(strpos($idv, 'SEP') === false)) {
+                            $hw_list[] = array('name' => $idv);
+                        }
+                        if ($idv == 'all') {
+                        }
+                    }
+                }
+                $res = $this->sccp_db_update_butons($hw_list);
+                $msg .= $res['Response'] . ' raw: ' . $res['data'] . ' ';
+// !TODO!: It is necessary in the future to check, and replace all server responses on correct messages. Use _(msg)                 
+                return array('status' => true, 'message' => 'Update Butons Labels Complite ' . $msg, 'reload' => true);
+                
             case 'model_add':
                 $save_settings = array();
                 $key_name = array('model', 'vendor', 'dns', 'buttons', 'loadimage', 'loadinformationid', 'nametemplate');
@@ -1792,6 +1813,52 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         return $errors;
     }
 
+    /*
+     *      Update Butons Labels on mysql DB
+     *      
+     */
+    private function sccp_db_update_butons($hw_list = array()) {
+        
+        $save_buttons = array();
+        if (!empty($hw_list)) {
+            $buton_list = array();
+            foreach ($hw_list as $value) {
+                $buton_tmp =$this->dbinterface->get_db_SccpTableData("get_sccpdevice_buttons", array('buttontype'=>'speeddial','id'=>$value['name']));
+//                die(print_r($buton_tmp,1));
+                if (!empty($buton_tmp)) {
+                    $buton_list = array_merge($buton_list, $buton_tmp);
+                }
+            }
+        } else {
+            $buton_list = $this->dbinterface->get_db_SccpTableData("get_sccpdevice_buttons", array('buttontype'=>'speeddial'));
+        }
+//        die(print_r($buton_list,1));
+        if (empty($buton_list)) {
+            return array('Response'=> ' Found 0 device ', 'data'=> '');
+        }
+        $copy_fld = array('ref','reftype','instance','buttontype');
+        $user_list = $user_list = $this->dbinterface->get_db_SccpTableByID("SccpExtension",Array(),'name');
+        foreach ($buton_list as $value) {
+            $btn_opt = explode(',',$value['options']);
+            $btn_id = $btn_opt[0];
+            if (!empty($user_list[$btn_id])){
+                if ($user_list[$btn_id]['label'] != $value['name']) {
+                    $btn_data['name'] = $user_list[$btn_id]['label'];
+                    foreach ($copy_fld as $ckey) {
+                       $btn_data[$ckey] = $value[$ckey];
+                    }
+                    $save_buttons[] = $btn_data;
+                }
+                
+            }
+        }
+        if (empty($save_buttons)) {
+            return array('Response'=> 'No update required', 'data'=> ' 0 - records ');
+        }
+        $res = $this->dbinterface->sccp_save_db("sccpbuttons",  $save_buttons, 'replace', '','');
+        return array('Response'=> 'Update records :'.count($save_buttons),'data'=>$res);
+    }
+    
     /*
      *      Save Config Value to mysql DB
      *      sccp_db_save_setting(empty) - Save All settings from $sccpvalues

@@ -601,16 +601,26 @@ $(document).ready(function () {
             }
 
         }
-        if ($(this).data('id') === 'reset_dev' || $(this).data('id') === 'reset_token') {
+        if ($(this).data('id') === 'reset_dev' || $(this).data('id') === 'reset_token' || $(this).data('id') === 'update_button_label' ) {
             var dev_cmd = $(this).data('id');
             var datas = '';
             var i = 0;
+            var conf_msg = '??????';
+            if ($(this).data('id') === 'reset_dev') {
+                conf_msg = 'Reset All device ?';
+            }
+            if ($(this).data('id') === 'reset_token') {
+                conf_msg = 'Reset Token on All device ?';
+            }
+            if ($(this).data('id') === 'update_button_label') {
+                conf_msg = 'Update Butons Labels on All device ?';
+            }
             $('table').bootstrapTable('getSelections').forEach(function (entry) {
                 datas = datas + 'name[' + i + ']=' + entry['name'] + '&';
                 i++;
             });
             if (datas === '') {
-                if (confirm('Resaet All device')) {
+                if (confirm(conf_msg)) {
                     datas = 'name[0]=all';
                 } else {
                     dev_cmd = '';

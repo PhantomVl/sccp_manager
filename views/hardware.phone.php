@@ -21,6 +21,9 @@
                     <button name="cr_sccp_phone_xml" class="btn sccp_update btn-default" data-id="create-cnf">
                         <i class="glyphicon glyphicon-ok"></i> <span><?php echo _('Create CNF') ?></span>
                     </button>
+                    <button name="update_button_label" class="btn sccp_update btn-default" data-id="update_button_label">
+                        <i class="glyphicon glyphicon-ok"></i> <span><?php echo _('Update Button label') ?></span>
+                    </button>
                     <button name="reset_sccp_phone" class="btn sccp_update btn-default" data-id="reset_dev">
                         <i class="glyphicon glyphicon-ok"></i> <span><?php echo _('Reset Device') ?></span>
                     </button>

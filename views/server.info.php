@@ -30,6 +30,9 @@ $info['dbinterface'] = $this->dbinterface->info();
 $info['aminterface'] = $this->aminterface->info();
 $db_Schema = $this->dbinterface->validate();
 
+$mysql_info = $this->dbinterface->get_db_sysvalues();
+
+
 $info['XML'] = $this->xmlinterface->info();
 $info['sccp_class'] = $driver['sccp'];
 $info['Core_sccp'] = array('Version' => $core['Version'],  'about'=> 'Sccp ver.'. $core['Version'].' r'.$core['vCode']. ' Revision :'. $core['RevisionNum']. ' Hash :'. $core['RevisionHash']);
@@ -90,29 +93,26 @@ if (empty($conf_realtime)) {
         $info['ConfigsRealTime'] = array('Version' => 'Error',  'about'=> $rt_info);
     }
 }
+// $mysql_info 
+if ($mysql_info['Value'] <= '2000') {
+    $this->info_warning['MySql'] = Array('Increase Mysql Group Concat Max. Length','Step 1: Go to mysql path <br> nano /etc/my.cnf',
+                                          'Step 2: And add the following line below [mysqld] as shown below <br> [mysql] <br>group_concat_max_len = 4096 or more',
+                                          'Step 3: Save and restart <br> systemctl restart mariadb.service<br> Or <br> service mysqld restart');
+}
  //global $amp_conf;
 // ************************************************************************************
-print_r("<br> Request:<br><pre>");
- $json = '';
+$buton_list = $this->dbinterface->get_db_SccpTableData("get_sccpdevice_buttons", array('buttontype'=>'speeddial'));
+$user_list = $this->dbinterface->get_db_SccpTableByID("SccpExtension",Array(),'name');
+
+print_r("<br> Help Info:<br><pre>");
  print_r("<br>");
-// print_r($conf_realtime);
+ //print_r($buton_list);
  print_r("<br>");
+ print_r($user_list);
  print_r("<br>");
 // print_r("DIRECT START");
 //  print_r($this->sccpvalues['ccm_address']);
  //print_r($this->get_php_classes('\\FreePBX\\modules\\'));
-/*
- print_r(get_declared_classes());
-  print_r($this->aminterface->open());
- 
- 
- print_r($this->aminterface->_error);
- print_r("<br>");
- 
- */
- 
- 
- 
  //print_r($this->dbinterface->get_db_SccpTableData('SccpExtension'));
 //  print_r($this->srvinterface->getеtestChanSCCP_GlablsInfo());
 //  $test_data = $this->srvinterface-> astman_GetRaw('ExtensionStateList');
@@ -133,6 +133,33 @@ print_r("<br> Request:<br><pre>");
 //   print_r('<br>');
 
 //print_r($this->dbinterface->info());
+
+ if (!empty($this->info_warning)) {
+    ?>    
+    <div class="fpbx-container container-fluid">
+        <div class="row">
+            <div class="container">
+                <h2 style="border:2px solid Tomato;color:Tomato;" >Sccp Manager Warning</h2>
+                <div class="table-responsive">          
+                    <br> There are Warning in the SCCP Module:<br><pre>
+                        <?php
+                            foreach ($this->info_warning as $key => $value) {
+                                echo '<h3>'.$key.'</h3>';
+                                if (is_array($value)) {
+                                    echo '<li>'.implode('</li><li>',$value).'</li>';
+                                } else {
+                                    echo '<li>'.$value.'</li>';
+                                }
+                            }
+                        ?>
+                    </pre>
+                    <br><h4 style="border:2px solid Tomato;color:Green;" > Check these problems before continuing to work.</h4> <br>
+                </div>
+            </div>
+        </div>
+    </div>
+<br>
+<?php  }     
 
 if (!empty($this->class_error)) {
     ?>    

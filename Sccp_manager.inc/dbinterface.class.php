@@ -26,6 +26,18 @@ class dbinterface {
     /*
      * Core Access Function
      */
+    public function get_db_SccpTableByID($dataid, $data = array(), $indexField = '') {
+        $resut = array();
+        $raw = $this->get_db_SccpTableData($dataid, $data);
+        if ( empty($raw) || empty($indexField)) {
+            return $raw;
+        }
+        foreach ($raw as $value) {
+            $id = $value[$indexField];
+            $resut[$id] = $value;
+        }
+        return $resut;
+    }
 
     public function get_db_SccpTableData($dataid, $data = array()) {
         if ($dataid == '') {
@@ -76,8 +88,19 @@ class dbinterface {
                 $raw_settings = sql($sql, "getRow", DB_FETCHMODE_ASSOC);
                 break;
             case "get_sccpdevice_buttons":
-                $sql = 'SELECT * FROM sccpbuttonconfig WHERE  ref="' . $data['id'] . '" ORDER BY `instance`;';
-                $raw_settings = sql($sql, "getAll", DB_FETCHMODE_ASSOC);
+                $sql = '';
+                if (!empty($data['buttontype'])) {
+                    $sql .= 'buttontype="' . $data['buttontype'] . '" ';
+                }
+                if (!empty($data['id'])) {
+                    $sql .= (empty($sql)) ? 'ref="' . $data['id'] . '" ' : 'and ref="' . $data['id'] . '" ';
+                }
+                if (!empty($sql)) {
+                    $sql = 'SELECT * FROM sccpbuttonconfig WHERE ' .$sql. 'ORDER BY `instance`;';
+                    $raw_settings = sql($sql, "getAll", DB_FETCHMODE_ASSOC);
+                } else {
+                    $raw_settings = Array();
+                }
                 break;
         }
 
@@ -87,6 +110,12 @@ class dbinterface {
     public function get_db_SccpSetting() {
         $sql = "SELECT `keyword`, `data`, `type`, `seq` FROM `sccpsettings` ORDER BY `type`, `seq`";
         $raw_settings = sql($sql, "getAll", DB_FETCHMODE_ASSOC);
+        return $raw_settings;
+    }
+
+    public function get_db_sysvalues() {
+        $sql = "SHOW VARIABLES LIKE '%group_concat%'";
+        $raw_settings = sql($sql, "getRow", DB_FETCHMODE_ASSOC);
         return $raw_settings;
     }
 
@@ -213,11 +242,20 @@ class dbinterface {
                 if ($mode == 'delete') {
                     break;
                 }
-                if (!empty($save_value)) {
+                if (empty($save_value)) {
+                    break;
+                }
+                if ($mode == 'replace') {
+                    $sql = 'UPDATE `sccpbuttonconfig` SET `name`=? WHERE  `ref`= ? AND `reftype`=? AND `instance`=?  AND `buttontype`=?;';
+//                    $sql = 'INSERT INTO `sccpbuttonconfig` (`ref`, `reftype`,`instance`, `buttontype`, `name`, `options`) VALUES (?,?,?,?,?,?);';
+//                    die(print_r($save_value,1));
+                    $stmt = $db->prepare($sql);
+                    $result= $db->executeMultiple($stmt, $save_value);
+                } else {
                     $sql = 'INSERT INTO `sccpbuttonconfig` (`ref`, `reftype`,`instance`, `buttontype`, `name`, `options`) VALUES (?,?,?,?,?,?);';
 //                    die(print_r($save_value,1));
                     $stmt = $db->prepare($sql);
-                    $res = $db->executeMultiple($stmt, $save_value);
+                    $result = $db->executeMultiple($stmt, $save_value);
                 }
 
                 break;

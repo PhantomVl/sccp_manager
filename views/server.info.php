@@ -22,8 +22,9 @@ foreach ($ast_realtime as $key => $value) {
        }
     }
 }
-$conf_realtime = $this->extconfigs->validate_RealTime($ast_realm);
 $info = array();
+
+$conf_realtime = $this->extconfigs->validate_RealTime($ast_realm);
 $info['srvinterface'] = $this->srvinterface->info();
 $info['extconfigs'] = $this->extconfigs->info();
 $info['dbinterface'] = $this->dbinterface->info();
@@ -101,9 +102,7 @@ if ($mysql_info['Value'] <= '2000') {
 }
  //global $amp_conf;
 // ************************************************************************************
-$buton_list = $this->dbinterface->get_db_SccpTableData("get_sccpdevice_buttons", array('buttontype'=>'speeddial'));
-$user_list = $this->dbinterface->get_db_SccpTableByID("SccpExtension",Array(),'name');
-
+/*
 print_r("<br> Help Info:<br><pre>");
  print_r("<br>");
  //print_r($buton_list);
@@ -124,7 +123,7 @@ print_r("<br> Help Info:<br><pre>");
 //  print_r($this->srvinterface->t_get_meta_data());
 //  print_r($this->sccp_metainfo);
  print("</pre>");
-
+*/
 // ************************************************************************************
 
 //   $lang_arr =  $this->extconfigs->getextConfig('sccp_lang','sk_SK');    

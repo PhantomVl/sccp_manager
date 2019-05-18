@@ -35,7 +35,9 @@ $time_zone = array('-12' => 'GTM -12', '-11' => 'GTM -11', '-10' => 'GTM -10', '
                    '04'  => 'GTM +4',   '05' => 'GTM +5',  '06'  => 'GTM +6', '07'  => 'GTM +7',
                    '08'  => 'GTM +8',   '09' => 'GTM +9',  '10'  => 'GTM +10', '11'=> 'GTM +11', '12' => 'GTM +12');
 
-$time_zone_name = \FreePBX::Sccp_manager()-> extconfigs-> getextConfig('cisco_timezone');
+$time_zone_name = array();
+        
+//$time_zone_name = \FreePBX::Sccp_manager()-> extconfigs-> getextConfig('cisco_timezone');
 //$time_zone = \FreePBX::Sccp_manager()-> extconfigs-> getextConfig('cisco_time');
 //$system_time_zone = \FreePBX::Sccp_manager()->getSysnemTimeZone();
 //print_r($metainfo);
@@ -53,13 +55,17 @@ if (function_exists('music_list')){
 if (!is_array($moh_list)){
     $moh_list = array('default');
 }
-$sofkey_list = \FreePBX::Sccp_manager()-> srvinterface -> sccp_list_keysets();
-$model_list = \FreePBX::Sccp_manager()->dbinterface->get_db_SccpTableData("HWDevice");
-$extension_list = \FreePBX::Sccp_manager()->dbinterface->get_db_SccpTableData("HWextension");
-$device_list = \FreePBX::Sccp_manager()->dbinterface->get_db_SccpTableData("SccpDevice");
+$sofkey_list = array();
+$model_list = array();
+$extension_list = array();
+$device_list = array();
 
-$extension_list[]=array(model=>'NONE', vendor=>'CISCO', dns=>'0');
-$device_list[]=array(name=>'NONE', description=>'No Device');
+//$sofkey_list = \FreePBX::Sccp_manager()-> srvinterface -> sccp_list_keysets();
+// $model_list = \FreePBX::Sccp_manager()->dbinterface->get_db_SccpTableData("HWDevice");
+//$extension_list = \FreePBX::Sccp_manager()->dbinterface->get_db_SccpTableData("HWextension");
+//$device_list = \FreePBX::Sccp_manager()->dbinterface->get_db_SccpTableData("SccpDevice");
+//$extension_list[]=array(model=>'NONE', vendor=>'CISCO', dns=>'0');
+//$device_list[]=array(name=>'NONE', description=>'No Device');
 
 
 $items = $itm -> children();
@@ -420,6 +426,9 @@ foreach ($items as $child) {
             $select_opt= $moh_list;
         }
         if ($child['type'] == 'SLK') {
+            if (empty($sofkey_list)) {
+                $sofkey_list = \FreePBX::Sccp_manager()-> srvinterface -> sccp_list_keysets();
+            }
             $select_opt= $sofkey_list;
         }
 //        if ($child['type'] == 'SLZ') {
@@ -484,6 +493,9 @@ foreach ($items as $child) {
             $select_opt= $tftp_lang;
         }
         if ($child['type'] == 'SLZN') {
+            if (empty($time_zone_name)) {
+                $time_zone_name = \FreePBX::Sccp_manager()-> extconfigs-> getextConfig('cisco_timezone');
+            }
             $select_opt= $time_zone_name;
         }
         if ($child['type'] == 'SLZ') {
@@ -637,12 +649,23 @@ foreach ($items as $child) {
            $child->class = 'form-control';
         }
         if ($child['type'] == 'SDM') {
+            if (empty($model_list)) {
+                $model_list = \FreePBX::Sccp_manager()->dbinterface->get_db_SccpTableData("HWDevice");
+            }
             $select_opt= $model_list;            
         }
         if ($child['type'] == 'SDE') {
+            if (empty($extension_list)) {
+                $extension_list = \FreePBX::Sccp_manager()->dbinterface->get_db_SccpTableData("HWextension");
+                $extension_list[]=array(model=>'NONE', vendor=>'CISCO', dns=>'0');
+            }
             $select_opt= $extension_list;            
         }
         if ($child['type'] == 'SDD') {
+            if (empty($device_list)) {
+                $device_list = \FreePBX::Sccp_manager()->dbinterface->get_db_SccpTableData("SccpDevice");
+                $device_list[]=array(name=>'NONE', description=>'No Device');
+            }
             $select_opt = $device_list;
         }
 

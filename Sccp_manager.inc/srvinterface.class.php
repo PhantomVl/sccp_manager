@@ -37,7 +37,7 @@ class srvinterface {
     public function sccp_core_commands($params = array()) {
         global $astman;
         $cmd_list = array('get_softkey' => array('cmd' => "sccp show softkeyssets", 'param' => ''),
-            'get_version' => array('cmd' => "sccp show version", 'param' => ''),
+                'get_version' => array('cmd' => "sccp show version", 'param' => ''),
             'get_device' => array('cmd' => "sccp show devices", 'param' => ''),
             'get_dev_info' => array('cmd' => "sccp show device", 'param' => 'name'),
             'get_hints' => array('cmd' => "core show hints", 'param' => ''),

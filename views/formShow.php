@@ -36,10 +36,21 @@ $time_zone = array('-12' => 'GTM -12', '-11' => 'GTM -11', '-10' => 'GTM -10', '
                    '08'  => 'GTM +8',   '09' => 'GTM +9',  '10'  => 'GTM +10', '11'=> 'GTM +11', '12' => 'GTM +12');
 
 $time_zone_name = array();
+$extension_list = array();
+$sofkey_list = array();
+$model_list = array();
+$device_list = array();
         
 //$time_zone_name = \FreePBX::Sccp_manager()-> extconfigs-> getextConfig('cisco_timezone');
 //$time_zone = \FreePBX::Sccp_manager()-> extconfigs-> getextConfig('cisco_time');
 //$system_time_zone = \FreePBX::Sccp_manager()->getSysnemTimeZone();
+//$sofkey_list = \FreePBX::Sccp_manager()-> srvinterface -> sccp_list_keysets();
+//$model_list = \FreePBX::Sccp_manager()->dbinterface->get_db_SccpTableData("HWDevice");
+//$extension_list = \FreePBX::Sccp_manager()->dbinterface->get_db_SccpTableData("HWextension");
+//$device_list = \FreePBX::Sccp_manager()->dbinterface->get_db_SccpTableData("SccpDevice");
+//$extension_list[]=array(model=>'NONE', vendor=>'CISCO', dns=>'0');
+//$device_list[]=array(name=>'NONE', description=>'No Device');
+
 //print_r($metainfo);
 
 if (\FreePBX::Modules()->checkStatus("soundlang")) {
@@ -55,17 +66,7 @@ if (function_exists('music_list')){
 if (!is_array($moh_list)){
     $moh_list = array('default');
 }
-$sofkey_list = array();
-$model_list = array();
-$extension_list = array();
-$device_list = array();
 
-//$sofkey_list = \FreePBX::Sccp_manager()-> srvinterface -> sccp_list_keysets();
-// $model_list = \FreePBX::Sccp_manager()->dbinterface->get_db_SccpTableData("HWDevice");
-//$extension_list = \FreePBX::Sccp_manager()->dbinterface->get_db_SccpTableData("HWextension");
-//$device_list = \FreePBX::Sccp_manager()->dbinterface->get_db_SccpTableData("SccpDevice");
-//$extension_list[]=array(model=>'NONE', vendor=>'CISCO', dns=>'0');
-//$device_list[]=array(name=>'NONE', description=>'No Device');
 
 
 $items = $itm -> children();

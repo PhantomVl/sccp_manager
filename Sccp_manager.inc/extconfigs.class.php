@@ -255,7 +255,7 @@ class extconfigs {
         }
         if (empty($base_config["tftp_path"])) {
             if (!empty($this->paren_class)) {
-                $this->paren_class->class_error['tftp_path'] = 'Tftp path not defined';
+                $this->paren_class->class_error['tftp_path'] = 'Tftp path not exist or not defined';
             }
             return array('error' => 'empty tftp_path');
         }

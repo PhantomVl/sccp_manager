@@ -143,7 +143,7 @@ print_r("<br> Help Info:<br><pre>");
                             foreach ($this->info_warning as $key => $value) {
                                 echo '<h3>'.$key.'</h3>';
                                 if (is_array($value)) {
-                                    echo '<li>'.implode('</li><li>', $value).'</li>';
+                                    echo '<li>'._(implode('</li><li>', $value)).'</li>';
                                 } else {
                                     echo '<li>'. _($value).'</li>';
                                 }

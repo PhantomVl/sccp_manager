@@ -803,7 +803,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 break;
             case 'updateSoftKey':
                 if (!empty($request['id'])) {
-                    $id_name = $request['id'];
+                    $id_name = preg_replace('/\s/', '', $request['id']);
                     $this->sccp_conf_init[$id_name]['type'] = "softkeyset";
                     foreach ($this->extconfigs->getextConfig('keyset') as $keyl => $vall) {
                         if (!empty($request[$keyl])) {

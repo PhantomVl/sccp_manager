@@ -656,7 +656,7 @@ function CreateBackUpConfig() {
     global $amp_conf;
     outn("<li>" . _("Create Config BackUp") . "</li>");
     $cnf_int = \FreePBX::Config();
-    $backup_files = array('extensions','extconfig','res_mysql', 'res_config_mysql','sccp');
+    $backup_files = array('extensions','extconfig','res_mysql', 'res_config_mysql','sccp','sccp_hardware','sccp_extensions');
     $backup_ext = array('_custom.conf', '.conf');
     $dir = $cnf_int->get('ASTETCDIR');
 
@@ -682,6 +682,22 @@ function CreateBackUpConfig() {
     }
     unlink($fsql);
     outn("<li>" . _("Create Config BackUp: ") . $filename ."</li>");
+}
+
+function RenameConfig() {
+    global $amp_conf;
+    outn("<li>" . _("Move Old Config") . "</li>");
+    $cnf_int = \FreePBX::Config();
+    $rename_files = array('sccp_hardware','sccp_extensions');
+    $rename_ext = array('_custom.conf', '.conf');
+    $dir = $cnf_int->get('ASTETCDIR');
+    foreach ($rename_files as $file) {
+        foreach ($rename_ext as $b_ext) {
+            if (file_exists($dir . '/'.$file . $b_ext)) {
+                rename($dir . '/'.$file . $b_ext, $dir . '/'.$file . $b_ext.'.old');
+            }
+        }
+    }
 }
 
 function Setup_RealTime() {
@@ -774,6 +790,7 @@ $sccp_db_ver = CheckSCCPManagerDBVersion();
 
 // BackUp Old config
 CreateBackUpConfig();
+RenameConfig();
 InstallDB_sccpsettings();
 InstallDB_sccpdevmodel();
 InstallDB_updateSchema($db_config);

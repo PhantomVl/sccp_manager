@@ -804,7 +804,7 @@ function CreateBackUpConfig() {
     outn("<li>" . _("Create Config BackUp") . "</li>");
     $cnf_int = \FreePBX::Config();
     $backup_files = array('extensions','extconfig','res_mysql', 'res_config_mysql','sccp','sccp_hardware','sccp_extensions');
-    $backup_ext = array('_custom.conf', '.conf');
+    $backup_ext = array('_custom.conf', '_additional.conf','.conf');
     $dir = $cnf_int->get('ASTETCDIR');
 
     $fsql = $dir.'/sccp_backup_'.date("Ymd").'.sql';
@@ -836,7 +836,7 @@ function RenameConfig() {
     outn("<li>" . _("Move Old Config") . "</li>");
     $cnf_int = \FreePBX::Config();
     $rename_files = array('sccp_hardware','sccp_extensions');
-    $rename_ext = array('_custom.conf', '.conf');
+    $rename_ext = array('_custom.conf', '_additional.conf','.conf');
     $dir = $cnf_int->get('ASTETCDIR');
     foreach ($rename_files as $file) {
         foreach ($rename_ext as $b_ext) {
@@ -853,7 +853,7 @@ function Setup_RealTime() {
     $cnf_int = \FreePBX::Config();
     $cnf_wr = \FreePBX::WriteConfig();
     $cnf_read = \FreePBX::LoadConfig();
-    $backup_ext = array('_custom.conf', '.conf');
+    $backup_ext = array('_custom.conf', '_additional.conf','.conf');
     
     $def_config = array('sccpdevice' => 'mysql,sccp,sccpdeviceconfig', 'sccpline' => ' mysql,sccp,sccpline');
     $def_bd_config = array('dbhost' => $amp_conf['AMPDBHOST'], 'dbname' => $amp_conf['AMPDBNAME'],

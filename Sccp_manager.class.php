@@ -1291,6 +1291,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
             }
             switch ($key) {
                 case 'voicecodecs':
+                case 'vcodec':
                     foreach ($value as $keycodeс => $valcodeс) {
                         $save_codec[$i] = $keycodeс;
                         $i++;
@@ -1473,32 +1474,36 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
     }
 
     public function getCodecs($type, $showDefaults = false) {
-
+        $codecs_res = array();
         switch ($type) {
             case 'audio':
-                $codecs = $this->getMyConfig('voicecodecs');
+                $lcodecs = $this->getMyConfig('voicecodecs');
+                $allCodecs = $this->FreePBX->Codecs->getAudio();
                 break;
             case 'video':
-                $codecs = $this->getConfig('videocodecs');
+                $lcodecs = $this->getMyConfig('voicecodecs');
+                $allCodecs = array('h264'=>'1','h263'=>'','h265'=>'','h261'=>'');
+//                $allCodecs = $this->FreePBX->Codecs->getVideo();
                 break;
             case 'text':
-                $codecs = $this->getConfig('textcodecs');
+                $lcodecs = $this->getConfig('textcodecs');
                 break;
             case 'image':
-                $codecs = $this->getConfig('imagecodecs');
+                $lcodecs = $this->getConfig('imagecodecs');
                 break;
             default:
                 throw new Exception(_('Unknown Type'));
                 break;
         }
 
-        if (empty($codecs) || !is_array($codecs)) {
+        if (empty($lcodecs) || !is_array($lcodecs)) {
             switch ($type) {
                 case 'audio':
                     $codecs = $this->FreePBX->Codecs->getAudio(true);
                     break;
                 case 'video':
-                    $codecs = $this->FreePBX->Codecs->getVideo(true);
+//                    $codecs = $this->FreePBX->Codecs->getVideo(true);
+                    $codecs = array('h264'=>'1','h263'=>'','h265'=>'','h261'=>'');
                     break;
                 case 'text':
                     $codecs = $this->FreePBX->Codecs->getText(true);
@@ -1506,6 +1511,12 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 case 'image':
                     $codecs = $this->FreePBX->Codecs->getImage(true);
                     break;
+            }
+        } else {
+            foreach ($lcodecs as $c => $v) {
+                if (isset($allCodecs[$c])) {
+                    $codecs[$c] = true;
+                }
             }
         }
 
@@ -1515,7 +1526,8 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                     $allCodecs = $this->FreePBX->Codecs->getAudio();
                     break;
                 case 'video':
-                    $allCodecs = $this->FreePBX->Codecs->getVideo();
+//                    $allCodecs = $this->FreePBX->Codecs->getVideo();
+                    $allCodecs = array('h264'=>'1','h263'=>'','h265'=>'','h261'=>'');
                     break;
                 case 'text':
                     $allCodecs = $this->FreePBX->Codecs->getText();

@@ -1474,7 +1474,9 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
     }
 
     public function getCodecs($type, $showDefaults = false) {
-        $codecs_res = array();
+        $allSupported = array();
+//        $Sccp_Codec = array('gsm','slin16','alow','ulaw','g722','g723','g726','g728','g729','ilibc','isac','opus','h224','aac','h264','h263','h265','h261');
+        $Sccp_Codec = array('gsm','slin16','alaw','ulaw','g722','g723','g726','g728','g729','ilibc','opus','h264','h263','h265','h261');
         switch ($type) {
             case 'audio':
                 $lcodecs = $this->getMyConfig('voicecodecs');
@@ -1482,63 +1484,42 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 break;
             case 'video':
                 $lcodecs = $this->getMyConfig('voicecodecs');
-                $allCodecs = array('h264'=>'1','h263'=>'','h265'=>'','h261'=>'');
-//                $allCodecs = $this->FreePBX->Codecs->getVideo();
+                $allCodecs = $this->FreePBX->Codecs->getVideo();
                 break;
             case 'text':
                 $lcodecs = $this->getConfig('textcodecs');
+                $allCodecs = $this->FreePBX->Codecs->getText(true);
                 break;
             case 'image':
                 $lcodecs = $this->getConfig('imagecodecs');
+                $allCodecs = $this->FreePBX->Codecs->getImage(true);
                 break;
             default:
                 throw new Exception(_('Unknown Type'));
                 break;
         }
+        foreach ($allCodecs as $c => $v) {
+            if (array_search($c,$Sccp_Codec) !=null) {
+                $allSupported[$c] =$v;
+            }
+        }
 
-        if (empty($lcodecs) || !is_array($lcodecs)) {
-            switch ($type) {
-                case 'audio':
-                    $codecs = $this->FreePBX->Codecs->getAudio(true);
-                    break;
-                case 'video':
-//                    $codecs = $this->FreePBX->Codecs->getVideo(true);
-                    $codecs = array('h264'=>'1','h263'=>'','h265'=>'','h261'=>'');
-                    break;
-                case 'text':
-                    $codecs = $this->FreePBX->Codecs->getText(true);
-                    break;
-                case 'image':
-                    $codecs = $this->FreePBX->Codecs->getImage(true);
-                    break;
+        if (empty($lcodecs) || (!is_array($lcodecs)) ) {
+            if (empty($allSupported)) {
+                $lcodecs = $allCodecs;
+            } else {
+                $lcodecs = $allSupported;
             }
         } else {
             foreach ($lcodecs as $c => $v) {
-                if (isset($allCodecs[$c])) {
+                if (isset($allSupported[$c])) {
                     $codecs[$c] = true;
-                }
+                }  
             }
         }
 
         if ($showDefaults) {
-            switch ($type) {
-                case 'audio':
-                    $allCodecs = $this->FreePBX->Codecs->getAudio();
-                    break;
-                case 'video':
-//                    $allCodecs = $this->FreePBX->Codecs->getVideo();
-                    $allCodecs = array('h264'=>'1','h263'=>'','h265'=>'','h261'=>'');
-                    break;
-                case 'text':
-                    $allCodecs = $this->FreePBX->Codecs->getText();
-                    break;
-                case 'image':
-                    $allCodecs = $this->FreePBX->Codecs->getImage();
-                    break;
-            }
-            // Update the $codecs array by adding un-selected codecs to the end of it.
-
-            foreach ($allCodecs as $c => $v) {
+            foreach ($allSupported as $c => $v) {
                 if (!isset($codecs[$c])) {
                     $codecs[$c] = false;
                 }

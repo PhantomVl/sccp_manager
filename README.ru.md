@@ -60,8 +60,8 @@ Make sure you have the following installed on your system:
 >    git clone https://github.com/chan-sccp/chan-sccp.git
 >    git checkout develop
 
-   - Собираем с флагами и создаем БД для работы:
->     ./configure --enable-conference --enable-advanced-functions --enable-distributed-devicestate
+   - Важно ! **_Собираем с флагами и создаем БД для работы:_**
+>     ./configure ./configure  --enable-conference --enable-advanced-functions --enable-distributed-devicestate --enable-video
 >     mysql -u root asterisk < mysql-v5_enum.sql
 
 - Настраиваем TFTP Server, он нужен для телефонов /tftpboot/ [See our WIKI] (https://github.com/chan-sccp/chan-sccp/wiki/setup-tftp-service)

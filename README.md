@@ -45,7 +45,7 @@ Make sure you have the following installed on your system:
 ### Requirements
 - Chan_SCCP module 4.3.1 (or later) channel driver for Asterisk: [See our WIKI] (https://github.com/chan-sccp/chan-sccp/wiki/Building-and-Installation-Guide)
   - expected configure flags: 
-    ```./configure --enable-conference --enable-advanced-functions --enable-distributed-devicestate```
+    ```./configure  --enable-conference --enable-advanced-functions --enable-distributed-devicestate --enable-video```
   - Creating mysql DB from sorce 
     ```mysql -u root asterisk < mysql-v5_enum.sql```
 

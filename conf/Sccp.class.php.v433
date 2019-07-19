@@ -20,10 +20,16 @@ class Sccp extends \FreePBX\modules\Core\Driver {
                                  "transfer" => 'transfer', "echocancel" => 'echocancel',
                                  "language" => 'language', "description" => 'callerid',
                                  "cid_num" => 'cid_num', "cid_name" => 'label', "mailbox" => 'mailbox',
-                                 "musicclass" => 'musicclass',
+                                 "musicclass" => 'musicclass',"allow" => 'allow',"disallow" => 'disallow',
+                                 "videomode" => 'videomode',
                                  "dnd" => 'dnd', "silencesuppression" => 'silencesuppression',
                                  "secondary_dialtone_digits" => 'secondary_dialtone_digits', "secondary_dialtone_tone" => 'secondary_dialtone_tone'
                             );
+        private $guidefaults =array(
+                'gui_checkset' => array( "elemname" => "", "prompttext" => "", "helptext" => "", "currentvalue" => "",  "valarray" => array(), "jsonclick" => '',
+                                      "jsvalidation" => "", "failvalidationmsg" => "", "canbeempty" => true, "maxchars" => 0, "disable" => false, "inputgroup" => false,
+                                      "class" => "",  "cblabel" => 'Enable', "disabled_value" => 'DEFAULT', "check_enables" => 'true', "cbdisable" => false, "cbclass" => '') );
+ 
         
         public function __construct($freepbx) {
                 parent::__construct($freepbx);
@@ -37,21 +43,10 @@ class Sccp extends \FreePBX\modules\Core\Driver {
 			"prettyName" => _("Sccp Custom Driver"),
 			"shortName" => "SCCP",
 			"description" => _("Sccp Device"),
-			"Version" => "11.3.v433",
-			"about" => "Sccp mysql class Base ver: 11.3,  Sccp ver: 433"
+			"Version" => "11.3.v434",
+			"about" => "Sccp mysql class Base ver: 11.3,  Sccp ver: 434"
 		);
 	}
-/*        
-       public function addDevice1($id, $settings) {
-                $sql = 'INSERT INTO sccp (id, keyword, data, flags) values (?,?,?,?)';
-                $sth = $this->database->prepare($sql);
-                $settings = is_array($settings)?$settings:array();
-                foreach($settings as $key => $setting) {
-                        $sth->execute(array($id,$key,$setting['value'],$setting['flag']));
-                }
-                return true;
-        }
-*/
 	public function addDevice($id, $settings) {
                 $add_fld = array ("name"=>'label',"outboundcid"=>'cid_num',"langcode"=>'language',"extdisplay"=>'description','devinfo_mailbox'=>'mailbox');
 //                print_r($_REQUEST);
@@ -66,6 +61,14 @@ class Sccp extends \FreePBX\modules\Core\Driver {
                         }
                     }
                 }
+                $allow_codec = array();
+                foreach($settings as $key => $val) {
+                    if (strpos($key,'codec_') !== false ) {
+                         $allow_codec[] =substr($key,6);
+                    }
+                }
+                $settings['allow']['value'] = implode(",", $allow_codec);
+
                 if (empty($settings['cid_num']['value'])) {
                     $settings['cid_num']['value']= $id;
                 }
@@ -138,13 +141,20 @@ class Sccp extends \FreePBX\modules\Core\Driver {
 		$sth = $this->database->prepare($sql);
 		$result = array();
 		$tech = array();
+//                print_r($sql);
     		try {
 		    $sth->execute(array($id));
-		    $result = $sth->fetch(\PDO::FETCH_ASSOC);
-                    $tech = $result;
+                   $tech = $sth->fetch();
+//		    $tech = $sth->fetch(\PDO::FETCH_ASSOC);
+//                    die(print_r($tech));
+//		    $tech = $sth->fetch(\PDO::FETCH_ASSOC);
                     $tech['dial']='SCCP/'.$id;
 		} catch(\Exception $e) {}
-
+//                $tech['sccp_codec'] = Array ('g729');
+//                $tech['allow'] = 'g729';
+//                $tech['sccp_codec2'] = Array ('g729','gsm');
+//                $tech['devinfo_sccp_codec'] = Array ('g729');
+                
 //                print_r($tech);
 //                echo '<br><br>';
 //                print_r($sql);
@@ -251,6 +261,18 @@ class Sccp extends \FreePBX\modules\Core\Driver {
 			"musicclass" => array(
 				"value" => "default",
 				"flag" => $flag++
+                        ),
+			"allow" => array(
+				"value" => "all",
+				"flag" => $flag++
+			),
+			"disallow" => array(
+				"value" => "all",
+				"flag" => $flag++
+			),
+			"videomode" => array(
+				"value" => "auto",
+				"flag" => $flag++
 			),
 		);
 		return array(
@@ -261,23 +283,82 @@ class Sccp extends \FreePBX\modules\Core\Driver {
 
 	public function getDeviceDisplay($display, $deviceInfo, $currentcomponent, $primarySection) {
 		$section = _("SCCP Extension Details");
-//		$category = "general";
-//                Assigned DID/CID
+		$section_с = _("SCCP Codec Details");
+                $gn_category = "sccp";
+                global $currentcomponent, $display;
                 $named_group = $this->getNamedGroup();
+                //add sccp category
+                $currentcomponent->addTabTranslation('sccp',_('SCCP'));
+//                $currentcomponent->addTabTranslation('Codec',_('Codec'));
+
+                //Fill Codecs Informations
+
+                $Sccp_Codec = array('gsm','slin16','alaw','ulaw','g722','g723','g726','g728','g729','ilibc','opus','h264','h263','h265','h261');
+                $allCodecs  = $this->freepbx->Codecs->getAudio(true);
+                $allVCodecs = $this->freepbx->Codecs->getVideo();
+                $ACodec_cur = array('all');
+                $VCodec_cur = array('all');
+
+                foreach ($allCodecs as $c => $v) {
+                    if (array_search($c,$Sccp_Codec) !=null) {
+                        $currentcomponent->addoptlistitem('devinfo_sccp_codec', "devinfo_codec_"."$c", "$c");
+                        if (isset($deviceInfo['allow'])) {
+                            if (strpos($deviceInfo['allow'],$c)!== false) {
+                                $ACodec_cur[] ="devinfo_codec_"."$c";
+                            }
+                        }
+                    }
+                }
+
+                foreach ($allVCodecs as $c => $v) {
+                    if (array_search($c,$Sccp_Codec) !=null) {
+                        $currentcomponent->addoptlistitem('devinfo_sccp_vcodec', "devinfo_codec_"."$c", "$c");
+                        if (isset($deviceInfo['allow'])) {
+                            if (strpos($deviceInfo['allow'],$c)!== false) {
+                                $VCodec_cur[] ="devinfo_codec_"."$c";
+                            }
+                        }
+                    }
+                }
+
+                $el = array(
+                    "elemname" => "devinfo_sccp_codec",
+                    "prompttext" => _('Line Audio Codec:'),
+                    "helptext" => _("Line Audio Codec"),
+                    "currentvalue" => $ACodec_cur,
+                    "valarray" => $currentcomponent->getoptlist('devinfo_sccp_codec'),
+                    "class" => $section_с,
+                    "disable" => 0
+                );
+
+                $currentcomponent->addguielem($section_с, new \gui_checkset(array_merge($this->guidefaults['gui_checkset'],$el)), $gn_category);
+                unset($el);
+                
+                $el = array(
+                    "elemname" => "devinfo_sccp_vcodec",
+                    "prompttext" => _('Line Video Codec:'),
+                    "helptext" => _("Line Video Codec"),
+                    "currentvalue" => $VCodec_cur,
+                    "valarray" => $currentcomponent->getoptlist('devinfo_sccp_vcodec'),
+                    "class" => $section_с,
+                    "disable" => 0
+                );
+                $currentcomponent->addguielem($section_с, new \gui_checkset(array_merge($this->guidefaults['gui_checkset'],$el)), $gn_category);
+
 		$tmparr = array();
                 $tt = _("Name or id of lincked maibox");
-		$tmparr['mailbox'] = array('prompttext' => _('Mailbox'), 'value' => '', 'tt' => $tt, 'level' => 1, 'section' => $section);
+		$tmparr['mailbox'] = array('prompttext' => _('Mailbox'), 'value' => '', 'tt' => $tt, 'level' => 1, 'section' => $section,'category' => $gn_category);
                 $tt = _("The SCCP channel number for this port. If you plaining to use this line as 'Shared' or use on several devices - leave this field blank or set limit to 10 calls.");
 //		$tmparr['incominglimit'] = array('prompttext' => _('Incoming Call Limit'), 'value' => '2', 'tt' => $tt, 'level' => 0, 'jsvalidation' => 'isEmpty()', 'failvalidationmsg' => $msgInvalidChannel);
 //		$tmparr['incominglimit'] = array('prompttext' => _('Incoming Call Limit'), 'value' => '', 'tt' => $tt, 'level' => 1, 'section' => $section, 'category' => 'general');
 
-                $tmparr['incominglimit'] = array('prompttext' => _('Incoming Call Limit'), 'value' => '', 'tt' => $tt, 'level' => 1, 'section' => $section);
+                $tmparr['incominglimit'] = array('prompttext' => _('Incoming Call Limit'), 'value' => '', 'tt' => $tt, 'level' => 1, 'section' => $section,'category' => $gn_category);
 
                 $tt = _("Asterisk context this device will send calls to. Only change this is you know what you are doing.");
-                $tmparr['lcontext'] = array('prompttext' => _('Line context'), 'value' => 'from-internal', 'tt' => $tt, 'level' => 1, 'section' => $section);
+                $tmparr['lcontext'] = array('prompttext' => _('Line context'), 'value' => 'from-internal', 'tt' => $tt, 'level' => 1, 'section' => $section,'category' => $gn_category);
 
                 $tt = _("Asterisk context this device will can pickup calls. Only change this is you know what you are doing.");
-                $tmparr['directed_pickup_context'] = array('prompttext' => _('Directed PickUp Сontext '), 'value' => 'from-internal', 'tt' => $tt, 'level' => 1, 'section' => $section);
+                $tmparr['directed_pickup_context'] = array('prompttext' => _('Directed PickUp Сontext '), 'value' => 'from-internal', 'tt' => $tt, 'level' => 1, 'section' => $section,'category' => $gn_category);
 
 //		$tt = _("Phone call group callgroup=1,3-4");
 //              $tmparr['callgroup'] = array('prompttext' => _('Call group id'),'value' => '', 'tt' => $tt, 'level' => 1, 'section' => $section);
@@ -289,7 +370,7 @@ class Sccp extends \FreePBX\modules\Core\Driver {
                     } 
                     $tt .= '... ';
                 }
-		$tmparr['namedcallgroup'] = array('prompttext' => _('Named Call Group'),'value' => '', 'tt' => $tt, 'level' => 1, 'section' => $section);
+		$tmparr['namedcallgroup'] = array('prompttext' => _('Named Call Group'),'value' => '', 'tt' => $tt, 'level' => 1, 'section' => $section,'category' => $gn_category);
 //		$tmparr['namedcallgroup'] = array('prompttext' => _('Named Call Group'),'value' => '', 'tt' => $tt, 'level' => 1, 'section' => $section, 'category' => 'general');
 //		$tt = _("Phone pickup group pickupgroup=1,3-4");
 //                $tmparr['pickupgroup'] = array('prompttext' => _('Pickup group id'),'value' => '', 'tt' => $tt, 'level' => 1, 'section' => $section);
@@ -300,10 +381,10 @@ class Sccp extends \FreePBX\modules\Core\Driver {
                     } 
                     $tt .= '... ';
                 }
-		$tmparr['namedpickupgroup'] = array('prompttext' => _('Named Pickup Group'),'value' => '', 'tt' => $tt, 'level' => 1, 'section' => $section);
+		$tmparr['namedpickupgroup'] = array('prompttext' => _('Named Pickup Group'),'value' => '', 'tt' => $tt, 'level' => 1, 'section' => $section,'category' => $gn_category);
 //		$tmparr['namedpickupgroup'] = array('prompttext' => _('Named Pickup Group'),'value' => '', 'tt' => $tt, 'level' => 1, 'section' => $section, 'category' => 'general');
                 $tt = _("Digits to indicate an external line to user (secondary dialtone) Sample 9 or 8 (max 9 digits)");
-		$tmparr['secondary_dialtone_digits'] = array('prompttext' => _('Secondary dialtone digits'), 'value' => '', 'tt' => $tt, 'level' => 1, 'section' => $section);
+		$tmparr['secondary_dialtone_digits'] = array('prompttext' => _('Secondary dialtone digits'), 'value' => '', 'tt' => $tt, 'level' => 1, 'section' => $section,'category' => $gn_category);
 
                 unset($select);
                 $select[] = array( 'value' => '0x21', 'text' => 'Inside Dial Tone');
@@ -364,7 +445,7 @@ class Sccp extends \FreePBX\modules\Core\Driver {
                 $select[] = array('value' => 'no', 'text' => 'No');
 
                 $tt = _("Outside dialtone frequency (defaul 0x22)");
-                $tmparr['secondary_dialtone_tone'] = array('prompttext' => _('Secondary dialtone'), 'value' => '0x22', 'tt' => $tt, 'select' => $select, 'level' => 1, 'type' => 'select', 'section' => $section);
+                $tmparr['secondary_dialtone_tone'] = array('prompttext' => _('Secondary dialtone'), 'value' => '0x22', 'tt' => $tt, 'select' => $select, 'level' => 1, 'type' => 'select', 'section' => $section,'category' => $gn_category);
 
 
 
@@ -373,14 +454,14 @@ class Sccp extends \FreePBX\modules\Core\Driver {
                 $select[] = array('value' => 'on', 'text' => 'Yes');
                 $select[] = array('value' => 'off', 'text' => 'No');
                 $tt = _("Enable/Disable the `directed` pickup softkey");
-                $tmparr['directed_pickup'] = array('prompttext' => _('Directed pickup'), 'value' => '', 'tt' => $tt, 'select' => $select, 'level' => 1, 'type' => 'radio', 'section' => $section);
+                $tmparr['directed_pickup'] = array('prompttext' => _('Directed pickup'), 'value' => '', 'tt' => $tt, 'select' => $select, 'level' => 1, 'type' => 'radio', 'section' => $section,'category' => $gn_category);
 
                 unset($select);
                 $select[] = array('value' => '', 'text' => 'Inherit');
                 $select[] = array('value' => 'on', 'text' => 'Yes');
                 $select[] = array('value' => 'off', 'text' => 'No');
                 $tt = _("Should the picked/gpicked-up call be answered automatically");
-                $tmparr['pickup_modeanswer'] = array('prompttext' => _('Pickup  Modeanswer'), 'value' => '', 'tt' => $tt, 'select' => $select, 'level' => 1, 'type' => 'radio', 'section' => $section);
+                $tmparr['pickup_modeanswer'] = array('prompttext' => _('Pickup  Modeanswer'), 'value' => '', 'tt' => $tt, 'select' => $select, 'level' => 1, 'type' => 'radio', 'section' => $section,'category' => $gn_category);
 
                 unset($select);
                 $select[] = array('value' => '', 'text' => 'Inherit');
@@ -388,13 +469,13 @@ class Sccp extends \FreePBX\modules\Core\Driver {
                 $select[] = array('value' => 'off', 'text' => 'No');
                 $tt = _("Allow call transfer.");
 //                $tmparr['transfer'] = array('prompttext' => _('Call Transfer'), 'value' => 'yes', 'tt' => $tt, 'select' => $select, 'level' => 1, 'type' => 'radio', 'section' => $section, 'category' => 'general');
-                $tmparr['transfer'] = array('prompttext' => _('Call Transfer'), 'value' => '', 'tt' => $tt, 'select' => $select, 'level' => 1, 'type' => 'radio', 'section' => $section);
+                $tmparr['transfer'] = array('prompttext' => _('Call Transfer'), 'value' => '', 'tt' => $tt, 'select' => $select, 'level' => 1, 'type' => 'radio', 'section' => $section,'category' => $gn_category);
 
                 unset($select);
                 $select[] = array('value' => 'on', 'text' => 'Yes');
                 $select[] = array('value' => 'off', 'text' => 'No');
                 $tt = _("Echo cancel");
-                $tmparr['echocancel'] = array('prompttext' => _('Echo cancel'), 'value' => 'on', 'tt' => $tt, 'select' => $select, 'level' => 1, 'type' => 'radio', 'section' => $section);
+                $tmparr['echocancel'] = array('prompttext' => _('Echo cancel'), 'value' => 'on', 'tt' => $tt, 'select' => $select, 'level' => 1, 'type' => 'radio', 'section' => $section,'category' => $gn_category);
 
                 unset($select);
                 $select[] = array('value' => 'off', 'text' => 'Off');
@@ -405,13 +486,13 @@ class Sccp extends \FreePBX\modules\Core\Driver {
                       _("Cycle  - dnd that cycles through all three states off -> reject -> silent -> off (this is the normal behaviour)").'<br>'.
                       _("Reject - Usesr can only switch off and on (in reject/busy mode)").'<br>'.
                       _("Silent - Usesr can only switch off and on (in silent mode)");
-                $tmparr['dnd'] = array('prompttext' => _('DND'), 'value' => 'reject', 'tt' => $tt, 'select' => $select, 'level' => 1, 'type' => 'radio', 'section' => $section);
+                $tmparr['dnd'] = array('prompttext' => _('DND'), 'value' => 'reject', 'tt' => $tt, 'select' => $select, 'level' => 1, 'type' => 'radio', 'section' => $section,'category' => $gn_category);
 
                 unset($select);
                 $select[] = array('value' => 'on', 'text' => 'Yes');
                 $select[] = array('value' => 'off', 'text' => 'No');
                 $tt = _("Silence Suppression. Asterisk Not suported");
-                $tmparr['silencesuppression'] = array('prompttext' => _('Silence Suppression'), 'value' => 'off', 'tt' => $tt, 'select' => $select, 'level' => 1, 'type' => 'radio', 'section' => $section);
+                $tmparr['silencesuppression'] = array('prompttext' => _('Silence Suppression'), 'value' => 'off', 'tt' => $tt, 'select' => $select, 'level' => 1, 'type' => 'radio', 'section' => $section,'category' => $gn_category);
 
                 unset($select);
                 $select[] = array('value' => 'default', 'text' => _('default'));
@@ -425,13 +506,26 @@ class Sccp extends \FreePBX\modules\Core\Driver {
                 }
 
                 $tt = _("Music on hold");
-                $tmparr['musicclass'] = array('prompttext' => _('Music on hold'), 'value' => '', 'tt' => $tt, 'select' => $select, 'level' => 1, 'section' => $section);
+                $tmparr['musicclass'] = array('prompttext' => _('Music on hold'), 'value' => '', 'tt' => $tt, 'select' => $select, 'level' => 1, 'section' => $section,'category' => $gn_category);
+                unset($select);
 
 		$tt = _("Sets the named pickup groups this line is a member of (this phone can pickup calls from remote phones which are in this caller group (ast111)");
-		$tmparr['pin'] = array('value' => '', 'tt' => $tt, 'level' => 1, 'section' => $section);
-                
-                
-		$devopts = $tmparr;
+		$tmparr['pin'] = array('value' => '', 'tt' => $tt, 'level' => 1, 'section' => $section ,'category' => $gn_category);
+                unset($select);
+
+
+                $select[] = array('value' => 'off', 'text' => 'Off');
+                $select[] = array('value' => 'user', 'text' => 'User');
+                $select[] = array('value' => 'auto', 'text' => 'Auto');
+                $tt = _("Automatic or Manual video mode. Valid values are 'auto', 'user' or 'off'. When set to 'auto', video will automatically start if both parties have a compatible code enabled. In 'user' mode the user needs to press the vidmode softkey before video will be tried. Default:'auto'");
+                $tmparr['videomode'] = array('prompttext' => _('Video Mode '), 'value' => 'auto', 'tt' => $tt, 'select' => $select, 'level' => 1, 'type' => 'radio', 'section' => $section_с, 'category' => $gn_category);
+                unset($select);
+
+                $tt = _("Codec disallow");
+		$tmparr['disallow'] = array('prompttext' => _('Codec disallow'), 'value' => 'all', 'tt' => $tt, 'level' => 1, 'section' => $section_с,'category' => $gn_category);
+                unset($select);
+
+                $devopts = $tmparr;
 		return $devopts;
 	}
   public function getDeviceHeaders() {

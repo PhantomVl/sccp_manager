@@ -145,15 +145,8 @@ class Sccp extends \FreePBX\modules\Core\Driver {
     		try {
 		    $sth->execute(array($id));
                    $tech = $sth->fetch();
-//		    $tech = $sth->fetch(\PDO::FETCH_ASSOC);
-//                    die(print_r($tech));
-//		    $tech = $sth->fetch(\PDO::FETCH_ASSOC);
                     $tech['dial']='SCCP/'.$id;
 		} catch(\Exception $e) {}
-//                $tech['sccp_codec'] = Array ('g729');
-//                $tech['allow'] = 'g729';
-//                $tech['sccp_codec2'] = Array ('g729','gsm');
-//                $tech['devinfo_sccp_codec'] = Array ('g729');
                 
 //                print_r($tech);
 //                echo '<br><br>';

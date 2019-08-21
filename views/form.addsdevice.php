@@ -97,9 +97,11 @@ if (!empty($device_warning)) {
 
 <?php } ?>
 
-<form autocomplete="off" name="frm_adddevice" id="frm_adddevice" class="fpbx-submit" action="" method="post" data-id="hw_edit">
+<form autocomplete="off" name="frm_adddevice" id="frm_adddevice" class="fpbx-submit" action="" method="post" data-id="hw_sedit">
     <input type="hidden" name="category" value="adddevice_form">
     <input type="hidden" name="Submit" value="Submit">
+    <input type="hidden" name="sccp_device_typeid" value="sipdevice">
+    
 
     <?php
     if (empty($dev_new)){
@@ -108,15 +110,16 @@ if (!empty($device_warning)) {
         echo '<input type="hidden" name="sccp_deviceid" value="'.$dev_id.'">';
     }
     if (empty($dev_id)){
-        echo $this->ShowGroup('sccp_hw_dev', 1, 'sccp_hw', $def_val);
+        echo $this->ShowGroup('sccp_hw_sip_dev', 1, 'sccp_hw', $def_val);
     } else {
         echo $this->ShowGroup('sccp_hw_dev_edit', 1, 'sccp_hw', $def_val);       
     }
     echo $this->ShowGroup('sccp_hw_dev2', 1, 'sccp_hw', $def_val);
-    echo $this->ShowGroup('sccp_hw_dev_advance', 1, 'sccp_hw', $def_val);
-    echo $this->ShowGroup('sccp_hw_dev_softkey', 1, 'sccp_hw', $def_val);
-    echo $this->ShowGroup('sccp_hw_dev_pickup', 1, 'sccp_hw', $def_val);
-    echo $this->ShowGroup('sccp_hw_dev_conference', 1, 'sccp_hw', $def_val);
-    echo $this->ShowGroup('sccp_hw_dev_network', 1, 'sccp_hw', $def_val);
+    echo $this->ShowGroup('sccp_hw_sip_conf', 1, 'sccp_hw', $def_val);
+//    echo $this->ShowGroup('sccp_hw_dev_advance', 1, 'sccp_hw', $def_val);
+//    echo $this->ShowGroup('sccp_hw_dev_softkey', 1, 'sccp_hw', $def_val);
+//    echo $this->ShowGroup('sccp_hw_dev_pickup', 1, 'sccp_hw', $def_val);
+//    echo $this->ShowGroup('sccp_hw_dev_conference', 1, 'sccp_hw', $def_val);
+//    echo $this->ShowGroup('sccp_hw_dev_network', 1, 'sccp_hw', $def_val);
     ?>    
 </form>

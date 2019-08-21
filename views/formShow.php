@@ -40,6 +40,7 @@ $extension_list = array();
 $sofkey_list = array();
 $model_list = array();
 $device_list = array();
+$dialplan_list = array();
         
 //$time_zone_name = \FreePBX::Sccp_manager()-> extconfigs-> getextConfig('cisco_timezone');
 //$time_zone = \FreePBX::Sccp_manager()-> extconfigs-> getextConfig('cisco_time');
@@ -403,9 +404,10 @@ foreach ($items as $child) {
  *                        
  *                         SLM - Music on hold 
  *                         SLK - System KeySet
+ *                         SLP - Dial Paterns
  */
 
-    if ($child['type'] == 'SLD'  || $child['type'] == 'SLM'|| $child['type'] == 'SLK' ) {
+    if ($child['type'] == 'SLD'  || $child['type'] == 'SLM'|| $child['type'] == 'SLK'|| $child['type'] == 'SLP' ) {
 //        $value = $child -> select;
         $res_n =  (string)$child ->name;       
         $res_id = $npref.$res_n;
@@ -431,6 +433,15 @@ foreach ($items as $child) {
                 $sofkey_list = \FreePBX::Sccp_manager()-> srvinterface -> sccp_list_keysets();
             }
             $select_opt= $sofkey_list;
+        }
+        if ($child['type'] == 'SLP') {
+            if (empty($dialplan_list)) {
+                foreach (\FreePBX::Sccp_manager()->get_DialPlanList() as $tmpkey) {
+                   $tmp_id = $tmpkey['id'];
+                   $dialplan_list[$tmp_id] = $tmp_id;
+                }
+            }
+            $select_opt= $dialplan_list;
         }
 //        if ($child['type'] == 'SLZ') {
 //            $select_opt= $time_zone;
@@ -631,11 +642,12 @@ foreach ($items as $child) {
     }
 
  /*
- *    Input element Select SDM - Model List 
- *                         SDE - Extension List 
+ *    Input element Select SDM  - Model List 
+ *                         SDMS - Sip model List 
+ *                         SDE  - Extension List 
  */
 
-    if ($child['type'] == 'SDM' || $child['type'] == 'SDE' || $child['type'] == 'SDD') {
+    if ($child['type'] == 'SDM' || $child['type'] == 'SDMS' || $child['type'] == 'SDE' || $child['type'] == 'SDD') {
 //        $value = $child -> select;
         $res_n =  (string)$child ->name;       
         $res_id = $npref.$res_n;
@@ -652,6 +664,12 @@ foreach ($items as $child) {
         if ($child['type'] == 'SDM') {
             if (empty($model_list)) {
                 $model_list = \FreePBX::Sccp_manager()->dbinterface->get_db_SccpTableData("HWDevice");
+            }
+            $select_opt= $model_list;            
+        }
+        if ($child['type'] == 'SDMS') {
+            if (empty($model_list)) {
+              $model_list = \FreePBX::Sccp_manager()->dbinterface->get_db_SccpTableData("HWSipDevice");
             }
             $select_opt= $model_list;            
         }

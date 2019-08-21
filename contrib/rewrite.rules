@@ -186,6 +186,7 @@ ri ^(ATA030204SCCP090202A.zup)$ firmware/ata186/\1
 
 # Keep locales in a separate directory (optional)
 ri ^(.+)\/(.+-sccp.jar)$ languages/\1/\2
+ri ^(.+)\/(.+-sip.jar)$ languages/\1/\2
 ri ^(.+)\/(.+-dictionary.xml)$ languages/\1/\2
 ri ^(.+)\/(.+-dictionary-ext.xml)$ languages/\1/\2
 ri ^(.+)\/(.+-tones.xml)$ languages/\1/\2

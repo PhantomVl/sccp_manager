@@ -318,6 +318,9 @@ function Get_DB_config($sccp_compatible) {
             'auto_logout' => array('create' => "ENUM('on','off') NULL DEFAULT 'off'", 'modify' => "ENUM('on','off')" ),
             'homedevice' => array('create' => "varchar(20) NOT NULL", 'modify' => "VARCHAR(20)" ),
             'devicegroup' => array('create' => "varchar(7) NOT NULL", 'modify' => "VARCHAR(7)" ),
+        ),
+        'sccpbuttonconfig' => array(
+            'reftype' => array('create' => "enum('sccpdevice', 'sipdevice', 'sccpuser') NOT NULL default 'sccpdevice'", 'modify' => "enum('sccpdevice', 'sipdevice', 'sccpuser')" ),
         )
     );
 //  Hardware Mobile.  Can switch Softwate to Hardware
@@ -443,7 +446,7 @@ function InstallDB_Buttons() {
     $sql = "DROP TABLE IF EXISTS `buttonconfig`;
              CREATE TABLE IF NOT EXISTS `sccpbuttonconfig` (
             `ref` varchar(15) NOT NULL default '',
-            `reftype` enum('sccpdevice', 'sccpuser') NOT NULL default 'sccpdevice',
+            `reftype` enum('sccpdevice', 'sipdevice', 'sccpuser') NOT NULL default 'sccpdevice',
             `instance` tinyint(4) NOT NULL default 0,
             `buttontype` enum('line','speeddial','service','feature','empty') NOT NULL default 'line',
             `name` varchar(36) default NULL,
@@ -690,8 +693,10 @@ function InstallDB_createButtonConfigTrigger() {
         IF NEW.`buttontype` = 'line' THEN
             SET @line_x = SUBSTRING_INDEX(NEW.`name`,'!',1);
             SET @line_x = SUBSTRING_INDEX(@line_x,'@',1);
-            IF (SELECT COUNT(*) FROM `sccpline` WHERE `sccpline`.`name` = @line_x ) = 0 THEN
-                UPDATE `Foreign key contraint violated: line does not exist in sccpline` SET x=1;
+            IF NEW.`reftype` != 'sipdevice' THEN
+                IF (SELECT COUNT(*) FROM `sccpline` WHERE `sccpline`.`name` = @line_x ) = 0 THEN
+                    UPDATE `Foreign key contraint violated: line does not exist in sccpline` SET x=1;
+                END IF;
             END IF;
         END IF;
         END;";

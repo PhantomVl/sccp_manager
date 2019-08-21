@@ -65,6 +65,9 @@ $(document).ready(function () {
         if ($('.fpbx-submit').data('id') == "hw_edit") {
             snd_command = 'save_hardware';
         }
+        if ($('.fpbx-submit').data('id') == "hw_sedit") {
+            snd_command = 'save_sip_hardware';
+        }
         if ($('.fpbx-submit').data('id') == "ruser_edit") {
             snd_command = 'save_ruser';
         }
@@ -102,6 +105,9 @@ $(document).ready(function () {
         });
         if ($('.fpbx-submit').data('id') == "hw_edit") {
             snd_command = 'save_hardware';
+        }
+        if ($('.fpbx-submit').data('id') == "hw_sedit") {
+            snd_command = 'save_sip_hardware';
         }
         if ($('.fpbx-submit').data('id') == "ruser_edit") {
             snd_command = 'save_ruser';

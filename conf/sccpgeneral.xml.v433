@@ -1418,10 +1418,10 @@ and open the template in the editor. Base Version before all crash :-)
     </page_group>
     <page_group name="sccp_dp_new_template">
         <item type="IE" id="1" seq="99">
-            <label>Template Name</label>
+            <label>Template Name </label>
             <input>
                 <name>dialtemplate_name</name> 
-                <default></default>
+                <default>name_ruls</default>
                 <class>form-control</class>
             </input>
             <help>Help.</help>
@@ -1648,7 +1648,46 @@ and open the template in the editor. Base Version before all crash :-)
         </item>
         
     </page_group>
-    
-    
+    <page_group name="sccp_hw_sip_dev">
+        <label>General Device configuration</label>
+        <item type="IE" id="1" seq="99">
+            <label>Device SEP ID.[XXXXXXXXXXXX]=MAC</label>
+            <input>
+                <name>mac</name> 
+                <default>000000000</default>
+                <class>sccp-custom</class>
+            </input>
+            <help>The MAC address of the phone. You must specify 12 characters in the format XXXX.XXXX.XXXX or XX-XX-XX-XX-XX-XX or XXXXXXXXXXXX</help>
+        </item>
+       
+        <item type="SDMS" id="2" seq="99">
+            <label>Type</label>
+            <name>type</name>
+            <default>7911</default>
+            <select name="model" dataid="dns" dataval="buttons">model</select>
+            <class>hw_select sccp-custom</class>
+            <help>The type of phone: 7911, 7940, 7960, etc. Important note: the 'G' models are handled as the base model (e.g., 7962G is handled as 7962). In the Display mode, this field is read-only because the MAC address and the model number are a pair.</help>
+        </item>
+        <item type="SDE" id="3" seq="99">
+            <label>Addon</label>
+            <name>addon</name> 
+            <default>NONE</default>
+            <select name="model" dataval="buttons">model</select>
+            <class>hw_select sccp-custom</class>
+            <help>Addon: Addons are model specific and only work with certain base phones. This phone model is identified as being a phone that does not accept sidecars. Update devmodel if this is not correct.</help>
+        </item>
+    </page_group>
+
+    <page_group name="sccp_hw_sip_conf">
+        <label>SIP Device config</label> 
+        <item type="SLP" id="2" seq="99">
+            <label>Dial Templates</label>
+            <name>_dialrules</name> 
+            <default>dialplan</default>
+            <select></select>
+             <help>Dial templates control what number patterns are valid and how many seconds to wait for extra digits before dialing. </help>
+        </item>
+        
+    </page_group>
     
 </root>

@@ -34,7 +34,9 @@
     function DispayDPActionsKeyFormatter(value, row, index) {
         var exp_model = '';
         exp_model += '<a href="?display=sccp_adv&tech_hardware=dialplan&extdisplay=' + row['id'] + '"><i class="fa fa-pencil"></i></a> &nbsp; &nbsp;\n';
-        exp_model += '</a> &nbsp;<a class="btn-item-delete" data-for="dialplan" data-id="' + row['id'] + '"><i class="fa fa-trash"></i></a>';
+        if (row['id'] !== 'dialplan') {
+            exp_model += '</a> &nbsp;<a class="btn-item-delete" data-for="dialplan" data-id="' + row['id'] + '"><i class="fa fa-trash"></i></a>';
+        }
         return  exp_model;
     }
 </script>

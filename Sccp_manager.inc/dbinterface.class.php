@@ -49,17 +49,59 @@ class dbinterface {
                     $sql = "SELECT * FROM `sccpline` ORDER BY `name`";
                     $raw_settings = sql($sql, "getAll", DB_FETCHMODE_ASSOC);
                 } else {
-                    $sql = "SELECT * FROM `sccpline` WHERE `name`=" . $data['name'];
+                    $sql = "SELECT * FROM `sccpline` WHERE `name`='" . $data['name']. "'";;
                     $raw_settings = sql($sql, "getAll", DB_FETCHMODE_ASSOC);
                 }
                 break;
             case "SccpDevice":
-//                $sql = "SELECT * FROM `sccpdeviceconfig` ORDER BY `name`";
-                $sql = "select `name`,`name` as `mac`, `type`, `button`, `addon`, `_description` as description from `sccpdeviceconfig` ORDER BY `name`";
-                $raw_settings = sql($sql, "getAll", DB_FETCHMODE_ASSOC);
+                $filtred ='';
+                $singlrow = false;
+                if (empty($data['fields'])) {
+                    $fld = '`name`,`name` as `mac`, `type`, `button`, `addon`, `_description` as description';
+                } else {
+                    switch ($data['fields']) {
+                        case "all":
+                            $fld ='*';
+                            break;
+                        case "sip_ext":
+                            $fld ='button as sip_lines, description as description, addon';
+                            break;
+                        default:
+                            $fld = $data['fields'];
+                            break;
+                    }
+                }
+                if (!empty($data['name'])) {
+                    $filtred = "`name`='" . $data['name']. "'";;
+                    $singlrow = true;
+                }
+                if (!empty($data['type'])) {
+                    switch ($data['type']) {
+                        case "cisco-sip":
+                            $filtred = "`TYPE` LIKE '%-sip'";
+                            break;
+                        case "cisco":
+                        default:
+                            $filtred = "`TYPE` not LIKE '%-sip'";
+                            break;
+                    }
+                }
+                if (empty($filtred)) {
+                    $sql = "SELECT ". $fld ." FROM `sccpdeviceconfig` ORDER BY `name`";
+                } else {
+                    $sql = "SELECT ". $fld ." FROM `sccpdeviceconfig` WHERE ".$filtred." ORDER BY `name`";
+                }
+                if ($singlrow) {
+                    $raw_settings = sql($sql, "getRow", DB_FETCHMODE_ASSOC);
+                } else {
+                    $raw_settings = sql($sql, "getAll", DB_FETCHMODE_ASSOC);
+                }
+                break;
+            case "HWSipDevice":
+                $raw_settings = $this->getDb_model_info($get = "sipphones", $format_list = "model");
                 break;
             case "HWDevice":
-                $raw_settings = $this->getDb_model_info($get = "phones", $format_list = "model");
+                $raw_settings = $this->getDb_model_info($get = "ciscophones", $format_list = "model");
                 break;
             case "HWextension":
                 $raw_settings = $this->getDb_model_info($get = "extension", $format_list = "model");
@@ -169,6 +211,14 @@ class dbinterface {
             case "enabled":
             case "phones":
                 $sql = "SELECT " . $sel_inf . " FROM sccpdevmodel WHERE (dns > 0) and (enabled > 0) ORDER BY model ";
+//                $sql = "SELECT " . $sel_inf . " FROM sccpdevmodel WHERE (enabled > 0) ORDER BY model ";
+                break;
+            case "ciscophones":
+                $sql = "SELECT " . $sel_inf . " FROM sccpdevmodel WHERE (dns > 0) and (enabled > 0) AND `vendor` not LIKE '%-sip' ORDER BY model ";
+//                $sql = "SELECT " . $sel_inf . " FROM sccpdevmodel WHERE (enabled > 0) ORDER BY model ";
+                break;
+            case "sipphones":
+                $sql = "SELECT " . $sel_inf . " FROM sccpdevmodel WHERE (dns > 0) and (enabled > 0) AND `vendor` LIKE '%-sip' ORDER BY model ";
 //                $sql = "SELECT " . $sel_inf . " FROM sccpdevmodel WHERE (enabled > 0) ORDER BY model ";
                 break;
             case "all":

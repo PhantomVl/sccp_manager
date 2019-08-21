@@ -216,25 +216,25 @@ class extconfigs {
 //        global $amp_conf;
 // *** Setings for Provision Sccp        
         $adv_config = Array('tftproot' => '', 'firmware' => 'firmware', 'settings' => 'settings',
-            'locales' => 'locales', 'languages' => 'languages', 'templates' => 'templates');
+            'locales' => 'locales', 'languages' => 'languages', 'templates' => 'templates', 'dialplan' => 'dialplan', 'softkey' => 'softkey');
 // 'pro' /tftpboot - root dir 
 //       /tftpboot/locales/locales/%Languge_name%
 //       /tftpboot/settings/XMLdefault.cnf.xml
 //       /tftpboot/settings/SEP[MAC].cnf.xml
 //       /tftpboot/firmware/79xx/SCCPxxxx.loads
-        $adv_tree['pro'] = Array('templates' => 'tftproot', 'settings' => 'tftproot', 'locales' => 'tftproot', 'firmware' => 'tftproot', 'languages' => 'locales');
+        $adv_tree['pro'] = Array('templates' => 'tftproot', 'settings' => 'tftproot', 'locales' => 'tftproot', 'firmware' => 'tftproot', 'languages' => 'locales', 'dialplan' => 'tftproot', 'softkey' => 'tftproot');
 
 // 'def' /tftpboot - root dir 
 //       /tftpboot/languages/%Languge_name%
 //       /tftpboot/XMLdefault.cnf.xml
 //       /tftpboot/SEP[MAC].cnf.xml
 //       /tftpboot/SCCPxxxx.loads
-        $adv_tree['def'] = Array('templates' => 'tftproot', 'settings' => '', 'locales' => '', 'firmware' => '', 'languages' => 'tftproot');
+        $adv_tree['def'] = Array('templates' => 'tftproot', 'settings' => '', 'locales' => '', 'firmware' => '', 'languages' => 'tftproot','dialplan' => '', 'softkey' => '');
 //        $adv_tree['def']   = Array('templates' => 'tftproot', 'settings' => '', 'locales' => 'tftproot',  'firmware' => 'tftproot', 'languages' => '');
 //        $adv_tree['def'] = Array('templates' => 'tftproot', 'settings' => '', 'locales' => 'tftproot', 'firmware' => 'tftproot', 'languages' => 'tftproot');
         
 //* **************------ ****        
-        $base_tree = Array('tftp_templates' => 'templates', 'tftp_path_store' => 'settings', 'tftp_lang_path' => 'languages', 'tftp_firmware_path' => 'firmware');
+        $base_tree = Array('tftp_templates' => 'templates', 'tftp_path_store' => 'settings', 'tftp_lang_path' => 'languages', 'tftp_firmware_path' => 'firmware', 'tftp_dialplan' => 'dialplan', 'tftp_softkey' => 'softkey');
 
         if (empty($confDir)) {
             return array('error' => 'empty СonfDir');
@@ -309,7 +309,8 @@ class extconfigs {
                 }
             }
         }
-
+        print_r($base_config,1);
+//        die(print_r($base_config,1));
 //        $base_config['External_ini'] = $adv_config;
 //        $base_config['External_mode'] =  $adv_tree_mode;
 

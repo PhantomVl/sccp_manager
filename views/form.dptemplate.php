@@ -16,7 +16,7 @@ if (!empty($_REQUEST['extdisplay'])) {
     $dev_id = $_REQUEST['extdisplay'];
 }
 if ($dev_id != '*new*') {
-    $list_data= $this->get_DialPlan($dev_id );
+    $list_data= $this->get_DialPlan($dev_id);
     $data_s= '';
     foreach ($list_data['template'] as $key => $value) {
         foreach ($dialFelds as $fld) {
@@ -37,7 +37,7 @@ if ($dev_id != '*new*') {
 
 <form autocomplete="off" name="frm_editdialtemplate" id="frm_editbuttons" class="fpbx-submit" action="" method="post" data-id="dial_template">
     
-    <input type="hidden" name="idtemplate" value="<?php echo $dev_id;?>">
+    <input type="hidden" name="idtemplate" value="<?php echo str_replace('dial','',$dev_id);?>">
     <input type="hidden" name="Submit" value="Submit">
     <?php  
       if ($dev_id == '*new*') {

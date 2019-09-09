@@ -149,6 +149,14 @@ and open the template in the editor. Base Version before all crash :-)
             <button value="sccpsimple">Simple</button>
             <help>Help!</help>
         </item>
+        <item type="IS" id="7" seq="98">
+            <name>siptftp</name> 
+            <label>Support SIP device</label>
+            <default>off</default>
+            <button value="off">Disabled</button>
+            <button value="on">Enabled</button>
+            <help>Help!</help>
+        </item>
     </page_group>
     <page_group name="sccp_net">
         <label>SCCP Networks</label>

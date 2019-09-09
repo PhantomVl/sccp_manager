@@ -100,7 +100,7 @@ if ($mysql_info['Value'] <= '2000') {
 }
  global $amp_conf;
 // ************************************************************************************
-
+/*
 //$tmp_data_list = $this->getSccp_model_information('enabled', $validate = TRUE);
 //$tmp_data_list = $amp_conf;
   //$tmp_data_list=FreePBX::create()->Sipsettings->getConfig('bindport');
@@ -109,20 +109,16 @@ if ($mysql_info['Value'] <= '2000') {
 //  $tmp_data_list=$this->dbinterface->get_db_SccpTableData('SccpExtension');
 //  $tmp_data_list=$this->dbinterface->get_db_SccpTableData('SccpDevice', array('type'=>'cisco-sip'));
 //  $tmp_data_list= FreePBX::Sipsettings()->getChanSipDefaults();
-$file_ext = array('.loads', '.sbn', '.bin', '.zup');
-$dir = '/tftpboot';
 //$tmp_data_list = $this->find_all_files($dir, $file_ext, 'fileonly');
 print_r("<br> Help Info:<br><pre>");
  print_r("<br>");
  print_r($tmp_data_list);
  //$tmp_data_list = FreePBX::Sipsettings()->getChanSipDefaults();
- $tmp_data_list = FreePBX::Sipsettings()->getBinds();
 // $tmp_data_list = \FreePBX::Sipsettings()->getSipPortOwner();
  //print_r($buton_list);
  print_r("<br>");
  print_r($this->sccp_conf_init);
  //$tmp_data_list=$this->sipconfigs->get_db_sip_TableData('Device');
- print_r($this->srvinterface->sccp_list_keysets());
  print_r("<br>");
 // print_r("DIRECT START");
 //  print_r($this->sccpvalues['ccm_address']);

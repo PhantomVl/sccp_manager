@@ -614,11 +614,12 @@ class xmlinterface {
                                     $ifc = 0;
                                     if (!empty($data_values['siplines'])) {
                                         foreach ($data_values['siplines'] as $spkey => $spvalue) {
+//                                            if $spvalue[]
                                             $xnode_obj = clone $xnode->line;
-
                                             $xnode_obj['button'] = $ifc + 1;
                                             $xnode_obj['lineIndex'] = $ifc + 1;
                                             //$xnode_obj->proxy = $data_values['bindaddr'];
+                                            $xnode_obj-> featureID = "9";
                                             if ($xnode_obj->proxy != 'USECALLMANAGER') {
                                                 $xnode_obj->proxy = $sip_bind[0]['ip'];
                                                 $xnode_obj->port = $sip_bind[0]['port'];
@@ -633,6 +634,17 @@ class xmlinterface {
                                             } else {
                                                 $this->appendSimpleXmlNode($xnode->line, $xnode_obj);
                                             }
+                                            $ifc ++;
+                                        }
+                                    }
+                                    if (!empty($data_values['speeddial'])) {
+                                        foreach ($data_values['speeddial'] as $spkey => $spvalue) {
+                                            $xmlstr = '<line button="'. ($ifc + 1) .'"> <featureID>22</featureID>'
+                                                       .'<featureLabel>'.$spvalue["name"].'</featureLabel>'
+                                                       .'<speedDialNumber>'.$spvalue["dial"].'</speedDialNumber>'
+                                                       .'<contact>'.$spvalue["dial"].'</contact> <retrievalPrefix /></line>';
+                                            $xnode_obj = simplexml_load_string($xmlstr);
+                                            $this->appendSimpleXmlNode($xnode->line, $xnode_obj);
                                             $ifc ++;
                                         }
                                     }

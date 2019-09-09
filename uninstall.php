@@ -58,12 +58,14 @@ if (!defined('FREEPBX_IS_AUTH')) { die('No direct script access allowed'); }
 /* Comment: Maybe save in sccpsettings, if the chan_sccp tables already existed in the database or if they were created by install.php */
 /* So that you know if it is save to drop/delete them */
 
-/*      DROP VIEW `sccpdeviceconfig`;
-        DROP TABLE `sccpbuttonconfig`;
-        DROP TABLE `sccpdevice`;
-        DROP TABLE `sccpdevmodel`;
-        DROP TABLE `sccpline`;
-        DROP TABLE `sccpsettings`;
+/*      DROP VIEW  IF EXISTS`sccpdeviceconfig`;
+        DROP TABLE IF EXISTS `sccpbuttonconfig`;
+        DROP TABLE IF EXISTS `sccpdevice`;
+        DROP TABLE IF EXISTS `sccpdevmodel`;
+        DROP TABLE IF EXISTS `sccpline`;
+        DROP TABLE IF EXISTS `sccpsettings`;
+        DROP TABLE IF EXISTS `sccpuser`;
+ * 
  */
    }
 

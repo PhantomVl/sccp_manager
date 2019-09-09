@@ -11,7 +11,8 @@ $forminfo =array(
     );
 //$buttons_type=  array("empty","line","service","feature","speeddial");
 //   "feature","service" -- Add leter !
-$buttons_type=  array("empty","line","silent","monitor","speeddial","feature","adv.line");
+//$buttons_type=  array("empty","line","silent","monitor","speeddial","feature","adv.line");
+$buttons_type=  array("empty","line","speeddial");
 $feature_list=  array('parkinglot'=>'Park Slots','monitor'=> "Record Calls",'devstate'=> "Change Status");
 
 //$lines_list = $this->dbinterface->get_db_SccpTableData('SccpExtension');

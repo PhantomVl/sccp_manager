@@ -95,7 +95,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
     private $SCCP_LANG_DICTIONARY = 'be-sccp.jar'; // CISCO LANG file search in /tftp-path 
     private $pagedata = null;
     private $sccp_driver_ver = '11.3';             // Ver fore SCCP.CLASS.PHP 
-    public $sccp_manager_ver = '13.0.0.4(M)';
+    public $sccp_manager_ver = '14.0.0.1';
     private $tftpLang = array();
 //    private $hint_context = '@ext-local'; /// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Get it from Config !!!
     private $hint_context = array('default' => '@ext-local'); /// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Get it from Config !!!
@@ -478,12 +478,14 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                         "sccpkeyset" => array(
                             "name" => _("SCCP Device Keyset"),
                             "page" => 'views/advserver.keyset.php'
-                        ),
-                        "sccpdialplan" => array(
-                            "name" => _("SIP Dial Plan information"),
-                            "page" => 'views/advserver.dialtemplate.php'
                         )
                     );
+                    if ($this->sccpvalues['siptftp']['data'] == 'on') {
+                        $this->pagedata["sccpdialplan"] = array(
+                            "name" => _("SIP Dial Plan information"),
+                            "page" => 'views/advserver.dialtemplate.php'
+                        );
+                    }
                     break;
             }
             foreach ($this->pagedata as &$page) {
@@ -567,12 +569,14 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                         "sccpdevice" => array(
                             "name" => _("SCCP Phone"),
                             "page" => 'views/hardware.phone.php'
-                        ),
-                        "sipdevice" => array(
-                            "name" => _("SIP CISCO Phone"),
-                            "page" => 'views/hardware.sphone.php'
                         )
                     );
+                    if ($this->sccpvalues['siptftp']['data'] == 'on') {
+                        $this->pagedata["sipdevice"] = array(
+                            "name" => _("SIP CISCO Phone"),
+                            "page" => 'views/hardware.sphone.php'
+                        );
+                    }
                     break;
             }
             foreach ($this->pagedata as &$page) {
@@ -1932,13 +1936,22 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 $data_tmp = explode(';',$dev_ext_config['sip_lines']);
                 foreach ($data_tmp as $value) {
                     $tmp_line = explode(',',$value);
-                    if ($tmp_line[0] == 'line') {
-                        $dev_line_data= $this->sipconfigs->get_db_sip_TableData('DeviceById',array('id'=>$tmp_line[1]));
-                        if (!empty($dev_line_data)) {
-                          $data_value['siplines'][] = $dev_line_data;
-                        }
+                    switch ($tmp_line[0]) {
+                         case 'line':
+                            $dev_line_data= $this->sipconfigs->get_db_sip_TableData('DeviceById',array('id'=>$tmp_line[1]));
+                            if (!empty($dev_line_data)) {
+                                $data_value['siplines'][] = $dev_line_data;
+                            }
+                            break;
+                         case 'speeddial':
+                                $data_value['speeddial'][] =  array("name"=>$tmp_line[1],"dial"=>$tmp_line[2]);
+                            break;
+                        default:
+                            $data_value['sipfunctions'][] =  $tmp_line;
+                            break;
                     }
                 }
+//                return  print_r($data_tmp ,true);
 //                return  print_r($dev_line_data,true);
             }
         }
@@ -1957,6 +1970,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 $dev_config['addon_info'][$key] = $hw_data[0]['loadimage'];
             }
         }
+//        return  print_r($data_value,true);
 //        return  print_r($dev_config,true);
         
         $lang_data = $this->extconfigs->getextConfig('sccp_lang');

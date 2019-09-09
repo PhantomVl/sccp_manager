@@ -245,8 +245,9 @@ function Get_DB_config($sccp_compatible) {
             '_hwlang' => array('create' => 'varchar(12) NULL DEFAULT NULL'),
             '_loginname' => array('create' => 'varchar(20) NULL DEFAULT NULL AFTER `_hwlang`'),
             '_profileid' => array('create' => "INT(11) NOT NULL DEFAULT '0' AFTER `_loginname`"),
+            '_dialrules' => array('create' => "VARCHAR(255) NULL DEFAULT NULL AFTER `_profileid`"),
             
-            'useRedialMenu' => array('create' => "VARCHAR(5) NULL DEFAULT 'no' AFTER `_profileid`"),
+            'useRedialMenu' => array('create' => "VARCHAR(5) NULL DEFAULT 'no' AFTER `_dialrules`"),
             //'dtmfmode' => array('create' => "VARCHAR(10) default 'outofband'", 'modify' => "VARCHAR(10)", 'def_modify'=> 'outofband'),
             'dtmfmode' => array('drop' => "yes"),
 //            'force_dtmfmode' => array('create' => "VARCHAR(10) default 'auto'", 'modify' => "VARCHAR(10)", 'def_modify'=> 'auto'),
@@ -334,6 +335,7 @@ function Get_DB_config($sccp_compatible) {
             '_description' => array('rename' => "description"),
             '_loginname' => array('drop' => "yes"),
             '_profileid' => array('drop' => "yes"),
+            '_dialrules' => array('create' => "VARCHAR(255) NULL DEFAULT NULL AFTER `_profileid`"),
             'transfer_on_hangup' => array('create' => "enum('on','off') NULL DEFAULT NULL", 'modify' => "enum('on','off')"),
         ),
         'sccpline' => array(
@@ -656,7 +658,9 @@ function InstallDB_fillsccpdevmodel() {
             "('S60', 'NOKIA', 0, 1, '', 'loadInformation376', 0, ''), ('9971', 'CISCO', 1, 1, '', 'loadInformation493', 0, ''), ('9951', 'CISCO', 1, 1, '', 'loadInformation537', 0, ''), ('8961', 'CISCO', 1, 1, '', 'loadInformation540', 0, ''), ('Iphone', 'APPLE', 0, 1, '', 'loadInformation562', 0, ''), ('Android', 'ANDROID', 0, 1, '', 'loadInformation575', 0, ''), ('7926', 'CISCO', 1, 1, 'CP7926G-1.4.5.3', 'loadInformation577', 0, ''), ('7821', 'CISCO', 1, 1, '', 'loadInformation621', 0, ''), ('7841', 'CISCO', 1, 1, '', 'loadInformation622', 0, ''), ('7861', 'CISCO', 1, 1, '', 'loadInformation623', 0, ''), ('VXC 6215', 'CISCO', 1, 1, '', 'loadInformation634', 0, ''), ('8831', 'CISCO', 1, 1, '', 'loadInformation659', 0, ''), ('8841', 'CISCO', 1, 1, '', 'loadInformation683', 0, ''), ('8851', 'CISCO', 1, 1, '', 'loadInformation684', 0, ''), ('8861', 'CISCO', 1, 1, '', 'loadInformation685', 0, ''), ".
             "('Analog', 'CISCO', 1, 1, '', 'loadInformation30027', 0, ''), ('ISDN', 'CISCO', 1, 1, '', 'loadInformation30028', 0, ''), ('SCCP GW', 'CISCO', 1, 1, '', 'loadInformation30032', 0, ''), ('IP-STE', 'CISCO', 1, 1, '', 'loadInformation30035', 0, ''), ".
             "('SPA 521S', 'CISCO', 1, 1, '', 'loadInformation80000', 0, ''), ('SPA 502G', 'CISCO', 1, 1, '', 'loadInformation80003', 0, ''), ('SPA 504G', 'CISCO', 1, 1, '', 'loadInformation80004', 0, ''), ('SPA 525G', 'CISCO', 1, 1, '', 'loadInformation80005', 0, ''), ('SPA 525G2', 'CISCO', 1, 1, '', 'loadInformation80009', 0, ''), ('SPA 303G', 'CISCO', 1, 1, '', 'loadInformation80011', 0, ''),".
-            "('IP Communicator', 'CISCO', 1, 1, '', 'loadInformation30016', 0, NULL), ('Nokia E', 'Nokia', 1, 28, '', 'loadInformation275', 0, NULL), ('VGC Phone', 'CISCO', 1, 1, '', 'loadInformation10', 0, NULL), ('VGC Virtual', 'CISCO', 1, 1, '', 'loadInformation11', 0, NULL);";
+            "('IP Communicator', 'CISCO', 1, 1, '', 'loadInformation30016', 0, NULL), ('Nokia E', 'Nokia', 1, 28, '', 'loadInformation275', 0, NULL), ('VGC Phone', 'CISCO', 1, 1, '', 'loadInformation10', 0, NULL),".
+            "('7911-sip', 'CISCO-SIP', 1, 1, 'SIP11.9-2-1S', 'loadInformation307', 1, 'SEP0000000000.cnf.xml_791x_sip_template'),".
+            "('VGC Virtual', 'CISCO', 1, 1, '', 'loadInformation11', 0, NULL);";
     $check = $db->query($sql);
     if (db::IsError($check)) {
         die_freepbx("Can not create sccpdevmodel table, error:$check\n");

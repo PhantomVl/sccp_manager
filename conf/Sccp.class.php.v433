@@ -43,7 +43,7 @@ class Sccp extends \FreePBX\modules\Core\Driver {
 			"prettyName" => _("Sccp Custom Driver"),
 			"shortName" => "SCCP",
 			"description" => _("Sccp Device"),
-			"Version" => "11.3.v434",
+			"Version" => "11.3.v434m",
 			"about" => "Sccp mysql class Base ver: 11.3,  Sccp ver: 434"
 		);
 	}
@@ -80,10 +80,18 @@ class Sccp extends \FreePBX\modules\Core\Driver {
                 }
  
 //                die(print_r($settings));
+                $tech = Array();
+                $sql = "DESCRIBE `sccpline`";
+                foreach ($this->database->query($sql) as $row) {
+                    $tech[$row["Field"]]=$row["Field"];
+                }
+                   
+//                die(print_r($tech));
                 
                 $sql = 'REPLACE INTO sccpline (name';
                 $sqlv = 'values ("'.$id.'"';
 		foreach($this->data_fld as $key => $val) {
+                    if (isset($tech[$key])) {
                     switch ($key) {
                         case 'incominglimit':
                             $sql .= ', '.$key;
@@ -112,6 +120,7 @@ class Sccp extends \FreePBX\modules\Core\Driver {
                                 }
                             }
                             break;
+                    }
                     }
                 }
                 $sql .= ") ".$sqlv.");";              
@@ -144,7 +153,7 @@ class Sccp extends \FreePBX\modules\Core\Driver {
 //                print_r($sql);
     		try {
 		    $sth->execute(array($id));
-                   $tech = $sth->fetch();
+                    $tech = $sth->fetch();
                     $tech['dial']='SCCP/'.$id;
 		} catch(\Exception $e) {}
                 

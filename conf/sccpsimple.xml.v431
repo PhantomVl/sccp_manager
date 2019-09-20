@@ -1041,8 +1041,9 @@ and open the template in the editor. Base Version before all crash :-)
                 <name>description</name> 
                 <default>000000000</default>
                 <class>sccp-custom</class>
+                <options pattern="[0-9a-zA-Z]+"/>
             </input>
-            <help>The information in the upper right corner of the device screen</help>
+            <help>The information in the upper right corner of the device screen. Only English letters and digits !</help>
         </item>
         <item type="SLK" id="2" seq="99">
             <label>Soft Keyset</label>

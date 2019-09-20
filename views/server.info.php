@@ -105,6 +105,9 @@ if ($mysql_info['Value'] <= '2000') {
 //$tmp_data_list = $amp_conf;
   //$tmp_data_list=FreePBX::create()->Sipsettings->getConfig('bindport');
 //  $tmp_data_list=FreePBX::Sipsettings()->getChanSipSettings();
+  $tmp_data_list=$this->sipconfigs->getSipConfig();
+  //$tmp_data_list=FreePBX::Sipsettings()->getBinds();
+  
 // $tmp_data_list = \FreePBX::Sipsettings()->getSipPortOwner();
 //  $tmp_data_list=$this->dbinterface->get_db_SccpTableData('SccpExtension');
 //  $tmp_data_list=$this->dbinterface->get_db_SccpTableData('SccpDevice', array('type'=>'cisco-sip'));

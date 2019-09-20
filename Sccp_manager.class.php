@@ -1930,17 +1930,22 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         if (!empty($dev_config['type'])) {
             if (strpos($dev_config['type'],'sip') !== false) {
                 $sccp_native = false;
-                $data_tmp =$this->sipconfigs->getSipConfig();                
+                $tmp_bind =$this->sipconfigs->getSipConfig();
                 $dev_ext_config = $this->dbinterface->get_db_SccpTableData("SccpDevice", array('name' => $dev_id, 'fields'=>'sip_ext'));
-                $data_value = array_merge($data_value, $dev_ext_config, $data_tmp);
+                $data_value = array_merge($data_value, $dev_ext_config);
                 $data_tmp = explode(';',$dev_ext_config['sip_lines']);
                 foreach ($data_tmp as $value) {
                     $tmp_line = explode(',',$value);
                     switch ($tmp_line[0]) {
                          case 'line':
                             $dev_line_data= $this->sipconfigs->get_db_sip_TableData('DeviceById',array('id'=>$tmp_line[1]));
+                            $f_linetype = ($dev_line_data['dial'] == 'PJSIP')? 'pjsip':'sip';
+                            $dev_line_data['sbind'] = $tmp_bind[$f_linetype];
                             if (!empty($dev_line_data)) {
                                 $data_value['siplines'][] = $dev_line_data;
+                            }
+                            if ($tmp_line[2] =='default') {
+                                $data_value['sbind']=$tmp_bind[$f_linetype];
                             }
                             break;
                          case 'speeddial':
@@ -1951,10 +1956,12 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                             break;
                     }
                 }
-//                return  print_r($data_tmp ,true);
+//                return  print_r($data_value ,true);
 //                return  print_r($dev_line_data,true);
             }
         }
+//        return  print_r($dev_config ,true);
+        
         foreach ($this->sccpvalues as $key => $value) {
             $data_value[$key] = $value['data'];
         }

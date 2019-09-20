@@ -417,6 +417,7 @@ class xmlinterface {
         return $res;
     }
 
+    /*
     private function get_server_sip_bind($data_values = array()) {
         $res = array();
 
@@ -444,6 +445,8 @@ class xmlinterface {
         }
         return $res;
     }
+     * 
+     */
 
     function create_SEP_SIP_XML($store_path = '', $data_values = array(), $dev_config = array(), $dev_id = '', $lang_info = array()) {
 
@@ -481,7 +484,16 @@ class xmlinterface {
             $xml_template = $data_path . '/templates/SEP0000000000.cnf.xml_79df_sip_template';
         }
         $xml_name = $store_path . '/' . $dev_id . '.cnf.xml';
-        $sip_bind = $this->get_server_sip_bind($data_values);
+        //$sip_bind = $this->get_server_sip_bind($data_values);
+        $sip_bind = $data_values['sbind'];
+        $bind_proto = 'tcp';
+        $bind_ip_def = '';
+        foreach($sip_bind  as $key => $value) {
+            if (empty($bind_ip_def)) {
+                $bind_ip_def = $key;
+                $bind_proto  = (isset($value['tcp'])) ? 'tcp' : 'udp';
+            }
+        } 
 
         if (file_exists($xml_template)) {
             $xml_work = simplexml_load_file($xml_template);
@@ -569,13 +581,13 @@ class xmlinterface {
                                 case 'callManagerGroup':
                                     $xnode = &$xml_node->$dkey->members;
                                     $ifc = 0;
-                                    foreach ($sip_bind as $bind_value) {
+                                    foreach ($sip_bind as $bind_ip => $bind_value) {
                                         $xnode_obj = clone $xnode->member;
                                         $xnode_obj['priority'] = $ifc;
                                         $xnode_obj->callManager->name = $data_values['servername'];
-                                        $xnode_obj->callManager->ports->sipPort = $bind_value['port'];
-                                        $xnode_obj->callManager->ports->securedSipPort = $bind_value['tlsport'];
-                                        $xnode_obj->callManager->processNodeName = $bind_value['ip'];
+                                        $xnode_obj->callManager->ports->sipPort = $bind_value[$bind_proto];
+//                                        $xnode_obj->callManager->ports->securedSipPort = $bind_value['tlsport'];
+                                        $xnode_obj->callManager->processNodeName = $bind_ip;
                                         if ($ifc === 0) {
                                             $this->replaceSimpleXmlNode($xnode->member, $xnode_obj);
                                         } else {
@@ -599,13 +611,13 @@ class xmlinterface {
                             }
                             switch ($dkey) {
                                 case 'sipProxies':
-                                    $xnode = &$xml_node->$dkey;
-                                    $xnode->backupProxy = $sip_bind[0]['ip'];
-                                    $xnode->backupProxyPort = $sip_bind[0]['port'];
-                                    $xnode->emergencyProxy = $sip_bind[0]['ip'];
-                                    $xnode->emergencyProxyPort = $sip_bind[0]['port'];
-                                    $xnode->outboundProxy = $sip_bind[0]['ip'];
-                                    $xnode->outboundProxyPort = $sip_bind[0]['port'];
+                                    $xnode = &$xml_node->$dkey;                                    
+                                    $xnode->backupProxy = $bind_ip_def;
+                                    $xnode->backupProxyPort = $sip_bind[$bind_ip_def][$bind_proto];
+                                    $xnode->emergencyProxy = $bind_proto;
+                                    $xnode->emergencyProxyPort = $sip_bind[$bind_ip_def][$bind_proto];
+                                    $xnode->outboundProxy = $bind_proto;
+                                    $xnode->outboundProxyPort = $sip_bind[$bind_ip_def][$bind_proto];
                                     $xnode->registerWithProxy = "true";
 
                                     break;
@@ -621,8 +633,8 @@ class xmlinterface {
                                             //$xnode_obj->proxy = $data_values['bindaddr'];
                                             $xnode_obj-> featureID = "9";
                                             if ($xnode_obj->proxy != 'USECALLMANAGER') {
-                                                $xnode_obj->proxy = $sip_bind[0]['ip'];
-                                                $xnode_obj->port = $sip_bind[0]['port'];
+                                                $xnode_obj->proxy = $bind_proto;
+                                                $xnode_obj->port = $sip_bind[$bind_ip_def][$bind_proto];
                                             }
 
                                             foreach ($var_xml_sipline as $line_key => $line_val) {

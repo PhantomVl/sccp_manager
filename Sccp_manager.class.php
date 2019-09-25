@@ -662,7 +662,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
 
     public function ajaxHandler() {
         $request = $_REQUEST;
-        $msg = '';
+        $msg = array();
         $cmd_id = $request['command'];
         switch ($cmd_id) {
             case 'savesettings':
@@ -677,7 +677,8 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
 
                 $res = $this->srvinterface->sccp_core_commands(array('cmd' => 'sccp_reload'));
 //                $res = $this->srvinterface->sccp_core_commands(array('cmd' => 'restart_phone'));
-                $msg = '<p>Config Saved: ' . $res['Response'] . ".</p> <p>Info :" . $res['data']."</p>";
+                $msg []= 'Config Saved: ' . $res['Response'];
+                $msg []= 'Info :' . $res['data'];
 //                needreload();
 // !TODO!: It is necessary in the future to check, and replace all server responses on correct messages. Use _(msg)                 
                 return array('status' => true, 'message' => $msg, 'reload' => true);
@@ -757,17 +758,21 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
             case 'reset_token':
             case 'reset_dev':
                 $msg = '';
+                $msgr = array();
+                $msgr[] = 'Reset command send';
                 if (!empty($request['name'])) {
                     foreach ($request['name'] as $idv) {
                         $msg = strpos($idv, 'SEP-');
                         if (!(strpos($idv, 'SEP') === false)) {
                             if ($cmd_id == 'reset_token') {
                                 $res = $this->srvinterface->sccp_core_commands(array('cmd' => 'reset_token', 'name' => $idv));
+                                $msgr[] = $msg .' '. $res['Response'] . ' ' . $res['data'];
                             } else {
                                 $res = $this->srvinterface->sccp_core_commands(array('cmd' => 'reset_phone', 'name' => $idv));
+                                $msgr[] = $msg .' '. $res['Response'] . ' ' . $res['data'];
                             }
 //                            $msg = print_r($this->sccp_core_commands(array('cmd' => 'reset_phone', 'name' => $idv)), 1);
-                            $msg = $res['Response'] . ' ' . $res['data'];
+//                            $msg = $res['Response'] . ' ' . $res['data'];
                         }
                         if ($idv == 'all') {
                             $dev_list = $this->srvinterface->sccp_get_active_device();
@@ -775,11 +780,13 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                                 if ($cmd_id == 'reset_token') {
                                     if (($data['token'] == 'Rej') || ($data['status'] == 'Token ')) {
                                         $res = $this->srvinterface->sccp_core_commands(array('cmd' => 'reset_token', 'name' => $key));
-                                        $msg .= 'Send Token reset to :' . $key . ' ';
+  //                                      $msg .= 'Send Token reset to :' . $key . ' <br>';
+                                        $msgr[] = 'Send Token reset to :' . $key ;
                                     }
                                 } else {
                                     $res = $this->srvinterface->sccp_core_commands(array('cmd' => 'reset_phone', 'name' => $key));
-                                    $msg .= $res['Response'] . ' ' . $res['data'] . ' ';
+//                                    $msg .= $res['Response'] . ' ' . $res['data'] . ' <br>';
+                                    $msgr[] = $res['Response'] . ' ' . $res['data'];
                                 }
 //                                $msg .= $res['Response'] . ' ' . $res['data'] . ' ';
                             }
@@ -787,7 +794,8 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                     }
                 }
 // !TODO!: It is necessary in the future to check, and replace all server responses on correct messages. Use _(msg)                 
-                return array('status' => true, 'message' => 'Reset command send ' . $msg, 'reload' => true);
+                return array('status' => true, 'message' =>  $msgr, 'reload' => true);
+//                return array('status' => true, 'message' => 'Reset command send <br>' . $msg, 'reload' => true);
 //                }
                 break;
             case 'update_button_label':

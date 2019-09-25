@@ -83,16 +83,12 @@ $(document).ready(function () {
             success: function (data) {
                 if (data.status === true) {
                     if (data.message) {
-                        bs_alert(data.message);
+                        bs_alert(data.message,data.status);
                     } else {
-                        bs_alert('Data Save');
+                        bs_alert('Data Save',data.status);
                     }
                 } else {
-                    if (Array.isArray(data.message)) {
-                        data.message.forEach(function (entry) {
-                            fpbxToast(entry, 'error', 'error');
-                        });
-                    }
+                    bs_alert(data.message,data.status);
                 }
             }
         });
@@ -123,7 +119,7 @@ $(document).ready(function () {
             success: function (data) {
                 if (data.status === true) {
                     if (data.message) {
-                        var old_style = bs_alert(data.message, data.reload);
+                        var old_style = bs_alert(data.message, data.status, data.reload);
                     }
                     if (data.table_reload === true) {
                         $('table').bootstrapTable('refresh');
@@ -146,11 +142,7 @@ $(document).ready(function () {
                     }
 
                 } else {
-                    if (Array.isArray(data.message)) {
-                        data.message.forEach(function (entry) {
-                            fpbxToast(entry, 'error', 'error');
-                        });
-                    }
+                    bs_alert(data.message,data.status);
                 }
             }
         });
@@ -202,7 +194,7 @@ $(document).ready(function () {
 //                console.log(data);
                         if (data.status === true) {
                             if (data.message) {
-                                var old_style = bs_alert(data.message, data.reload);
+                                var old_style = bs_alert(data.message, data.status, data.reload);
                             }
                             if (data.table_reload === true) {
                                 $('table').bootstrapTable('refresh');
@@ -211,11 +203,7 @@ $(document).ready(function () {
                                 location.reload();
                             }
                         } else {
-                            if (Array.isArray(data.message)) {
-                                data.message.forEach(function (entry) {
-                                    fpbxToast(entry, 'error', 'error');
-                                });
-                            }
+                            bs_alert(data.message,data.status);
                         }
                     }
 
@@ -645,7 +633,7 @@ $(document).ready(function () {
 //                    console.log(data);
                     if (data.status === true) {
                         if (data.message) {
-                            var old_style = bs_alert(data.message, data.reload);
+                            var old_style = bs_alert(data.message, data.status,data.reload);
                         }
                         if (data.table_reload === true) {
                             $('table').bootstrapTable('refresh');
@@ -656,14 +644,15 @@ $(document).ready(function () {
                     } else {
                         if (Array.isArray(data.message)) {
                             data.message.forEach(function (entry) {
-                                fpbxToast(entry, 'error', 'error');
+                                bs_alert(entry,data.status);
+                                //fpbxToast(entry, 'error', 'error');
                             });
                         } else {
                             if (data.message) {
-                                bs_alert(data.message);
+                                bs_alert(data.message,data.status);
                             } else {
                                 if (data) {
-                                    bs_alert(data);
+                                    bs_alert(data,data.status);
                                 }
                             }
                         }
@@ -751,7 +740,7 @@ $("table").on("post-body.bs.table", function () {
                     });
                     toggle_reload_button("show");
                 } else {
-                    bs_alert(data.message);
+                    bs_alert(data.message, data.status);
                 }
             });
         }
@@ -1001,25 +990,51 @@ var theForm = document.editIax;
  return unescape(result);
  }
  */
-function bs_test() {
-//    alert('asasasasas');
+function bs_page_reload() {
     window.location.reload(false);
 }
-function bs_alert(data, reload)
+function bs_alert(data, status, reload)
 {
+    
     if (document.getElementById('hwalert') === null) {
-        alert(data);
+        if (Array.isArray(data)) {            
+            data.forEach(function (entry) {
+                alert(entry);
+            });
+        }else {
+            alert(data);
+        }
         return true; // Old style
     } else {
-        var modal = $("#hwalert");
-        modal.find('.modal-title').text('Success operation ');
-        modal.find('.modal-body').text(data);        
+        var modal = $("#hwalert");        
+        if (typeof status != "undefined") {
+            if (status === true) {
+                modal.find('.modal-title').text('Operation result');
+            } else {
+                 modal.find('.modal-title').text('Erroe operation ');
+            }
+        } else {
+            modal.find('.modal-title').text('Operation result');
+        }
+//        var modal2 = modal.find('.modal-title');
+//        console.log(modal2);
+//        modal.find('.modal-body').text(data);        
+        var modal2 = modal.find('.modal-body');
+        var msg_html = '';
+        if (Array.isArray(data)) {            
+            data.forEach(function(entry) {
+                msg_html = msg_html + '<p>'+ entry + '</p>';
+            });
+        }else {
+            msg_html = data;
+        }
+        modal2[0].innerHTML = msg_html;
         if (typeof reload != "undefined") {
             if (reload === true) {
-                $("#hwalert").on('hidden.bs.modal', bs_test);
+                $("#hwalert").on('hidden.bs.modal', bs_page_reload);
             }
         }
-        $("#hwalert").modal('show');
+        modal.modal('show');
         return false;
     }
 

@@ -80,6 +80,7 @@ class sipconfigs {
         $tmp_bind_ip = !empty($tmp_sipsetigs['bindaddr']) ? $tmp_sipsetigs['bindaddr'] : $tmp_bind_ip;
   */      
         $tmp_binds = is_array($tmp_binds) ? $tmp_binds: array();
+        $result = array();
         foreach($tmp_binds as $f_protocol => $f_bind) {            
             foreach($f_bind as $f_ip => $f_port) {
                 if (($f_ip == '0.0.0.0') || ($f_ip == '[::]')) {

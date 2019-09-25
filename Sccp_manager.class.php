@@ -677,7 +677,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
 
                 $res = $this->srvinterface->sccp_core_commands(array('cmd' => 'sccp_reload'));
 //                $res = $this->srvinterface->sccp_core_commands(array('cmd' => 'restart_phone'));
-                $msg = 'Config Saved: ' . $res['Response'] . '. Info :' . $res['data'];
+                $msg = '<p>Config Saved: ' . $res['Response'] . ".</p> <p>Info :" . $res['data']."</p>";
 //                needreload();
 // !TODO!: It is necessary in the future to check, and replace all server responses on correct messages. Use _(msg)                 
                 return array('status' => true, 'message' => $msg, 'reload' => true);
@@ -1934,6 +1934,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 $dev_ext_config = $this->dbinterface->get_db_SccpTableData("SccpDevice", array('name' => $dev_id, 'fields'=>'sip_ext'));
                 $data_value = array_merge($data_value, $dev_ext_config);
                 $data_tmp = explode(';',$dev_ext_config['sip_lines']);
+                $data_value['sbind']=array();
                 foreach ($data_tmp as $value) {
                     $tmp_line = explode(',',$value);
                     switch ($tmp_line[0]) {

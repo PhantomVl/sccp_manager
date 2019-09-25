@@ -1,4 +1,5 @@
 $(document).ready(function () {
+
     $('.sortable').sortable({
         update: function (event, ui) {
             //           console.log(ui.item.find('input').val(), ui.item.index())
@@ -24,37 +25,37 @@ $(document).ready(function () {
         }
     });
 
-/*
-    $('#ajaxbackup').on('click', function (e) {        
-        var vdata = '';
-        var snd_command = 'backupsettings';
-        $('.fpbx-submit').each(function () {
-            vdata = vdata + $(this).serialize() + '&';
-        });
-        
-        $.ajax({
-            type: 'POST',
-            url: 'ajax.php?module=sccp_manager&command=' + snd_command,
-            data: vdata,
-            success: function (data) {
-                if (data.status === true) {
-                    if (data.message) {
-                        alert(data.message);
-                    } else {
-                        alert('Data Save');                        
-                    }
-                } else {
-                    if (Array.isArray(data.message)) {
-                        data.message.forEach(function (entry) {
-                            fpbxToast(entry, 'error', 'error');
-                        });
-                    }
-                }
-            }
-        });
-
-    });
-*/
+    /*
+     $('#ajaxbackup').on('click', function (e) {        
+     var vdata = '';
+     var snd_command = 'backupsettings';
+     $('.fpbx-submit').each(function () {
+     vdata = vdata + $(this).serialize() + '&';
+     });
+     
+     $.ajax({
+     type: 'POST',
+     url: 'ajax.php?module=sccp_manager&command=' + snd_command,
+     data: vdata,
+     success: function (data) {
+     if (data.status === true) {
+     if (data.message) {
+     alert(data.message);
+     } else {
+     alert('Data Save');                        
+     }
+     } else {
+     if (Array.isArray(data.message)) {
+     data.message.forEach(function (entry) {
+     fpbxToast(entry, 'error', 'error');
+     });
+     }
+     }
+     }
+     });
+     
+     });
+     */
     $('#ajaxsubmit2').on('click', function (e) {
         var vdata = '';
         var snd_command = 'savesettings';
@@ -74,7 +75,7 @@ $(document).ready(function () {
         if ($('.fpbx-submit').data('id') == "dial_template") {
             snd_command = 'save_dialplan_template';
         }
-        
+
         $.ajax({
             type: 'POST',
             url: 'ajax.php?module=sccp_manager&command=' + snd_command,
@@ -82,9 +83,9 @@ $(document).ready(function () {
             success: function (data) {
                 if (data.status === true) {
                     if (data.message) {
-                        alert(data.message);
+                        bs_alert(data.message);
                     } else {
-                        alert('Data Save');                        
+                        bs_alert('Data Save');
                     }
                 } else {
                     if (Array.isArray(data.message)) {
@@ -122,7 +123,7 @@ $(document).ready(function () {
             success: function (data) {
                 if (data.status === true) {
                     if (data.message) {
-                        alert(data.message);
+                        var old_style = bs_alert(data.message, data.reload);
                     }
                     if (data.table_reload === true) {
                         $('table').bootstrapTable('refresh');
@@ -139,7 +140,8 @@ $(document).ready(function () {
                     if (data.search != null) {
                         location.search = data.search;
                     }
-                    if (data.reload === true) {
+//                    if (data.reload === true ) {
+                    if (data.reload === true && old_style ===true ) {
                         location.reload();
                     }
 
@@ -153,71 +155,71 @@ $(document).ready(function () {
             }
         });
     });
-    
-    $(".input-js-add").click(function(){
-        add_dynamic_input($(this),$(this).data('for'),"","");
+
+    $(".input-js-add").click(function () {
+        add_dynamic_input($(this), $(this).data('for'), "", "");
     });
 
-    $(".table").on('click','.table-js-add', function (e) {
-        add_dynamic_table($(this),$(this).data('for'),"","");
+    $(".table").on('click', '.table-js-add', function (e) {
+        add_dynamic_table($(this), $(this).data('for'), "", "");
     });
 
-    $(".table").on('click','.table-js-del', function (e) {
-        del_dynamic_table($(this),$(this).data('for'));
+    $(".table").on('click', '.table-js-del', function (e) {
+        del_dynamic_table($(this), $(this).data('for'));
     });
 
 
-    $(".table").on('click','.btn-item-delete', function (e) {
+    $(".table").on('click', '.btn-item-delete', function (e) {
         var dev_cmd = '';
         var dev_id = $(this).data('id');
         var dev_for = $(this).data('for');
         var ext_data = '';
-        if (dev_for =='softkeys') {
+        if (dev_for == 'softkeys') {
             dev_cmd = 'deleteSoftKey';
             ext_data = "softkey=" + dev_id;
         }
-        if (dev_for =='model') {
+        if (dev_for == 'model') {
             dev_cmd = 'model_delete';
             ext_data = "model=" + dev_id;
         }
-        if (dev_for =='dialplan') {
+        if (dev_for == 'dialplan') {
             dev_cmd = 'delete_dialplan';
             ext_data = "dialplan=" + dev_id;
         }
-        if (dev_for =='hardware') {
+        if (dev_for == 'hardware') {
             dev_cmd = 'delete_hardware';
             ext_data = "idn[0]=" + dev_id;
         }
 //    console.log("delete : " + data);
         if (dev_cmd != '') {
             if (confirm(_('Are you sure you wish to delete "' + dev_id.toString().toUpperCase() + '" inormation ?'))) {
-            $.ajax({
-                type: 'POST',
-                url: 'ajax.php?module=sccp_manager&command=' + dev_cmd,
-                command: dev_cmd,
-                data: ext_data,
-                success: function (data) {
+                $.ajax({
+                    type: 'POST',
+                    url: 'ajax.php?module=sccp_manager&command=' + dev_cmd,
+                    command: dev_cmd,
+                    data: ext_data,
+                    success: function (data) {
 //                console.log(data);
-                    if (data.status === true) {
-                        if (data.message) {
-                        alert(data.message);
-                        }
-                        if (data.table_reload === true) {
-                            $('table').bootstrapTable('refresh');
-                        }
-                        if (data.reload === true) {
-                            location.reload();
-                        }
-                    } else {
-                        if (Array.isArray(data.message)) {
-                            data.message.forEach(function (entry) {
-                                fpbxToast(entry, 'error', 'error');
-                            });
+                        if (data.status === true) {
+                            if (data.message) {
+                                var old_style = bs_alert(data.message, data.reload);
+                            }
+                            if (data.table_reload === true) {
+                                $('table').bootstrapTable('refresh');
+                            }
+                            if (data.reload === true && old_style === true ) {
+                                location.reload();
+                            }
+                        } else {
+                            if (Array.isArray(data.message)) {
+                                data.message.forEach(function (entry) {
+                                    fpbxToast(entry, 'error', 'error');
+                                });
+                            }
                         }
                     }
-                }
-           
-            });
+
+                });
             }
         }
 
@@ -348,18 +350,18 @@ $(document).ready(function () {
         });
 
     });
-    
+
     $('.sccp_button_hide').each(function () { // On page create !!  
         var dev_id = $(this).data('vhide');
         var dev_class = $(this).data('clhide');
         var dev_val = $(this).val();
         if ($(this).data('btn') == 'checkbox') {
-            dev_val = $('input',this).is(":checked");
+            dev_val = $('input', this).is(":checked");
         }
         var dev_state = $(this).attr('checked');
-        if (dev_state == 'checked'){
+        if (dev_state == 'checked') {
             $(dev_class).each(function () {
-                if (dev_val !=  dev_id) {
+                if (dev_val != dev_id) {
                     $(this).removeClass('hidden');
                     $(this).removeAttr('hidden')
                 } else {
@@ -367,41 +369,41 @@ $(document).ready(function () {
                 }
             });
         }
-        
+
         dev_id = $(this).data('vshow');
-        if (dev_state == 'checked'){
+        if (dev_state == 'checked') {
             dev_class = $(this).data('clshow');
             $(dev_class).each(function () {
-                if (dev_val ==  dev_id) {
+                if (dev_val == dev_id) {
                     $(this).removeClass('hidden');
                     $(this).removeAttr('hidden')
                 } else {
                     $(this).addClass('hidden');
                 }
             });
-        }        
+        }
     });
     $('.sccp_button_hide').on('click', function (e) {
         var dev_id = $(this).data('vhide');
         var dev_class = $(this).data('clhide');
         var dev_val = $(this).val();
         if ($(this).data('btn') == 'checkbox') {
-            dev_val = $('input',this).is(":checked");
+            dev_val = $('input', this).is(":checked");
         }
         $(dev_class).each(function () {
-            if (dev_val !=  dev_id) {
+            if (dev_val != dev_id) {
                 $(this).removeClass('hidden');
                 $(this).removeAttr('hidden')
             } else {
                 $(this).addClass('hidden');
             }
         });
-        
+
         dev_id = $(this).data('vshow');
-        if (dev_id !== ''){
+        if (dev_id !== '') {
             dev_class = $(this).data('clshow');
             $(dev_class).each(function () {
-                if (dev_val ==  dev_id) {
+                if (dev_val == dev_id) {
                     $(this).removeClass('hidden');
                     $(this).removeAttr('hidden')
                 } else {
@@ -409,7 +411,7 @@ $(document).ready(function () {
                 }
             });
         }
-        
+
     });
 
     $('.sccp_button_disabled').each(function () { // On page create !!  
@@ -417,28 +419,28 @@ $(document).ready(function () {
         var dev_class = $(this).data('clhide');
         var dev_val = $(this).val();
         if ($(this).data('btn') == 'checkbox') {
-            dev_val = $('input',this).is(":checked");
+            dev_val = $('input', this).is(":checked");
         }
-        $(dev_class).find('input, select, textarea, button').each(function() {
-                if (dev_val ==  dev_id) {
-                    $(this).removeClass('disabled');
-                    $(this).removeAttr('disabled')
-                } else {
-                    $(this).addClass('disabled', true);         
-                    $(this).attr('disabled', 'disabled');
-                }
+        $(dev_class).find('input, select, textarea, button').each(function () {
+            if (dev_val == dev_id) {
+                $(this).removeClass('disabled');
+                $(this).removeAttr('disabled')
+            } else {
+                $(this).addClass('disabled', true);
+                $(this).attr('disabled', 'disabled');
+            }
         });
     });
-    
+
     $('.sccp_button_disabled').on('click', function (e) {
         var dev_id = $(this).data('vhide');
         var dev_class = $(this).data('clhide');
         var dev_val = $(this).val();
         if ($(this).data('btn') == 'checkbox') {
-            dev_val = $('input',this).is(":checked");
+            dev_val = $('input', this).is(":checked");
         }
-        $(dev_class).find('input, select, textarea, button').each(function() {
-            if (dev_val !=  dev_id) {
+        $(dev_class).find('input, select, textarea, button').each(function () {
+            if (dev_val != dev_id) {
                 $(this).removeClass('disabled');
                 $(this).removeAttr('disabled')
             } else {
@@ -451,45 +453,45 @@ $(document).ready(function () {
 
     $('.button-checkbox').on('click', '', function (e) {
         settings = {
-                true: {
-                    icon: 'glyphicon glyphicon-unchecked'
-                },
-                false: {
-                    icon: 'glyphicon glyphicon-check'
-                }
-            };
-        var button_1 = $('button',this);
+            true: {
+                icon: 'glyphicon glyphicon-unchecked'
+            },
+            false: {
+                icon: 'glyphicon glyphicon-check'
+            }
+        };
+        var button_1 = $('button', this);
         var isChecked = $('input', this).is(':checked');
 
         if (button_1.find('.state-icon').length == 0) {
-                button_1.prepend('<i class="state-icon ' + settings[isChecked].icon + '"></i> ');
+            button_1.prepend('<i class="state-icon ' + settings[isChecked].icon + '"></i> ');
         } else {
             button_1.find('.state-icon')
-                .removeClass()
-                .addClass('state-icon ' + settings[isChecked].icon);
-        }     
+                    .removeClass()
+                    .addClass('state-icon ' + settings[isChecked].icon);
+        }
         if (isChecked) {
             $('input', this).removeAttr('checked');
             button_1.removeClass('active');
         } else {
             $('input', this).attr('checked');
-            $('input', this).prop('checked','true');
-            button_1.addClass('active');        
-       }
+            $('input', this).prop('checked', 'true');
+            button_1.addClass('active');
+        }
     });
-    
-    
-    
+
+
+
 // ----------------------- TEST Validate ----------------
     $('.need-validate').on('change', function (e) {
         var dev_class = $(this).attr('class');
         var dev_id = $(this).val();
         if (dev_class.includes('validate-netmask')) {
-            confirm(dev_id);        
+            confirm(dev_id);
         }
 //        confirm(dev_id);        
     });
-    
+
     $('.sccp_test').on('click', function (e) {
         var dev_id = [];
 //        $('table').bootstrapTable('getSelections').forEach(function (entry) {
@@ -522,7 +524,6 @@ $(document).ready(function () {
         ;
 //        console.log(datas);
     });
-
 
 
     $('.sccp_update').on('click', function (e) {
@@ -582,7 +583,7 @@ $(document).ready(function () {
         }
         if (($(this).data('id') === 'model_enabled') || ($(this).data('id') === 'model_disabled')) {
             var dev_cmd = $(this).data('id');
-            var tab_name ='#'+$(this).data('table');
+            var tab_name = '#' + $(this).data('table');
             var datas = '';
             var i = 0;
             $(tab_name).bootstrapTable('getSelections').forEach(function (entry) {
@@ -607,7 +608,7 @@ $(document).ready(function () {
             }
 
         }
-        if ($(this).data('id') === 'reset_dev' || $(this).data('id') === 'reset_token' || $(this).data('id') === 'update_button_label' ) {
+        if ($(this).data('id') === 'reset_dev' || $(this).data('id') === 'reset_token' || $(this).data('id') === 'update_button_label') {
             var dev_cmd = $(this).data('id');
             var datas = '';
             var i = 0;
@@ -635,6 +636,7 @@ $(document).ready(function () {
             }
         }
         if (dev_cmd !== '') {
+
             $.ajax({
                 type: 'POST',
                 url: 'ajax.php?module=sccp_manager&command=' + dev_cmd,
@@ -643,13 +645,13 @@ $(document).ready(function () {
 //                    console.log(data);
                     if (data.status === true) {
                         if (data.message) {
-                            alert(data.message);
+                            var old_style = bs_alert(data.message, data.reload);
                         }
                         if (data.table_reload === true) {
                             $('table').bootstrapTable('refresh');
                         }
-                        if (data.reload === true) {
-                            location.reload();
+                        if (data.reload === true && old_style === true) {
+                           location.reload();
                         }
                     } else {
                         if (Array.isArray(data.message)) {
@@ -658,10 +660,10 @@ $(document).ready(function () {
                             });
                         } else {
                             if (data.message) {
-                                alert(data.message);
+                                bs_alert(data.message);
                             } else {
                                 if (data) {
-                                    alert(data);
+                                    bs_alert(data);
                                 }
                             }
                         }
@@ -669,6 +671,7 @@ $(document).ready(function () {
                 }
 
             });
+
         }
 
     });
@@ -677,6 +680,7 @@ $(document).ready(function () {
 //        console.log($('#update-sccp-phone').find(':selected').data('val'));
 
     });
+
 });
 
 
@@ -705,7 +709,7 @@ $("table").on('check.bs.table', function (e, row) {
 });
 $("table").on('uncheck.bs.table', function (e, row) {
     var id_fld = $(this).data('id');
-    var id_parent = '#'+$(this).parent().find('table').attr('id');
+    var id_parent = '#' + $(this).parent().find('table').attr('id');
 //    console.log(id_parent);
     var id_count = $(id_parent).bootstrapTable('getAllSelections').length;
     if (id_count < 1) {
@@ -717,7 +721,7 @@ $("table").on('uncheck.bs.table', function (e, row) {
 });
 $("table").on('uncheck-all.bs.table', function (rows) {
     var id_fld = $(this).data('id');
-    var id_parent = '#'+$(this).parent().find('table').attr('id');
+    var id_parent = '#' + $(this).parent().find('table').attr('id');
 //    console.log(id_parent);
 //    var id_count = $(id_parent).bootstrapTable('getAllSelections').length;
     var id_count = $("table").bootstrapTable('getAllSelections').length;
@@ -736,7 +740,7 @@ $("table").on("post-body.bs.table", function () {
 // delete extension 
     $(this).find(".clickable.delete").click(function () {
         var id = $(this).data("id");
-        
+
         if (confirm(_("Are you sure you wish to delete this extension?"))) {
             $.post("ajax.php", {command: "delete", module: "core", extensions: [id], type: "extensions"}, function (data) {
                 if (data.status) {
@@ -747,7 +751,7 @@ $("table").on("post-body.bs.table", function () {
                     });
                     toggle_reload_button("show");
                 } else {
-                    alert(data.message);
+                    bs_alert(data.message);
                 }
             });
         }
@@ -813,102 +817,104 @@ function load_oncliсk(e, data) {
 
 
 function add_dynamic_input(pe, pclass, vdefault) {
-	// We'd like a new one, please.
-        pcls = pe.data('for');
-        pname = pe.data('id');
-        pmax = pe.data('max');
-        jdata = JSON.parse(hex2bin(pe.data('json')));
-        
-	var last = $("."+pcls+":last"),
-			ourid = last.data('nextid'),
-			nextid = ourid + 1;
-	var html = "<div class = '" + pcls +" form-group form-inline' data-nextid="+nextid+">";
-        for (var key in jdata) {
-            html_opt = '';
-            html_calss = jdata[key]['class'];
-            for (var skey in jdata[key]['options']) {
-                html_opt += ' ' + skey+'="' + jdata[key]['options'][skey] +'"';
-            }
-            html += "<input type='text' name='"+pname+ "["+ourid+"]["+key+"]' class='" + html_calss + "' " + html_opt + " value='" + vdefault+"'> "+ jdata[key]['nameseparator'] + " ";
+    // We'd like a new one, please.
+    pcls = pe.data('for');
+    pname = pe.data('id');
+    pmax = pe.data('max');
+    jdata = JSON.parse(hex2bin(pe.data('json')));
+
+    var last = $("." + pcls + ":last"),
+            ourid = last.data('nextid'),
+            nextid = ourid + 1;
+    var html = "<div class = '" + pcls + " form-group form-inline' data-nextid=" + nextid + ">";
+    for (var key in jdata) {
+        html_opt = '';
+        html_calss = jdata[key]['class'];
+        for (var skey in jdata[key]['options']) {
+            html_opt += ' ' + skey + '="' + jdata[key]['options'][skey] + '"';
         }
-	html += "</div>\n";
-        if (pmax >= nextid) {
-            last.after(html);
-        }
+        html += "<input type='text' name='" + pname + "[" + ourid + "][" + key + "]' class='" + html_calss + "' " + html_opt + " value='" + vdefault + "'> " + jdata[key]['nameseparator'] + " ";
+    }
+    html += "</div>\n";
+    if (pmax >= nextid) {
+        last.after(html);
+    }
 }
 
 function del_dynamic_table(pe, pclass, vdefault) {
-        pcls = pe.data('for');
-        pname = pe.data('id');
+    pcls = pe.data('for');
+    pname = pe.data('id');
 
 //        pe.preventDefault();
-	var rowCount = $('#dp-table-'+pcls+'>tbody >tr').length;
-        curRow =$('#'+pcls+'-row-'+ pname);
-	var curRow = pe.closest('tr');
-	if(rowCount > 1){
-		curRow.fadeOut("slow", function(){
-			$(this).remove();
-		});
-	}else{
-		curRow.find('input:text').each(function(){$(this).val('')});
-	}    
+    var rowCount = $('#dp-table-' + pcls + '>tbody >tr').length;
+    curRow = $('#' + pcls + '-row-' + pname);
+    var curRow = pe.closest('tr');
+    if (rowCount > 1) {
+        curRow.fadeOut("slow", function () {
+            $(this).remove();
+        });
+    } else {
+        curRow.find('input:text').each(function () {
+            $(this).val('')
+        });
+    }
 }
 
 function add_dynamic_table(pe, pclass, vdefault) {
-	// We'd like a new one, please.
-        pcls = pe.data('for');
-        pname = pe.data('id');
-        jdata = JSON.parse(hex2bin(pe.data('json')));
-        
-	var last = $("."+pcls+":last"),
-			ourid = last.data('nextid'),
-			nextid = ourid + 1;
-	var html = "<tr class = '" + pcls +"' data-nextid="+nextid+">";
-        for (var key in jdata) {
-            html_opt = '';
-            res_ni = pcls + '_' + nextid + '_' + key; 
-            res_n = pcls + '[' + nextid + '][' + key + ']';
-            for (var skey in jdata[key]['options']) {
-                html_opt += ' ' + skey+'="' + jdata[key]['options'][skey] +'"';
-            }
-            var html_rs = '<div class="input-group"> <span class="input-group-addon" id="basep_' + res_ni + '" >' + jdata[key]['display_prefix'] + '</span>';
-            var html_re = '<span class="input-group-addon" id="bases_' + res_ni + '">' + jdata[key]['display_sufix'] + '</span></div>';                                
+    // We'd like a new one, please.
+    pcls = pe.data('for');
+    pname = pe.data('id');
+    jdata = JSON.parse(hex2bin(pe.data('json')));
 
-            html += '<td class="">';
-            switch (jdata[key]['type']) {
-                case "title":
-                    break;
-                case "label":
-                    html +='<label ' + html_opt +' >' + jdata[key]['data'] + '</label>';
-                    break;
-                case "input":
-                    html += html_rs + '<input type="text" name="' + res_n + '" value="' +  '"' + html_opt + '>' +html_re ;
-                    break;
-                case "number":
-                    html += html_rs + '<input type="number" name="' + res_n + '" value="' +  '"' + html_opt + '>' +html_re ;
-                    break;
-                case "date":
-                    html += html_rs + '<input type="date" name="' + res_n + '" value="' +  '"' + html_opt + '>' +html_re ;
-                    break;
-                case "select":
-                    html += html_rs + '<select name="' +  res_n  + '" id="'  + res_n   + '"' + html_opt + ">";
-                    sel_data = jdata[key]['data'].split(';');
-                    for (var dkey in sel_data) {
-                        html += '<option>' + sel_data[dkey] + '</option>';
-                    }
-                    html += '</select>'+ html_re;
-                    break;
-            }
-            html += '</td>';                                
+    var last = $("." + pcls + ":last"),
+            ourid = last.data('nextid'),
+            nextid = ourid + 1;
+    var html = "<tr class = '" + pcls + "' data-nextid=" + nextid + ">";
+    for (var key in jdata) {
+        html_opt = '';
+        res_ni = pcls + '_' + nextid + '_' + key;
+        res_n = pcls + '[' + nextid + '][' + key + ']';
+        for (var skey in jdata[key]['options']) {
+            html_opt += ' ' + skey + '="' + jdata[key]['options'][skey] + '"';
         }
-        html += '<td><input type="button" id="' + pcls+ nextid + '-btn" data-id="' + nextid + '" data-for="' + pcls + '"data-json="'+ pe.data('json') + '" class="table-js-add" value="+" />';
-        html += '<input type="button" id="'+ pcls+ nextid +'-btndel" data-id="'+ nextid + '" data-for="' + pcls + '" class="table-js-del" value="-" />';
+        var html_rs = '<div class="input-group"> <span class="input-group-addon" id="basep_' + res_ni + '" >' + jdata[key]['display_prefix'] + '</span>';
+        var html_re = '<span class="input-group-addon" id="bases_' + res_ni + '">' + jdata[key]['display_sufix'] + '</span></div>';
+
+        html += '<td class="">';
+        switch (jdata[key]['type']) {
+            case "title":
+                break;
+            case "label":
+                html += '<label ' + html_opt + ' >' + jdata[key]['data'] + '</label>';
+                break;
+            case "input":
+                html += html_rs + '<input type="text" name="' + res_n + '" value="' + '"' + html_opt + '>' + html_re;
+                break;
+            case "number":
+                html += html_rs + '<input type="number" name="' + res_n + '" value="' + '"' + html_opt + '>' + html_re;
+                break;
+            case "date":
+                html += html_rs + '<input type="date" name="' + res_n + '" value="' + '"' + html_opt + '>' + html_re;
+                break;
+            case "select":
+                html += html_rs + '<select name="' + res_n + '" id="' + res_n + '"' + html_opt + ">";
+                sel_data = jdata[key]['data'].split(';');
+                for (var dkey in sel_data) {
+                    html += '<option>' + sel_data[dkey] + '</option>';
+                }
+                html += '</select>' + html_re;
+                break;
+        }
+        html += '</td>';
+    }
+    html += '<td><input type="button" id="' + pcls + nextid + '-btn" data-id="' + nextid + '" data-for="' + pcls + '"data-json="' + pe.data('json') + '" class="table-js-add" value="+" />';
+    html += '<input type="button" id="' + pcls + nextid + '-btndel" data-id="' + nextid + '" data-for="' + pcls + '" class="table-js-del" value="-" />';
 
 //        html += '<a href="#"  id="routerowdel0"><i class="fa fa-trash"></i></a>';
 
-	html += "</td></tr>\n";
+    html += "</td></tr>\n";
 
-	last.after(html);
+    last.after(html);
 }
 
 var theForm = document.editIax;
@@ -984,25 +990,56 @@ var theForm = document.editIax;
 })(jQuery);
 
 /*
-String.prototype.hex2bin = function()
-{ 
-   var i = 0, len = this.length, result = "";
-
-   //Converting the hex string into an escaped string, so if the hex string is "a2b320", it will become "%a2%b3%20"
-   for(; i < len; i+=2)
-      result += '%' + this.substr(i, 2);      
-
-   return unescape(result);
+ String.prototype.hex2bin = function()
+ { 
+ var i = 0, len = this.length, result = "";
+ 
+ //Converting the hex string into an escaped string, so if the hex string is "a2b320", it will become "%a2%b3%20"
+ for(; i < len; i+=2)
+ result += '%' + this.substr(i, 2);      
+ 
+ return unescape(result);
+ }
+ */
+function bs_test() {
+//    alert('asasasasas');
+    window.location.reload(false);
 }
-*/
+function bs_alert(data, reload)
+{
+    if (document.getElementById('hwalert') === null) {
+        alert(data);
+        return true; // Old style
+    } else {
+        var modal = $("#hwalert");
+        modal.find('.modal-title').text('Success operation ');
+        modal.find('.modal-body').text(data);        
+        if (typeof reload != "undefined") {
+            if (reload === true) {
+                $("#hwalert").on('hidden.bs.modal', bs_test);
+            }
+        }
+        $("#hwalert").modal('show');
+        return false;
+    }
 
+}
 function hex2bin(hex)
 {
     var bytes = [], str;
 
-    for(var i=0; i< hex.length-1; i+=2)
+    for (var i = 0; i < hex.length - 1; i += 2)
         bytes.push(parseInt(hex.substr(i, 2), 16));
 
-    return String.fromCharCode.apply(String, bytes);    
+    return String.fromCharCode.apply(String, bytes);
+}
+
+function sleep(milliseconds) {
+    var start = new Date().getTime();
+    for (var i = 0; i < 1e7; i++) {
+        if ((new Date().getTime() - start) > milliseconds) {
+            break;
+        }
+    }
 }
 

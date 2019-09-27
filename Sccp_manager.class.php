@@ -1038,6 +1038,10 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
     function get_buttons_phone($get_settings, $ref_id = '', $ref_type = 'sccpdevice') {
 //      Get Model Buttons info
         $res = array();
+        $def_feature = array('parkinglot' => array('name' => 'P.slot', 'value' => 'default'),
+            'devstate' => array('name' => 'Coffee', 'value' => 'coffee'),
+            'monitor' => array('name' => 'Record Calls', 'value' => '')
+        );
 
 //        $lines_list = $this->dbinterface->get_db_SccpTableData('SccpExtension');
         $max_btn = ((!empty($get_settings['buttonscount']) ? $get_settings['buttonscount'] : 100));
@@ -1073,7 +1077,13 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                             } else {
                                 $btn_opt .= ',' . $get_settings['button' . $it . '_fvalue'];
                             }
+                            if ($btn_f == 'parkinglot') {
+                                if (!empty($get_settings['button' . $it . '_retrieve'])) {
+                                    $btn_opt .= ',RetrieveSingle';
+                                }
+                            }
                         }
+                        
                         break;
                     case 'monitor':
                         $btn_t = 'speeddial';
@@ -1148,10 +1158,6 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         $save_buttons = array();
         $save_settings = array();
         $save_codec = array();
-        $def_feature = array('parkinglot' => array('name' => 'P.slot', 'value' => 'default'),
-            'devstate' => array('name' => 'Coffee', 'value' => 'coffee'),
-            'monitor' => array('name' => 'Record Calls', 'value' => '')
-        );
         $name_dev = '';
         $db_field = $this->dbinterface->get_db_SccpTableData("get_colums_sccpdevice");
         $hw_id = (empty($get_settings['sccp_deviceid'])) ? 'new' : $get_settings['sccp_deviceid'];

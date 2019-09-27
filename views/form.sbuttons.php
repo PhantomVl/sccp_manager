@@ -153,7 +153,7 @@ if (!empty($_REQUEST['ru_id'])) {
                     <div class="col-sm-5">
                         <div class="col-xs-3">
 <!--  Line Type Select                        -->
-                        <select class="form-control lineselect" data-id="<?php echo $line_id;?>" name="<?php echo $forminfo[1]['name'].$line_id.'_type';?>" >
+                        <select class="form-control buttontype" data-id="<?php echo $line_id;?>" name="<?php echo $forminfo[1]['name'].$line_id.'_type';?>" >
                         <?php 
                             if ($line_id == 0) {
                                 echo '<option value="line" selected >DEF LINE</option>';                                
@@ -168,7 +168,7 @@ if (!empty($_REQUEST['ru_id'])) {
                         </div>
 <!--  if Line Type = feature Show Futures -->
                         <div class="col-xs-7">
-                        <select class ="form-control linefeature_<?php echo $line_id.(($show_form_mode=='feature')?'':' hidden');?>" name="<?php echo $forminfo[1]['name'].$line_id.'_feature';?>" >
+                        <select data-type="feature" class ="futuretype form-control lineid_<?php echo $line_id.(($show_form_mode=='feature')?'':' hidden');?>" data-id="<?php echo $line_id;?>"  name="<?php echo $forminfo[1]['name'].$line_id.'_feature';?>" >
                         <?php 
                             foreach ($feature_list as $fkey => $fval) {
                                 $select = (($fkey == $defaul_ftr)?"selected":"");
@@ -177,7 +177,7 @@ if (!empty($_REQUEST['ru_id'])) {
                             ?>
                         </select>
 <!--  if Line Type = line Show SCCP Num -->
-                        <select class ="form-control lineselect_<?php echo $line_id.(($show_form_mode=='line' || $show_form_mode=='adv.line')?'':' hidden');?>" name="<?php echo $forminfo[1]['name'].$line_id.'_line';?>" >
+                        <select data-type='line' class ="form-control lineid_<?php echo $line_id.(($show_form_mode=='line' || $show_form_mode=='adv.line')?'':' hidden');?>" name="<?php echo $forminfo[1]['name'].$line_id.'_line';?>" >
                         <?php 
                             foreach ($lines_list as $data){
                               $select = (($data['id']==$defaul_btn)?"selected":"");
@@ -186,7 +186,7 @@ if (!empty($_REQUEST['ru_id'])) {
                             ?>
                         </select>
 <!--  if Line Type = Othe Show    Input -->
-                        <div class="linevalue_<?php echo $line_id.(($show_form_mode=='speeddial')? '':' hidden');?>" >
+                        <div data-type='speeddial' class="lineid_<?php echo $line_id.(($show_form_mode=='speeddial')? '':' hidden');?>" >
                             <?php 
                                 echo '<input class="form-control" type="text" id="'.$forminfo[1]['name'].$line_id.'_input"  name="'.$forminfo[1]['name'].$line_id.'_input" placeholder="Name" value="'.$db_buttons[$line_id]['name'].'" >';
                             ?>
@@ -196,7 +196,7 @@ if (!empty($_REQUEST['ru_id'])) {
                     </div>
                     <div class="col-md-5">
 <!--  if Line Type = speeddial Show  Hint line -->
-                        <div class="linespeed_<?php echo $line_id.(($show_form_mode=='speeddial')? '':' hidden');?>" name="<?php echo $forminfo[1]['name'].$line_id.'_hint';?>">
+                        <div data-type='hintline' class="lineid_<?php echo $line_id.(($show_form_mode=='speeddial')? '':' hidden');?>" name="<?php echo $forminfo[1]['name'].$line_id.'_hint';?>">
                             <?php 
                                 echo '<div class="col-xs-5">';
                                 echo '<input class="form-control" type="text" id="'.$forminfo[1]['name'].$line_id.'_phone"  name="'.$forminfo[1]['name'].$line_id.'_phone" placeholder="Phone" value="'.$defaul_opt[0].'">';
@@ -215,7 +215,8 @@ if (!empty($_REQUEST['ru_id'])) {
                                 echo '</div>';
                             ?>
                         </div>
-                        <div class="linefeature_<?php echo $line_id.(($show_form_mode=='feature')? '':' hidden');?>" name="<?php echo $forminfo[1]['name'].$line_id.'_hint';?>">
+<!--  if Line Type = feature Show Futures  Park --> 
+                        <div data-type='feature' class="lineid_<?php echo $line_id.(($show_form_mode=='feature')? '':' hidden');?>" name="<?php echo $forminfo[1]['name'].$line_id.'_hint';?>">
                             <div class="col-xs-5">
                             <?php 
                                 echo '<input class="form-control" type="text" id="'.$forminfo[1]['name'].$line_id.'_flabel"  name="'.$forminfo[1]['name'].$line_id.'_flabel" placeholder="Display Label" value="'.$db_buttons[$line_id]['name'].'" >';
@@ -229,7 +230,7 @@ if (!empty($_REQUEST['ru_id'])) {
                         </div>
 <!--  if Line Type = Advanced Show  Hint line -->
 
-                        <div class="lineadv_<?php echo $line_id.(($show_form_mode=='adv.line')? '':' hidden');?>" name="<?php echo $forminfo[1]['name'].$line_id.'_hint';?>">
+                        <div data-type='adv_line' class="lineid_<?php echo $line_id.(($show_form_mode=='adv.line')? '':' hidden');?>" name="<?php echo $forminfo[1]['name'].$line_id.'_hint';?>">
                             <div class="col-xs-5">
                             <?php 
                                 echo '<input class="form-control" type="text" id="'.$forminfo[1]['name'].$line_id.'_advline"  name="'.$forminfo[1]['name'].$line_id.'_advline" placeholder="[+=][01]:[cidname]" value="'.$defaul_advline.'" >';

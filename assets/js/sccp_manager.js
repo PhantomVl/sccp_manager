@@ -242,70 +242,59 @@ $(document).ready(function () {
         }
         e.preventDefault();
     });
+    
 // Form.buttons - Form.adddevice
-
-    $('.lineselect').change(function (e) {
+    $('.futuretype').change(function (e) {
         var kid = $(this).data('id');
         var kval = $(this).val();
-        $('.lineselect_' + kid).each(function () {
+        $('.lineid_' + kid).each(function () {
+            var lval = $(this).data('type'); 
+            if (lval == 'featurep') {
+                if ( kval == 'parkinglot') {
+                    $(this).removeClass('hidden');
+                } else {
+                    $(this).addClass('hidden');
+                }
+            }
+        });
+        
+    });
+
+    $('.buttontype').change(function (e) {
+        var kid = $(this).data('id');
+        var kval = $(this).val();
+        $('.lineid_' + kid).each(function () {
+            var lval = $(this).data('type');            
+            var class_id = [kval];
             switch (kval) {
                 case 'silent':
                 case 'monitor':
                 case 'line':
+                    class_id = ['line'];
+                    break;
                 case 'adv.line':
-                    $(this).removeClass('hidden');
+                    class_id = ['line','adv_line'];
                     break;
                 case 'service':
                 case 'feature':
+                    if (lval == 'featurep') {
+                       if ($('.futuretype').val() == 'parkinglot') {
+                           class_id = [kval,lval];
+                       }
+                    }
+                    break;
                 case 'speeddial':
+                    class_id = ['speeddial','hintline'];
+                    break;
                 case 'empty':
-                    $(this).addClass('hidden');
+                    class_id = [];
                     break;
             }
-        });
-        $('.linevalue_' + kid).each(function () {
-            switch (kval) {
-                case 'service':
-                case 'speeddial':
-                    $(this).removeClass('hidden');
-                    break;
-                case 'feature':
-                case 'silent':
-                case 'monitor':
-                case 'empty':
-                case 'adv.line':
-                case 'line':
-                    $(this).addClass('hidden');
-                    break;
-            }
-        });
-        $('.linefeature_' + kid).each(function () {
-            switch (kval) {
-                case 'feature':
-                    $(this).removeClass('hidden');
-                    break;
-                case 'adv.line':
-                case 'service':
-                case 'speeddial':
-                case 'silent':
-                case 'monitor':
-                case 'empty':
-                case 'line':
-                    $(this).addClass('hidden');
-                    break;
-            }
-        });
-        $('.lineadv_' + kid).each(function () {
-            if (kval == 'adv.line') {
+            var pos = class_id.indexOf(lval);
+            if (pos >= 0) {
                 $(this).removeClass('hidden');
             } else {
-                $(this).addClass('hidden');
-            }
-        });
-        $('.linespeed_' + kid).each(function () {
-            if (kval == 'speeddial') {
-                $(this).removeClass('hidden');
-            } else {
+                console.log(lval);
                 $(this).addClass('hidden');
             }
         });

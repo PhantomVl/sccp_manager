@@ -324,11 +324,16 @@ class xmlinterface {
                         if (!empty($dev_config['addon'])) {
                             $xnode = $xml_work->addChild('addOnModules');
                             $ti = 1;
-                            foreach ($dev_config['addon_info'] as $add_key => $add_val) {
-                                $xnode_obj = $xnode->addChild('addOnModule');
-                                $xnode_obj->addAttribute('idx', $ti);
-                                $xnode_obj->addChild('loadInformation', $add_val);
-                                $ti ++;
+                            $hw_addon = explode(',', $dev_config['addon']);
+                            foreach ($hw_addon as $add_key) {
+//                            foreach ($dev_config['addon_info'] as $add_key => $add_val) {
+                                if (!empty($dev_config['addon_info'][$add_key])) {
+                                    $add_val = $dev_config['addon_info'][$add_key];
+                                    $xnode_obj = $xnode->addChild('addOnModule');
+                                    $xnode_obj->addAttribute('idx', $ti);
+                                    $xnode_obj->addChild('loadInformation', $add_val);
+                                    $ti ++;
+                                }
                             }
 //                            $this->appendSimpleXmlNode($xml_work , $xnode_obj);
                         }

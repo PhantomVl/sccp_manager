@@ -738,18 +738,31 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                     return array('status' => true, 'table_reload' => true, 'message' => 'HW is Delete ! ');
                 }
                 break;
+// ------------- Create device tftp configuration 
             case 'create_hw_tftp':
                 $ver_id = ' Test !';
-                $this->sccp_delete_device_XML('all'); // Концы в вводу !!  
-                $this->sccp_create_tftp_XML();
-                $models = $this->dbinterface->get_db_SccpTableData("SccpDevice");
+                if (!empty($request['idn'])) {
+                    $models = array();
+                    foreach ($request['idn'] as $idv) {
+                        $this->sccp_delete_device_XML($idv);                        
+                        $models []= array('name'=>$idv);
+                    }
+                } else {
+                    $this->sccp_delete_device_XML('all'); 
+                    $models = $this->dbinterface->get_db_SccpTableData("SccpDevice");
+                }
+                
+                $this->sccp_create_tftp_XML(); // Default XML
                 $ver_id = ' on found active model !';
                 //return array('status' => false, 'message' => 'Error :'. print_r($models,1));
                 foreach ($models as $data) {
                     $ver_id = $this->sccp_create_device_XML($data['name']);
                 };
-// !TODO!: -TODO-:  Check SIP Suport Enabled 
-                $this->sccp_create_xmlSoftkey(); // Create Softkey Sets for SIP
+
+                if ($this->sccpvalues['siptftp']['data'] == 'on') { // Check SIP Suport Enabled 
+                    $this->sccp_create_xmlSoftkey(); // Create Softkey Sets for SIP
+                }
+
 // !TODO!: -TODO-: Do these returned message strings work with i18n ? 
 // !TODO!: It is necessary in the future to check, and replace all server responses on correct messages. Use _(msg) 
                 return array('status' => true, 'message' => 'Create new config files (version:' . $ver_id . ')');

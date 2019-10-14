@@ -571,12 +571,29 @@ $(document).ready(function () {
 // ----------------------- form ----------------
         if ($(this).data('id') === 'create-cnf') {
             var dev_cmd = 'create_hw_tftp';
+            var datas = '';
+            var i = 0;
+            $('#table-sccp').bootstrapTable('getSelections').forEach(function (entry) {
+                datas = datas + 'idn[' + i + ']=' + entry['name'] + '&';
+                i++;
+            });
+            $('#table-sip').bootstrapTable('getSelections').forEach(function (entry) {
+                datas = datas + 'idn[' + i + ']=' + entry['name'] + '&';
+                i++;
+            });
+            console.log(datas);
+
         }
         if ($(this).data('id') === 'delete_hardware') {
             var dev_cmd = $(this).data('id');
             var datas = '';
             var i = 0;
-            $('table').bootstrapTable('getSelections').forEach(function (entry) {
+//            $('table').bootstrapTable('getSelections').forEach(function (entry) {
+            $('#table-sccp').bootstrapTable('getSelections').forEach(function (entry) {
+                datas = datas + 'idn[' + i + ']=' + entry['name'] + '&';
+                i++;
+            });
+            $('#table-sip').bootstrapTable('getSelections').forEach(function (entry) {
                 datas = datas + 'idn[' + i + ']=' + entry['name'] + '&';
                 i++;
             });
@@ -599,10 +616,16 @@ $(document).ready(function () {
             if ($(this).data('id') === 'update_button_label') {
                 conf_msg = 'Update Butons Labels on All device ?';
             }
-            $('table').bootstrapTable('getSelections').forEach(function (entry) {
+//            $('table').bootstrapTable('getSelections').forEach(function (entry) {
+            $('#table-sccp').bootstrapTable('getSelections').forEach(function (entry) {
                 datas = datas + 'name[' + i + ']=' + entry['name'] + '&';
                 i++;
             });
+            $('#table-sip').bootstrapTable('getSelections').forEach(function (entry) {
+                datas = datas + 'name[' + i + ']=' + entry['name'] + '&';
+                i++;
+            });
+            
             if (datas === '') {
                 if (confirm(conf_msg)) {
                     datas = 'name[0]=all';

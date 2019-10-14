@@ -31,7 +31,7 @@
                         <i class="glyphicon glyphicon-ok"></i> <span><?php echo _('Reset Token Device') ?></span>
                     </button>
                 </div>
-                <table data-cookie="true" data-cookie-id-table="sccp-phone" data-url="ajax.php?module=sccp_manager&amp;command=getPhoneGrid&amp;type=sccp" data-cache="false" data-show-refresh="true" data-toolbar="#toolbar-sip" data-maintain-selected="true" data-show-columns="true" data-show-toggle="true" data-toggle="table" data-pagination="true" data-search="true" class="table table-striped ext-list" id="table-sip" data-id="mac">
+                <table data-cookie="true" data-cookie-id-table="sccp-phone" data-url="ajax.php?module=sccp_manager&amp;command=getPhoneGrid&amp;type=sccp" data-cache="false" data-show-refresh="true" data-toolbar="#toolbar-sccp" data-maintain-selected="true" data-show-columns="true" data-show-toggle="true" data-toggle="table" data-pagination="true" data-search="true" class="table table-striped ext-list" id="table-sccp" data-id="mac">
                     <thead>
                         <tr>
                             <th data-checkbox="true"></th>

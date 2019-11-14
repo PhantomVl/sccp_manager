@@ -577,10 +577,12 @@ $(document).ready(function () {
                 datas = datas + 'idn[' + i + ']=' + entry['name'] + '&';
                 i++;
             });
-            $('#table-sip').bootstrapTable('getSelections').forEach(function (entry) {
-                datas = datas + 'idn[' + i + ']=' + entry['name'] + '&';
-                i++;
-            });
+            if (document.getElementById('table-sip') != null ) {
+                $('#table-sip').bootstrapTable('getSelections').forEach(function (entry) {
+                    datas = datas + 'idn[' + i + ']=' + entry['name'] + '&';
+                    i++;
+                });
+            }
             console.log(datas);
 
         }
@@ -588,15 +590,16 @@ $(document).ready(function () {
             var dev_cmd = $(this).data('id');
             var datas = '';
             var i = 0;
-//            $('table').bootstrapTable('getSelections').forEach(function (entry) {
             $('#table-sccp').bootstrapTable('getSelections').forEach(function (entry) {
                 datas = datas + 'idn[' + i + ']=' + entry['name'] + '&';
                 i++;
             });
-            $('#table-sip').bootstrapTable('getSelections').forEach(function (entry) {
-                datas = datas + 'idn[' + i + ']=' + entry['name'] + '&';
-                i++;
-            });
+            if (document.getElementById('table-sip') != null ) {
+                $('#table-sip').bootstrapTable('getSelections').forEach(function (entry) {
+                    datas = datas + 'idn[' + i + ']=' + entry['name'] + '&';
+                    i++;
+                });
+            }
             if (!confirm(_('Are you sure you wish to delete selected device ?'))) {
                 dev_cmd = '';
             }
@@ -616,15 +619,16 @@ $(document).ready(function () {
             if ($(this).data('id') === 'update_button_label') {
                 conf_msg = 'Update Butons Labels on All device ?';
             }
-//            $('table').bootstrapTable('getSelections').forEach(function (entry) {
             $('#table-sccp').bootstrapTable('getSelections').forEach(function (entry) {
                 datas = datas + 'name[' + i + ']=' + entry['name'] + '&';
                 i++;
             });
-            $('#table-sip').bootstrapTable('getSelections').forEach(function (entry) {
-                datas = datas + 'name[' + i + ']=' + entry['name'] + '&';
-                i++;
-            });
+            if (document.getElementById('table-sip') != null ) {
+                $('#table-sip').bootstrapTable('getSelections').forEach(function (entry) {
+                    datas = datas + 'name[' + i + ']=' + entry['name'] + '&';
+                    i++;
+                });
+            }
             
             if (datas === '') {
                 if (confirm(conf_msg)) {

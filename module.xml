@@ -1,7 +1,7 @@
 <module>
 	<rawname>sccp_manager</rawname>
 	<name>SCCP Manager</name>
-	<version>13.0.0.4M</version>
+	<version>14.0.0.2M</version>
 	<type>setup</type>
 	<category>SCCP Connectivity</category>
 	<publisher>Alex GP</publisher>
@@ -19,7 +19,7 @@
 	</changelog>
 	<location></location>
 	<supported>
-		<version>13.0.0.1M</version>
+		<version>13.0.0.2M</version>
 	</supported>
         <info>https://github.com/PhantomVl/sccp_manager</info>
         <license>GPL</license>

@@ -276,6 +276,17 @@ and open the template in the editor. Base Version before all crash :-)
             <help>Digit Timeout: The amount of time to wait after the second (or subsequent) dialed digit. Override rules are the same as for firstdigittimeout.</help>
         </item>
         <item type="IE" id="3">
+            <label>No Answer Ring Time</label>
+            <input>
+                <name>cfwdnoanswer_timeout</name> 
+                <default>30</default>
+                <class>sccp-custom</class>
+                <type>number</type>
+                <options min="0" max="120"></options>
+            </input>
+            <help>Timeout after which callforward noanswer (when active) will be triggered. default is 30 seconds</help>
+        </item>
+        <item type="IE" id="3">
             <label>Autoanswer Ring Time</label>
             <input>
                 <name>autoanswer_ring_time</name> 
@@ -430,9 +441,17 @@ and open the template in the editor. Base Version before all crash :-)
             <name>cfwdbusy</name> 
             <label>Call Forward busy</label>
             <default>off</default>
-            <button value="on">On</button>
+            <button value="on">On</button>Call Forward
             <button value="off">Off</button>
             <help>Activate the callforward busy softkeys. Default is On</help>
+        </item>
+        <item type="IS" id="3" seq="0">
+            <name>cfwdnoanswer</name> 
+            <label>Call Forward NOANSWER</label>
+            <default>off</default>
+            <button value="on">On</button>
+            <button value="off">Off</button>
+            <help>Activate the callforward NOANSWER stuff and softkeys. Default is On</help>
         </item>
         <item type="IS" id="5" seq="0">
             <name>dndFeature</name> 
@@ -1174,6 +1193,15 @@ and open the template in the editor. Base Version before all crash :-)
             <button value="off">Off</button>
             <help>Transfer allowed</help>
         </item>
+        <item type="IS" id="1" seq="99">
+            <name>park</name> 
+            <label>Park</label>
+            <default>on</default>
+            <button_d value="NONE">Inherit</button_d>
+            <button value="on">On</button>
+            <button value="off">Off</button>
+            <help>Take a look to the compile how-to. Park stuff is not compiled by default.</help>
+        </item>
         <item type="IS" id="2" seq="99">
             <name>cfwdall</name> 
             <label>Call Forward</label>
@@ -1191,6 +1219,15 @@ and open the template in the editor. Base Version before all crash :-)
             <button value="on">On</button>
             <button value="off">Off</button>
             <help>Activate the callforward busy softkeys. Default is On</help>
+        </item>
+        <item type="IS" id="3" seq="0">
+            <name>cfwdnoanswer</name> 
+            <label>Call Forward NOANSWER</label>
+            <default>NONE</default>
+            <button value="NONE">Inherit</button>
+            <button value="on">On</button>
+            <button value="off">Off</button>
+            <help>Activate the callforward NOANSWER stuff and softkeys. Default is On</help>
         </item>
         <item type="IS" id="5" seq="99">
             <name>dndFeature</name> 

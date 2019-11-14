@@ -259,6 +259,8 @@ function Get_DB_config($sccp_compatible) {
             'transfer' => array('create' => "enum('on','off') NULL default NULL", 'modify' => "enum('on','off')"),
             'cfwdall' => array('create' => "enum('on','off') NULL default 'on'", 'modify' => "enum('on','off')"),
             'cfwdbusy' => array('create' => "enum('on','off') NULL default 'on'", 'modify' => "enum('on','off')"),
+            'cfwdnoanswer' => array('create' => "enum('on','off') NULL default 'on'", 'modify' => "enum('on','off')"),
+            'park' => array('create' => "enum('on','off') NULL default 'on'", 'modify' => "enum('on','off')"),            
             'directrtp' => array('create' => "enum('on','off') NULL default NULL", 'modify' => "enum('on','off')"),
             'dndFeature' => array('create' => "enum('on','off') NULL default NULL", 'modify' => "enum('on','off')"),
             'earlyrtp' => array('create' => "ENUM('immediate','offHook','dialing','ringout','progress','none') NULL default NULL", 'modify' => "ENUM('immediate','offHook','dialing','ringout','progress','none')"),
@@ -332,6 +334,8 @@ function Get_DB_config($sccp_compatible) {
         'sccpdevice' => array(
             'pickupexten' => array('drop' => "yes"),
             'directed_pickup' => array('drop' => "yes"),
+            'cfwdnoanswer' => array('create' => "enum('on','off') NULL default 'on'", 'modify' => "enum('on','off')"),
+            'park' => array('create' => "enum('on','off') NULL default 'on'", 'modify' => "enum('on','off')"),
             '_description' => array('rename' => "description"),
             '_loginname' => array('drop' => "yes"),
             '_profileid' => array('drop' => "yes"),
@@ -608,6 +612,10 @@ function InstallDB_updateSchema($db_config) {
                 }
             }
         }
+//        out("<li>" . print_r($sql_update, 1) . "</li>");
+//        out("<li>" . print_r($sql_modify, 1) . "</li>");
+//       die("Can not modify Е" . $tabl_name . " table sql: " . $sql_modify . "n");
+        
         if (!empty($sql_update)) {
             $sql_update = 'BEGIN; ' . $sql_update . ' COMMIT;';
             sql($sql_update);

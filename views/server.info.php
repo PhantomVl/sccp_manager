@@ -95,7 +95,7 @@ if (empty($conf_realtime)) {
 // $mysql_info 
 if ($mysql_info['Value'] <= '2000') {
     $this->info_warning['MySql'] = Array('Increase Mysql Group Concat Max. Length','Step 1: Go to mysql path <br> nano /etc/my.cnf',
-                                          'Step 2: And add the following line below [mysqld] as shown below <br> [mysql] <br>group_concat_max_len = 4096 or more',
+                                          'Step 2: And add the following line below [mysqld] as shown below <br> [mysqld] <br>group_concat_max_len = 4096 or more',
                                           'Step 3: Save and restart <br> systemctl restart mariadb.service<br> Or <br> service mysqld restart');
 }
  global $amp_conf;

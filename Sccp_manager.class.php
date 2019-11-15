@@ -1209,11 +1209,14 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
 
                 case 'allow':
                     $i = 0;
-                    foreach ($get_settings['voicecodecs'] as $keycodeс => $valcodeс) {
-                        $save_codec[$i] = $keycodeс;
-                        $i++;
-                    };
-                    $value = implode(";", $save_codec);
+                    if (!empty($get_settings['voicecodecs'])) {
+                        foreach ($get_settings['voicecodecs'] as $keycodeс => $valcodeс) {
+                            $save_codec[$i] = $keycodeс;
+                            $i++;
+                        };
+                        $value = implode(";", $save_codec);
+                    } else $value = 'all'; // Bug If not System Codecs 
+//                    } else $value = 'alaw;ulaw'; // Bug If not System Codecs 
                     break;
                 case 'phonecodepage':
                     $value = 'null';

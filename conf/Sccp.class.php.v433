@@ -376,7 +376,7 @@ class Sccp extends \FreePBX\modules\Core\Driver {
 //		$tmparr['namedcallgroup'] = array('prompttext' => _('Named Call Group'),'value' => '', 'tt' => $tt, 'level' => 1, 'section' => $section, 'category' => 'general');
 //		$tt = _("Phone pickup group pickupgroup=1,3-4");
 //                $tmparr['pickupgroup'] = array('prompttext' => _('Pickup group id'),'value' => '', 'tt' => $tt, 'level' => 1, 'section' => $section);
-		$tt = _("Name picapuroup : ");
+		$tt = _("Named PickupGroup : ");
                 if (!empty($named_group['namedpickupgroup'])) {
                     foreach ($named_group['namedpickupgroup'] as $val) {
                         $tt .= $val. ', ';

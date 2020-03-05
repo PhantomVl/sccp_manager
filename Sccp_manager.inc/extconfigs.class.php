@@ -85,18 +85,18 @@ class extconfigs {
         "linetable" => 'sccpline',
         "tftp_path" => '/tftpboot'
     );
-    private $keysetdefault = array('onhook' => 'redial,newcall,cfwdall,dnd,pickup,gpickup,private',
-        'connected' => 'hold,endcall,park,vidmode,select,cfwdall,cfwdbusy,idivert',
+    private $keysetdefault = array('onhook' => 'redial,newcall,cfwdall,cfwdbusy,cfwdnoanswer,pickup,gpickup,dnd,private',
+        'connected' => 'hold,endcall,park,vidmode,select,cfwdall,cfwdbusy,idivert,monitor',
         'onhold' => 'resume,newcall,endcall,transfer,conflist,select,dirtrfr,idivert,meetme',
         'ringin' => 'answer,endcall,transvm,idivert',
-        'offhook' => 'redial,endcall,private,cfwdall,cfwdbusy,pickup,gpickup,meetme,barge',
-        'conntrans' => 'hold,endcall,transfer,conf,park,select,dirtrfr,vidmode,meetme,cfwdall,cfwdbusy',
+        'offhook' => 'redial,endcall,private,cfwdall,cfwdbusy,cfwdnoanswer,pickup,gpickup,meetme,barg',
+        'conntrans' => 'hold,endcall,transfer,conf,park,select,dirtrfr,monitor,vidmode,meetme,cfwdal',
         'digitsfoll' => 'back,endcall,dial',
-        'connconf' => 'conflist,newcall,endcall,hold,vidmode',
-        'ringout' => 'empty,endcall,transfer,cfwdall,idivert',
-        'offhookfeat' => 'redial,endcall',
-        'onhint' => 'redial,newcall,pickup,gpickup,barge',
-        'onstealable' => 'redial,newcall,cfwdall,pickup,gpickup,dnd,intrcpt',
+        'connconf' => 'conflist,newcall,endcall,hold,vidmode,monitor',
+        'ringout' => 'empty,endcall,transfer',
+        'offhookfeat' => 'resume,newcall,endcall',
+        'onhint' => 'redial,newcall,pickup,gpickup',
+        'onstealable' => 'redial,newcall,barge,intrcpt,cfwdall,pickup,gpickup,dnd',
         'holdconf' => 'resume,newcall,endcall,join',
         'uriaction' => 'default');
 //   Cisco  Language Code / Directory  

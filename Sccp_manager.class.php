@@ -2002,7 +2002,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         $dev_config['tftp_firmware'] = '';
         $dev_config['addon_info'] = array();
         if (!empty($dev_config['addon'])) {
-            $hw_addon = explode(',', $dev_config['addon']);
+            $hw_addon = explode(';', $dev_config['addon']);
             foreach ($hw_addon as $key) {
                 $hw_data = $this->getSccp_model_information('byid', false, "all", array('model' => $key));
                 $dev_config['addon_info'][$key] = $hw_data[0]['loadimage'];

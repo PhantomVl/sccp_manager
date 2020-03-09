@@ -324,7 +324,7 @@ class xmlinterface {
                         if (!empty($dev_config['addon'])) {
                             $xnode = $xml_work->addChild('addOnModules');
                             $ti = 1;
-                            $hw_addon = explode(',', $dev_config['addon']);
+                            $hw_addon = explode(';', $dev_config['addon']);
                             foreach ($hw_addon as $add_key) {
 //                            foreach ($dev_config['addon_info'] as $add_key => $add_val) {
                                 if (!empty($dev_config['addon_info'][$add_key])) {

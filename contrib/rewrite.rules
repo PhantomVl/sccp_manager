@@ -58,13 +58,13 @@ ri ^(P00405000700.sbn)$ firmware/7910/\1
 ri ^(CP7912080004SCCP080108A.sbin)$ firmware/7912/\1
 
 # 7915 firmware (ancient)
-ri ^(B015-1-0-4.SBN)$ firmware/7915/\1
+ri ^(B015-1-0-)(+\.SBN)$ firmware/7915/\1
 
 # 7916 firmware (ancient)
-ri ^(B016-1-0-4.SBN)$ firmware/7916/\1
+ri ^(B016-1-0-)(+\.SBN)$ firmware/7916/\1
 
 # 7920 firmware (ancient)
-ri ^(cmterm_7920.4.0-03-02.bin)$ firmware/7920/\1
+ri ^(cmterm_7920)(+\.bin)$ firmware/7920/\1
 
 # 7921_7925 firmware (ancient)
 ri ^(APPS-1.4.3.4.SBN)$ firmware/7921/\1

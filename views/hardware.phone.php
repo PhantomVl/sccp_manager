@@ -38,9 +38,9 @@
                             <th data-sortable="true" data-field="mac"><?php echo _('Device SEP ID') ?></th>                            
                             <th data-sortable="true" data-field="description"><?php echo _('Device  Descriptions') ?></th>
                             <th data-sortable="true" data-formatter="DispayTypeFormatter" data-field="type"><?php echo _('Device type') ?></th>
-                            <th data-sortable="false" data-field="button" data-formatter="LineFormatter"><?php echo _('Line') ?></th>
-                            <th data-sortable="false" data-field="status"><?php echo _('Status') ?></th>
-                            <th data-sortable="false" data-field="address"><?php echo _('Address') ?></th>
+                            <th data-sortable="true" data-field="button" data-formatter="LineFormatter"><?php echo _('Line') ?></th>
+                            <th data-sortable="true" data-field="status"><?php echo _('Status') ?></th>
+                            <th data-sortable="true" data-field="address"><?php echo _('Address') ?></th>
                             <th data-field="actions" data-formatter="DispayDeviceActionsKeyFormatter"><?php echo _('Actions') ?></th>
                         </tr>
                     </thead>

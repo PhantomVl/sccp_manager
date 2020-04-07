@@ -11,7 +11,7 @@ and open the template in the editor. Base Version before all crash :-)
  *                         SLA - Select element (from - data )
  *    Input element Select SLD - Date format 
  *                         SLZ - Time Zone 
- *                         SLZN - Time Zone List
+ *                       SLTZN - Time Zone List
  *                         SLT - TFTP Lang
  *                         SLM - Music on hold 
  *                         SLK - System KeySet
@@ -97,16 +97,24 @@ and open the template in the editor. Base Version before all crash :-)
             <nameseparator> : </nameseparator>
         </item>
         <item type="IE" id="4"> 
-            <label>External Ip</label>
+            <label>External Ip / Name</label>
             <input>
                 <name>externip</name> 
-                <default></default>
+                <default>0.0.0.0</default>
                 <class>sccp-custom</class>
                 <options placeholder="Provider IP"></options>
             </input>
-            <help>External IP Address of the firewall, required in case the PBX is running on a seperate host behind it. IP Address that we're going to notify in RTP media stream as the pbx source address.</help>
+            <input>
+                <name>externhost</name> 
+                <default></default>
+                <class>sccp-custom</class>
+                <options placeholder="Host Name"></options>
+            </input>
+
+            <help>External IP Address of the firewall, required in case the PBX is running on a seperate host behind it. IP Address that we're going to notify in RTP media stream as the pbx source address. Resolve Hostname (if dynamic) that we're going to resolve when setting up the RTP media stream (only active if externip=0.0.0.0 and host is natted.)</help>
             <meta_help>1</meta_help>
             <nameseparator> / </nameseparator>
+            externhost
         </item>
         
         <item type="IE" id="5">
@@ -212,12 +220,17 @@ and open the template in the editor. Base Version before all crash :-)
         </item>
 
         <item type="IED" id="1" seq="98">
-            <label>Device Connect Address</label>
+            <label>Device Connect Address / Name </label>
             <name>ccm_address</name>
             <cbutton field="internal" value="internal">Internal</cbutton>
-            <default>0.0.0.0</default>
-            <input value="NONE" field="ip" nameseparator="">
-                <options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/>
+            <default>0.0.0.0:2000</default>
+            <input value="NONE" field="ip" nameseparator=":">
+                <options placeholder="0.0.0.0 / pbx.org"/>
+                <class></class>
+            </input>
+            <input value="NONE" field="port">
+                <options placeholder="2000"/>
+                <class></class>
             </input>
             <add_pluss>+</add_pluss>
             <addbutton-disabled>Add Address</addbutton-disabled>
@@ -512,7 +525,7 @@ and open the template in the editor. Base Version before all crash :-)
             </select>
             <help>Date Format: The date format for the on-screen display. Can be one of the following: (D-M-YA, M.D.Y, Y/M/D) where 'D' is Day, 'M' is Month, 'Y' is Year, 'A' is 24-hour, 'a' is 12-hour, and the separators can be '.','-','/'</help>
         </item>
-        <item type="SLZN" id="2" seq="95">
+        <item type="SLTZN" id="2" seq="95">
             <label>Time Zone</label>
             <name>ntp_timezone</name> 
             <class>sccp-custom</class>

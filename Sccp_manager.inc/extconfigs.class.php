@@ -29,28 +29,63 @@ class extconfigs {
             case 'sccpDefaults':
                 $result = $this->sccpDefaults;
                 break;
-            case 'sccp_timezone':
-                $result = array();
-                foreach ($this->cisco_timezone as $key => $value) {
-                    $cisco_code = $key . ' Standard' . ((empty($value['daylight'])) ? '' : '/' . $value['daylight']) . ' Time';
-                    if (isset($value['cisco_code'])) {
-                        $cisco_code = (empty($value['cisco_code'])) ? $cisco_code : $value['cisco_code'];
-                    }
-                    $result[$key] = array('offset' => $value['offset'], 'daylight' => $value['daylight'], 'cisco_code' => $cisco_code);
+            case 'sccp_timezone_offset': // Sccp manafer: 1400 (+ Id) :2007 (+ Id) 
+                if (empty($index)) {
+                    return 0;
                 }
+                if (array_key_exists($index, $this->cisco_timezone)) {
+                    $tmp_time = $this->get_cisco_time_zone($index);
+                    return $tmp_time['offset'];
+                }
+
+                $tmp_dt = new \DateTime(null, new \DateTimeZone($index));
+                $tmp_ofset = $tmp_dt->getOffset();
+                return $tmp_ofset / 60;
+                
                 break;
-            /*                case 'cisco_time':
-              $result = array();
-              foreach ($this->cisco_timezone as $key => $value) {
-              $result[] = array('id'=> ($value['offset']/60) ,'val'=>$key.((empty($value['daylight']))? '': '/'.$value['daylight']));
-              }
-              break;
-             */
-            case 'cisco_timezone':
+            case 'sccp_timezone': // Sccp manafer: 1400 (+ Id) :2007 (+ Id) 
                 $result = array();
-                foreach ($this->cisco_timezone as $key => $value) {
-                    $result[] = array('id' => $key, 'val' => $key . ((empty($value['daylight'])) ? '' : '/' . $value['daylight']));
-//                        $result[$key] =$key.((empty($value['daylight']))? '': '/'.$value['daylight']);
+                
+                if (empty($index)) {
+                    return array('offset' => '00', 'daylight' => '', 'cisco_code' => 'Greenwich');
+                }
+                if (array_key_exists($index, $this->cisco_timezone)) {
+                    return  $this->get_cisco_time_zone($index);
+                } else {
+                    $timezone_abbreviations = \DateTimeZone::listAbbreviations();
+                    
+                    $tz_tmp = array();
+                    foreach ($timezone_abbreviations as $subArray) {
+                        $tf_idt = array_search($index ,array_column($subArray, 'timezone_id'));
+                        if (!empty($tf_idt)) {
+                            $tz_tmp[] = $subArray[$tf_idt];
+                        } 
+                    }
+                    if (empty($tz_tmp)) {
+                        return array('offset' => '00', 'daylight' => '', 'cisco_code' => 'Greenwich');
+                    }
+
+                    if (count($tz_tmp)==1) {
+                        $time_set = $tz_tmp[0];
+                    } else {
+                        $tmp_dt = new \DateTime(null, new \DateTimeZone($index));
+                        $tmp_ofset = $tmp_dt->getOffset();
+                        foreach ($tz_tmp as $subArray) {
+                            if ($subArray['offset'] == $tmp_ofset) {
+                                $time_set = $subArray; 
+                                break;
+                            }
+                        }
+                    }
+                    $tmp_ofset = $time_set['offset'] / 60;
+                    $tmp_dli = (empty($time_set['dst']) ? '' :  'Daylight' );
+                    foreach ($this->cisco_timezone as $key => $value) {
+                        if (($value['offset'] == $tmp_ofset) and ( $value['daylight'] == $tmp_dli )) {
+                            return  $this->get_cisco_time_zone($key);
+                            break;
+                        }
+                    }
+                    return array('offset' => '00', 'daylight' => '', 'cisco_code' => 'Greenwich');
                 }
                 break;
             default:
@@ -66,6 +101,20 @@ class extconfigs {
                 return array();
             }
         }
+    }
+
+    private function get_cisco_time_zone($tzc){
+    
+        if ( (empty($tzc)) or (!array_key_exists($tzc, $this->cisco_timezone))) { 
+//            return array('offset' => '00', 'daylight' => '', 'cisco_code' => 'Greenwich');
+            return array();
+        }
+        $tzdata = $this->cisco_timezone[$tzc];
+        $cisco_code = $tzc . ' Standard' . ((empty($tzdata['daylight'])) ? '' : '/' . $tzdata['daylight']) . ' Time';
+        if (isset($tzdata['cisco_code'])) {
+            $cisco_code = (empty($tzdata['cisco_code'])) ? $cisco_code : $tzdata['cisco_code'];
+        }
+        return array('offset' => $tzdata['offset'], 'daylight' => $tzdata['daylight'], 'cisco_code' => $cisco_code);
     }
 
     private $sccpDefaults = array(
@@ -229,10 +278,9 @@ class extconfigs {
 //       /tftpboot/XMLdefault.cnf.xml
 //       /tftpboot/SEP[MAC].cnf.xml
 //       /tftpboot/SCCPxxxx.loads
-        $adv_tree['def'] = Array('templates' => 'tftproot', 'settings' => '', 'locales' => '', 'firmware' => '', 'languages' => 'tftproot','dialplan' => '', 'softkey' => '');
+        $adv_tree['def'] = Array('templates' => 'tftproot', 'settings' => '', 'locales' => '', 'firmware' => '', 'languages' => 'tftproot', 'dialplan' => '', 'softkey' => '');
 //        $adv_tree['def']   = Array('templates' => 'tftproot', 'settings' => '', 'locales' => 'tftproot',  'firmware' => 'tftproot', 'languages' => '');
 //        $adv_tree['def'] = Array('templates' => 'tftproot', 'settings' => '', 'locales' => 'tftproot', 'firmware' => 'tftproot', 'languages' => 'tftproot');
-        
 //* **************------ ****        
         $base_tree = Array('tftp_templates' => 'templates', 'tftp_path_store' => 'settings', 'tftp_lang_path' => 'languages', 'tftp_firmware_path' => 'firmware', 'tftp_dialplan' => 'dialplan', 'tftp_softkey' => 'softkey');
 
@@ -309,7 +357,7 @@ class extconfigs {
                 }
             }
         }
-        print_r($base_config,1);
+        print_r($base_config, 1);
 //        die(print_r($base_config,1));
 //        $base_config['External_ini'] = $adv_config;
 //        $base_config['External_mode'] =  $adv_tree_mode;
@@ -364,14 +412,14 @@ class extconfigs {
     public function validate_RealTime($realm = '') {
         global $amp_conf;
         $res = Array();
-        if (empty($realm) ) {
+        if (empty($realm)) {
             $realm = 'sccp';
         }
         $cnf_int = \FreePBX::Config();
         $cnf_wr = \FreePBX::WriteConfig();
         $cnf_read = \FreePBX::LoadConfig();
-        
-        $def_config = array('sccpdevice' => 'mysql,'.$realm.',sccpdeviceconfig', 'sccpline' => 'mysql,'.$realm.',sccpline');
+
+        $def_config = array('sccpdevice' => 'mysql,' . $realm . ',sccpdeviceconfig', 'sccpline' => 'mysql,' . $realm . ',sccpline');
         $backup_ext = array('_custom.conf', '.conf', '_additional.conf');
         $def_bd_config = array('dbhost' => $amp_conf['AMPDBHOST'], 'dbname' => $amp_conf['AMPDBNAME'],
             'dbuser' => $amp_conf['AMPDBUSER'], 'dbpass' => $amp_conf['AMPDBPASS'],
@@ -389,17 +437,19 @@ class extconfigs {
                 $ext_conf = $cnf_read->getConfig('extconfig' . $fext);
                 if (!empty($ext_conf['settings']['sccpdevice'])) {
                     // Add chek line
-                    if (strtolower($ext_conf['settings']['sccpdevice']) == strtolower($def_config['sccpdevice'])){
+                    if (strtolower($ext_conf['settings']['sccpdevice']) == strtolower($def_config['sccpdevice'])) {
                         $res['sccpdevice'] = 'OK';
-                        $res['extconfigfile'] = 'extconfig'. $fext;
+                        $res['extconfigfile'] = 'extconfig' . $fext;
                     } else {
-                        $res['sccpdevice'] = 'Error in line sccpdevice '. $res['sccpdevice'];
+                        $res['sccpdevice'] = 'Error in line sccpdevice ' . $res['sccpdevice'];
                     }
                 }
                 if (!empty($ext_conf['settings']['sccpline'])) {
-                    if (strtolower($ext_conf['settings']['sccpline']) == strtolower($def_config['sccpline'])){
+                    if (strtolower($ext_conf['settings']['sccpline']) == strtolower($def_config['sccpline'])) {
                         $res['sccpline'] = 'OK';
-                    } else {$res['sccpline'] = 'Error in line sccpline';}
+                    } else {
+                        $res['sccpline'] = 'Error in line sccpline';
+                    }
                 }
             }
         }
@@ -436,7 +486,7 @@ class extconfigs {
                 $res['mysqlconfig'] = 'OK';
             }
         }
-        
+
         if (file_exists($dir . '/res_config_mysql.conf')) {
             $res_conf = $cnf_read->getConfig('res_config_mysql.conf');
             if (empty($res_conf[$realm])) {

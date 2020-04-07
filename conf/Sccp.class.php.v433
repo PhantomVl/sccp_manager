@@ -43,8 +43,8 @@ class Sccp extends \FreePBX\modules\Core\Driver {
 			"prettyName" => _("Sccp Custom Driver"),
 			"shortName" => "SCCP",
 			"description" => _("Sccp Device"),
-			"Version" => "11.3.v434m",
-			"about" => "Sccp mysql class Base ver: 11.3,  Sccp ver: 434"
+			"Version" => "11.4.v434m",
+			"about" => "Sccp mysql class Base ver: 11.4,  Sccp ver: 434"
 		);
 	}
 	public function addDevice($id, $settings) {
@@ -127,6 +127,8 @@ class Sccp extends \FreePBX\modules\Core\Driver {
 //                die(print_r($sql));
 		$sth = $this->database->prepare($sql);
                 $sth->execute();
+
+                $this->reload_line($id);
 		return true;
         }
 
@@ -135,9 +137,15 @@ class Sccp extends \FreePBX\modules\Core\Driver {
 		$sql = "DELETE FROM sccpline WHERE name = ?";
 		$sth = $this->database->prepare($sql);
 		$sth->execute(array($id));
+                $this->reload_line($id);
 		return true;
 	}
 
+        public function reload_line($id) {
+            global $astman;
+            $result = $astman->Command('sccp reload line ' . $id);
+            return $result;
+        }
         
 	public function getDevice($id) {
                 $sccp_line = array();

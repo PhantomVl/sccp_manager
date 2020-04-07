@@ -8,7 +8,7 @@
  *                         SLA - Select element (from - data )
  *    Input element Select SLD - Date format 
  *                         SLZ - Time Zone 
- *                         SLZN - Time Zone List
+ *                       SLTZN - Time Zone List
  *                         SLT - TFTP Lang
  *                         SLM - Music on hold 
  *                         SLK - System KeySet
@@ -35,6 +35,7 @@ $time_zone = array('-12' => 'GTM -12', '-11' => 'GTM -11', '-10' => 'GTM -10', '
                    '04'  => 'GTM +4',   '05' => 'GTM +5',  '06'  => 'GTM +6', '07'  => 'GTM +7',
                    '08'  => 'GTM +8',   '09' => 'GTM +9',  '10'  => 'GTM +10', '11'=> 'GTM +11', '12' => 'GTM +12');
 
+
 $time_zone_name = array();
 $extension_list = array();
 $sofkey_list = array();
@@ -42,7 +43,6 @@ $model_list = array();
 $device_list = array();
 $dialplan_list = array();
         
-//$time_zone_name = \FreePBX::Sccp_manager()-> extconfigs-> getextConfig('cisco_timezone');
 //$time_zone = \FreePBX::Sccp_manager()-> extconfigs-> getextConfig('cisco_time');
 //$system_time_zone = \FreePBX::Sccp_manager()->getSysnemTimeZone();
 //$sofkey_list = \FreePBX::Sccp_manager()-> srvinterface -> sccp_list_keysets();
@@ -486,7 +486,7 @@ foreach ($items as $child) {
  *    Input element Select SLS - System Language 
  */
     
-    if ($child['type'] == 'SLS' || $child['type'] == 'SLT' || $child['type'] == 'SLA' || $child['type'] == 'SLZ' || $child['type'] == 'SLZN') {
+    if ($child['type'] == 'SLS' || $child['type'] == 'SLT' || $child['type'] == 'SLA' || $child['type'] == 'SLZ') {
 //        $value = $child -> select;
         $res_n =  (string)$child ->name;       
         $res_id = $npref.$res_n;
@@ -503,12 +503,6 @@ foreach ($items as $child) {
         }
         if ($child['type'] == 'SLT') {
             $select_opt= $tftp_lang;
-        }
-        if ($child['type'] == 'SLZN') {
-            if (empty($time_zone_name)) {
-                $time_zone_name = \FreePBX::Sccp_manager()-> extconfigs-> getextConfig('cisco_timezone');
-            }
-            $select_opt= $time_zone_name;
         }
         if ($child['type'] == 'SLZ') {
             $select_opt= $time_zone;
@@ -929,6 +923,82 @@ foreach ($items as $child) {
         <?php
         echo '<!-- END '.$child->label.' -->';
     }
+/*
+ *    Input element Select SLTZN - System Time Zone
+ */
+    
+    if ($child['type'] == 'SLTZN') {
+//        $value = $child -> select;
+        $res_n =  (string)$child ->name;       
+        $res_id = $npref.$res_n;
+        $child->value ='';
+
+        if (!empty($metainfo[$res_n])){
+            if ($child->meta_help == '1' || $child->help == 'Help!') {
+                $child->help = $metainfo[$res_n]['Description'];
+            }
+        }
+
+        $time_regions = array('Africa', 'America', 'Antarctica', 'Arctic', 'Asia', 'Atlantic', 'Australia', 'Europe', 'Russian', 'Indian', 'Pacific');
+        $time_zone_global = DateTimeZone::listIdentifiers(DateTimeZone::ALL_WITH_BC );
+        $time_zone_ru = array('Russian/Kaliningrad', 'Russian/Moscow', 'Russian/St.Peterburg', 'Russian/Samara', 'Russian/Novosibirsk', 'Russian/Ekaterinburg', 'Russian/Irkutsk', 'Russian/Yakutsk', 'Russian/Khabarovsk', 'Russian/Vladivostok', 'Russian/Sakhalin', 'Russian/Magadan', 'Russian/Kamchatka');
+        $time_zone_list = array_merge($time_zone_global,$time_zone_ru);
+        $optgroup = '';
+        sort($time_zone_list);
+        
+        if (empty($child->class)) {
+           $child->class = 'form-control';
+        }
+        
+        if (!empty($fvalues[$res_n])) {
+            if (!empty($fvalues[$res_n]['data'])) {
+                $child->value = $fvalues[$res_n]['data'];
+            }
+        }
+        
+        if (empty($child->value)){
+            $child->value = \date_default_timezone_get();
+//            if (!empty($child->default)){
+//                $child->value = $child->default;
+//            }
+        }
+        
+        echo '<!-- Begin '.$child->label.' -->';
+        ?>
+        <div class="element-container">
+           <div class="row"> <div class="form-group"> 
+ 
+                   <div class="col-md-3">
+                        <label class="control-label" for="<?php echo $res_id; ?>"><?php echo _($child->label);?></label>
+                        <i class="fa fa-question-circle fpbx-help-icon" data-for="<?php echo $res_id; ?>"></i>
+                    </div>
+                    <div class="col-md-9"> <!-- <div class = "lnet form-group form-inline" data-nextid=1> --> <?php
+                            echo  '<select name="'.$res_id.'" class="'. $child->class . '" id="' . $res_id . '">';
+                            foreach ($time_zone_list as $opt_key) {
+                                $z = explode('/', $opt_key, 2);
+                                if (count($z) != 2 || !in_array($z[0], $time_regions)) continue;
+                                if ($optgroup != $z[0]) {
+                                    if ($optgroup !== '') echo  '</optgroup>';
+                                    $optgroup = $z[0];
+                                    echo   '<optgroup label="' . htmlentities($z[0]) . '">';
+                                }
+                                echo  '<option value="' . htmlentities($opt_key) . '" label="' . htmlentities(str_replace('_', ' ', $z[1])) . '"' . ($opt_key == $child->value ? ' selected="selected" >' : '>'). htmlentities(str_replace('_', ' ', $opt_key)) . '</option>';
+                            }
+                            if ($optgroup !== '') echo '</optgroup>';
+                            
+                            ?> </select>
+                    <!-- </div> --> </div>
+            </div></div>
+            <div class="row"><div class="col-md-12">
+                <span id="<?php echo $res_id;?>-help" class="help-block fpbx-help-block"><?php echo _($child->help);?></span>
+            </div></div>
+        </div>
+        <!--END System Language-->
+        <?php
+        echo '<!-- END '.$child->label.' -->';
+        
+    }
+    
     
 }
 ?>

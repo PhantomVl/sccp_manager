@@ -42,44 +42,22 @@ class xmlinterface {
 
 
             $xnode = &$xml_work->callManagerGroup->members;
-            if ($data_values['bindaddr'] == '0.0.0.0') {
-                $ifc = 0;
-//                $xnode->member['priority'] = print_r($data_values['server_if_list'], true);
-                foreach ($data_values['server_if_list'] as $value) {
-                    if (!empty($value['ip'])) {
-                        $ip_valid = true;
-                        if (!empty($data_values['ccm_address'])) {
-                            if (strpos($data_values['ccm_address'], 'internal') !== false || strpos($data_values['ccm_address'], '0.0.0.0') !== false) {
-                                // Skip
-                            } else {
-                                if (strpos($data_values['ccm_address'], $value['ip']) === false) {
-                                    $ip_valid = false;
-                                }
-                            }
-                        }
-                        if (!in_array($value['ip'], array('0.0.0.0', '127.0.0.1'), true) && ($ip_valid)) {
-                            $xnode_obj = clone $xnode->member;
-                            $xnode_obj['priority'] = $ifc;
-                            //$xnode_obj =  &$xnode -> member -> callManager;
-                            $xnode_obj->callManager->name = $data_values['servername'];
-                            $xnode_obj->callManager->ports->ethernetPhonePort = $data_values['port'];
-                            $xnode_obj->callManager->processNodeName = $value['ip'];
-                            if ($ifc === 0) {
-                                $this->replaceSimpleXmlNode($xnode->member, $xnode_obj);
-                            } else {
-                                $this->appendSimpleXmlNode($xnode->member, $xnode_obj);
-                            }
-                            $ifc ++;
-                        }
-                    }
+            $bind_tmp = $this->get_server_sccp_bind($data_values);
+            $ifc = 0;
+            foreach ($bind_tmp as $bind_value) {
+                $xnode_obj = clone $xnode->member;
+                $xnode_obj['priority'] = $ifc;
+                $xnode_obj->callManager->name = $data_values['servername'];
+                $xnode_obj->callManager->ports->ethernetPhonePort = $bind_value['port'];
+                $xnode_obj->callManager->processNodeName = $bind_value['ip'];
+                if ($ifc === 0) {
+                    $this->replaceSimpleXmlNode($xnode->member, $xnode_obj);
+                } else {
+                    $this->appendSimpleXmlNode($xnode->member, $xnode_obj);
                 }
-            } else {
-                $xnode->member['priority'] = '0';
-                $xnode_obj = &$xnode->member->callManager;
-                $xnode_obj->name = $data_values['servername'];
-                $xnode_obj->ports->ethernetPhonePort = $data_values['port'];
-                $xnode_obj->processNodeName = $data_values['bindaddr'];
+                $ifc++;
             }
+
             $this->replaceSimpleXmlNode($xml_work->callManagerGroup->members, $xnode);
 
             foreach ($def_xml_fields as $value) {
@@ -231,14 +209,14 @@ class xmlinterface {
                                             $xnode->$nod = $srs_val[0];
                                             $nod = $srs_put[1] . $si;
                                             $xnode->$nod = $srs_val[1];
-                                            $si ++;
+                                            $si++;
                                         }
                                         while ($si < 4) {
                                             $nod = $srs_put[0] . $si;
                                             $xnode->$nod = '';
                                             $nod = $srs_put[1] . $si;
                                             $xnode->$nod = '';
-                                            $si ++;
+                                            $si++;
                                         }
                                     }
                                     break;
@@ -260,7 +238,7 @@ class xmlinterface {
                                         } else {
                                             $this->appendSimpleXmlNode($xnode->member, $xnode_obj);
                                         }
-                                        $ifc ++;
+                                        $ifc++;
                                     }
                                 /*                                    if ($data_values['bindaddr'] == '0.0.0.0') {
                                   $ifc = 0;
@@ -332,7 +310,7 @@ class xmlinterface {
                                     $xnode_obj = $xnode->addChild('addOnModule');
                                     $xnode_obj->addAttribute('idx', $ti);
                                     $xnode_obj->addChild('loadInformation', $add_val);
-                                    $ti ++;
+                                    $ti++;
                                 }
                             }
 //                            $this->appendSimpleXmlNode($xml_work , $xnode_obj);
@@ -396,60 +374,82 @@ class xmlinterface {
 
     private function get_server_sccp_bind($data_values = array()) {
         $res = array();
-
-        if ($data_values['bindaddr'] == '0.0.0.0') {
-            $ifc = 0;
-            foreach ($data_values['server_if_list'] as $value) {
-                if (!empty($value['ip'])) {
-                    $ip_valid = true;
-                    if (!empty($data_values['ccm_address'])) {
-                        if (strpos($data_values['ccm_address'], 'internal') !== false || strpos($data_values['ccm_address'], '0.0.0.0') !== false) {
-                            // Skip
-                        } else {
-                            if (strpos($data_values['ccm_address'], $value['ip']) === false) {
-                                $ip_valid = false;
-                            }
-                        }
-                    }
-                    if (!in_array($value['ip'], array('0.0.0.0', '127.0.0.1'), true) && ($ip_valid)) {
-                        $res[] = array('ip' => $value['ip'], 'port' => $data_values['port']);
+        if ($data_values['bindaddr'] !== '0.0.0.0') {
+            return array('ip' => $data_values['bindaddr'], 'port' => $data_values['port']);
+        }
+        $ip_fill = true;
+        if (!empty($data_values['ccm_address'])) {
+            $ccm_address = $data_values['ccm_address'];
+            if (strpos($ccm_address, 'internal') === false && strpos($ccm_address, '0.0.0.0') === false) {
+                $tmp_data = explode(';', $ccm_address);
+                $ip_fill = false;
+                foreach ($tmp_data as $tmp_row) {
+                    if (strpos($tmp_row, '/') !== false) {
+                        $ttmp_r = explode('/', $tmp_row); // IPv6 - ????
+                        $rkey = $ttmp_r[0];
+                        $res[$rkey] = array('ip' => $rkey, 'port' => $ttmp_r[1]);
+                    } else {
+                        $rkey = $tmp_row;
+                        $res[$rkey] = array('ip' => $rkey, 'port' => $data_values['port']);
                     }
                 }
             }
-        } else {
-            $res[0] = array('ip' => $data_values['bindaddr'], 'port' => $data_values['port']);
         }
+        if ($ip_fill) {
+            foreach ($data_values['server_if_list'] as $value) {
+                if (!empty($value['ip'])) {
+                    if (!in_array($value['ip'], array('0.0.0.0', '127.0.0.1'), true)) {
+                        $rkey = $value['ip'];
+                        $res[$rkey] = array('ip' => $rkey, 'port' => $data_values['port']);
+                    }
+                }
+            }
+        }
+        if (!empty($data_values['externhost'])) {
+            $rkey = $data_values['externhost'];
+            if (!in_array($rkey, array('0.0.0.0', '127.0.0.1', 'localhost'), true)) {
+                $res[$rkey] = array('ip' => $rkey, 'port' => $data_values['port']);
+            }
+        } else {
+            if (!empty($data_values['externip'])) {
+                $rkey = $data_values['externip'];
+                if (!in_array($rkey, array('0.0.0.0', '127.0.0.1'), true)) {
+                    $res[$rkey] = array('ip' => $rkey, 'port' => $data_values['port']);
+                }
+            }
+        }
+
         return $res;
     }
 
     /*
-    private function get_server_sip_bind($data_values = array()) {
-        $res = array();
+      private function get_server_sip_bind($data_values = array()) {
+      $res = array();
 
-        if (!empty($data_values['sipbind']) and ( $data_values['sipbind'] != '0.0.0.0')) {
-            $res[0] = array('ip' => $data_values['sipbind'], 'port' => $data_values['sipbindport'], 'tlsport' => $data_values['tlsport'], 'proto' => $data_values['sipsuportproto']);
-        }
+      if (!empty($data_values['sipbind']) and ( $data_values['sipbind'] != '0.0.0.0')) {
+      $res[0] = array('ip' => $data_values['sipbind'], 'port' => $data_values['sipbindport'], 'tlsport' => $data_values['tlsport'], 'proto' => $data_values['sipsuportproto']);
+      }
 
-        $ifc = 0;
-        foreach ($data_values['server_if_list'] as $value) {
-            if (!empty($value['ip'])) {
-                $ip_valid = true;
-                if (!empty($data_values['ccm_address'])) {
-                    if (strpos($data_values['ccm_address'], 'internal') !== false || strpos($data_values['ccm_address'], '0.0.0.0') !== false) {
-                        // Skip
-                    } else {
-                        if (strpos($data_values['ccm_address'], $value['ip']) === false) {
-                            $ip_valid = false;
-                        }
-                    }
-                }
-                if (!in_array($value['ip'], array('0.0.0.0', '127.0.0.1', $data_values['sipbind']), true) && ($ip_valid)) {
-                    $res[] = array('ip' => $value['ip'], 'port' => $data_values['sipbindport'], 'tlsport' => $data_values['tlsport'], 'proto' => $data_values['sipsuportproto']);
-                }
-            }
-        }
-        return $res;
-    }
+      $ifc = 0;
+      foreach ($data_values['server_if_list'] as $value) {
+      if (!empty($value['ip'])) {
+      $ip_valid = true;
+      if (!empty($data_values['ccm_address'])) {
+      if (strpos($data_values['ccm_address'], 'internal') !== false || strpos($data_values['ccm_address'], '0.0.0.0') !== false) {
+      // Skip
+      } else {
+      if (strpos($data_values['ccm_address'], $value['ip']) === false) {
+      $ip_valid = false;
+      }
+      }
+      }
+      if (!in_array($value['ip'], array('0.0.0.0', '127.0.0.1', $data_values['sipbind']), true) && ($ip_valid)) {
+      $res[] = array('ip' => $value['ip'], 'port' => $data_values['sipbindport'], 'tlsport' => $data_values['tlsport'], 'proto' => $data_values['sipsuportproto']);
+      }
+      }
+      }
+      return $res;
+      }
      * 
      */
 
@@ -493,12 +493,12 @@ class xmlinterface {
         $sip_bind = $data_values['sbind'];
         $bind_proto = 'tcp';
         $bind_ip_def = '';
-        foreach($sip_bind  as $key => $value) {
+        foreach ($sip_bind as $key => $value) {
             if (empty($bind_ip_def)) {
                 $bind_ip_def = $key;
-                $bind_proto  = (isset($value['tcp'])) ? 'tcp' : 'udp';
+                $bind_proto = (isset($value['tcp'])) ? 'tcp' : 'udp';
             }
-        } 
+        }
 
         if (file_exists($xml_template)) {
             $xml_work = simplexml_load_file($xml_template);
@@ -598,7 +598,7 @@ class xmlinterface {
                                         } else {
                                             $this->appendSimpleXmlNode($xnode->member, $xnode_obj);
                                         }
-                                        $ifc ++;
+                                        $ifc++;
                                     }
                             }
                         }
@@ -616,7 +616,7 @@ class xmlinterface {
                             }
                             switch ($dkey) {
                                 case 'sipProxies':
-                                    $xnode = &$xml_node->$dkey;                                    
+                                    $xnode = &$xml_node->$dkey;
                                     $xnode->backupProxy = $bind_ip_def;
                                     $xnode->backupProxyPort = $sip_bind[$bind_ip_def][$bind_proto];
                                     $xnode->emergencyProxy = $bind_proto;
@@ -636,7 +636,7 @@ class xmlinterface {
                                             $xnode_obj['button'] = $ifc + 1;
                                             $xnode_obj['lineIndex'] = $ifc + 1;
                                             //$xnode_obj->proxy = $data_values['bindaddr'];
-                                            $xnode_obj-> featureID = "9";
+                                            $xnode_obj->featureID = "9";
                                             if ($xnode_obj->proxy != 'USECALLMANAGER') {
                                                 $xnode_obj->proxy = $bind_proto;
                                                 $xnode_obj->port = $sip_bind[$bind_ip_def][$bind_proto];
@@ -651,18 +651,18 @@ class xmlinterface {
                                             } else {
                                                 $this->appendSimpleXmlNode($xnode->line, $xnode_obj);
                                             }
-                                            $ifc ++;
+                                            $ifc++;
                                         }
                                     }
                                     if (!empty($data_values['speeddial'])) {
                                         foreach ($data_values['speeddial'] as $spkey => $spvalue) {
-                                            $xmlstr = '<line button="'. ($ifc + 1) .'"> <featureID>22</featureID>'
-                                                       .'<featureLabel>'.$spvalue["name"].'</featureLabel>'
-                                                       .'<speedDialNumber>'.$spvalue["dial"].'</speedDialNumber>'
-                                                       .'<contact>'.$spvalue["dial"].'</contact> <retrievalPrefix /></line>';
+                                            $xmlstr = '<line button="' . ($ifc + 1) . '"> <featureID>22</featureID>'
+                                                    . '<featureLabel>' . $spvalue["name"] . '</featureLabel>'
+                                                    . '<speedDialNumber>' . $spvalue["dial"] . '</speedDialNumber>'
+                                                    . '<contact>' . $spvalue["dial"] . '</contact> <retrievalPrefix /></line>';
                                             $xnode_obj = simplexml_load_string($xmlstr);
                                             $this->appendSimpleXmlNode($xnode->line, $xnode_obj);
-                                            $ifc ++;
+                                            $ifc++;
                                         }
                                     }
 //                                    $xnode = &$xml_node->$dkey->members;
@@ -674,7 +674,7 @@ class xmlinterface {
                                     $templet_path = (($dkey == 'softKeyFile') ? $dev_config['tftp_softkey'] : $dev_config['tftp_dialplan']);
                                     $tmp_key = ($dkey == 'softKeyFile') ? 'softkeyset' : '_dialrules';
                                     if (!empty($dev_config[$tmp_key])) {
-                                        $xml_ext_file = (($dkey == 'softKeyFile') ? 'softkey'.$dev_config[$tmp_key].'.xml' : $dev_config[$tmp_key].'.xml');
+                                        $xml_ext_file = (($dkey == 'softKeyFile') ? 'softkey' . $dev_config[$tmp_key] . '.xml' : $dev_config[$tmp_key] . '.xml');
                                     }
 //                                    $xml_node->$dkey = $templet_path . '/' . $xml_ext_file.'---'.$dev_config[$tmp_key];
 //                                    break;
@@ -710,7 +710,7 @@ class xmlinterface {
                                 $xnode_obj = $xnode->addChild('addOnModule');
                                 $xnode_obj->addAttribute('idx', $ti);
                                 $xnode_obj->addChild('loadInformation', $add_val);
-                                $ti ++;
+                                $ti++;
                             }
 //                            $this->appendSimpleXmlNode($xml_work , $xnode_obj);
                         }
@@ -771,9 +771,9 @@ class xmlinterface {
         return time();
     }
 
-    function save_DialPlan($confDir,$get_settings) {
+    function save_DialPlan($confDir, $get_settings) {
         $xmlstr = "<DIALTEMPLATE>\n";
-        $xmlstr .= "<versionStamp>".time()."</versionStamp>\n";
+        $xmlstr .= "<versionStamp>" . time() . "</versionStamp>\n";
         $dialFelds = array('match', 'timeout', 'rewrite', 'tone'); //str -to lo ! 
 
         $hdr_prefix = 'sccp_dial_';
@@ -811,7 +811,7 @@ class xmlinterface {
         } else {
             $errors = array('Fields Dial Plan Name is requered !!');
         }
-        
+
         if (empty($errors)) {
 //            $put_file = 'test';
             $put_file = str_replace(array("\n", "\r", "\t", "/", "\\", ".", ","), '', $put_file);
@@ -824,41 +824,41 @@ class xmlinterface {
 
     function create_xmlSoftkeyset($config, $confDir, $name) {
         if (empty($config[$name])) {
-            if ($name =='default') {
-                $typeSoft = $confDir["tftp_templates"].'/SIPDefaultSoftKey.xml_template';
-                if(file_exists($typeSoft)){
+            if ($name == 'default') {
+                $typeSoft = $confDir["tftp_templates"] . '/SIPDefaultSoftKey.xml_template';
+                if (file_exists($typeSoft)) {
                     $file = $confDir["tftp_softkey"] . '/softkey' . $name . '.xml';
                     if (!copy($typeSoft, $file)) {
-                        return array('error'=>'Access error'.$name);
+                        return array('error' => 'Access error' . $name);
                     }
                 }
                 return array();
             } else {
-                return array('error'=>'Invalid softkey Name'.$name);
+                return array('error' => 'Invalid softkey Name' . $name);
             }
         }
         $errors = array();
         $xmlstr = "<softKeyCfg>\n";
-        $xmlstr .= "<versionStamp>".time()."</versionStamp>\n";
+        $xmlstr .= "<versionStamp>" . time() . "</versionStamp>\n";
 //        $xmlstr .= "<typeSoftKey></typeSoftKey>\n";
-        $typeSoft = $confDir["tftp_templates"].'/SIPTypeSoftKey.xml_template';
+        $typeSoft = $confDir["tftp_templates"] . '/SIPTypeSoftKey.xml_template';
         $read_soft = "";
-        if(file_exists($typeSoft)){
-            $f_read = fopen($typeSoft,'r');
+        if (file_exists($typeSoft)) {
+            $f_read = fopen($typeSoft, 'r');
             while (!feof($f_read)) {
                 $read_soft .= fread($f_read, 8192);
             }
-            fclose($f_read);            
+            fclose($f_read);
         }
         $xmlstr .= $read_soft;
 //        $xmlstr .= $read_soft."\n</typeSoftKey>\n";
         $xmlstr .= "  <softKeySets>\n";
         foreach ($config[$name] as $key => $value) {
-            $xmlstr .='    <softKeySet id="'.$key.'">'."\n";
-            foreach (explode(",",$value) as $keyvalue ) {
-                $xmlstr .= '      <softKey keyID="'.$keyvalue.'" />'."\n";
+            $xmlstr .= '    <softKeySet id="' . $key . '">' . "\n";
+            foreach (explode(",", $value) as $keyvalue) {
+                $xmlstr .= '      <softKey keyID="' . $keyvalue . '" />' . "\n";
             }
-            $xmlstr .="    </softKeySet>\n";
+            $xmlstr .= "    </softKeySet>\n";
         }
         $xmlstr .= "  </softKeySets>\n";
 
@@ -870,7 +870,6 @@ class xmlinterface {
         }
 
         return $errors;
-        
     }
 
     private function replaceSimpleXmlNode($xml, $element = SimpleXMLElement) {

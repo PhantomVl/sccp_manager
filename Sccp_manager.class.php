@@ -1881,7 +1881,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
      */
     function createDefaultSccpXml()
     {
-
+        $data_value = array();
         foreach ($this->sccpvalues as $key => $value) {
             $data_value[$key] = $value['data'];
         }

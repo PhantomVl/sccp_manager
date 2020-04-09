@@ -43,10 +43,9 @@ class xmlinterface
 
         if (file_exists($xml_template)) {
             $xml_work = simplexml_load_file($xml_template);
-
-
             $xnode = &$xml_work->callManagerGroup->members;
             $bind_tmp = $this->get_server_sccp_bind($data_values);
+            //error_log("bind_tmp:".print_r($bind_tmp, true), 0);
             $ifc = 0;
             foreach ($bind_tmp as $bind_value) {
                 $xnode_obj = clone $xnode->member;
@@ -381,7 +380,9 @@ class xmlinterface
     {
         $res = array();
         if ($data_values['bindaddr'] !== '0.0.0.0') {
-            return array('ip' => $data_values['bindaddr'], 'port' => $data_values['port']);
+            $rkey = $data_values['bindaddr'];
+            $res[$rkey] = array('ip' => $data_values['bindaddr'], 'port' => $data_values['port']);
+            return $res;
         }
         $ip_fill = true;
         if (!empty($data_values['ccm_address'])) {

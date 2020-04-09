@@ -301,7 +301,7 @@ class Sccp extends \FreePBX\modules\Core\Driver {
                 $currentcomponent->addTabTranslation('sccp',_('SCCP'));
 //                $currentcomponent->addTabTranslation('Codec',_('Codec'));
 
-                //Fill Codecs Informations
+                //Fill Codecs Information
 
                 $Sccp_Codec = array('gsm','slin16','alaw','ulaw','g722','g723','g726','g728','g729','ilibc','opus','h264','h263','h265','h261');
                 $allCodecs  = $this->freepbx->Codecs->getAudio(true);
@@ -501,7 +501,7 @@ class Sccp extends \FreePBX\modules\Core\Driver {
                 unset($select);
                 $select[] = array('value' => 'on', 'text' => 'Yes');
                 $select[] = array('value' => 'off', 'text' => 'No');
-                $tt = _("Silence Suppression. Asterisk Not suported");
+                $tt = _("Silence Suppression. Asterisk Not supported");
                 $tmparr['silencesuppression'] = array('prompttext' => _('Silence Suppression'), 'value' => 'off', 'tt' => $tt, 'select' => $select, 'level' => 1, 'type' => 'radio', 'section' => $section,'category' => $gn_category);
 
                 unset($select);

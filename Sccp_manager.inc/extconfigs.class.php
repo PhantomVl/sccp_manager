@@ -223,7 +223,7 @@ class extconfigs {
         'South Africa' => array('offset' => '120', 'daylight' => ''),
         'Jerusalem' => array('offset' => '120', 'daylight' => 'Daylight'),
         'Saudi Arabia' => array('offset' => '180', 'daylight' => ''),
-        /*              Russion  Regions                                                                 */
+        /*              Russian  Regions                                                                 */
         'Russian/Kaliningrad' => array('offset' => '120', 'daylight' => '', 'cisco_code' => 'South Africa Standard Time'),
         'Russian/Moscow' => array('offset' => '180', 'daylight' => '', 'cisco_code' => 'Russian Standard Time'),
         'Russian/St.Peterburg' => array('offset' => '180', 'daylight' => '', 'cisco_code' => 'Russian Standard Time'),
@@ -237,7 +237,7 @@ class extconfigs {
         'Russian/Sakhalin' => array('offset' => '660', 'daylight' => '', 'cisco_code' => 'Central Pacific Standard Time'),
         'Russian/Magadan' => array('offset' => '660', 'daylight' => '', 'cisco_code' => 'Central Pacific Standard Time'),
         'Russian/Kamchatka' => array('offset' => '720', 'daylight' => '', 'cisco_code' => 'Fiji Standard Time'),
-        /*              EnD - Russion  Regions                                                             */
+        /*              EnD - Russian  Regions                                                             */
         'Iran' => array('offset' => '210', 'daylight' => 'Daylight'),
         'Caucasus' => array('offset' => '240', 'daylight' => 'Daylight'),
         'Arabian' => array('offset' => '240', 'daylight' => ''),
@@ -309,9 +309,9 @@ class extconfigs {
         }
         if (!is_writeable($base_config["tftp_path"])) {
             if (!empty($this->paren_class)) {
-                $this->paren_class->class_error['tftp_path'] = 'No write permision on tftp DIR';
+                $this->paren_class->class_error['tftp_path'] = 'No write permission on tftp DIR';
             }
-            return array('error' => 'No write permision on tftp DIR');
+            return array('error' => 'No write permission on tftp DIR');
         }
 //      END Test Base dir (/tftproot)
 

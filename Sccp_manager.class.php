@@ -152,7 +152,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 $this->sccpvalues['sccp_compatible']['data'] = $this->sccpvalues['SccpDBmodel']['data'];
             }
         }
-        // Load Advanced Form Constuctor Data 
+        // Load Advanced Form Constructor Data 
         if (empty($this->sccpvalues['displayconfig'])) {
             $xml_vars = __DIR__ . '/conf/sccpgeneral.xml.v' . $this->sccpvalues['sccp_compatible']['data'];
         } else {
@@ -701,7 +701,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 return array('status' => false, 'message' => print_r($res));
                 break;
             /* !TODO!: -TODO-: dialplan templates should be removed (only required for very old devices (like ATA) */
-// -------------------------------   Old +  Sip deviece suport - In the development--- 
+// -------------------------------   Old +  Sip deviece support - In the development--- 
             case 'save_dialplan_template':
                 $res = $this->save_DialPlan($request);
                 //public 
@@ -723,7 +723,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                     return array('status' => false, 'message' => print_r($res));
                 }
                 break;
-// -------------------------------   Old deviece suport - In the development--- 
+// -------------------------------   Old deviece support - In the development--- 
             case 'delete_hardware':
                 if (!empty($request['idn'])) {
                     foreach ($request['idn'] as $idv) {
@@ -762,7 +762,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                     $ver_id = $this->sccp_create_device_XML($data['name']);
                 };
 
-                if ($this->sccpvalues['siptftp']['data'] == 'on') { // Check SIP Suport Enabled 
+                if ($this->sccpvalues['siptftp']['data'] == 'on') { // Check SIP Support Enabled 
                     $this->sccp_create_xmlSoftkey(); // Create Softkey Sets for SIP
                 }
 
@@ -919,7 +919,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                     }
                     $this->sccp_create_sccp_init();
 
-// !TODO!: -TODO-:  Check SIP Suport Enabled 
+// !TODO!: -TODO-:  Check SIP Support Enabled 
                     $this->sccp_create_xmlSoftkey();
                     $msg = print_r($this->srvinterface->sccp_reload(), 1);
 //                    $msg = print_r($this->srvinterface->sccp_core_commands(array('cmd' => 'sccp_reload')), 1);
@@ -1021,7 +1021,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 }
                 return $result;
                 break;
-// -------------------------------   Old deviece suport - In the development--- 
+// -------------------------------   Old deviece support - In the development--- 
             case 'getDialTemplate':
                 $result = $this->get_DialPlanList();
                 if (empty($result)) {
@@ -1029,7 +1029,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 }
                 return $result;
                 break;
-// -------------------------------   Old deviece suport - In the development---                 
+// -------------------------------   Old deviece support - In the development---                 
             case 'backupsettings':
                 $filename = $this->sccp_create_sccp_backup();
                 $file_name = basename($filename);
@@ -1560,7 +1560,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
 
     public function getCodecs($type, $showDefaults = false) {
         $allSupported = array();
-//        $Sccp_Codec = array('gsm','slin16','alow','ulaw','g722','g723','g726','g728','g729','ilibc','isac','opus','h224','aac','h264','h263','h265','h261');
+//        $Sccp_Codec = array('gsm','slin16','allow','ulaw','g722','g723','g726','g728','g729','ilibc','isac','opus','h224','aac','h264','h263','h265','h261');
         $Sccp_Codec = array('gsm', 'slin16', 'alaw', 'ulaw', 'g722', 'g723', 'g726', 'g728', 'g729', 'ilibc', 'opus', 'h264', 'h263', 'h265', 'h261');
         switch ($type) {
             case 'audio':

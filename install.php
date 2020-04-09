@@ -543,7 +543,7 @@ function InstallDB_updateSchema($db_config) {
         $sql = "DESCRIBE " . $tabl_name . "";
         $db_result = $db->getAll($sql);
         if (DB::IsError($db_result)) {
-            die_freepbx("Can not add get informations from " . $tabl_name . " table\n");
+            die_freepbx("Can not add get information from " . $tabl_name . " table\n");
         }
         foreach ($db_result as $tabl_data) {
             $fld_id = $tabl_data[0];

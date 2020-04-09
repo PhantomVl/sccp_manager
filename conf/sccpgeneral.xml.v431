@@ -104,7 +104,7 @@ and open the template in the editor. Base Version before all crash :-)
                 <class>sccp-custom</class>
                 <options placeholder="Provider IP"></options>
             </input>
-            <help>External IP Address of the firewall, required in case the PBX is running on a seperate host behind it. IP Address that we're going to notify in RTP media stream as the pbx source address.</help>
+            <help>External IP Address of the firewall, required in case the PBX is running on a separate host behind it. IP Address that we're going to notify in RTP media stream as the pbx source address.</help>
             <nameseparator> / </nameseparator>
         </item>
         <item type="IE" id="5">
@@ -346,7 +346,7 @@ and open the template in the editor. Base Version before all crash :-)
             <default>off</default>
             <button value="on">On</button>
             <button value="off">Off</button>
-            <help>Complete transfer on hangup, without pressing transfer a second time. Will complete transfer, when the transferer puts the receiver on hook, after the destination has been reached. To cancel the transfer, either press resume on the transfered channel, press the 'endcall' softkey, or have the receiving party hangup first.</help>
+            <help>Complete transfer on hangup, without pressing transfer a second time. Will complete transfer, when the transferer puts the receiver on hook, after the destination has been reached. To cancel the transfer, either press resume on the transferred channel, press the 'endcall' softkey, or have the receiving party hangup first.</help>
         </item>
         <item type="IS" id="13">
             <name>callanswerorder</name> 
@@ -472,7 +472,7 @@ and open the template in the editor. Base Version before all crash :-)
             <button value="broadcast">Broadcast</button>
             <button value="multicast">Multicast</button>
             <button value="manycast">Manycast</button>
-            <help>Configure NTP Server protocol time syncronization</help>
+            <help>Configure NTP Server protocol time synchronization</help>
         </item>
 
     </page_group>          

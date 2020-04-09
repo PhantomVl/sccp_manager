@@ -383,7 +383,7 @@ class srvinterface {
                 $resp .= fgets($fp);
             }
             $time_resp = microtime_float();
-            $resp .= "\r\n\r\n Connect :".($time_send - $time_connect). " Logoff :".($time_logoff- $time_send). " Responce :".($time_resp-$time_logoff)."\r\n\r\n ";
+            $resp .= "\r\n\r\n Connect :".($time_send - $time_connect). " Logoff :".($time_logoff- $time_send). " Response :".($time_resp-$time_logoff)."\r\n\r\n ";
 //            print_r(fgets($fp));
 //            print_r('<br>');
 //                echo fgets($fp, 128);

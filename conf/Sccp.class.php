@@ -296,7 +296,7 @@ class Sccp extends \FreePBX\modules\Core\Driver {
                 unset($select);
                 $select[] = array('value' => 'yes', 'text' => 'Yes');
                 $select[] = array('value' => 'no', 'text' => 'No');
-                $tt = _("Silence Suppression. Asterisk Not suported");
+                $tt = _("Silence Suppression. Asterisk Not supported");
                 $tmparr['silencesuppression'] = array('prompttext' => _('Silence Suppression'), 'value' => 'no', 'tt' => $tt, 'select' => $select, 'level' => 1, 'type' => 'radio');
 
                 unset($select);

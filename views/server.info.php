@@ -25,7 +25,7 @@ foreach ($ast_realtime as $key => $value) {
 $conf_realtime = $this->extconfigs->validate_RealTime($ast_realm);
 $db_Schema = $this->dbinterface->validate();
 $mysql_info = $this->dbinterface->get_db_sysvalues();
-$compatable = $this->srvinterface->get_compatible_sccp();
+$compatible = $this->srvinterface->get_compatible_sccp();
 $info = array();
 
 $info['srvinterface'] = $this->srvinterface->info();
@@ -48,16 +48,16 @@ if (!empty($this->sccpvalues['tftp_rewrite'])) {
         $info['TFTP_Rewrite'] = array('Version' => 'base', 'about' => 'Rewrite Supported');
     }
 }
-$info['Сompatible'] = array('Version' => $compatable, 'about' => 'Ok');
+$info['Сompatible'] = array('Version' => $compatible, 'about' => 'Ok');
 if (!empty($this->sccpvalues['SccpDBmodel'])) {
-    if ($compatable > $this->sccpvalues['SccpDBmodel']['data']) {
+    if ($compatible > $this->sccpvalues['SccpDBmodel']['data']) {
         $info['Сompatible']['about'] = '<div class="alert signature alert-danger"> Reinstall SCCP manager required</div>';
     }
 }
 if ($db_Schema == 0) {
     $info['DB_Schema'] = array('Version' => 'Error', 'about' => '<div class="alert signature alert-danger"> ERROR DB Version </div>');
 } else {
-    $info['DB_Schema'] = array('Version' => $db_Schema, 'about' => (($compatable == $db_Schema ) ? 'Ok' : 'Incompatable Version'));
+    $info['DB_Schema'] = array('Version' => $db_Schema, 'about' => (($compatible == $db_Schema ) ? 'Ok' : 'Incompatible Version'));
 }
 
 if (empty($ast_realtime)) {
@@ -389,9 +389,9 @@ if ($test_ami == 1) {
         $time_old += $value['old'];
     }
     print_r('</tbody></table></div></div></div></div>');
-    print_r('<br>Ami Responce :');
+    print_r('<br>Ami Response :');
     print_r($time_ami);
-    print_r('<br>PBX Responce :');
+    print_r('<br>PBX Response :');
     print_r($time_old);
     print_r('<br>--- Stat  -----------------<br>');
 }

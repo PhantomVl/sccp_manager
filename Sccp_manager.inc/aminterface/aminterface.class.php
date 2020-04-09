@@ -233,15 +233,15 @@ class aminterface {
             } else if ($evePos !== false) {
                 $event = $this->_messageToEvent($aMsg); // Event  Ok
 
-                $this->_msgToDebug(99,'--- Responce Type 2 --- ');
+                $this->_msgToDebug(99,'--- Response Type 2 --- ');
                 $this->_msgToDebug(99,$aMsg);
-                $this->_msgToDebug(99,'--- Event Responce Type 2 --- ');
+                $this->_msgToDebug(99,'--- Event Response Type 2 --- ');
                 $this->_msgToDebug(99,$event);
 
                 if ($event != null) {
                     $response = $this->findResponse($event);
 //                    print_r($response);
-//                    print_r('<br>--- E2 Responce Type 2 ----------<br>');
+//                    print_r('<br>--- E2 Response Type 2 ----------<br>');
                     
                     if ($response === false || $response->isComplete()) {
                         $this->dispatch($event);  // не работает 
@@ -493,7 +493,7 @@ class aminterface {
         $result = array();
         if ($this->_connect_state) {
             $_action = new \FreePBX\modules\Sccp_manager\aminterface\ReloadAction('chan_sccp');
-//            $_action = new \FreePBX\modules\Sccp_manager\aminterface\CommandAction('sccp reload force'); // No Responce Result !!
+//            $_action = new \FreePBX\modules\Sccp_manager\aminterface\CommandAction('sccp reload force'); // No Response Result !!
             $_response = $this->send($_action);
             $result = $_response->getMessage();
         }

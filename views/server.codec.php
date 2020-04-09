@@ -168,7 +168,7 @@ if (!empty($_REQUEST['id'])) {
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <span id="sccp_disallow-help" class="help-block fpbx-help-block"><?php echo _("Defaut : all. Plz eneter format: alaw,ulaw") ?></span>
+                    <span id="sccp_disallow-help" class="help-block fpbx-help-block"><?php echo _("Default : all. Plz eneter format: alaw,ulaw") ?></span>
                 </div>
             </div>
         </div>

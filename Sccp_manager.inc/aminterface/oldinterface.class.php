@@ -392,20 +392,20 @@ class oldinterface {
                     $it++;
                 } while ((count($line_arr) > 3) and ( $it < count($line_arr)));
                 explode(";|", implode(";|", $line_arr));
-                list ($descr, $adress, $devname, $status, $token, $junk) = explode(";|", implode(";|", $line_arr));
+                list ($descr, $address, $devname, $status, $token, $junk) = explode(";|", implode(";|", $line_arr));
 
-//                list ($descr, $adress, $devname, $status, $junk) = $line_arr;
+//                list ($descr, $address, $devname, $status, $junk) = $line_arr;
 //                if (strlen($ast_key[$devname]) < 1) {
                 if (strlen($devname) > 1) {
-                    $ast_key[$devname] = Array('name' => $devname, 'status' => $status, 'address' => $adress, 'descr' => $descr, 'token' => $token);
+                    $ast_key[$devname] = Array('name' => $devname, 'status' => $status, 'address' => $address, 'descr' => $descr, 'token' => $token);
                 }
                 /*
                   if (isset($ast_key[$devname])) {
                   if (strlen($ast_key[$devname]) < 1) {
-                  $ast_key[$devname] = Array('name' => $devname, 'status' => $status, 'address' => $adress, 'descr' => $descr, 'token' => $descr);
+                  $ast_key[$devname] = Array('name' => $devname, 'status' => $status, 'address' => $address, 'descr' => $descr, 'token' => $descr);
                   }
                   } else {
-                  $ast_key[$devname] = Array('name' => $devname, 'status' => $status, 'address' => $adress, 'descr' => $descr, 'token' => $token);
+                  $ast_key[$devname] = Array('name' => $devname, 'status' => $status, 'address' => $address, 'descr' => $descr, 'token' => $token);
                   }
                  *
                  */

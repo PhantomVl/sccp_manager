@@ -1,26 +1,26 @@
 <?php
 /*
- *                          IE - Text Input 
+ *                          IE - Text Input
  *                         IED - Text Input Dynamic
  *                         ITED- Input Dynamic Table
  *                          IS - Radio box
- *                          SL - Select element 
+ *                          SL - Select element
  *                         SLA - Select element (from - data )
- *    Input element Select SLD - Date format 
- *                         SLZ - Time Zone 
+ *    Input element Select SLD - Date format
+ *                         SLZ - Time Zone
  *                       SLTZN - Time Zone List
  *                         SLT - TFTP Lang
- *                         SLM - Music on hold 
+ *                         SLM - Music on hold
  *                         SLK - System KeySet
- *  * Input element Select SLS - System Language 
- *    Input element Select SDM - Model List 
- *                         SDE - Extension List 
+ *  * Input element Select SLS - System Language
+ *    Input element Select SDM - Model List
+ *                         SDE - Extension List
  *    Help elemen          HLP - Help Element
  */
 
 $npref = $form_prefix.'_';
 $napref = $form_prefix.'-ar_';
-if (empty($form_prefix)){
+if (empty($form_prefix)) {
     $npref = "sccp_";
     $napref ="sccp-ar_";
 }
@@ -60,11 +60,11 @@ if (\FreePBX::Modules()->checkStatus("soundlang")) {
         $syslangs = array();
     }
 }
-if (function_exists('music_list')){
+if (function_exists('music_list')) {
     $moh_list = music_list();
 //    $cur = (isset($mohsilence) && $mohsilence != "" ? $mohsilence : 'default');
 }
-if (!is_array($moh_list)){
+if (!is_array($moh_list)) {
     $moh_list = array('default');
 }
 
@@ -73,40 +73,40 @@ if (!is_array($moh_list)){
 $items = $itm -> children();
 
 if ($h_show==1) {
- $sec_class ='';   
- if (!empty($items ->class)){
-    $sec_class = (string)$items ->class;
- }
- ?>
+    $sec_class ='';
+    if (!empty($items ->class)) {
+        $sec_class = (string)$items ->class;
+    }
+    ?>
 
  <div class="section-title" data-for="<?php echo $npref.$itm['name'];?>">
     <h3><i class="fa fa-minus"></i><?php echo _($items ->label) ?></h3>
  </div>
  <div class="section <?php echo $sec_class;?>" data-id="<?php echo $npref.$itm['name'];?>">
 
-<?php
+    <?php
 }
 foreach ($items as $child) {
     if (empty($child->help)) {
-        $child->help = 'Help is not available.';        
+        $child->help = 'Help is not available.';
         $child->meta_help = '1';
     }
-//    $child->meta_help = '1';          // Remove comments to see original help ! 
+//    $child->meta_help = '1';          // Remove comments to see original help !
 
     if ($child['type'] == 'IE') {
         $res_input = '';
         $res_name = '';
         $res_oid = (string)$child->input[0]->name;
         $res_id = $npref.$res_oid;
-        if (!empty($metainfo[$res_oid])){
+        if (!empty($metainfo[$res_oid])) {
             if ($child->meta_help == '1' || $child->help == 'Help!') {
                 $child->help = $metainfo[$res_oid]['Description'];
             }
         }
 
         // --- Add Hiden option
-        $res_sec_class ='';   
-        if (!empty($child ->class)){
+        $res_sec_class ='';
+        if (!empty($child ->class)) {
             $res_sec_class = (string)$child ->class;
         }
          
@@ -130,38 +130,43 @@ foreach ($items as $child) {
                         foreach ($child->xpath('input') as $value) {
                                 $res_n =  (string)$value->name;
                                 $res_name = $npref . $res_n;
-                                if (empty($res_id)) {
-                                  $res_id = $res_name;
-                                }
+                            if (empty($res_id)) {
+                                $res_id = $res_name;
+                            }
 
-                                if (!empty($fvalues[$res_n])) {
-                                    if (!empty($fvalues[$res_n]['data'])) {
-                                        $value->value = $fvalues[$res_n]['data'];
-                                    }
+                            if (!empty($fvalues[$res_n])) {
+                                if (!empty($fvalues[$res_n]['data'])) {
+                                    $value->value = $fvalues[$res_n]['data'];
                                 }
+                            }
 
-                                if (empty($value->value)) {
-                                    $value->value = $value->default;
-                                }
-                                if (empty($value->type)) {
-                                    $value->type = 'text';
-                                }
-                                if (empty($value->class)) {
-                                    $value->class = 'form-control';
-                                }
-                                if ($i > 0) echo $child->nameseparator;
+                            if (empty($value->value)) {
+                                $value->value = $value->default;
+                            }
+                            if (empty($value->type)) {
+                                $value->type = 'text';
+                            }
+                            if (empty($value->class)) {
+                                $value->class = 'form-control';
+                            }
+                            if ($i > 0) {
+                                echo $child->nameseparator;
+                            }
 //
                             echo '<input type="' . $value->type . '" class="' . $value->class . '" id="' . $res_id . '" name="' . $res_name . '" value="' . $value->value.'"';
-                            if (isset($value->options)){
-                                foreach ($value->options ->attributes() as $optkey =>$optval){
+                            if (isset($value->options)) {
+                                foreach ($value->options ->attributes() as $optkey => $optval) {
                                     echo  ' '.$optkey.'="'.$optval.'"';
                                 }
                             }
-                            if (!empty($value->min)) echo  ' min="'.$value->min.'"';
-                            if (!empty($value->max)) echo  ' max="'.$value->max.'"';
+                            if (!empty($value->min)) {
+                                echo  ' min="'.$value->min.'"';
+                            }
+                            if (!empty($value->max)) {
+                                echo  ' max="'.$value->max.'"';
+                            }
                             echo  '>';
                             $i ++;
-
                         }
                         ?>
                     </div>
@@ -173,7 +178,6 @@ foreach ($items as $child) {
 
         <?php
         echo '<!-- END '.$child->label.' -->';
-        
     }
     if ($child['type'] == 'IED') {
         $res_input = '';
@@ -182,7 +186,7 @@ foreach ($items as $child) {
         $opt_at = array();
         $res_n =  (string)$child->name;
 
-        if (!empty($metainfo[$res_n])){
+        if (!empty($metainfo[$res_n])) {
             if ($child->meta_help == '1' || $child->help == 'Help!') {
                 $child->help = $metainfo[$res_n]['Description'];
             }
@@ -208,7 +212,7 @@ foreach ($items as $child) {
         
         echo '<!-- Begin '.$child->label.' -->';
         ?>
-	<div class="element-container">
+    <div class="element-container">
             <div class="row">
                 <div class="col-md-12">
                     <div class="row">
@@ -219,16 +223,16 @@ foreach ($items as $child) {
                             </div>
                             
                             <div class="col-md-9">
-                            <?php 
+                            <?php
                             if (!empty($child->cbutton)) {
                                 echo '<div class="form-group form-inline">';
                                 foreach ($child->xpath('cbutton') as $value) {
                                     $res_n = $res_id.'[0]['.$value['field'].']';
                                     $res_vf = '';
-                                    if ($value['value']=='NONE' && empty($res_value)){
+                                    if ($value['value']=='NONE' && empty($res_value)) {
                                         $res_vf = 'active';
-                                    } 
-                                    $ch_key = array_search($value['value'],$res_value);
+                                    }
+                                    $ch_key = array_search($value['value'], $res_value);
                                     if ($ch_key !== false) {
                                         unset($res_value[$ch_key]);
                                         $res_vf = 'active';
@@ -236,23 +240,23 @@ foreach ($items as $child) {
                                     }
                                     $opt_hide ='';
                                     $opt_class="button-checkbox";
-                                    if (!empty($value->option_hide)) { 
+                                    if (!empty($value->option_hide)) {
                                         $opt_class .= " sccp_button_hide";
                                         $opt_hide = ' data-vhide="'.$value->option_hide.'" data-btn="checkbox" data-clhide="'.$value->option_hide['class'].'" ';
-                                    }     
-                                    if (!empty($child->option_show)) { 
+                                    }
+                                    if (!empty($child->option_show)) {
                                         if (empty($opt_hide)) {
                                             $opt_hide =' class="sccp_button_hide" ';
                                         }
                                         $opt_hide .= ' data-vshow="'.$child->option_show.'" data-clshow="'.$child->option_show['class'].'" ';
                                     }
                                     
-                                    if (!empty($value->option_disabled)) { 
+                                    if (!empty($value->option_disabled)) {
                                         $opt_class .= " sccp_button_disabled";
                                         $opt_hide = ' data-vhide="'.$value->option_disabled.'" data-btn="checkbox" data-clhide="'.$value->option_disabled['class'].'" ';
-                                    }                          
+                                    }
 
-                                    if (!empty($value->class)) { 
+                                    if (!empty($value->class)) {
                                         $opt_class .= " ".(string)$value->class;
                                     }
                                     
@@ -263,52 +267,51 @@ foreach ($items as $child) {
                                 echo '</div>';
                             }
                             $opt_class = "col-sm-7 ".$res_id."-gr";
-                            if (!empty($child->class)) { 
+                            if (!empty($child->class)) {
                                 $opt_class .= " ".(string)$child->class;
                             }
                             echo '<div class = "'.$opt_class.'">';
                                     
                             foreach ($res_value as $dat_v) {
-                            ?>
+                                ?>
                                 <div class = "<?php echo $res_id;?> form-group form-inline" data-nextid=<?php echo $i+1;?> > 
-                            <?php
-                            $res_vf = explode('/', $dat_v);
-                            $i2 = 0;
-                            foreach ($child->xpath('input') as $value) {
-                                $res_n = $res_id.'['.$i.']['.$value['field'].']';
-                                $fields_id = (string)$value['field'];
-                                $opt_at[$fields_id]['nameseparator']=(string)$value['nameseparator'];
-                                if (!empty($value->class)) {
-                                    $opt_at[$fields_id]['class']='form-control ' .(string)$value->class;
-                                }
-                                $opt_at[$fields_id]['nameseparator']=(string)$value['nameseparator'];
-                                
-                                echo '<input type="text" name="'. $res_n.'" class="'.$opt_at[$fields_id]['class'].'" value="'.$res_vf[$i2].'"';
-                                if (isset($value->options)){
-                                    foreach ($value->options ->attributes() as $optkey =>$optval){
-                                        $opt_at[$fields_id]['options'][$optkey]=(string)$optval;
-                                        echo  ' '.$optkey.'="'.$optval.'"';
+                                <?php
+                                $res_vf = explode('/', $dat_v);
+                                $i2 = 0;
+                                foreach ($child->xpath('input') as $value) {
+                                    $res_n = $res_id.'['.$i.']['.$value['field'].']';
+                                    $fields_id = (string)$value['field'];
+                                    $opt_at[$fields_id]['nameseparator']=(string)$value['nameseparator'];
+                                    if (!empty($value->class)) {
+                                        $opt_at[$fields_id]['class']='form-control ' .(string)$value->class;
                                     }
+                                    $opt_at[$fields_id]['nameseparator']=(string)$value['nameseparator'];
+                                
+                                    echo '<input type="text" name="'. $res_n.'" class="'.$opt_at[$fields_id]['class'].'" value="'.$res_vf[$i2].'"';
+                                    if (isset($value->options)) {
+                                        foreach ($value->options ->attributes() as $optkey => $optval) {
+                                            $opt_at[$fields_id]['options'][$optkey]=(string)$optval;
+                                            echo  ' '.$optkey.'="'.$optval.'"';
+                                        }
+                                    }
+                                    echo '> '.(string)$value['nameseparator'].' ';
+                                    $i2 ++;
                                 }
-                                echo '> '.(string)$value['nameseparator'].' ';
-                                $i2 ++;
-
-                            }
-                            if (!empty($child->add_pluss)) {
-                                echo '<button type="button" class="btn btn-primary btn-lg input-js-add" id="'.$res_id.'-btn" data-id="'.$res_id.'" data-for="'.$res_id.'" data-max="'.$max_row.'"data-json="'.bin2hex(json_encode($opt_at)).'"><i class="fa fa-plus pull-right"></i></button>';
-                            }
-                            echo '</div>';
-                            $i++;
+                                if (!empty($child->add_pluss)) {
+                                    echo '<button type="button" class="btn btn-primary btn-lg input-js-add" id="'.$res_id.'-btn" data-id="'.$res_id.'" data-for="'.$res_id.'" data-max="'.$max_row.'"data-json="'.bin2hex(json_encode($opt_at)).'"><i class="fa fa-plus pull-right"></i></button>';
+                                }
+                                echo '</div>';
+                                $i++;
                             }
                             ?>
                                     
                                 </div>
-                            <?php 
-                                if (!empty($child->addbutton)) {
-                                    echo '<div class = "col-sm-5 '.$res_id.'-gr">';
-                                    echo '<input type="button" id="'.$res_id.'-btn" data-id="'.$res_id.'" data-for="'.$res_id.'" data-max="'.$max_row.'"data-json="'.bin2hex(json_encode($opt_at)).'" class="input-js-add" value="'._($child->addbutton).'" />';
-                                    echo '</div>';
-                                }
+                            <?php
+                            if (!empty($child->addbutton)) {
+                                echo '<div class = "col-sm-5 '.$res_id.'-gr">';
+                                echo '<input type="button" id="'.$res_id.'-btn" data-id="'.$res_id.'" data-for="'.$res_id.'" data-max="'.$max_row.'"data-json="'.bin2hex(json_encode($opt_at)).'" class="input-js-add" value="'._($child->addbutton).'" />';
+                                echo '</div>';
+                            }
                             ?>
                             </div>
                         </div>
@@ -318,24 +321,23 @@ foreach ($items as $child) {
             <div class="row"><div class="col-md-12">
                 <span id="<?php echo $res_id;?>-help" class="help-block fpbx-help-block"><?php echo _($child->help);?></span>
             </div></div>
-	</div>
-        <?php        
+    </div>
+        <?php
         echo '<!-- END '.$child->label.' -->';
-        
-    }    
+    }
     
     if ($child['type'] == 'IS') {
         $res_n =  (string)$child->name;
         $res_id = $npref.$child->name;
-        if (!empty($metainfo[$res_n])){
+        if (!empty($metainfo[$res_n])) {
             if ($child->meta_help == '1' || $child->help == 'Help!') {
                 $child->help = $metainfo[$res_n]['Description'];
             }
         }
         
              // --- Add Hiden option
-        $res_sec_class ='';   
-        if (!empty($child ->class)){
+        $res_sec_class ='';
+        if (!empty($child ->class)) {
             $res_sec_class = (string)$child ->class;
         }
        
@@ -352,31 +354,31 @@ foreach ($items as $child) {
                           $i = 0;
 //                          $res_v = 'no';
                           $opt_hide = '';
-                          if (empty($child->default)) {
-                              $res_v = 'no';
-                          } else {
-                              $res_v = (string)$child->default;
-                          }
-                          if (!empty($child->value)) { 
-                               $res_v = (string)$child->value;
-                          }
-                          if (!empty($fvalues[$res_n])) {
+                        if (empty($child->default)) {
+                            $res_v = 'no';
+                        } else {
+                            $res_v = (string)$child->default;
+                        }
+                        if (!empty($child->value)) {
+                             $res_v = (string)$child->value;
+                        }
+                        if (!empty($fvalues[$res_n])) {
                             if (!empty($fvalues[$res_n]['data'])) {
                                 $res_v = (string)$fvalues[$res_n]['data'];
                             }
-                          }
-                          if (!empty($child->option_hide)) { 
+                        }
+                        if (!empty($child->option_hide)) {
                             $opt_hide = ' class="sccp_button_hide" data-vhide="'.$child->option_hide.'" data-clhide="'.$child->option_hide['class'].'" ';
-                          }                          
-                          if (!empty($child->option_show)) { 
+                        }
+                        if (!empty($child->option_show)) {
                             if (empty($opt_hide)) {
                                 $opt_hide =' class="sccp_button_hide" ';
                             }
                             $opt_hide .= ' data-vshow="'.$child->option_show.'" data-clshow="'.$child->option_show['class'].'" ';
-                          }
-                          foreach ($child->xpath('button') as $value) {
+                        }
+                        foreach ($child->xpath('button') as $value) {
                             $val_check = (string)$value[@value];
-                            if ($val_check == '' || $val_check == 'NONE' || $val_check == 'none' ) {
+                            if ($val_check == '' || $val_check == 'NONE' || $val_check == 'none') {
                                 $val_check = (((string)$value[@value] == $res_v) ? " checked" : "");
                             } else {
                                 $val_check = (strtolower((string)$value[@value]) == strtolower($res_v) ? " checked" : "");
@@ -384,7 +386,7 @@ foreach ($items as $child) {
                             echo '<input type="radio" name="' . $res_id . '" id="' . $res_id. '_' . $i .'" value="' . $value[@value] . '"' . $val_check . $opt_hide.'>';
                             echo '<label for="' . $res_id. '_' . $i . '">' . _($value) . '</label>';
                             $i++;
-                          }
+                        }
                         ?>                        
                         </div>
                 </div></div>
@@ -395,30 +397,29 @@ foreach ($items as $child) {
 
         <?php
         echo '<!-- END '.$child->label.' -->';
-
     }
     
 /*
- *    Input element Select SLD - Date format 
- *                         SLZ - Time Zone 
- *                        
- *                         SLM - Music on hold 
+ *    Input element Select SLD - Date format
+ *                         SLZ - Time Zone
+ *
+ *                         SLM - Music on hold
  *                         SLK - System KeySet
  *                         SLP - Dial Paterns
  */
 
-    if ($child['type'] == 'SLD'  || $child['type'] == 'SLM'|| $child['type'] == 'SLK'|| $child['type'] == 'SLP' ) {
+    if ($child['type'] == 'SLD'  || $child['type'] == 'SLM'|| $child['type'] == 'SLK'|| $child['type'] == 'SLP') {
 //        $value = $child -> select;
-        $res_n =  (string)$child ->name;       
+        $res_n =  (string)$child ->name;
         $res_id = $npref.$res_n;
-        if (!empty($metainfo[$res_n])){
+        if (!empty($metainfo[$res_n])) {
             if ($child->meta_help == '1' || $child->help == 'Help!') {
                 $child->help = $metainfo[$res_n]['Description'];
             }
         }
         
         if (empty($child->class)) {
-           $child->class = 'form-control';
+            $child->class = 'form-control';
         }
         
         if ($child['type'] == 'SLD') {
@@ -436,9 +437,9 @@ foreach ($items as $child) {
         }
         if ($child['type'] == 'SLP') {
             if (empty($dialplan_list)) {
-                foreach (\FreePBX::Sccp_manager()->get_DialPlanList() as $tmpkey) {
-                   $tmp_id = $tmpkey['id'];
-                   $dialplan_list[$tmp_id] = $tmp_id;
+                foreach (\FreePBX::Sccp_manager()->getDialPlanList() as $tmpkey) {
+                    $tmp_id = $tmpkey['id'];
+                    $dialplan_list[$tmp_id] = $tmp_id;
                 }
             }
             $select_opt= $dialplan_list;
@@ -459,19 +460,19 @@ foreach ($items as $child) {
                     </div>
                     <div class="col-md-9"><div class = "lnet form-group form-inline" data-nextid=1> <?php
                             echo  '<select name="'.$res_id.'" class="'. $child->class . '" id="' . $res_id . '">';
-                            if (!empty($fvalues[$res_n])) {
-                                if (!empty($fvalues[$res_n]['data'])) {
-                                    $child->value = $fvalues[$res_n]['data'];
-                                }
-                            }
-                            foreach ($select_opt as $key) {
-                                echo '<option value="' . $key . '"';
-                                if ($key == $child->value) {
-                                    echo ' selected="selected"';
-                                }
-                                echo '>' . $key . '</option>';
-                            }
-                            ?> </select>
+                    if (!empty($fvalues[$res_n])) {
+                        if (!empty($fvalues[$res_n]['data'])) {
+                            $child->value = $fvalues[$res_n]['data'];
+                        }
+                    }
+                    foreach ($select_opt as $key) {
+                        echo '<option value="' . $key . '"';
+                        if ($key == $child->value) {
+                            echo ' selected="selected"';
+                        }
+                        echo '>' . $key . '</option>';
+                    }
+                    ?> </select>
                     </div></div>
             </div></div>
             <div class="row"><div class="col-md-12">
@@ -480,19 +481,18 @@ foreach ($items as $child) {
         </div>
         <?php
         echo '<!-- END '.$child->label.' -->';
-        
     }
 /*
- *    Input element Select SLS - System Language 
+ *    Input element Select SLS - System Language
  */
     
     if ($child['type'] == 'SLS' || $child['type'] == 'SLT' || $child['type'] == 'SLA' || $child['type'] == 'SLZ') {
 //        $value = $child -> select;
-        $res_n =  (string)$child ->name;       
+        $res_n =  (string)$child ->name;
         $res_id = $npref.$res_n;
         $child->value ='';
 
-        if (!empty($metainfo[$res_n])){
+        if (!empty($metainfo[$res_n])) {
             if ($child->meta_help == '1' || $child->help == 'Help!') {
                 $child->help = $metainfo[$res_n]['Description'];
             }
@@ -525,7 +525,7 @@ foreach ($items as $child) {
         }
         
         if (empty($child->class)) {
-           $child->class = 'form-control';
+            $child->class = 'form-control';
         }
         
         if (!empty($fvalues[$res_n])) {
@@ -534,8 +534,8 @@ foreach ($items as $child) {
             }
         }
         
-        if (empty($child->value)){
-            if (!empty($child->default)){
+        if (empty($child->value)) {
+            if (!empty($child->default)) {
                 $child->value = $child->default;
             }
         }
@@ -551,21 +551,21 @@ foreach ($items as $child) {
                     </div>
                     <div class="col-md-9"> <!-- <div class = "lnet form-group form-inline" data-nextid=1> --> <?php
                             echo  '<select name="'.$res_id.'" class="'. $child->class . '" id="' . $res_id . '">';
-                            foreach ($select_opt as $key => $val) {
-                                if (is_array($val)) {
-                                    $opt_key = (isset($val['id'])) ? $val['id'] : $key;
-                                    $opt_val = (isset($val['val'])) ? $val['val'] : $val;
-                                } else {
-                                    $opt_key = $key;
-                                    $opt_val = $val;
-                                }
-                                echo '<option value="' . $opt_key . '"';
-                                if ($opt_key == $child->value) {
-                                    echo ' selected="selected"';
-                                }
-                                echo '>' . $opt_val. '</option>';
-                            }
-                            ?> </select>
+                    foreach ($select_opt as $key => $val) {
+                        if (is_array($val)) {
+                            $opt_key = (isset($val['id'])) ? $val['id'] : $key;
+                            $opt_val = (isset($val['val'])) ? $val['val'] : $val;
+                        } else {
+                            $opt_key = $key;
+                            $opt_val = $val;
+                        }
+                        echo '<option value="' . $opt_key . '"';
+                        if ($opt_key == $child->value) {
+                            echo ' selected="selected"';
+                        }
+                        echo '>' . $opt_val. '</option>';
+                    }
+                    ?> </select>
                     <!-- </div> --> </div>
             </div></div>
             <div class="row"><div class="col-md-12">
@@ -575,24 +575,23 @@ foreach ($items as $child) {
         <!--END System Language-->
         <?php
         echo '<!-- END '.$child->label.' -->';
-        
     }
 /*
- *    Input element Select 
+ *    Input element Select
  */
 
     if ($child['type'] == 'SL') {
         $res_n =  (string)$child->name;
         $res_id = $npref.$child->name;
 
-        if (!empty($metainfo[$res_n])){
+        if (!empty($metainfo[$res_n])) {
             if ($child->meta_help == '1' || $child->help == 'Help!') {
                 $child->help = $metainfo[$res_n]['Description'];
             }
         }
         
         if (empty($child ->class)) {
-           $child->class = 'form-control';
+            $child->class = 'form-control';
         }
         echo '<!-- Begin '.$child->label.' -->';
 
@@ -606,24 +605,24 @@ foreach ($items as $child) {
                     </div>
                     <div class="col-md-9"> <div class = "lnet form-group form-inline" data-nextid=1> <?php
                         echo  '<select name="'.$res_id.'" class="'. $child->class . '" id="' . $res_id . '">';
-                        if (!empty($fvalues[$res_n])) {
-                            if (!empty($fvalues[$res_n]['data'])) {
-                                $child->value = $fvalues[$res_n]['data'];
-                            }
+                    if (!empty($fvalues[$res_n])) {
+                        if (!empty($fvalues[$res_n]['data'])) {
+                            $child->value = $fvalues[$res_n]['data'];
                         }
-                         foreach ($child->xpath('select') as $value) {
-                            if (!empty($value[@value])) {
+                    }
+                    foreach ($child->xpath('select') as $value) {
+                        if (!empty($value[@value])) {
                                 $key = $value[@value];
-                            } else { 
-                                $key =  (string)$value; 
-                            }
-                            echo '<option value="' . $key . '"';
-                            if (strtolower((string)$key) == strtolower((string)$child->value)) {
-                                echo ' selected="selected"';
-                            }
-                            echo '>' . (string)$value. '</option>';
+                        } else {
+                            $key =  (string)$value;
                         }
-                        ?> </select>
+                             echo '<option value="' . $key . '"';
+                        if (strtolower((string)$key) == strtolower((string)$child->value)) {
+                            echo ' selected="selected"';
+                        }
+                             echo '>' . (string)$value. '</option>';
+                    }
+                    ?> </select>
                             
                     </div> </div>
             </div></div>
@@ -636,43 +635,43 @@ foreach ($items as $child) {
     }
 
  /*
- *    Input element Select SDM  - Model List 
- *                         SDMS - Sip model List 
- *                         SDE  - Extension List 
+ *    Input element Select SDM  - Model List
+ *                         SDMS - Sip model List
+ *                         SDE  - Extension List
  */
 
     if ($child['type'] == 'SDM' || $child['type'] == 'SDMS' || $child['type'] == 'SDE' || $child['type'] == 'SDD') {
 //        $value = $child -> select;
-        $res_n =  (string)$child ->name;       
+        $res_n =  (string)$child ->name;
         $res_id = $npref.$res_n;
 
-        if (!empty($metainfo[$res_n])){
+        if (!empty($metainfo[$res_n])) {
             if ($child->meta_help == '1' || $child->help == 'Help!') {
                 $child->help = $metainfo[$res_n]['Description'];
             }
         }
         
         if (empty($child->class)) {
-           $child->class = 'form-control';
+            $child->class = 'form-control';
         }
         if ($child['type'] == 'SDM') {
             if (empty($model_list)) {
                 $model_list = \FreePBX::Sccp_manager()->dbinterface->get_db_SccpTableData("HWDevice");
             }
-            $select_opt= $model_list;            
+            $select_opt= $model_list;
         }
         if ($child['type'] == 'SDMS') {
             if (empty($model_list)) {
-              $model_list = \FreePBX::Sccp_manager()->dbinterface->get_db_SccpTableData("HWSipDevice");
+                $model_list = \FreePBX::Sccp_manager()->dbinterface->get_db_SccpTableData("HWSipDevice");
             }
-            $select_opt= $model_list;            
+            $select_opt= $model_list;
         }
         if ($child['type'] == 'SDE') {
             if (empty($extension_list)) {
                 $extension_list = \FreePBX::Sccp_manager()->dbinterface->get_db_SccpTableData("HWextension");
                 $extension_list[]=array(model=>'NONE', vendor=>'CISCO', dns=>'0');
             }
-            $select_opt= $extension_list;            
+            $select_opt= $extension_list;
         }
         if ($child['type'] == 'SDD') {
             if (empty($device_list)) {
@@ -694,11 +693,11 @@ foreach ($items as $child) {
                     </div>
                     <div class="col-md-9"><div class = "lnet form-group form-inline" data-nextid=1> <?php
                             echo  '<select name="'.$res_id.'" class="'. $child->class . '" id="' . $res_id . '"';
-                            if (isset($child->options)){
-                                foreach ($child->options->attributes() as $optkey =>$optval){
-                                    echo  ' '.$optkey.'="'.$optval.'"';
-                                }
-                            }
+                    if (isset($child->options)) {
+                        foreach ($child->options->attributes() as $optkey => $optval) {
+                            echo  ' '.$optkey.'="'.$optval.'"';
+                        }
+                    }
                             echo  '>';
 
                             $fld  = (string)$child->select['name'];
@@ -707,32 +706,32 @@ foreach ($items as $child) {
                             $flk  = (string)$child->select['dataid'];
                             $flkv = (string)$child->select['dataval'];
                             $key  = (string)$child->default;
-                            if (!empty($fvalues[$res_n])) {
-                                if (!empty($fvalues[$res_n]['data'])) {
-                                    $child->value = $fvalues[$res_n]['data'];
-                                    $key = $fvalues[$res_n]['data'];
-                                }
-                            }
+                    if (!empty($fvalues[$res_n])) {
+                        if (!empty($fvalues[$res_n]['data'])) {
+                            $child->value = $fvalues[$res_n]['data'];
+                            $key = $fvalues[$res_n]['data'];
+                        }
+                    }
                             
-                            foreach ($select_opt as $data) {
-                                echo '<option value="' . $data[$fld] . '"';
-                                if ($key == $data[$fld]) {
-                                    echo ' selected="selected"';
-                                }
-                                if (!empty($flk)){
-                                    echo ' data-id="'.$data[$flk].'"';
-                                }
-                                if (!empty($flkv)){
-                                    echo ' data-val="'.$data[$flkv].'"';
-                                }
-                                echo '>' . $data[$flv];
-                                if (!empty($flv2)){
-                                    echo ' / '.$data[$flv2];
-                                }
-                                echo '</option>';
-                            }
+                    foreach ($select_opt as $data) {
+                        echo '<option value="' . $data[$fld] . '"';
+                        if ($key == $data[$fld]) {
+                            echo ' selected="selected"';
+                        }
+                        if (!empty($flk)) {
+                            echo ' data-id="'.$data[$flk].'"';
+                        }
+                        if (!empty($flkv)) {
+                            echo ' data-val="'.$data[$flkv].'"';
+                        }
+                        echo '>' . $data[$flv];
+                        if (!empty($flv2)) {
+                            echo ' / '.$data[$flv2];
+                        }
+                        echo '</option>';
+                    }
 
-                            ?> </select>
+                    ?> </select>
                     </div></div>
             </div></div>
             <div class="row"><div class="col-md-12">
@@ -741,9 +740,8 @@ foreach ($items as $child) {
         </div>
         <?php
         echo '<!-- END '.$child->label.' -->';
-        
     }
-        if ($child['type'] == 'ITED') {
+    if ($child['type'] == 'ITED') {
         $res_input = '';
         $res_name = '';
         $res_na =  (string)$child->name;
@@ -787,11 +785,11 @@ foreach ($items as $child) {
                                 
                 if (empty($value->options->class)) {
                     $opt_at[$fields_id]['options']['class']='form-control';
-                } 
+                }
                 $opt_at[$fields_id]['type']=(string)$value['type'];
                 $res_opt['addon'] ='';
-                if (isset($value->options)){
-                    foreach ($value->options ->attributes() as $optkey =>$optval){
+                if (isset($value->options)) {
+                    foreach ($value->options ->attributes() as $optkey => $optval) {
                         $opt_at[$fields_id]['options'][$optkey]=(string)$optval;
                         $res_opt['addon'] .=' '.$optkey.'="'.$optval.'"';
                     }
@@ -800,7 +798,7 @@ foreach ($items as $child) {
                 echo '<td class="">';
                 $res_opt['inp_st'] = '<div class="input-group"> <span class="input-group-addon" id="basep_'.$res_n.'">'.$opt_at[$fields_id]['display_prefix'].'</span>';
                 $res_opt['inp_end'] = '<span class="input-group-addon" id="bases_'.$res_n.'">'.$opt_at[$fields_id]['display_sufix'].'</span></div>';
-                switch ($value['type']){
+                switch ($value['type']) {
                     case 'date':
                         echo $res_opt['inp_st'].'<input type="date" name="'. $res_n.'" value="'.$res_vf[$i2].'"'.$res_opt['addon']. '>'.$res_opt['inp_end'];
                         break;
@@ -811,7 +809,7 @@ foreach ($items as $child) {
                         echo $res_opt['inp_st'].'<input type="text" name="'. $res_n.'" value="'.$res_vf[$i2].'"'.$res_opt['addon']. '>'.$res_opt['inp_end'];
                         break;
                     case 'title':
-                        if ($i > 0 ) {
+                        if ($i > 0) {
                             break;
                         }
                     case 'label':
@@ -821,7 +819,7 @@ foreach ($items as $child) {
                     case 'select':
                         echo  $res_opt['inp_st'].'<select name="'.$res_n.'" id="' . $res_n . '"'. $res_opt['addon'].'>';
                         $opt_at[$fields_id]['data']='';
-                        foreach ($value->xpath('data') as $optselect ){
+                        foreach ($value->xpath('data') as $optselect) {
                             $opt_at[$fields_id]['data'].= (string)$optselect.';';
                             echo '<option value="' . $optselect. '"';
                             if (strtolower((string)$optselect) == strtolower((string)$res_vf[$i2])) {
@@ -832,28 +830,26 @@ foreach ($items as $child) {
                         echo  '</select>'.$res_opt['inp_end'];
                         break;
                 }
-                echo '</td>';                                
+                echo '</td>';
                 $i2 ++;
-
             }
             echo '<td><input type="button" id="'.$res_id.'-btn" data-id="'.($i).'" data-for="'.$res_id.'" data-json="'.bin2hex(json_encode($opt_at)).'" class="table-js-add" value="+" />';
-            if ($i > 0 ) {
+            if ($i > 0) {
                 echo '<input type="button" id="'.$res_id.'-btndel" data-id="'.($i).'" data-for="'.$res_id.'" class="table-js-del" value="-" />';
             }
                             
             echo '</td></tr>';
             $i++;
-                            }
-            echo '</table>';
-            echo '<!-- END '.$res_id.' -->';
-        
-    }    
+        }
+        echo '</table>';
+        echo '<!-- END '.$res_id.' -->';
+    }
     
-    if ($child['type'] == 'HLP' ) {
+    if ($child['type'] == 'HLP') {
         $res_n =  (string)$child ->name;
         $res_id = $npref.$res_n;
         if (empty($child->class)) {
-           $child->class = 'form-control';
+            $child->class = 'form-control';
         }
         echo '<!-- Begin '.$child->label.' -->';
 
@@ -866,41 +862,40 @@ foreach ($items as $child) {
             </div>
             <div class="panel-body collapse" id="<?php echo $res_id;?>">
         <?php
-                foreach ($child->xpath('element') as $value) {
-                    switch ($value['type']){
-                        case 'p':
-                        case 'h1':
-                        case 'h2':
-                        case 'h3':
-                        case 'h4':
-                            echo '<'.$value['type'].'>'._((string)$value).'</'.$value['type'].'>';
-                            break;
-                        case 'table':
-                            echo '<'.$value['type'].' class="table" >';
-                            foreach ($value->xpath('row') as $trow) {
-                                echo '<tr>';
-                                foreach ($trow->xpath('col') as $tcol) {
-                                    echo '<td>'._((string)$tcol).'</td>';
-                                }
-                                echo '</tr>';
-                            }
-                            echo '</'.$value['type'].'>';
-                            break;
+        foreach ($child->xpath('element') as $value) {
+            switch ($value['type']) {
+                case 'p':
+                case 'h1':
+                case 'h2':
+                case 'h3':
+                case 'h4':
+                    echo '<'.$value['type'].'>'._((string)$value).'</'.$value['type'].'>';
+                    break;
+                case 'table':
+                    echo '<'.$value['type'].' class="table" >';
+                    foreach ($value->xpath('row') as $trow) {
+                        echo '<tr>';
+                        foreach ($trow->xpath('col') as $tcol) {
+                            echo '<td>'._((string)$tcol).'</td>';
+                        }
+                        echo '</tr>';
                     }
-                }
+                    echo '</'.$value['type'].'>';
+                    break;
+            }
+        }
         ?>
 
             </div>
         </div>
         <?php
         echo '<!-- END '.$child->label.' -->';
-        
     }
-    if ($child['type'] == 'MINFO' ) {
+    if ($child['type'] == 'MINFO') {
         $res_n =  (string)$child ->name;
         $res_id = $npref.$res_n;
         if (empty($child->class)) {
-           $child->class = 'form-control';
+            $child->class = 'form-control';
         }
         echo '<!-- Begin '.$child->label.' -->';
         ?>
@@ -929,25 +924,25 @@ foreach ($items as $child) {
     
     if ($child['type'] == 'SLTZN') {
 //        $value = $child -> select;
-        $res_n =  (string)$child ->name;       
+        $res_n =  (string)$child ->name;
         $res_id = $npref.$res_n;
         $child->value ='';
 
-        if (!empty($metainfo[$res_n])){
+        if (!empty($metainfo[$res_n])) {
             if ($child->meta_help == '1' || $child->help == 'Help!') {
                 $child->help = $metainfo[$res_n]['Description'];
             }
         }
 
         $time_regions = array('Africa', 'America', 'Antarctica', 'Arctic', 'Asia', 'Atlantic', 'Australia', 'Europe', 'Russian', 'Indian', 'Pacific');
-        $time_zone_global = DateTimeZone::listIdentifiers(DateTimeZone::ALL_WITH_BC );
+        $time_zone_global = DateTimeZone::listIdentifiers(DateTimeZone::ALL_WITH_BC);
         $time_zone_ru = array('Russian/Kaliningrad', 'Russian/Moscow', 'Russian/St.Peterburg', 'Russian/Samara', 'Russian/Novosibirsk', 'Russian/Ekaterinburg', 'Russian/Irkutsk', 'Russian/Yakutsk', 'Russian/Khabarovsk', 'Russian/Vladivostok', 'Russian/Sakhalin', 'Russian/Magadan', 'Russian/Kamchatka');
-        $time_zone_list = array_merge($time_zone_global,$time_zone_ru);
+        $time_zone_list = array_merge($time_zone_global, $time_zone_ru);
         $optgroup = '';
         sort($time_zone_list);
         
         if (empty($child->class)) {
-           $child->class = 'form-control';
+            $child->class = 'form-control';
         }
         
         if (!empty($fvalues[$res_n])) {
@@ -956,7 +951,7 @@ foreach ($items as $child) {
             }
         }
         
-        if (empty($child->value)){
+        if (empty($child->value)) {
             $child->value = \date_default_timezone_get();
 //            if (!empty($child->default)){
 //                $child->value = $child->default;
@@ -974,19 +969,25 @@ foreach ($items as $child) {
                     </div>
                     <div class="col-md-9"> <!-- <div class = "lnet form-group form-inline" data-nextid=1> --> <?php
                             echo  '<select name="'.$res_id.'" class="'. $child->class . '" id="' . $res_id . '">';
-                            foreach ($time_zone_list as $opt_key) {
-                                $z = explode('/', $opt_key, 2);
-                                if (count($z) != 2 || !in_array($z[0], $time_regions)) continue;
-                                if ($optgroup != $z[0]) {
-                                    if ($optgroup !== '') echo  '</optgroup>';
-                                    $optgroup = $z[0];
-                                    echo   '<optgroup label="' . htmlentities($z[0]) . '">';
-                                }
-                                echo  '<option value="' . htmlentities($opt_key) . '" label="' . htmlentities(str_replace('_', ' ', $z[1])) . '"' . ($opt_key == $child->value ? ' selected="selected" >' : '>'). htmlentities(str_replace('_', ' ', $opt_key)) . '</option>';
+                    foreach ($time_zone_list as $opt_key) {
+                        $z = explode('/', $opt_key, 2);
+                        if (count($z) != 2 || !in_array($z[0], $time_regions)) {
+                            continue;
+                        }
+                        if ($optgroup != $z[0]) {
+                            if ($optgroup !== '') {
+                                echo  '</optgroup>';
                             }
-                            if ($optgroup !== '') echo '</optgroup>';
+                            $optgroup = $z[0];
+                            echo   '<optgroup label="' . htmlentities($z[0]) . '">';
+                        }
+                        echo  '<option value="' . htmlentities($opt_key) . '" label="' . htmlentities(str_replace('_', ' ', $z[1])) . '"' . ($opt_key == $child->value ? ' selected="selected" >' : '>'). htmlentities(str_replace('_', ' ', $opt_key)) . '</option>';
+                    }
+                    if ($optgroup !== '') {
+                        echo '</optgroup>';
+                    }
                             
-                            ?> </select>
+                    ?> </select>
                     <!-- </div> --> </div>
             </div></div>
             <div class="row"><div class="col-md-12">
@@ -996,15 +997,12 @@ foreach ($items as $child) {
         <!--END System Language-->
         <?php
         echo '<!-- END '.$child->label.' -->';
-        
     }
-    
-    
 }
 ?>
 <?php
-    if ($h_show==1) {
-       echo '</div>';
-    }
- ?>
+if ($h_show==1) {
+    echo '</div>';
+}
+?>
 

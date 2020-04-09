@@ -111,7 +111,7 @@ and open the template in the editor. Base Version before all crash :-)
                 <options placeholder="Host Name"></options>
             </input>
 
-            <help>External IP Address of the firewall, required in case the PBX is running on a seperate host behind it. IP Address that we're going to notify in RTP media stream as the pbx source address. Resolve Hostname (if dynamic) that we're going to resolve when setting up the RTP media stream (only active if externip=0.0.0.0 and host is natted.)</help>
+            <help>External IP Address of the firewall, required in case the PBX is running on a separate host behind it. IP Address that we're going to notify in RTP media stream as the pbx source address. Resolve Hostname (if dynamic) that we're going to resolve when setting up the RTP media stream (only active if externip=0.0.0.0 and host is natted.)</help>
             <meta_help>1</meta_help>
             <nameseparator> / </nameseparator>
             externhost
@@ -511,7 +511,7 @@ and open the template in the editor. Base Version before all crash :-)
             <button value="broadcast">Broadcast</button>
             <button value="multicast">Multicast</button>
             <button value="manycast">Manycast</button>
-            <help>Configure NTP Server protocol time syncronization</help>
+            <help>Configure NTP Server protocol time synchronization</help>
         </item>
 
     </page_group>          
@@ -883,7 +883,7 @@ and open the template in the editor. Base Version before all crash :-)
             <default>off</default>
             <button value="on">Enabled</button>
             <button value="off">Disabled</button>
-            <help>Complete transfer on hangup, without pressing transfer a second time. Will complete transfer, when the transferer puts the receiver on hook, after the destination has been reached. To cancel the transfer, either press resume on the transfered channel, press the 'endcall' softkey, or have the receiving party hangup first.</help>
+            <help>Complete transfer on hangup, without pressing transfer a second time. Will complete transfer, when the transferer puts the receiver on hook, after the destination has been reached. To cancel the transfer, either press resume on the transferred channel, press the 'endcall' softkey, or have the receiving party hangup first.</help>
         </item>
 
         <item type="SLA-disabled" id="6">
@@ -1038,11 +1038,11 @@ and open the template in the editor. Base Version before all crash :-)
 
         <item type="IS" id="4" seq="90">
             <name>system_rouminguser</name> 
-            <label>User Rouming</label>
+            <label>User Roaming</label>
             <default>no</default>
             <button value="yes">Yes</button>
             <button value="no">No</button>
-            <help>Experemental Function Rouming Users</help>
+            <help>Experemental Function Roaming Users</help>
         </item>
     
     </page_group>
@@ -1609,10 +1609,10 @@ and open the template in the editor. Base Version before all crash :-)
             
     </page_group>
  <!--   
-    Rouming User Pages
+    Roaming User Pages
      -->
     <page_group name="sccp_ruser">
-        <label>Rouming User configuration</label>
+        <label>Roaming User configuration</label>
         <item type="IE" id="1" seq="99">
             <label>User ID</label>
             <input>
@@ -1650,7 +1650,7 @@ and open the template in the editor. Base Version before all crash :-)
         </item>
         <item type="IS" id="13" seq="99">
             <name>roaminglogin</name> 
-            <label>Rouming</label>
+            <label>Roaming</label>
             <default>off</default>
             <button value="off">Disabled</button>
             <button value="on">Enable Single</button>
@@ -1676,7 +1676,7 @@ and open the template in the editor. Base Version before all crash :-)
         </item>
     </page_group>
  <!--   
-    Rouming User Pages
+    Roaming User Pages
      -->
     <page_group name="sccp_ruser_time">
         <label>Time Work configuration</label>

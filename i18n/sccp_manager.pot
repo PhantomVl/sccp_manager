@@ -143,7 +143,7 @@ msgid "External Ip"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid "External IP Address of the firewall, required in case the PBX is running on a seperatehost behind it. IP Address that we're going to notify in RTP media stream as the pbx source address."
+msgid "External IP Address of the firewall, required in case the PBX is running on a separatehost behind it. IP Address that we're going to notify in RTP media stream as the pbx source address."
 msgstr ""
 
 #: views/sccpgeneral.xml:
@@ -395,7 +395,7 @@ msgid "NTP Server name or IP"
 msgstr ""
 
 #: views/sccpgeneral.xml:
-msgid "Configure NTP Server protocol time syncronization"
+msgid "Configure NTP Server protocol time synchronization"
 msgstr ""
 
 #: views/sccpgeneral.xml:
@@ -967,7 +967,7 @@ msgid "Close"
 msgstr ""
 
 #: views/server.model:
-msgid "Add New model whithout Enabled"
+msgid "Add New model without Enabled"
 msgstr ""
 
 #: views/server.model:

@@ -1,24 +1,28 @@
 <?php
 
 /**
- * 
+ *
  */
 
 namespace FreePBX\modules\Sccp_manager;
 
-class extconfigs {
+class extconfigs
+{
 
-    public function __construct($parent_class = null) {
+    public function __construct($parent_class = null)
+    {
         $this->paren_class = $parent_class;
     }
 
-    public function info() {
+    public function info()
+    {
         $Ver = '13.0.3';
-        return Array('Version' => $Ver,
+        return array('Version' => $Ver,
             'about' => 'Default Setings and Enums ver: ' . $Ver);
     }
 
-    public function getextConfig($id = '', $index = '') {
+    public function getextConfig($id = '', $index = '')
+    {
         switch ($id) {
             case 'keyset':
                 $result = $this->keysetdefault;
@@ -29,7 +33,7 @@ class extconfigs {
             case 'sccpDefaults':
                 $result = $this->sccpDefaults;
                 break;
-            case 'sccp_timezone_offset': // Sccp manafer: 1400 (+ Id) :2007 (+ Id) 
+            case 'sccp_timezone_offset': // Sccp manafer: 1400 (+ Id) :2007 (+ Id)
                 if (empty($index)) {
                     return 0;
                 }
@@ -43,7 +47,7 @@ class extconfigs {
                 return $tmp_ofset / 60;
                 
                 break;
-            case 'sccp_timezone': // Sccp manafer: 1400 (+ Id) :2007 (+ Id) 
+            case 'sccp_timezone': // Sccp manafer: 1400 (+ Id) :2007 (+ Id)
                 $result = array();
                 
                 if (empty($index)) {
@@ -56,10 +60,10 @@ class extconfigs {
                     
                     $tz_tmp = array();
                     foreach ($timezone_abbreviations as $subArray) {
-                        $tf_idt = array_search($index ,array_column($subArray, 'timezone_id'));
+                        $tf_idt = array_search($index, array_column($subArray, 'timezone_id'));
                         if (!empty($tf_idt)) {
                             $tz_tmp[] = $subArray[$tf_idt];
-                        } 
+                        }
                     }
                     if (empty($tz_tmp)) {
                         return array('offset' => '00', 'daylight' => '', 'cisco_code' => 'Greenwich');
@@ -72,7 +76,7 @@ class extconfigs {
                         $tmp_ofset = $tmp_dt->getOffset();
                         foreach ($tz_tmp as $subArray) {
                             if ($subArray['offset'] == $tmp_ofset) {
-                                $time_set = $subArray; 
+                                $time_set = $subArray;
                                 break;
                             }
                         }
@@ -103,9 +107,10 @@ class extconfigs {
         }
     }
 
-    private function get_cisco_time_zone($tzc){
+    private function get_cisco_time_zone($tzc)
+    {
     
-        if ( (empty($tzc)) or (!array_key_exists($tzc, $this->cisco_timezone))) { 
+        if ((empty($tzc)) or (!array_key_exists($tzc, $this->cisco_timezone))) {
 //            return array('offset' => '00', 'daylight' => '', 'cisco_code' => 'Greenwich');
             return array();
         }
@@ -148,7 +153,7 @@ class extconfigs {
         'onstealable' => 'redial,newcall,barge,intrcpt,cfwdall,pickup,gpickup,dnd',
         'holdconf' => 'resume,newcall,endcall,join',
         'uriaction' => 'default');
-//   Cisco  Language Code / Directory  
+//   Cisco  Language Code / Directory
 //
     private $cisco_language = array('ar_SA' => array('code' => 'ar', 'language' => 'Arabic', 'locale' => 'Arabic_Saudi_Arabia', 'codepage' => 'ISO8859-1'),
         'bg_BG' => array('code' => 'bg', 'language' => 'Bulgarian', 'locale' => 'Bulgarian_Bulgaria', 'codepage' => 'ISO8859-1'),
@@ -223,7 +228,7 @@ class extconfigs {
         'South Africa' => array('offset' => '120', 'daylight' => ''),
         'Jerusalem' => array('offset' => '120', 'daylight' => 'Daylight'),
         'Saudi Arabia' => array('offset' => '180', 'daylight' => ''),
-        /*              Russion  Regions                                                                 */
+        /*              Russian  Regions                                                                 */
         'Russian/Kaliningrad' => array('offset' => '120', 'daylight' => '', 'cisco_code' => 'South Africa Standard Time'),
         'Russian/Moscow' => array('offset' => '180', 'daylight' => '', 'cisco_code' => 'Russian Standard Time'),
         'Russian/St.Peterburg' => array('offset' => '180', 'daylight' => '', 'cisco_code' => 'Russian Standard Time'),
@@ -237,7 +242,7 @@ class extconfigs {
         'Russian/Sakhalin' => array('offset' => '660', 'daylight' => '', 'cisco_code' => 'Central Pacific Standard Time'),
         'Russian/Magadan' => array('offset' => '660', 'daylight' => '', 'cisco_code' => 'Central Pacific Standard Time'),
         'Russian/Kamchatka' => array('offset' => '720', 'daylight' => '', 'cisco_code' => 'Fiji Standard Time'),
-        /*              EnD - Russion  Regions                                                             */
+        /*              EnD - Russian  Regions                                                             */
         'Iran' => array('offset' => '210', 'daylight' => 'Daylight'),
         'Caucasus' => array('offset' => '240', 'daylight' => 'Daylight'),
         'Arabian' => array('offset' => '240', 'daylight' => ''),
@@ -260,35 +265,36 @@ class extconfigs {
         'New Zealand' => array('offset' => '720', 'daylight' => 'Daylight')
     );
 
-    public function validate_init_path($confDir = '', $db_vars, $sccp_driver_replace = '') {
+    public function validate_init_path($confDir = '', $db_vars, $sccp_driver_replace = '')
+    {
 //        global $db;
 //        global $amp_conf;
-// *** Setings for Provision Sccp        
-        $adv_config = Array('tftproot' => '', 'firmware' => 'firmware', 'settings' => 'settings',
+// *** Setings for Provision Sccp
+        $adv_config = array('tftproot' => '', 'firmware' => 'firmware', 'settings' => 'settings',
             'locales' => 'locales', 'languages' => 'languages', 'templates' => 'templates', 'dialplan' => 'dialplan', 'softkey' => 'softkey');
-// 'pro' /tftpboot - root dir 
+// 'pro' /tftpboot - root dir
 //       /tftpboot/locales/locales/%Languge_name%
 //       /tftpboot/settings/XMLdefault.cnf.xml
 //       /tftpboot/settings/SEP[MAC].cnf.xml
 //       /tftpboot/firmware/79xx/SCCPxxxx.loads
-        $adv_tree['pro'] = Array('templates' => 'tftproot', 'settings' => 'tftproot', 'locales' => 'tftproot', 'firmware' => 'tftproot', 'languages' => 'locales', 'dialplan' => 'tftproot', 'softkey' => 'tftproot');
+        $adv_tree['pro'] = array('templates' => 'tftproot', 'settings' => 'tftproot', 'locales' => 'tftproot', 'firmware' => 'tftproot', 'languages' => 'locales', 'dialplan' => 'tftproot', 'softkey' => 'tftproot');
 
-// 'def' /tftpboot - root dir 
+// 'def' /tftpboot - root dir
 //       /tftpboot/languages/%Languge_name%
 //       /tftpboot/XMLdefault.cnf.xml
 //       /tftpboot/SEP[MAC].cnf.xml
 //       /tftpboot/SCCPxxxx.loads
-        $adv_tree['def'] = Array('templates' => 'tftproot', 'settings' => '', 'locales' => '', 'firmware' => '', 'languages' => 'tftproot', 'dialplan' => '', 'softkey' => '');
+        $adv_tree['def'] = array('templates' => 'tftproot', 'settings' => '', 'locales' => '', 'firmware' => '', 'languages' => 'tftproot', 'dialplan' => '', 'softkey' => '');
 //        $adv_tree['def']   = Array('templates' => 'tftproot', 'settings' => '', 'locales' => 'tftproot',  'firmware' => 'tftproot', 'languages' => '');
 //        $adv_tree['def'] = Array('templates' => 'tftproot', 'settings' => '', 'locales' => 'tftproot', 'firmware' => 'tftproot', 'languages' => 'tftproot');
-//* **************------ ****        
-        $base_tree = Array('tftp_templates' => 'templates', 'tftp_path_store' => 'settings', 'tftp_lang_path' => 'languages', 'tftp_firmware_path' => 'firmware', 'tftp_dialplan' => 'dialplan', 'tftp_softkey' => 'softkey');
+//* **************------ ****
+        $base_tree = array('tftp_templates' => 'templates', 'tftp_path_store' => 'settings', 'tftp_lang_path' => 'languages', 'tftp_firmware_path' => 'firmware', 'tftp_dialplan' => 'dialplan', 'tftp_softkey' => 'softkey');
 
         if (empty($confDir)) {
             return array('error' => 'empty СonfDir');
         }
 
-        $base_config = Array('asterisk' => $confDir, 'sccp_conf' => $confDir . '/sccp.conf', 'tftp_path' => '');
+        $base_config = array('asterisk' => $confDir, 'sccp_conf' => $confDir . '/sccp.conf', 'tftp_path' => '');
 
 //      Test Base dir (/tftproot)
         if (!empty($db_vars["tftp_path"])) {
@@ -309,9 +315,9 @@ class extconfigs {
         }
         if (!is_writeable($base_config["tftp_path"])) {
             if (!empty($this->paren_class)) {
-                $this->paren_class->class_error['tftp_path'] = 'No write permision on tftp DIR';
+                $this->paren_class->class_error['tftp_path'] = 'No write permission on tftp DIR';
             }
-            return array('error' => 'No write permision on tftp DIR');
+            return array('error' => 'No write permission on tftp DIR');
         }
 //      END Test Base dir (/tftproot)
 
@@ -372,7 +378,7 @@ class extconfigs {
           }
           }
          */
-        //    TFTP -REWrite        double model 
+        //    TFTP -REWrite        double model
         if (empty($_SERVER['DOCUMENT_ROOT'])) {
             if (!empty($this->paren_class)) {
                 $this->paren_class->class_error['DOCUMENT_ROOT'] = 'Empty DOCUMENT_ROOT';
@@ -401,7 +407,7 @@ class extconfigs {
             }
         }
 
-        if (!file_exists($base_config["sccp_conf"])) { // System re Config 
+        if (!file_exists($base_config["sccp_conf"])) { // System re Config
             $sccpfile = file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/admin/modules/sccp_manager/conf/sccp.conf');
             file_put_contents($base_config["sccp_conf"], $sccpfile);
         }
@@ -409,9 +415,10 @@ class extconfigs {
         return $base_config;
     }
 
-    public function validate_RealTime($realm = '') {
+    public function validate_RealTime($realm = '')
+    {
         global $amp_conf;
-        $res = Array();
+        $res = array();
         if (empty($realm)) {
             $realm = 'sccp';
         }
@@ -505,5 +512,4 @@ class extconfigs {
         }
         return $res;
     }
-
 }

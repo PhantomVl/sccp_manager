@@ -26,13 +26,13 @@ $(document).ready(function () {
     });
 
     /*
-     $('#ajaxbackup').on('click', function (e) {        
+     $('#ajaxbackup').on('click', function (e) {
      var vdata = '';
      var snd_command = 'backupsettings';
      $('.fpbx-submit').each(function () {
      vdata = vdata + $(this).serialize() + '&';
      });
-     
+
      $.ajax({
      type: 'POST',
      url: 'ajax.php?module=sccp_manager&command=' + snd_command,
@@ -42,7 +42,7 @@ $(document).ready(function () {
      if (data.message) {
      alert(data.message);
      } else {
-     alert('Data Save');                        
+     alert('Data Save');
      }
      } else {
      if (Array.isArray(data.message)) {
@@ -53,7 +53,7 @@ $(document).ready(function () {
      }
      }
      });
-     
+
      });
      */
     $('#ajaxsubmit2').on('click', function (e) {
@@ -140,7 +140,6 @@ $(document).ready(function () {
                     if (data.reload === true && old_style ===true ) {
                         location.reload();
                     }
-
                 } else {
                     bs_alert(data.message,data.status);
                 }
@@ -248,7 +247,7 @@ $(document).ready(function () {
         var kid = $(this).data('id');
         var kval = $(this).val();
         $('.lineid_' + kid).each(function () {
-            var lval = $(this).data('type'); 
+            var lval = $(this).data('type');
             if (lval == 'featurep') {
                 if ( kval == 'parkinglot') {
                     $(this).removeClass('hidden');
@@ -264,7 +263,7 @@ $(document).ready(function () {
         var kid = $(this).data('id');
         var kval = $(this).val();
         $('.lineid_' + kid).each(function () {
-            var lval = $(this).data('type');            
+            var lval = $(this).data('type');
             var class_id = [kval];
             switch (kval) {
                 case 'silent':
@@ -278,9 +277,9 @@ $(document).ready(function () {
                 case 'service':
                 case 'feature':
                     if (lval == 'featurep') {
-                       if ($('.futuretype').val() == 'parkinglot') {
-                           class_id = [kval,lval];
-                       }
+                        if ($('.futuretype').val() == 'parkinglot') {
+                            class_id = [kval,lval];
+                        }
                     }
                     break;
                 case 'speeddial':
@@ -311,7 +310,6 @@ $(document).ready(function () {
                 $('#sccp_hw_addon').val('NONE').change();
             }
             $('#sccp_hw_addon').attr("disabled", "disabled");
-
         } else {
             $('#sccp_hw_addon').removeAttr('disabled');
         }
@@ -328,7 +326,8 @@ $(document).ready(function () {
 
     });
 
-    $('.sccp_button_hide').each(function () { // On page create !!  
+    $('.sccp_button_hide').each(function () {
+ // On page create !!
         var dev_id = $(this).data('vhide');
         var dev_class = $(this).data('clhide');
         var dev_val = $(this).val();
@@ -391,7 +390,8 @@ $(document).ready(function () {
 
     });
 
-    $('.sccp_button_disabled').each(function () { // On page create !!  
+    $('.sccp_button_disabled').each(function () {
+ // On page create !!
         var dev_id = $(this).data('vhide');
         var dev_class = $(this).data('clhide');
         var dev_val = $(this).val();
@@ -466,7 +466,7 @@ $(document).ready(function () {
         if (dev_class.includes('validate-netmask')) {
             confirm(dev_id);
         }
-//        confirm(dev_id);        
+//        confirm(dev_id);
     });
 
     $('.sccp_test').on('click', function (e) {
@@ -507,7 +507,7 @@ $(document).ready(function () {
 //        console.log($(this).data('id'));
 
 // ----------------------- Server.keyset form ----------------
-// 
+//
         if ($(this).data('id') === 'keyset_add') {
             var dev_cmd = 'updateSoftKey';
             if ($(this).data('mode') === 'new') {
@@ -584,7 +584,6 @@ $(document).ready(function () {
                 });
             }
             console.log(datas);
-
         }
         if ($(this).data('id') === 'delete_hardware') {
             var dev_cmd = $(this).data('id');
@@ -603,7 +602,6 @@ $(document).ready(function () {
             if (!confirm(_('Are you sure you wish to delete selected device ?'))) {
                 dev_cmd = '';
             }
-
         }
         if ($(this).data('id') === 'reset_dev' || $(this).data('id') === 'reset_token' || $(this).data('id') === 'update_button_label') {
             var dev_cmd = $(this).data('id');
@@ -636,11 +634,9 @@ $(document).ready(function () {
                 } else {
                     dev_cmd = '';
                 }
-
             }
         }
         if (dev_cmd !== '') {
-
             $.ajax({
                 type: 'POST',
                 url: 'ajax.php?module=sccp_manager&command=' + dev_cmd,
@@ -655,7 +651,7 @@ $(document).ready(function () {
                             $('table').bootstrapTable('refresh');
                         }
                         if (data.reload === true && old_style === true) {
-                           location.reload();
+                            location.reload();
                         }
                     } else {
                         if (Array.isArray(data.message)) {
@@ -676,7 +672,6 @@ $(document).ready(function () {
                 }
 
             });
-
         }
 
     });
@@ -690,14 +685,14 @@ $(document).ready(function () {
 
 
 
-//$("table").on('click-cell.bs.table', function (field, value, row, $element) {   
+//$("table").on('click-cell.bs.table', function (field, value, row, $element) {
 //    var id_fld=$element['model']; Работает !
 //    console.log('Table test: '+ id_fld);
 //    $('#bt'+id_fld).removeAttr('hidden');
 //});
 
 
-//    Bootstrap table Enabled / Disabled buttons ( class="btn-tab-select") 
+//    Bootstrap table Enabled / Disabled buttons ( class="btn-tab-select")
 $("table").on('check-all.bs.table', function (rows) {
     var id_fld = $(this).data('id');
     $(".btn-tab-select").each(function () {
@@ -738,11 +733,11 @@ $("table").on('uncheck-all.bs.table', function (rows) {
 //    console.log('Table  unselect all' + id_fld);
 });
 
-// 
-// On table  Click !!!!!! 
+//
+// On table  Click !!!!!!
 $("table").on("post-body.bs.table", function () {
 //    console.log('Table ');
-// delete extension 
+// delete extension
     $(this).find(".clickable.delete").click(function () {
         var id = $(this).data("id");
 
@@ -763,7 +758,8 @@ $("table").on("post-body.bs.table", function () {
     });
 });
 
-function load_oncliсk(e, data) {
+function load_oncliсk(e, data)
+{
 
 //    console.log('load_oncliсk');
     var add_softkey = false;
@@ -796,7 +792,7 @@ function load_oncliсk(e, data) {
         var opts_idx = -1;
         for (var i = 0; i < dev_fld.length; i++) {
             opts = $('#destination_' + dev_fld[i] + ' option');
-            if (opts.length > 0) { // Remove all 
+            if (opts.length > 0) { // Remove all
                 $(opts).remove();
                 $('#source_' + dev_fld[i]).append($(opts).clone());
             }
@@ -821,7 +817,8 @@ function load_oncliсk(e, data) {
 }
 
 
-function add_dynamic_input(pe, pclass, vdefault) {
+function add_dynamic_input(pe, pclass, vdefault)
+{
     // We'd like a new one, please.
     pcls = pe.data('for');
     pname = pe.data('id');
@@ -846,7 +843,8 @@ function add_dynamic_input(pe, pclass, vdefault) {
     }
 }
 
-function del_dynamic_table(pe, pclass, vdefault) {
+function del_dynamic_table(pe, pclass, vdefault)
+{
     pcls = pe.data('for');
     pname = pe.data('id');
 
@@ -865,7 +863,8 @@ function del_dynamic_table(pe, pclass, vdefault) {
     }
 }
 
-function add_dynamic_table(pe, pclass, vdefault) {
+function add_dynamic_table(pe, pclass, vdefault)
+{
     // We'd like a new one, please.
     pcls = pe.data('for');
     pname = pe.data('id');
@@ -996,33 +995,34 @@ var theForm = document.editIax;
 
 /*
  String.prototype.hex2bin = function()
- { 
+ {
  var i = 0, len = this.length, result = "";
- 
+
  //Converting the hex string into an escaped string, so if the hex string is "a2b320", it will become "%a2%b3%20"
  for(; i < len; i+=2)
- result += '%' + this.substr(i, 2);      
- 
+ result += '%' + this.substr(i, 2);
+
  return unescape(result);
  }
  */
-function bs_page_reload() {
+function bs_page_reload()
+{
     window.location.reload(false);
 }
 function bs_alert(data, status, reload)
 {
     
     if (document.getElementById('hwalert') === null) {
-        if (Array.isArray(data)) {            
+        if (Array.isArray(data)) {
             data.forEach(function (entry) {
                 alert(entry);
             });
-        }else {
+        } else {
             alert(data);
         }
         return true; // Old style
     } else {
-        var modal = $("#hwalert");        
+        var modal = $("#hwalert");
         if (typeof status != "undefined") {
             if (status === true) {
                 modal.find('.modal-title').text('Operation result');
@@ -1034,14 +1034,14 @@ function bs_alert(data, status, reload)
         }
 //        var modal2 = modal.find('.modal-title');
 //        console.log(modal2);
-//        modal.find('.modal-body').text(data);        
+//        modal.find('.modal-body').text(data);
         var modal2 = modal.find('.modal-body');
         var msg_html = '';
-        if (Array.isArray(data)) {            
-            data.forEach(function(entry) {
+        if (Array.isArray(data)) {
+            data.forEach(function (entry) {
                 msg_html = msg_html + '<p>'+ entry + '</p>';
             });
-        }else {
+        } else {
             msg_html = data;
         }
         modal2[0].innerHTML = msg_html;
@@ -1059,13 +1059,15 @@ function hex2bin(hex)
 {
     var bytes = [], str;
 
-    for (var i = 0; i < hex.length - 1; i += 2)
+    for (var i = 0; i < hex.length - 1; i += 2) {
         bytes.push(parseInt(hex.substr(i, 2), 16));
+    }
 
     return String.fromCharCode.apply(String, bytes);
 }
 
-function sleep(milliseconds) {
+function sleep(milliseconds)
+{
     var start = new Date().getTime();
     for (var i = 0; i < 1e7; i++) {
         if ((new Date().getTime() - start) > milliseconds) {

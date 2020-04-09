@@ -21,13 +21,13 @@
             </div>
         </div>
     </div>
-    <?php 
-        echo $this->ShowGroup('sccp_general',1);
-        echo $this->ShowGroup('sccp_dev_time_s',1);
-        echo $this->ShowGroup('sccp_net',1);
-        echo $this->ShowGroup('sccp_lang',1);
-        echo $this->ShowGroup('sccp_qos_config',1);
-        echo $this->ShowGroup('sccp_extpath_config',1);
+    <?php
+        echo $this->showGroup('sccp_general', 1);
+        echo $this->showGroup('sccp_dev_time_s', 1);
+        echo $this->showGroup('sccp_net', 1);
+        echo $this->showGroup('sccp_lang', 1);
+        echo $this->showGroup('sccp_qos_config', 1);
+        echo $this->showGroup('sccp_extpath_config', 1);
         
     ?>    
 
@@ -43,8 +43,8 @@
             </div>
             <div class="modal-body">
                 <ul class="nav nav-tabs" role="tablist">
-                <?php 
-//                    echo $this->ShowGroup('add_network_1',0);
+                <?php
+//                    echo $this->showGroup('add_network_1',0);
                 ?>    
                 </ul>
             </div>    

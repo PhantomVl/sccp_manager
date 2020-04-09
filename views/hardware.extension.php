@@ -7,7 +7,7 @@
 // vim: set ai ts=4 sw=4 ft=phtml:
 $roming_enable = '';
 if (!empty($this->sccpvalues['system_rouminguser'])) {
-    if ($this->sccpvalues['system_rouminguser']['data'] == 'yes'){
+    if ($this->sccpvalues['system_rouminguser']['data'] == 'yes') {
         $roming_enable = 'yes';
     }
 }

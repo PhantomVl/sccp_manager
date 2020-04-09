@@ -10,18 +10,21 @@
 
 namespace FreePBX\modules\Sccp_manager;
 
-class oldinterface {
+class oldinterface
+{
 
     var $error;
 
-    public function __construct($parent_class = null) {
+    public function __construct($parent_class = null)
+    {
         $this->paren_class = $parent_class;
         $this->error = "";
     }
 
-    public function info() {
+    public function info()
+    {
         $Ver = '13.0.4';
-        return Array('Version' => $Ver,
+        return array('Version' => $Ver,
             'about' => 'Old interface data ver: ' . $Ver);
     }
 
@@ -34,7 +37,8 @@ class oldinterface {
      *    Replace or dublicate to AMI interface
      */
 
-    public function sccp_core_commands($params = array()) {
+    public function sccp_core_commands($params = array())
+    {
         global $astman;
         $cmd_list = array('get_softkey' => array('cmd' => "sccp show softkeyssets", 'param' => ''),
             'get_version' => array('cmd' => "sccp show version", 'param' => ''),
@@ -77,7 +81,6 @@ class oldinterface {
                         if (!empty($params['name'])) {
                             $astman->Command('sccp device ' . $params['name'] . ' ' . $msg);
                         } else {
-
                         }
                         break;
                     default:
@@ -89,7 +92,8 @@ class oldinterface {
         return $result;
     }
 
-    public function sccp_getdevice_info($dev_id) {
+    public function sccp_getdevice_info($dev_id)
+    {
         if (empty($dev_id)) {
             return array();
         }
@@ -113,9 +117,9 @@ class oldinterface {
             } else {
                 $res2 = '';
             }
-            $res3['SCCP_Vendor'] = Array('vendor' => strtok($res1, ' '), 'model' => strtok('('), 'model_id' => strtok(')'), 'vendor_addon' => strtok($res2, ' '), 'model_addon' => strtok(' '));
+            $res3['SCCP_Vendor'] = array('vendor' => strtok($res1, ' '), 'model' => strtok('('), 'model_id' => strtok(')'), 'vendor_addon' => strtok($res2, ' '), 'model_addon' => strtok(' '));
             if (empty($res3['SCCP_Vendor']['vendor']) || $res3['SCCP_Vendor']['vendor'] == 'Undefined') {
-                $res3['SCCP_Vendor'] = Array('vendor' => 'Undefined', 'model' => $res4, 'model_id' => '', 'vendor_addon' => $res3['SCCP_Vendor']['vendor_addon'], 'model_addon' => $res3['SCCP_Vendor']['model_addon']);
+                $res3['SCCP_Vendor'] = array('vendor' => 'Undefined', 'model' => $res4, 'model_id' => '', 'vendor_addon' => $res3['SCCP_Vendor']['vendor_addon'], 'model_addon' => $res3['SCCP_Vendor']['model_addon']);
 //               return $res4;
 //                return array();
             }
@@ -130,7 +134,8 @@ class oldinterface {
      * A function should be used in the form of buttons for getting all hint. Not working. I don't know how to use properly.
      */
 
-    public function sccp_list_hints() {
+    public function sccp_list_hints()
+    {
         $hint_key = array();
         $hint_all = $this->sccp_list_all_hints();
         foreach ($hint_all as $value) {
@@ -143,7 +148,8 @@ class oldinterface {
         return $hint_key;
     }
 
-    public function sccp_list_all_hints() {
+    public function sccp_list_all_hints()
+    {
         $ast_out = $this->sccp_core_commands(array('cmd' => 'get_hints'));
         $ast_out = preg_split("/[\n]/", $ast_out['data']);
         $ast_key = array();
@@ -171,7 +177,8 @@ class oldinterface {
         return $ast_key;
     }
 
-    public function sccp_realtime_status() {
+    public function sccp_realtime_status()
+    {
         $ast_res = array();
         $ast_out = $this->sccp_core_commands(array('cmd' => 'get_realtime_status'));
         $ast_out = preg_split("/[\n]/", $ast_out['data']);
@@ -190,7 +197,8 @@ class oldinterface {
 // !TODO!: -TODO-: install.php is still using the other version number. This is actually where I use another method ?
 
 
-    public function get_compatible_sccp() {
+    public function get_compatible_sccp()
+    {
         $res = $this->getSCCPVersion();
         if (empty($res)) {
             return 0;
@@ -220,7 +228,8 @@ class oldinterface {
 //        return $res["vCode"];
     }
 
-    public function getSCCPVersion() {
+    public function getSCCPVersion()
+    {
         $res = $this->getChanSCCPVersion();
         if (empty($res)) {
             $res = $this->getCoreSCCPVersion();
@@ -228,7 +237,8 @@ class oldinterface {
         return $res;
     }
 
-    function getCoreSCCPVersion() {
+    function getCoreSCCPVersion()
+    {
         $result = array();
         $ast_out = $this->sccp_version();
         $result["Version"] = $ast_out[0];
@@ -252,9 +262,10 @@ class oldinterface {
         return $result;
     }
 
-    private function sccp_version() {
+    private function sccp_version()
+    {
         $ast_out = $this->sccp_core_commands(array('cmd' => 'get_version'));
-        if ( ($ast_out['Response'] == 'Error') ||  (strpos($ast_out['data'], 'No such command') != false) ) {
+        if (($ast_out['Response'] == 'Error') ||  (strpos($ast_out['data'], 'No such command') != false)) {
             return array('-1');
         }
         if (preg_match("/Release.*\(/", $ast_out['data'], $matches)) {
@@ -265,7 +276,8 @@ class oldinterface {
         }
     }
 
-    function getChanSCCPVersion() {
+    function getChanSCCPVersion()
+    {
         global $astman;
         $result = array();
         if (!$astman) {
@@ -285,11 +297,9 @@ class oldinterface {
                 $result["vCode"] = 400;
                 if ($version_parts[1] == "1") {
                     $result["vCode"] = 410;
-                } else
-                if ($version_parts[1] == "2") {
+                } elseif ($version_parts[1] == "2") {
                     $result["vCode"] = 420;
-                } else
-                if ($version_parts[1] >= "3") {
+                } elseif ($version_parts[1] >= "3") {
                     $result["vCode"] = 430;
                 }
             }
@@ -338,7 +348,8 @@ class oldinterface {
         return $result;
     }
 
-    public function sccp_list_keysets() {
+    public function sccp_list_keysets()
+    {
         $ast_out = $this->sccp_core_commands(array('cmd' => 'get_softkey'));
 
         $ast_out = preg_split("/[\n]/", $ast_out['data']);
@@ -364,7 +375,8 @@ class oldinterface {
         return $ast_key;
     }
 
-    public function sccp_get_active_device() {
+    public function sccp_get_active_device()
+    {
         $ast_out = $this->sccp_core_commands(array('cmd' => 'get_device'));
 
         $ast_out = preg_split("/[\n]/", $ast_out['data']);
@@ -392,20 +404,20 @@ class oldinterface {
                     $it++;
                 } while ((count($line_arr) > 3) and ( $it < count($line_arr)));
                 explode(";|", implode(";|", $line_arr));
-                list ($descr, $adress, $devname, $status, $token, $junk) = explode(";|", implode(";|", $line_arr));
+                list ($descr, $address, $devname, $status, $token, $junk) = explode(";|", implode(";|", $line_arr));
 
-//                list ($descr, $adress, $devname, $status, $junk) = $line_arr;
+//                list ($descr, $address, $devname, $status, $junk) = $line_arr;
 //                if (strlen($ast_key[$devname]) < 1) {
                 if (strlen($devname) > 1) {
-                    $ast_key[$devname] = Array('name' => $devname, 'status' => $status, 'address' => $adress, 'descr' => $descr, 'token' => $token);
+                    $ast_key[$devname] = array('name' => $devname, 'status' => $status, 'address' => $address, 'descr' => $descr, 'token' => $token);
                 }
                 /*
                   if (isset($ast_key[$devname])) {
                   if (strlen($ast_key[$devname]) < 1) {
-                  $ast_key[$devname] = Array('name' => $devname, 'status' => $status, 'address' => $adress, 'descr' => $descr, 'token' => $descr);
+                  $ast_key[$devname] = Array('name' => $devname, 'status' => $status, 'address' => $address, 'descr' => $descr, 'token' => $descr);
                   }
                   } else {
-                  $ast_key[$devname] = Array('name' => $devname, 'status' => $status, 'address' => $adress, 'descr' => $descr, 'token' => $token);
+                  $ast_key[$devname] = Array('name' => $devname, 'status' => $status, 'address' => $address, 'descr' => $descr, 'token' => $token);
                   }
                  *
                  */
@@ -418,7 +430,8 @@ class oldinterface {
      *  Replace  sccp_core_commands($params = array()) {
      */
 
-    private function astman_retrieveJSFromMetaData($segment = "") {
+    private function astman_retrieveJSFromMetaData($segment = "")
+    {
         global $astman;
         $params = array();
         if ($segment != "") {
@@ -434,7 +447,8 @@ class oldinterface {
         }
     }
 
-    private function strpos_array($haystack, $needles) {
+    private function strpos_array($haystack, $needles)
+    {
         if (is_array($needles)) {
             foreach ($needles as $str) {
                 if (is_array($str)) {
@@ -442,22 +456,25 @@ class oldinterface {
                 } else {
                     $pos = strpos($haystack, $str);
                 }
-                if ($pos !== FALSE) {
+                if ($pos !== false) {
                     return $pos;
                 }
             }
         } else {
             return strpos($haystack, $needles);
         }
-        return FALSE;
+        return false;
     }
 
-    private function loc_after($value, $inthat) {
-        if (!is_bool(strpos($inthat, $value)))
+    private function loc_after($value, $inthat)
+    {
+        if (!is_bool(strpos($inthat, $value))) {
             return substr($inthat, strpos($inthat, $value) + strlen($value));
+        }
     }
 
-    function getеtestChanSCC() {
+    function getеtestChanSCC()
+    {
         global $astman;
 //        $action = Array('SCCPShowGlobals',);
         $params = array();
@@ -472,7 +489,8 @@ class oldinterface {
     /*
      *    [Segments] => ( [0] => general  [1] => device  [2] => line [3] => softkey  )
      */
-    function getеtestChanSCCP_GlablsInfo($Segment = '') {
+    function getGlobalsFromMetaData($Segment = '')
+    {
         global $astman;
         $params = array();
 
@@ -498,5 +516,4 @@ class oldinterface {
         }
         return $metadata;
     }
-
 }

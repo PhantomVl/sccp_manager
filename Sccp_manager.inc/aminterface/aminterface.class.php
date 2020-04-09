@@ -1,17 +1,17 @@
 <?php
 
 /**
- * 
- * Core Comsnd Interface 
- * 
+ *
+ * Core Comsnd Interface
+ *
  *  https://www.voip-info.org/asterisk-manager-example-php/
  */
 /* !TODO!: Re-Indent this file.  -TODO-: What do you mean? coreaccessinterface  ??  */
 
 namespace FreePBX\modules\Sccp_manager;
 
-
-class aminterface {
+class aminterface
+{
 
     var $_socket;
     var $_error;
@@ -29,7 +29,8 @@ class aminterface {
     private $_responseFactory;
     private $debug_level = 1;
 
-    public function load_subspace($parent_class = null) {
+    public function load_subspace($parent_class = null)
+    {
         $driverNamespace = "\\FreePBX\\Modules\\Sccp_manager\\aminterface";
 
         $drivers = array('Message' => 'Message.class.php', 'Response' => 'Response.class.php', 'Event' => 'Event.class.php');
@@ -37,7 +38,6 @@ class aminterface {
             $class = $driverNamespace . "\\" . $key;
             $driver = __DIR__ . "/" . $value;
             if (!class_exists($class, false)) {
-
                 if (file_exists($driver)) {
                     include(__DIR__ . "/" . $value);
                 } else {
@@ -47,7 +47,8 @@ class aminterface {
         }
     }
 
-    public function __construct($parent_class = null) {
+    public function __construct($parent_class = null)
+    {
         global $amp_conf;
         $this->paren_class = $parent_class;
         $this->_socket = false;
@@ -57,10 +58,10 @@ class aminterface {
         
         
         $this->_eventListeners = array();
-//	$this->_eventFactory = new EventFactoryImpl(\Logger::getLogger('EventFactory'));
-//	$this->_responseFactory = new ResponseFactoryImpl(\Logger::getLogger('ResponseFactory'));
-	$this->_incomingQueue = array();
-	$this->_lastActionId = false;
+//  $this->_eventFactory = new EventFactoryImpl(\Logger::getLogger('EventFactory'));
+//  $this->_responseFactory = new ResponseFactoryImpl(\Logger::getLogger('ResponseFactory'));
+        $this->_incomingQueue = array();
+        $this->_lastActionId = false;
         
         $fld_conf = array('user' => 'AMPMGRUSER', 'pass' => 'AMPMGRPASS');
         if (isset($amp_conf['AMPMGRUSER'])) {
@@ -75,19 +76,23 @@ class aminterface {
         }
     }
 
-    public function status() {
+    public function status()
+    {
         if ($this->_config['enabled']) {
             return true;
-        } else {return false;}
+        } else {
+            return false;
+        }
     }
 
-    public function info() {
+    public function info()
+    {
         $Ver = '13.0.4';
         if ($this->_config['enabled']) {
-            return Array('Version' => $Ver,
+            return array('Version' => $Ver,
                 'about' => 'AMI data ver: ' . $Ver, 'test' => get_declared_classes());
         } else {
-            return Array('Version' => $Ver,
+            return array('Version' => $Ver,
                 'about' => 'Disabled AMI  ver: ' . $Ver);
         }
     }
@@ -96,15 +101,20 @@ class aminterface {
      * Opens a tcp connection to ami.
      *
      */
-    public function open() {
+    public function open()
+    {
         $cString = $this->_config['tsoket'] . $this->_config['host'] . ':' . $this->_config['port'];
         $this->_context = stream_context_create();
         $errno = 0;
         $errstr = '';
         $this->_ProcessingMessage = '';
         $this->_socket = @stream_socket_client(
-                        $cString, $errno, $errstr,
-                        $this->_config['timeout'], STREAM_CLIENT_CONNECT, $this->_context
+            $cString,
+            $errno,
+            $errstr,
+            $this->_config['timeout'],
+            STREAM_CLIENT_CONNECT,
+            $this->_context
         );
         if ($this->_socket === false) {
             $this->_errorException('Error connecting to ami: ' . $errstr . $cString);
@@ -129,13 +139,15 @@ class aminterface {
     /**
      * Closes the connection to ami.
      */
-    public function close() {
+    public function close()
+    {
         $this->_connect_state = false;
         $this->_ProcessingMessage = '';
         @stream_socket_shutdown($this->_socket, STREAM_SHUT_RDWR);
     }
 
-    public function send($message) {
+    public function send($message)
+    {
         $messageToSend = $message->serialize();
         $length = strlen($messageToSend);
         $this->_countE = 0;
@@ -171,7 +183,8 @@ class aminterface {
         $this->_errorException("Read waittime: " . ($this->socket_param['timeout']) . " exceeded (timeout).\n");
     }
 
-    protected function getRelated($message) {
+    protected function getRelated($message)
+    {
         $ret = false;
         $id = 0;
         $id = $message->getActionID('ActionID');
@@ -185,11 +198,13 @@ class aminterface {
         return $ret;
     }
 
-    private function _messageToEvent($msg) {
+    private function _messageToEvent($msg)
+    {
         return $this->_eventFromRaw($msg);
     }
 
-    protected function getMessages() {
+    protected function getMessages()
+    {
         $msgs = array();
         // Read something.
         $read = @fread($this->_socket, 65535);
@@ -200,28 +215,30 @@ class aminterface {
         if ($read == "") {
             usleep(100);
         } else {
-                $this->_msgToDebug(98,'--- Not Empy AMI MSG --- ');
+                $this->_msgToDebug(98, '--- Not Empy AMI MSG --- ');
         }
         $this->_ProcessingMessage .= $read;
         $this->_DumpMessage .= $read;
         while (($marker = strpos($this->_ProcessingMessage, aminterface\Message::EOM))) {
             $msg = substr($this->_ProcessingMessage, 0, $marker);
             $this->_ProcessingMessage = substr(
-                    $this->_ProcessingMessage, $marker + strlen(aminterface\Message::EOM)
+                $this->_ProcessingMessage,
+                $marker + strlen(aminterface\Message::EOM)
             );
             $msgs[] = $msg;
         }
         return $msgs;
     }
 
-    public function process() {
+    public function process()
+    {
         $msgs = $this->getMessages();
-        $this->_msgToDebug(90,$msgs);
+        $this->_msgToDebug(90, $msgs);
         $this->_countE++;
         if ($this->_countE > 10000) {
-            $this->_msgToDebug(9,'--- Procecc Die, Dump --- ');
-            $this->_msgToDebug(9,$this->_DumpMessage);
-            $this->_msgToDebug(9,'--- END Procecc Die, Dump --- ');
+            $this->_msgToDebug(9, '--- Procecc Die, Dump --- ');
+            $this->_msgToDebug(9, $this->_DumpMessage);
+            $this->_msgToDebug(9, '--- END Procecc Die, Dump --- ');
             die();
         }
         foreach ($msgs as $aMsg) {
@@ -230,29 +247,29 @@ class aminterface {
             if (($resPos !== false) && (($resPos < $evePos) || $evePos === false)) {
                 $response = $this->_msgToResponse($aMsg); // resp Ok
                 $this->_incomingQueue[$this->_lastActionId] = $response;
-            } else if ($evePos !== false) {
+            } elseif ($evePos !== false) {
                 $event = $this->_messageToEvent($aMsg); // Event  Ok
 
-                $this->_msgToDebug(99,'--- Responce Type 2 --- ');
-                $this->_msgToDebug(99,$aMsg);
-                $this->_msgToDebug(99,'--- Event Responce Type 2 --- ');
-                $this->_msgToDebug(99,$event);
+                $this->_msgToDebug(99, '--- Response Type 2 --- ');
+                $this->_msgToDebug(99, $aMsg);
+                $this->_msgToDebug(99, '--- Event Response Type 2 --- ');
+                $this->_msgToDebug(99, $event);
 
                 if ($event != null) {
                     $response = $this->findResponse($event);
 //                    print_r($response);
-//                    print_r('<br>--- E2 Responce Type 2 ----------<br>');
+//                    print_r('<br>--- E2 Response Type 2 ----------<br>');
                     
                     if ($response === false || $response->isComplete()) {
-                        $this->dispatch($event);  // не работает 
+                        $this->dispatch($event);  // не работает
                     } else {
                         $response->addEvent($event);
                     }
                 }
             } else {
                 // broken ami.. sending a response with events without
-                // Event and ActionId 
-                $this->_msgToDebug(1,'resp broken ami');
+                // Event and ActionId
+                $this->_msgToDebug(1, 'resp broken ami');
                 $bMsg = 'Event: ResponseEvent' . "\r\n";
                 $bMsg .= 'ActionId: ' . $this->_lastActionId . "\r\n" . $aMsg;
                 $event = $this->_messageToEvent($bMsg);
@@ -261,19 +278,20 @@ class aminterface {
             }
         }
 //        print_r('<br>--- EProcecc ----------<br>');
-        
     }
 
-    private function _msgToDebug($level, $msg) {
+    private function _msgToDebug($level, $msg)
+    {
         if ($level > $this->debug_level) {
             return;
-        }        
+        }
         print_r('<br> level: '.$level.' ');
         print_r($msg);
         print_r('<br>');
     }
 
-    private function _msgToResponse($msg) {
+    private function _msgToResponse($msg)
+    {
         //      print_r("<br>------------hmsg----------<br>");
         //      print_r($this->_lastActionClass);
 //        print_r($this->_lastRequestedResponseHandler);
@@ -293,39 +311,42 @@ class aminterface {
     }
 
     /*
-     * 
-     * 
+     *
+     *
      */
 
-    public function _msgFromRaw($message, $requestingaction = false, $responseHandler = false) {
+    public function _msgFromRaw($message, $requestingaction = false, $responseHandler = false)
+    {
 
         $_className = false;
 
         $responseclass = '\\FreePBX\\modules\\Sccp_manager\\aminterface\\Generic_Response';
         if ($responseHandler != false) {
             $_className = '\\FreePBX\\modules\\Sccp_manager\\aminterface\\' . $responseHandler . '_Response';
-        } else if ($requestingaction != false) {
+        } elseif ($requestingaction != false) {
             $_className = '\\FreePBX\\modules\\Sccp_manager\\' . substr(get_class($requestingaction), 20, -6) . '_Response';
         }
         if ($_className) {
             if (class_exists($_className, true)) {
                 $responseclass = $_className;
-            } else if ($responseHandler != false) {
+            } elseif ($responseHandler != false) {
                 $this->_errorException('Response Class ' . $_className . '  requested via responseHandler, could not be found');
             }
         }
         return new $responseclass($message);
     }
 
-    protected function _errorException($msg) {
+    protected function _errorException($msg)
+    {
         $this->_error[] = $msg;
     }
 
     /*
-     *    Replace or dublicate to AMI interface   
+     *    Replace or dublicate to AMI interface
      */
 
-    public function _eventFromRaw($message) {
+    public function _eventFromRaw($message)
+    {
         $eventStart = strpos($message, 'Event: ') + 7;
 
         if ($eventStart > strlen($message)) {
@@ -344,31 +365,33 @@ class aminterface {
         return new $className($message);
     }
 
-    public function _respnceFromRaw($message, $requestingaction = false, $responseHandler = false) {
+    public function _respnceFromRaw($message, $requestingaction = false, $responseHandler = false)
+    {
 
         $responseclass = '\\FreePBX\\modules\\Sccp_manager\\aminterface\\Response';
 
         $_className = false;
         if ($responseHandler != false) {
             $_className = '\\FreePBX\\modules\\Sccp_manager\\aminterface\\' . $responseHandler . '_Response';
-        } else if ($requestingaction != false) {
+        } elseif ($requestingaction != false) {
             $_className = '\\FreePBX\\modules\\Sccp_manager\\aminterface\\' . substr(get_class($requestingaction), 20, -6) . '_Response';
         }
         if ($_className) {
             if (class_exists($_className, true)) {
                 $responseclass = $_className;
-            } else if ($responseHandler != false) {
+            } elseif ($responseHandler != false) {
                 throw new AMIException('Response Class ' . $_className . '  requested via responseHandler, could not be found');
             }
         }
-//		if ($this->_logger->isDebugEnabled()) $this->_logger->debug('Created: ' . $responseclass . "\n");
+//      if ($this->_logger->isDebugEnabled()) $this->_logger->debug('Created: ' . $responseclass . "\n");
         print_r($responseclass);
         die();
         return new $responseclass($message);
     }
 
-//    protected function findResponse(IncomingMessage $message)	{
-    protected function findResponse($message) {
+//    protected function findResponse(IncomingMessage $message) {
+    protected function findResponse($message)
+    {
         $actionId = $message->getActionId();
         if (isset($this->_incomingQueue[$actionId])) {
             return $this->_incomingQueue[$actionId];
@@ -376,7 +399,8 @@ class aminterface {
         return false;
     }
 
-    protected function dispatch($message) {
+    protected function dispatch($message)
+    {
         print_r("<br>------------dispatch----------<br>");
         print_r($message);
         return false;
@@ -391,25 +415,26 @@ class aminterface {
             }
             if ($listener instanceof \Closure) {
                 $listener($message);
-            } else if (is_array($listener)) {
+            } elseif (is_array($listener)) {
                 $listener[0]->$listener[1]($message);
             } else {
                 $listener->handle($message);
             }
         }
         print_r("<br>------------E dispatch----------<br>");
-        
     }
 
 //-------------------------------------------------------------------------------
-    function core_list_all_exten($keyfld = '', $filter = array()) {
+    function core_list_all_exten($keyfld = '', $filter = array())
+    {
         $result = array();
         return $result;
     }
 
 //-------------------Adaptive Function ------------------------------------------------------------
 
-    function core_list_hints() {
+    function core_list_hints()
+    {
         $result = array();
         if ($this->_connect_state) {
             $_action = new \FreePBX\modules\Sccp_manager\aminterface\ExtensionStateListAction();
@@ -424,7 +449,8 @@ class aminterface {
         return $result;
     }
 
-    function core_list_all_hints() {
+    function core_list_all_hints()
+    {
         $result = array();
         if ($this->_connect_state) {
             $_action = new \FreePBX\modules\Sccp_manager\aminterface\ExtensionStateListAction();
@@ -439,7 +465,8 @@ class aminterface {
         return $result;
     }
 // --------------------- SCCP Comands
-    function sccp_list_keysets() {
+    function sccp_list_keysets()
+    {
         $result = array();
         if ($this->_connect_state) {
             $_action = new \FreePBX\modules\Sccp_manager\aminterface\SCCPShowSoftkeySetsAction();
@@ -451,7 +478,8 @@ class aminterface {
         }
         return $result;
     }
-    function sccp_get_active_device() {
+    function sccp_get_active_device()
+    {
         $result = array();
         if ($this->_connect_state) {
             $_action = new \FreePBX\modules\Sccp_manager\aminterface\SCCPShowDevicesAction();
@@ -463,7 +491,8 @@ class aminterface {
         }
         return $result;
     }
-    function sccp_getdevice_info($devicename) {
+    function sccp_getdevice_info($devicename)
+    {
         $result = array();
         if ($this->_connect_state) {
             $_action = new \FreePBX\modules\Sccp_manager\aminterface\SCCPShowDeviceAction($devicename);
@@ -473,14 +502,15 @@ class aminterface {
         }
         return $result;
     }
-    function sccp_device_reset($devicename,$action = '') {    
+    function sccpDeviceReset($devicename, $action = '')
+    {
         if ($this->_connect_state) {
             if ($action == 'tokenack') {
                 $_action = new \FreePBX\modules\Sccp_manager\aminterface\SCCPTokenAckAction($devicename);
             } else {
-                $_action = new \FreePBX\modules\Sccp_manager\aminterface\SCCPDeviceRestartAction($devicename,$action);
+                $_action = new \FreePBX\modules\Sccp_manager\aminterface\SCCPDeviceRestartAction($devicename, $action);
             }
-            $_response = $this->send($_action);            
+            $_response = $this->send($_action);
             $result['data'] = 'Device :'.$devicename.' Result: '.$_response->getMessage();
             $result['Response']=$_response->getKey('Response');
          //   $result = $_response->getResult();
@@ -489,17 +519,19 @@ class aminterface {
     }
 
 //------------------- Core Comands ----
-    function core_sccp_reload() {
+    function core_sccp_reload()
+    {
         $result = array();
         if ($this->_connect_state) {
             $_action = new \FreePBX\modules\Sccp_manager\aminterface\ReloadAction('chan_sccp');
-//            $_action = new \FreePBX\modules\Sccp_manager\aminterface\CommandAction('sccp reload force'); // No Responce Result !!
+//            $_action = new \FreePBX\modules\Sccp_manager\aminterface\CommandAction('sccp reload force'); // No Response Result !!
             $_response = $this->send($_action);
             $result = $_response->getMessage();
         }
         return $result;
     }
-    function getSCCPVersion() {
+    function getSCCPVersion()
+    {
         $result = array();
         if ($this->_connect_state) {
             $_action = new \FreePBX\modules\Sccp_manager\aminterface\SCCPConfigMetaDataAction();
@@ -509,7 +541,8 @@ class aminterface {
         return $result;
     }
 
-    function getRealTimeStatus() {
+    function getRealTimeStatus()
+    {
         $result = array();
         if ($this->_connect_state) {
             $_action = new \FreePBX\modules\Sccp_manager\aminterface\CommandAction('realtime mysql status');
@@ -523,5 +556,4 @@ class aminterface {
         }
         return $result;
     }
-    
 }

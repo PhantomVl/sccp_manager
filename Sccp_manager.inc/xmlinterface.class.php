@@ -1,33 +1,37 @@
 <?php
 
 /**
- * 
- * Core Comsnd Interface 
- * 
- * 
+ *
+ * Core Comsnd Interface
+ *
+ *
  */
-/* !TODO!: -TODO-: Would you like to use my XSD file to check if the provided template file is a correct cisco cnf.xml file ? 
+/* !TODO!: -TODO-: Would you like to use my XSD file to check if the provided template file is a correct cisco cnf.xml file ?
  * !TODO!: -TODO-: I just don't understand how to use it here.. To check the incoming pattern ? To check the result of my script ?
- * !TODO!: -TODO-: The most correct variant is to generate xml based on XSD template.  
+ * !TODO!: -TODO-: The most correct variant is to generate xml based on XSD template.
  */
 
 namespace FreePBX\modules\Sccp_manager;
 
-class xmlinterface {
+class xmlinterface
+{
 
     private $val_null = 'NONE'; /// REPLACE to null Field
 
-    public function __construct($parent_class = null) {
+    public function __construct($parent_class = null)
+    {
         $this->paren_class = $parent_class;
     }
 
-    public function info() {
+    public function info()
+    {
         $Ver = '13.0.4';
-        return Array('Version' => $Ver,
+        return array('Version' => $Ver,
             'about' => 'Create XML data interface ver: ' . $Ver);
     }
 
-    function create_default_XML($store_path = '', $data_values = array(), $model_information = array(), $lang_info = array()) {
+    function create_default_XML($store_path = '', $data_values = array(), $model_information = array(), $lang_info = array())
+    {
         $data_path = $data_values['tftp_path'];
         if (empty($store_path) || empty($data_path) || empty($data_values)) {
             return;
@@ -39,10 +43,9 @@ class xmlinterface {
 
         if (file_exists($xml_template)) {
             $xml_work = simplexml_load_file($xml_template);
-
-
             $xnode = &$xml_work->callManagerGroup->members;
             $bind_tmp = $this->get_server_sccp_bind($data_values);
+            //error_log("bind_tmp:".print_r($bind_tmp, true), 0);
             $ifc = 0;
             foreach ($bind_tmp as $bind_value) {
                 $xnode_obj = clone $xnode->member;
@@ -88,7 +91,7 @@ class xmlinterface {
                                 $xnode->name = '';
                                 $xnode->langCode = '';
                             }
-//                            $this -> replaceSimpleXmlNode($xml_work->$key,$xnode); 
+//                            $this -> replaceSimpleXmlNode($xml_work->$key,$xnode);
                             break;
                         case 'networkLocale':
                             $lang = $data_values['netlang'];
@@ -99,7 +102,7 @@ class xmlinterface {
                             }
                             break;
                     }
-                    //$this-> replaceSimpleXmlNode($xml_work->$value, $xnode );                     
+                    //$this-> replaceSimpleXmlNode($xml_work->$value, $xnode );
                 }
             }
 
@@ -113,7 +116,8 @@ class xmlinterface {
         }
     }
 
-    function create_SEP_XML($store_path = '', $data_values = array(), $dev_config = array(), $dev_id = '', $lang_info = array()) {
+    function create_SEP_XML($store_path = '', $data_values = array(), $dev_config = array(), $dev_id = '', $lang_info = array())
+    {
 
         $var_xml_general_fields = array('authenticationURL' => 'dev_authenticationURL', 'informationURL' => 'dev_informationURL', 'messagesURL' => 'dev_messagesURL',
             'servicesURL' => 'dev_servicesURL', 'directoryURL' => 'dev_directoryURL', 'proxyServerURL' => 'dev_proxyServerURL', 'idleTimeout' => 'dev_idleTimeout',
@@ -282,7 +286,7 @@ class xmlinterface {
                                   $xnode_obj->processNodeName = $data_values['bindaddr'];
                                   }
                                   break;
-                                 * 
+                                 *
                                  */
                             }
                         }
@@ -292,7 +296,7 @@ class xmlinterface {
                         $xml_work->$key = time();
                         break;
                     case 'loadInformation':
-//                      Set Path Image ???? 
+//                      Set Path Image ????
                         if (isset($dev_config["tftp_firmware"])) {
                             $xml_work->$key = (isset($dev_config["loadimage"])) ? $dev_config["tftp_firmware"] . $dev_config["loadimage"] : '';
                         } else {
@@ -365,17 +369,20 @@ class xmlinterface {
             }
 
 //            print_r($xml_work);
-            $xml_work->asXml($xml_name);  // Save  
+            $xml_work->asXml($xml_name);  // Save
         } else {
             die('Error Hardware template :' . $xml_template . ' not found');
         }
         return time();
     }
 
-    private function get_server_sccp_bind($data_values = array()) {
+    private function get_server_sccp_bind($data_values = array())
+    {
         $res = array();
         if ($data_values['bindaddr'] !== '0.0.0.0') {
-            return array('ip' => $data_values['bindaddr'], 'port' => $data_values['port']);
+            $rkey = $data_values['bindaddr'];
+            $res[$rkey] = array('ip' => $data_values['bindaddr'], 'port' => $data_values['port']);
+            return $res;
         }
         $ip_fill = true;
         if (!empty($data_values['ccm_address'])) {
@@ -450,10 +457,11 @@ class xmlinterface {
       }
       return $res;
       }
-     * 
+     *
      */
 
-    function create_SEP_SIP_XML($store_path = '', $data_values = array(), $dev_config = array(), $dev_id = '', $lang_info = array()) {
+    function create_SEP_SIP_XML($store_path = '', $data_values = array(), $dev_config = array(), $dev_id = '', $lang_info = array())
+    {
 
         $var_xml_general_fields = array('authenticationURL' => 'dev_authenticationURL', 'informationURL' => 'dev_informationURL', 'messagesURL' => 'dev_messagesURL',
             'servicesURL' => 'dev_servicesURL', 'directoryURL' => 'dev_directoryURL', 'proxyServerURL' => 'dev_proxyServerURL', 'idleTimeout' => 'dev_idleTimeout',
@@ -669,7 +677,7 @@ class xmlinterface {
                                     //$xnode = null;
                                     break;
                                 case 'softKeyFile':
-                                case 'dialTemplate': // Доработать !  
+                                case 'dialTemplate': // Доработать !
                                     $xml_ext_file = '';
                                     $templet_path = (($dkey == 'softKeyFile') ? $dev_config['tftp_softkey'] : $dev_config['tftp_dialplan']);
                                     $tmp_key = ($dkey == 'softKeyFile') ? 'softkeyset' : '_dialrules';
@@ -696,7 +704,7 @@ class xmlinterface {
                         $xml_work->$key = time();
                         break;
                     case 'loadInformation':
-//                      Set Path Image ???? 
+//                      Set Path Image ????
                         if (isset($dev_config["tftp_firmware"])) {
                             $xml_work->$key = (isset($dev_config["loadimage"])) ? $dev_config["tftp_firmware"] . $dev_config["loadimage"] : '';
                         } else {
@@ -764,17 +772,18 @@ class xmlinterface {
             }
 
 //            print_r($xml_work);
-            $xml_work->asXml($xml_name);  // Save  
+            $xml_work->asXml($xml_name);  // Save
         } else {
             die('Error Hardware template :' . $xml_template . ' not found');
         }
         return time();
     }
 
-    function save_DialPlan($confDir, $get_settings) {
+    function saveDialPlan($confDir, $get_settings)
+    {
         $xmlstr = "<DIALTEMPLATE>\n";
         $xmlstr .= "<versionStamp>" . time() . "</versionStamp>\n";
-        $dialFelds = array('match', 'timeout', 'rewrite', 'tone'); //str -to lo ! 
+        $dialFelds = array('match', 'timeout', 'rewrite', 'tone'); //str -to lo !
 
         $hdr_prefix = 'sccp_dial_';
         $hdr_arprefix = 'sccp_dial-ar_';
@@ -787,7 +796,7 @@ class xmlinterface {
                 foreach ($dialFelds as $fld) {
                     if (isset($value[$fld])) {
                         if ($value[$fld] == 'empty' || $value[$fld] == '') {
-//                            
+//
                         } else {
                             $xmlstr .= ' ' . $fld . '="' . (string) $value[$fld] . '"';
                         }
@@ -806,8 +815,9 @@ class xmlinterface {
                 } else {
                     $errors = array('Fields Dial Plan Name is requered !!');
                 }
-            } else
+            } else {
                 $put_file = (string) $get_settings['idtemplate'];
+            }
         } else {
             $errors = array('Fields Dial Plan Name is requered !!');
         }
@@ -822,7 +832,8 @@ class xmlinterface {
         return $errors;
     }
 
-    function create_xmlSoftkeyset($config, $confDir, $name) {
+    function create_xmlSoftkeyset($config, $confDir, $name)
+    {
         if (empty($config[$name])) {
             if ($name == 'default') {
                 $typeSoft = $confDir["tftp_templates"] . '/SIPDefaultSoftKey.xml_template';
@@ -872,22 +883,25 @@ class xmlinterface {
         return $errors;
     }
 
-    private function replaceSimpleXmlNode($xml, $element = SimpleXMLElement) {
+    private function replaceSimpleXmlNode($xml, $element = SimpleXMLElement)
+    {
         $dom = dom_import_simplexml($xml);
         $import = $dom->ownerDocument->importNode(
-                dom_import_simplexml($element), TRUE
+            dom_import_simplexml($element),
+            true
         );
         $dom->parentNode->replaceChild($import, $dom);
     }
 
-    private function appendSimpleXmlNode($xml, $element = SimpleXMLElement) {
+    private function appendSimpleXmlNode($xml, $element = SimpleXMLElement)
+    {
 
         $dom = dom_import_simplexml($xml);
         $import = $dom->ownerDocument->importNode(
-                dom_import_simplexml($element), TRUE
+            dom_import_simplexml($element),
+            true
         );
-//        $dom->parentNode->appendChild($import, $dom);        
+//        $dom->parentNode->appendChild($import, $dom);
         $dom->parentNode->appendChild($import->cloneNode(true));
     }
-
 }

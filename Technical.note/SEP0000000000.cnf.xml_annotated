@@ -308,7 +308,7 @@
 			For example, if you want to enter 411, 511, and 911 as special numbers, enter 411,511,911 in the field without spaces.
 				string
 				length = 16
-				comma seperated
+				comma separated
 		-->
 		<PushToTalkURL></PushToTalkURL>
 		<!--

@@ -12,7 +12,7 @@ if (!empty($_REQUEST['ru_id'])) {
     $dev_id = $_REQUEST['ru_id'];
     $def_val['id'] = array("keyword" => 'id', "data" => $dev_id, "seq" => "99");
     $db_res = $this->dbinterface->get_db_SccpTableData('get_sccpuser', array("id" => $dev_id));
-    if (!empty($db_res) ) {
+    if (!empty($db_res)) {
         foreach ($db_res as $key => $val) {
             if (!empty($val)) {
                 $def_val[$key] = array("keyword" => $key, "data" => $val, "seq" => "99");
@@ -28,7 +28,7 @@ if (!empty($_REQUEST['ru_id'])) {
     <input type="hidden" name="Submit" value="Submit">
 
     <?php
-    echo $this->ShowGroup('sccp_ruser', 1, 'sccp_ru', $def_val);
-    echo $this->ShowGroup('sccp_ruser_time', 1, 'sccp_ru', $def_val);
+    echo $this->showGroup('sccp_ruser', 1, 'sccp_ru', $def_val);
+    echo $this->showGroup('sccp_ruser_time', 1, 'sccp_ru', $def_val);
     ?>    
 </form>

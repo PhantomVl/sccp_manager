@@ -283,7 +283,7 @@ and open the template in the editor. Base Version before all crash :-)
           <button value="broadcast">Broadcast</button>
           <button value="multicast">Multicast</button>
           <button value="manycast">Manycast</button>
-          <help>Configure NTP Server protocol time syncronization</help>
+          <help>Configure NTP Server protocol time synchronization</help>
       </item>
 
     </page_group>          

@@ -437,7 +437,7 @@ foreach ($items as $child) {
         }
         if ($child['type'] == 'SLP') {
             if (empty($dialplan_list)) {
-                foreach (\FreePBX::Sccp_manager()->get_DialPlanList() as $tmpkey) {
+                foreach (\FreePBX::Sccp_manager()->getDialPlanList() as $tmpkey) {
                     $tmp_id = $tmpkey['id'];
                     $dialplan_list[$tmp_id] = $tmp_id;
                 }

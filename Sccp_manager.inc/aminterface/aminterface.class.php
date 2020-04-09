@@ -502,7 +502,7 @@ class aminterface
         }
         return $result;
     }
-    function sccp_device_reset($devicename, $action = '')
+    function sccpDeviceReset($devicename, $action = '')
     {
         if ($this->_connect_state) {
             if ($action == 'tokenack') {

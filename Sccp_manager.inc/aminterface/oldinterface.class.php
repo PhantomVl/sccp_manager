@@ -489,7 +489,7 @@ class oldinterface
     /*
      *    [Segments] => ( [0] => general  [1] => device  [2] => line [3] => softkey  )
      */
-    function getеtestChanSCCP_GlablsInfo($Segment = '')
+    function getGlobalsFromMetaData($Segment = '')
     {
         global $astman;
         $params = array();

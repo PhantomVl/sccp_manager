@@ -778,7 +778,7 @@ class xmlinterface
         return time();
     }
 
-    function save_DialPlan($confDir, $get_settings)
+    function saveDialPlan($confDir, $get_settings)
     {
         $xmlstr = "<DIALTEMPLATE>\n";
         $xmlstr .= "<versionStamp>" . time() . "</versionStamp>\n";

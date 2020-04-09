@@ -427,7 +427,7 @@ if ($test_ami == 1) {
 //  $test_data = $this->srvinterface-> astman_GetRaw('ExtensionStateList');
 //  print_r($test_data);
 //  print_r($this->srvinterface-> core_list_all_exten());
-//  print_r($this->get_hint_info());
+//  print_r($this->getHintInformation());
 //  print_r($this->aminterface->open());
 //  print_r($this->aminterface-> core_list_all_exten('exten'));
 //  print_r($this->aminterface->Sok_param['total']);
@@ -516,5 +516,5 @@ foreach ($info as $key => $value) {
 
     </div>
 </div>
-<?php echo $this->ShowGroup('sccp_info', 0); ?>
+<?php echo $this->showGroup('sccp_info', 0); ?>
 

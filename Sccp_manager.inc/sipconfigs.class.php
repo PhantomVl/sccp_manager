@@ -74,7 +74,7 @@ class sipconfigs
 //        $result['tlsport'] = \FreePBX::Sipsettings()->getConfig('tlsbindport');
 //        $tmp_sipsetigs = \FreePBX::Sipsettings()->getChanSipSettings();
         $tmp_binds = \FreePBX::Sipsettings()->getBinds();
-        $if_list = $this->paren_class ->getIP_information2('ip4');
+        $if_list = $this->paren_class ->getIpInformation('ip4');
         
 /*
         $tmp_bind_ip = !empty($tmp_sipsetigs['externhost_val']) ? $tmp_sipsetigs['externhost_val'] : '';

@@ -18,7 +18,7 @@ $feature_list=  array('parkinglot'=>'Park Slots','monitor'=> "Record Calls",'dev
 //$lines_list = $this->dbinterface->get_db_SccpTableData('SccpExtension');
 $lines_list = $this->sipconfigs->get_db_sip_TableData('Device');
 //$hint_list  = $this->dbinterface->get_db_SccpTableData('SccpExtension');
-$hint_list  = $this->get_hint_info(true, array('context'=>'park-hints')) ;
+$hint_list  = $this->getHintInformation(true, array('context'=>'park-hints')) ;
 
 // print_r($lines_list);
 $line_id =0;
@@ -37,12 +37,12 @@ if (!empty($_REQUEST['id'])) {
 }
 if (!empty($_REQUEST['new_id'])) {
     $val = $_REQUEST['type'];
-    $dev_schema =  $this-> getSccp_model_information('byid', false, "all", array('model' =>$val));
+    $dev_schema =  $this-> getSccpModelInformation('byid', false, "all", array('model' =>$val));
 //   $db_device = $this->dbinterface->get_db_SccpTableData('get_sccpdevice_byid', array("id" => $val));
     $max_buttons = $dev_schema[0]['buttons'];
     if (!empty($_REQUEST['addon'])) {
         $val = $_REQUEST['addon'];
-        $dev_schema =  $this-> getSccp_model_information('byid', false, "all", array('model' =>$val));
+        $dev_schema =  $this-> getSccpModelInformation('byid', false, "all", array('model' =>$val));
         $max_buttons += $dev_schema[0]['buttons'];
     }
     $show_buttons = $max_buttons;

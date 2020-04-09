@@ -62,19 +62,19 @@ class srvinterface
             'about' => 'Server interface data ver: ' . $Ver . "\n  " . $info);
     }
 
-    public function sccp_device_reset($id = '')
+    public function sccpDeviceReset($id = '')
     {
         if ($this->ami_mode) {
-            return $this->aminterface->sccp_device_reset($id, 'reset');
+            return $this->aminterface->sccpDeviceReset($id, 'reset');
         } else {
             return $this->oldinterface->sccp_core_commands(array('cmd' => 'reset_phone', 'name' => $id));
         }
     }
 
-    public function sccp_device_restart($id = '')
+    public function sccpDeviceRestart($id = '')
     {
         if ($this->ami_mode) {
-            return $this->aminterface->sccp_device_reset($id, 'restart');
+            return $this->aminterface->sccpDeviceReset($id, 'restart');
         } else {
             return $this->oldinterface->sccp_core_commands(array('cmd' => 'reset_phone', 'name' => $id));
         }
@@ -83,7 +83,7 @@ class srvinterface
     public function sccp_device_reload($id = '')
     {
         if ($this->ami_mode) {
-            return $this->aminterface->sccp_device_reset($id, 'full');
+            return $this->aminterface->sccpDeviceReset($id, 'full');
         } else {
             return $this->oldinterface->sccp_core_commands(array('cmd' => 'reload_phone', 'name' => $id));
         }
@@ -92,7 +92,7 @@ class srvinterface
     public function sccp_reset_token($id = '')
     {
         if ($this->ami_mode) {
-            return $this->aminterface->sccp_device_reset($id, 'tokenack');
+            return $this->aminterface->sccpDeviceReset($id, 'tokenack');
         } else {
             return $this->oldinterface->sccp_core_commands(array('cmd' => 'reset_token', 'name' => $id));
         }
@@ -124,19 +124,19 @@ class srvinterface
             if (!empty($params['cmd'])) {
                 switch ($params['cmd']) {
                     case 'reset_phone':
-                        return $this->aminterface->sccp_device_reset($params['name'], 'reset');
+                        return $this->aminterface->sccpDeviceReset($params['name'], 'reset');
                         break;
                     case 'restart_phone':
-                        return $this->aminterface->sccp_device_reset($params['name'], 'restart');
+                        return $this->aminterface->sccpDeviceReset($params['name'], 'restart');
                         break;
                     case 'reload_phone':
-                        return $this->aminterface->sccp_device_reset($params['name'], 'full');
+                        return $this->aminterface->sccpDeviceReset($params['name'], 'full');
                         break;
                     case 'reset_token':
-                        return $this->aminterface->sccp_device_reset($params['name'], 'tokenack');
+                        return $this->aminterface->sccpDeviceReset($params['name'], 'tokenack');
                         break;
                     case 'reload_line':
-//                        return $this->aminterface->sccp_device_reset($params['name'], 'full');
+//                        return $this->aminterface->sccpDeviceReset($params['name'], 'full');
                         break;
 //                    case 'get_version':
 //                    case 'sccp_reload':

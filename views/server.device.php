@@ -7,7 +7,7 @@
  */
 /*
 $data = 'none;';
-foreach ($this->get_DialPlanList() as $value) {
+foreach ($this->getDialPlanList() as $value) {
    $data .= $value['id'].';';
 }
 if (strlen($data) >0 ){
@@ -22,11 +22,11 @@ if (strlen($data) >0 ){
     <input type="hidden" name="Submit" value="Submit">
 <?php
 
-        echo $this->ShowGroup('sccp_dev_config', 1);
-        echo $this->ShowGroup('sccp_dev_group_config', 1);
-        echo $this->ShowGroup('sccp_dev_advconfig', 1);
-        echo $this->ShowGroup('sccp_dev_softkey', 1);
-        echo $this->ShowGroup('sccp_dev_url', 1);
-        echo $this->ShowGroup('sccp_hotline_config', 1);
+        echo $this->showGroup('sccp_dev_config', 1);
+        echo $this->showGroup('sccp_dev_group_config', 1);
+        echo $this->showGroup('sccp_dev_advconfig', 1);
+        echo $this->showGroup('sccp_dev_softkey', 1);
+        echo $this->showGroup('sccp_dev_url', 1);
+        echo $this->showGroup('sccp_hotline_config', 1);
 ?>  
 </form>

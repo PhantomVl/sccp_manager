@@ -28,7 +28,7 @@ if (!empty($_REQUEST['ru_id'])) {
     <input type="hidden" name="Submit" value="Submit">
 
     <?php
-    echo $this->ShowGroup('sccp_ruser', 1, 'sccp_ru', $def_val);
-    echo $this->ShowGroup('sccp_ruser_time', 1, 'sccp_ru', $def_val);
+    echo $this->showGroup('sccp_ruser', 1, 'sccp_ru', $def_val);
+    echo $this->showGroup('sccp_ruser_time', 1, 'sccp_ru', $def_val);
     ?>    
 </form>

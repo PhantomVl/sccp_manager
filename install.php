@@ -1002,8 +1002,8 @@ if (!$sccp_db_ver) {
 }
 outn("<br>");
 
-//    $ss->save_submit($request);
-//    $ss->sccp_create_sccp_init();
-//    $ss->sccp_db_save_setting();
+//    $ss->handleSubmit($request);
+//    $ss->createDefaultSccpConfig();
+//    $ss->saveSccpSettings();
 //
 //}

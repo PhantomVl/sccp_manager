@@ -34,7 +34,7 @@ if (!empty($_REQUEST['id'])) {
         if (!empty($val)) {
             switch ($key) {
                 case 'type':
-                    $tmp_raw = $this->getSccp_model_information('byid', true, 'all', array('model'=>$val));
+                    $tmp_raw = $this->getSccpModelInformation('byid', true, 'all', array('model'=>$val));
                     if (!empty($tmp_raw[0])) {
                         $tmp_raw = $tmp_raw[0];
                     }
@@ -108,15 +108,15 @@ if (!empty($device_warning)) {
         echo '<input type="hidden" name="sccp_deviceid" value="'.$dev_id.'">';
     }
     if (empty($dev_id)) {
-        echo $this->ShowGroup('sccp_hw_dev', 1, 'sccp_hw', $def_val);
+        echo $this->showGroup('sccp_hw_dev', 1, 'sccp_hw', $def_val);
     } else {
-        echo $this->ShowGroup('sccp_hw_dev_edit', 1, 'sccp_hw', $def_val);
+        echo $this->showGroup('sccp_hw_dev_edit', 1, 'sccp_hw', $def_val);
     }
-    echo $this->ShowGroup('sccp_hw_dev2', 1, 'sccp_hw', $def_val);
-    echo $this->ShowGroup('sccp_hw_dev_advance', 1, 'sccp_hw', $def_val);
-    echo $this->ShowGroup('sccp_hw_dev_softkey', 1, 'sccp_hw', $def_val);
-    echo $this->ShowGroup('sccp_hw_dev_pickup', 1, 'sccp_hw', $def_val);
-    echo $this->ShowGroup('sccp_hw_dev_conference', 1, 'sccp_hw', $def_val);
-    echo $this->ShowGroup('sccp_hw_dev_network', 1, 'sccp_hw', $def_val);
+    echo $this->showGroup('sccp_hw_dev2', 1, 'sccp_hw', $def_val);
+    echo $this->showGroup('sccp_hw_dev_advance', 1, 'sccp_hw', $def_val);
+    echo $this->showGroup('sccp_hw_dev_softkey', 1, 'sccp_hw', $def_val);
+    echo $this->showGroup('sccp_hw_dev_pickup', 1, 'sccp_hw', $def_val);
+    echo $this->showGroup('sccp_hw_dev_conference', 1, 'sccp_hw', $def_val);
+    echo $this->showGroup('sccp_hw_dev_network', 1, 'sccp_hw', $def_val);
     ?>    
 </form>

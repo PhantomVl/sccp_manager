@@ -16,10 +16,10 @@ if (!defined('FREEPBX_IS_AUTH')) {
 //
 $spage = FreePBX::create()->Sccp_manager;
 if (empty($spage->class_error)) {
-    $display_page = $spage->AdvServerShowPage();
+    $display_page = $spage->advServerShowPage();
     $display_info = _("SCCP Advance Server Configuration");
 } else {
-    $display_page = $spage->InfoServerShowPage();
+    $display_page = $spage->infoServerShowPage();
     $display_info = _("SCCP Server Configuration");
 }
 ?>

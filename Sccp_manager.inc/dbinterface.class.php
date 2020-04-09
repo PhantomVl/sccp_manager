@@ -240,7 +240,7 @@ class dbinterface
         return $raw_settings;
     }
 
-    function sccp_save_db($db_name = "", $save_value = array(), $mode = 'update', $key_fld = "", $hwid = "")
+    function write($db_name = "", $save_value = array(), $mode = 'update', $key_fld = "", $hwid = "")
     {
         // mode clear  - Empty tabele before update
         // mode update - update / replace record

@@ -1038,11 +1038,11 @@ and open the template in the editor. Base Version before all crash :-)
 
         <item type="IS" id="4" seq="90">
             <name>system_rouminguser</name> 
-            <label>User Rouming</label>
+            <label>User Roaming</label>
             <default>no</default>
             <button value="yes">Yes</button>
             <button value="no">No</button>
-            <help>Experemental Function Rouming Users</help>
+            <help>Experemental Function Roaming Users</help>
         </item>
     
     </page_group>
@@ -1609,10 +1609,10 @@ and open the template in the editor. Base Version before all crash :-)
             
     </page_group>
  <!--   
-    Rouming User Pages
+    Roaming User Pages
      -->
     <page_group name="sccp_ruser">
-        <label>Rouming User configuration</label>
+        <label>Roaming User configuration</label>
         <item type="IE" id="1" seq="99">
             <label>User ID</label>
             <input>
@@ -1650,7 +1650,7 @@ and open the template in the editor. Base Version before all crash :-)
         </item>
         <item type="IS" id="13" seq="99">
             <name>roaminglogin</name> 
-            <label>Rouming</label>
+            <label>Roaming</label>
             <default>off</default>
             <button value="off">Disabled</button>
             <button value="on">Enable Single</button>
@@ -1676,7 +1676,7 @@ and open the template in the editor. Base Version before all crash :-)
         </item>
     </page_group>
  <!--   
-    Rouming User Pages
+    Roaming User Pages
      -->
     <page_group name="sccp_ruser_time">
         <label>Time Work configuration</label>

@@ -12,8 +12,8 @@
     
 <?php
     
-        echo $this->ShowGroup('sccp_srst', 1);
-//        echo $this->ShowGroup('sccp_dev_time',1);
+        echo $this->showGroup('sccp_srst', 1);
+//        echo $this->showGroup('sccp_dev_time',1);
 
 ?>  
 </form>

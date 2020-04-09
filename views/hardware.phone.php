@@ -86,7 +86,7 @@
           if (val[0] === 'line') {
               result = result + val[1] + '<br>';
           }
-	}
+    }
         return  result;
     }
     

@@ -30,45 +30,45 @@ function CreateBackUpConfig() {
     outn("<li>" . _("Create Config BackUp: ") . $filename ."</li>");
 }
 */
-if (!defined('FREEPBX_IS_AUTH')) { die('No direct script access allowed'); }
+if (!defined('FREEPBX_IS_AUTH')) {
+    die('No direct script access allowed');
+}
 
     global $db;
     $version = FreePBX::Config()->get('ASTVERSION');
 
     out('Remove all SCCP tables');
     $tables = array('sccpdevmodel', 'sccpsettings');
-    foreach ($tables as $table) {
-        $sql = "DROP TABLE IF EXISTS {$table}";
-        $result = $db->query($sql);
-        if (DB::IsError($result)) {
-            die_freepbx($result->getDebugInfo());
-        }
-        unset($result);
+foreach ($tables as $table) {
+    $sql = "DROP TABLE IF EXISTS {$table}";
+    $result = $db->query($sql);
+    if (DB::IsError($result)) {
+        die_freepbx($result->getDebugInfo());
     }
-    if (!empty($version)) {
-     // Woo, we have a version
-        $check = $db->getRow("SELECT 1 FROM `kvstore` LIMIT 0", DB_FETCHMODE_ASSOC);
-        if (!(DB::IsError($check))) {
-            //print_r("none, creating table :". $value);
-            echo "Deleting key FROM kvstore..";
-            sql("DELETE FROM kvstore WHERE module = 'sccpsettings'");
-            sql("DELETE FROM kvstore WHERE module = 'Sccp_manager'");
-        } 
+    unset($result);
+}
+if (!empty($version)) {
+ // Woo, we have a version
+    $check = $db->getRow("SELECT 1 FROM `kvstore` LIMIT 0", DB_FETCHMODE_ASSOC);
+    if (!(DB::IsError($check))) {
+        //print_r("none, creating table :". $value);
+        echo "Deleting key FROM kvstore..";
+        sql("DELETE FROM kvstore WHERE module = 'sccpsettings'");
+        sql("DELETE FROM kvstore WHERE module = 'Sccp_manager'");
+    }
 
 /* Comment: Maybe save in sccpsettings, if the chan_sccp tables already existed in the database or if they were created by install.php */
 /* So that you know if it is save to drop/delete them */
 
 /*      DROP VIEW  IF EXISTS`sccpdeviceconfig`;
-        DROP TABLE IF EXISTS `sccpbuttonconfig`;
-        DROP TABLE IF EXISTS `sccpdevice`;
-        DROP TABLE IF EXISTS `sccpdevmodel`;
-        DROP TABLE IF EXISTS `sccpline`;
-        DROP TABLE IF EXISTS `sccpsettings`;
-        DROP TABLE IF EXISTS `sccpuser`;
- * 
+    DROP TABLE IF EXISTS `sccpbuttonconfig`;
+    DROP TABLE IF EXISTS `sccpdevice`;
+    DROP TABLE IF EXISTS `sccpdevmodel`;
+    DROP TABLE IF EXISTS `sccpline`;
+    DROP TABLE IF EXISTS `sccpsettings`;
+    DROP TABLE IF EXISTS `sccpuser`;
+ *
  */
-   }
+}
 
    echo "done<br>\n";
-
-?>

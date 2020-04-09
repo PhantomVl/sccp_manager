@@ -1,35 +1,39 @@
 <?php
 
 /**
- * 
- * Core Comsnd Interface 
- * 
- * 
+ *
+ * Core Comsnd Interface
+ *
+ *
  */
 
 namespace FreePBX\modules\Sccp_manager;
 
-class dbinterface {
+class dbinterface
+{
 
     private $val_null = 'NONE'; /// REPLACE to null Field
 
-    public function __construct($parent_class = null) {
-	$this->paren_class = $parent_class;
+    public function __construct($parent_class = null)
+    {
+        $this->paren_class = $parent_class;
     }
 
-    public function info() {
+    public function info()
+    {
         $Ver = '13.0.2';
-        return Array('Version' => $Ver,
+        return array('Version' => $Ver,
             'about' => 'Data access interface ver: ' . $Ver);
     }
 
     /*
      * Core Access Function
      */
-    public function get_db_SccpTableByID($dataid, $data = array(), $indexField = '') {
+    public function get_db_SccpTableByID($dataid, $data = array(), $indexField = '')
+    {
         $resut = array();
         $raw = $this->get_db_SccpTableData($dataid, $data);
-        if ( empty($raw) || empty($indexField)) {
+        if (empty($raw) || empty($indexField)) {
             return $raw;
         }
         foreach ($raw as $value) {
@@ -39,9 +43,10 @@ class dbinterface {
         return $resut;
     }
 
-    public function get_db_SccpTableData($dataid, $data = array()) {
+    public function get_db_SccpTableData($dataid, $data = array())
+    {
         if ($dataid == '') {
-            return False;
+            return false;
         }
         switch ($dataid) {
             case "SccpExtension":
@@ -49,7 +54,8 @@ class dbinterface {
                     $sql = "SELECT * FROM `sccpline` ORDER BY `name`";
                     $raw_settings = sql($sql, "getAll", DB_FETCHMODE_ASSOC);
                 } else {
-                    $sql = "SELECT * FROM `sccpline` WHERE `name`='" . $data['name']. "'";;
+                    $sql = "SELECT * FROM `sccpline` WHERE `name`='" . $data['name']. "'";
+                    ;
                     $raw_settings = sql($sql, "getAll", DB_FETCHMODE_ASSOC);
                 }
                 break;
@@ -72,7 +78,8 @@ class dbinterface {
                     }
                 }
                 if (!empty($data['name'])) {
-                    $filtred = "`name`='" . $data['name']. "'";;
+                    $filtred = "`name`='" . $data['name']. "'";
+                    ;
                     $singlrow = true;
                 }
                 if (!empty($data['type'])) {
@@ -141,7 +148,7 @@ class dbinterface {
                     $sql = 'SELECT * FROM sccpbuttonconfig WHERE ' .$sql. 'ORDER BY `instance`;';
                     $raw_settings = sql($sql, "getAll", DB_FETCHMODE_ASSOC);
                 } else {
-                    $raw_settings = Array();
+                    $raw_settings = array();
                 }
                 break;
         }
@@ -149,13 +156,15 @@ class dbinterface {
         return $raw_settings;
     }
 
-    public function get_db_SccpSetting() {
+    public function get_db_SccpSetting()
+    {
         $sql = "SELECT `keyword`, `data`, `type`, `seq` FROM `sccpsettings` ORDER BY `type`, `seq`";
         $raw_settings = sql($sql, "getAll", DB_FETCHMODE_ASSOC);
         return $raw_settings;
     }
 
-    public function get_db_sysvalues() {
+    public function get_db_sysvalues()
+    {
         $sql = "SHOW VARIABLES LIKE '%group_concat%'";
         $raw_settings = sql($sql, "getRow", DB_FETCHMODE_ASSOC);
         return $raw_settings;
@@ -165,7 +174,8 @@ class dbinterface {
      *      Get Sccp Device Model information
      */
 
-    function getDb_model_info($get = "all", $format_list = "all", $filter = array()) {
+    function getDb_model_info($get = "all", $format_list = "all", $filter = array())
+    {
         global $db;
         switch ($format_list) {
             case "model":
@@ -230,8 +240,9 @@ class dbinterface {
         return $raw_settings;
     }
 
-    function sccp_save_db($db_name = "", $save_value = array(), $mode = 'update', $key_fld = "", $hwid = "") {
-        // mode clear  - Empty tabele before update 
+    function sccp_save_db($db_name = "", $save_value = array(), $mode = 'update', $key_fld = "", $hwid = "")
+    {
+        // mode clear  - Empty tabele before update
         // mode update - update / replace record
         global $db;
 //        global $amp_conf;
@@ -315,42 +326,44 @@ class dbinterface {
 
     /*
      *  My be Replace by SccpTables ??!
-     * 
+     *
      */
-    public function dump_sccp_tables($data_path,  $database, $user, $pass ) {
+    public function dump_sccp_tables($data_path, $database, $user, $pass)
+    {
         $filename = $data_path.'/sccp_backup_'.date('G_a_m_d_y').'.sql';
-        $result = exec('mysqldump '.$database.' --password='.$pass.' --user='.$user.' --single-transaction >'.$filename ,$output);
+        $result = exec('mysqldump '.$database.' --password='.$pass.' --user='.$user.' --single-transaction >'.$filename, $output);
         return $filename;
     }
     
 /*
- *  Check Table structure 
+ *  Check Table structure
  */
-    public function validate() {
+    public function validate()
+    {
         global $db;
         $check_fields = array('430' => array('_hwlang' => "varchar(12)"), '431' => array('private'=> "enum('on','off')"), '433' => array('directed_pickup'=>'') );
         $sql = "DESCRIBE `sccpdevice`;";
         $raw_result = sql($sql, "getAll", DB_FETCHMODE_ASSOC);
         $result = 0;
         foreach ($raw_result as $value) {
-           $id_result[$value['Field']] = $value['Type'];
+            $id_result[$value['Field']] = $value['Type'];
         }
         foreach ($check_fields as $key => $value) {
-            $sub_result = true;                    
-            foreach($value as $skey => $svalue) {
-              if (!empty($svalue) ) {
-                if (empty($id_result[$skey])) {
-                    $sub_result = false;
+            $sub_result = true;
+            foreach ($value as $skey => $svalue) {
+                if (!empty($svalue)) {
+                    if (empty($id_result[$skey])) {
+                        $sub_result = false;
+                    } else {
+                        if (strtolower($id_result[$skey]) != strtolower($svalue)) {
+                            $sub_result = false;
+                        }
+                    }
                 } else {
-                    if (strtolower($id_result[$skey]) != strtolower($svalue)) {
+                    if (!empty($id_result[$skey])) {
                         $sub_result = false;
                     }
-                }                
-              } else {
-                if (!empty($id_result[$skey])) {
-                    $sub_result = false;
                 }
-              }
             }
             if ($sub_result) {
                 $result = $key;
@@ -361,5 +374,4 @@ class dbinterface {
         
         return $result;
     }
-
 }

@@ -74,7 +74,7 @@ if (empty($ast_realtime)) {
                 $rt_sccp = 'SCCP ERROR';
                 $rt_info .= '<div class="alert signature alert-danger"> Error : ' . $value['message'] . '</div>';
             }
-        } else if ($value['status'] == 'ERROR') {
+        } elseif ($value['status'] == 'ERROR') {
             $rt_info .= '<div> Found error in realtime sectoin [' . $key . '] : ' . $value['message'] . '</div>';
         }
     }
@@ -94,15 +94,15 @@ if (empty($conf_realtime)) {
         $info['ConfigsRealTime'] = array('Version' => 'Error', 'about' => $rt_info);
     }
 }
-// $mysql_info 
+// $mysql_info
 if ($mysql_info['Value'] <= '2000') {
-    $this->info_warning['MySql'] = Array('Increase Mysql Group Concat Max. Length', 'Step 1: Go to mysql path <br> nano /etc/my.cnf',
+    $this->info_warning['MySql'] = array('Increase Mysql Group Concat Max. Length', 'Step 1: Go to mysql path <br> nano /etc/my.cnf',
         'Step 2: And add the following line below [mysqld] as shown below <br> [mysqld] <br>group_concat_max_len = 4096 or more',
         'Step 3: Save and restart <br> systemctl restart mariadb.service<br> Or <br> service mysqld restart');
 }
 
 
-// Check Time Zone comatable  
+// Check Time Zone comatable
 $conf_tz = $this->sccpvalues['ntp_timezone']['data'];
 $cisco_tz = $this->extconfigs->getextConfig('sccp_timezone', $conf_tz);
 if ($cisco_tz['offset'] == 0) {
@@ -110,7 +110,7 @@ if ($cisco_tz['offset'] == 0) {
         $tmp_dt = new DateTime(null, new DateTimeZone($conf_tz));
         $tmp_ofset = $tmp_dt->getOffset();
         if (($cisco_tz['offset'] != ($tmp_ofset / 60) )) {
-            $this->info_warning['NTP'] = Array('The selected NTP time zone is not supported by cisco devices.', 'We will use the Greenwich Time zone');
+            $this->info_warning['NTP'] = array('The selected NTP time zone is not supported by cisco devices.', 'We will use the Greenwich Time zone');
         }
     }
 }
@@ -121,59 +121,59 @@ global $amp_conf;
 if ($test_any == 1) {
 # Output option list, HTML.
 
-$timezone_identifiers = DateTimeZone::listIdentifiers();
-$timezone_abbreviations = DateTimeZone::listAbbreviations();
-$a = DateTimeZone::listIdentifiers(DateTimeZone::ALL_WITH_BC ); 
+    $timezone_identifiers = DateTimeZone::listIdentifiers();
+    $timezone_abbreviations = DateTimeZone::listAbbreviations();
+    $a = DateTimeZone::listIdentifiers(DateTimeZone::ALL_WITH_BC);
 
 
-$Ts_set =  $a[200]; 
+    $Ts_set =  $a[200];
 
 
 // ************************************************************************************
-print_r("<br> Help Info:<br><pre>");
-print_r("<br>");
+    print_r("<br> Help Info:<br><pre>");
+    print_r("<br>");
 //print_r(array_column($timezone_abbreviations, 'timezone_id'));
-print_r($Ts_set);
-$tz_tmp = array();
+    print_r($Ts_set);
+    $tz_tmp = array();
         
-foreach ($timezone_abbreviations as $subArray) {
-    $dddd  = array_search($Ts_set ,array_column($subArray, 'timezone_id'));
-    if (!empty($dddd)) {
-        $tz_tmp[] = $subArray[$dddd];
-    } 
-}
-
-if (empty($tz_tmp)) {
-    print_r('erroe');
-}
-if (count($tz_tmp)==1) {
-  $time_set = $tz_tmp[0];
-} else {
-    $tmp_dt = new DateTime(null, new DateTimeZone($Ts_set));
-    $tmp_ofset = $tmp_dt->getOffset();
-    foreach ($tz_tmp as $subArray) {
-       if ($subArray['offset'] == $tmp_ofset) {
-           $time_set = $subArray; 
-       }
+    foreach ($timezone_abbreviations as $subArray) {
+        $dddd  = array_search($Ts_set, array_column($subArray, 'timezone_id'));
+        if (!empty($dddd)) {
+            $tz_tmp[] = $subArray[$dddd];
+        }
     }
-}
-    
-print_r("<br>");
-//print_r($time_set);
-print_r($this->sccpvalues['ntp_timezone']);
-//print_r($tz_tmp);
-print_r("<br>");
-print_r("<br>");
 
-print_r("<br>");
+    if (empty($tz_tmp)) {
+        print_r('erroe');
+    }
+    if (count($tz_tmp)==1) {
+        $time_set = $tz_tmp[0];
+    } else {
+        $tmp_dt = new DateTime(null, new DateTimeZone($Ts_set));
+        $tmp_ofset = $tmp_dt->getOffset();
+        foreach ($tz_tmp as $subArray) {
+            if ($subArray['offset'] == $tmp_ofset) {
+                $time_set = $subArray;
+            }
+        }
+    }
+    
+    print_r("<br>");
+//print_r($time_set);
+    print_r($this->sccpvalues['ntp_timezone']);
+//print_r($tz_tmp);
+    print_r("<br>");
+    print_r("<br>");
+
+    print_r("<br>");
 //print_r($timezone_abbreviations);
 //print_r($timezone_identifiers);
 //print_r($timezone);
 //print_r($transitions);
 
 
-print_r("<br>");
-print_r("</pre>");
+    print_r("<br>");
+    print_r("</pre>");
 // print_r("DIRECT START");
 //  print_r($this->sccpvalues['ccm_address']);
 //print_r($this->get_php_classes('\\FreePBX\\modules'));
@@ -211,24 +211,24 @@ print_r("</pre>");
 //   $a = new \FreePBX\modules\Sccp_manager\aminterface\SCCPConfigMetaDataAction();
 //   $response = $this->aminterface->send($a);
 //
-//  $response = $this->aminterface->getRealTimeStatus(); 
+//  $response = $this->aminterface->getRealTimeStatus();
 //  $time_get_a = microtime_float();
 //  print_r($response);
 //  $tmp_data = $this->aminterface->core_sccp_reload();
 //  print_r($tmp_data);
 //  print_r($response -> getResult());
-//    $events = $response->getEvents();  
+//    $events = $response->getEvents();
 //  $events = $response->Events2Array();
-//  
+//
 //  print_r($events);
-//  print_r('--- RESULT A -----------------');  
+//  print_r('--- RESULT A -----------------');
 //  $b = $this->oldinterface->sccp_realtime_status();
 //  print_r($b);
 //  $b = $this->srvinterface->sccp_realtime_status();
 //  print_r($response->getMessage());
 //  print_r($a);
 //  $events = $response ->getTableNames();
-//  $events = $response->getEvents();  
+//  $events = $response->getEvents();
 //  print_r($events);
 //  $b = $response->Table2Array($events[0]);
 //  $b = $response->getResult();
@@ -245,9 +245,9 @@ print_r("</pre>");
 
 /* Test Ok
  *
- * 
  *
- * 
+ *
+ *
  */
 if ($test_ami == 1) {
     $time_ami = 0;
@@ -402,7 +402,7 @@ if ($test_ami == 1) {
 //  print_r($events);
 //$b = $response->Table2Array($events[0]);
 //$b = $response->getResult();
-//  print_r('--- RESULT 2 -----------------<br>');  
+//  print_r('--- RESULT 2 -----------------<br>');
 //print_r($events);
 //  print_r($b);
 //  $ser = serialize($response);
@@ -414,14 +414,14 @@ if ($test_ami == 1) {
   $this->assertEquals($events[0]->getName(), 'CoreShowChannelsComplete');
   $this->assertEquals($events[0]->getListItems(), 0);
  */
-//  print_r('--- RESULT 3 -----------------');  
+//  print_r('--- RESULT 3 -----------------');
 //  print_r($a);
-//  print_r('--- С RESULT -----------------');  
+//  print_r('--- С RESULT -----------------');
 //  print_r($this->aminterface::SCCPShowDevicesAction());
-//  
+//
 //  print_r($this->aminterface->close());
-//  
-//  
+//
+//
 //print_r($this->dbinterface->get_db_SccpTableData('SccpExtension'));
 //  print_r($this->srvinterface->getеtestChanSCC());
 //  $test_data = $this->srvinterface-> astman_GetRaw('ExtensionStateList');
@@ -436,7 +436,7 @@ if ($test_ami == 1) {
 print(" ");
 /* */
 // ************************************************************************************
-//   $lang_arr =  $this->extconfigs->getextConfig('sccp_lang','sk_SK');    
+//   $lang_arr =  $this->extconfigs->getextConfig('sccp_lang','sk_SK');
 //   print_r('<br>');
 //   print_r(timezone_identifiers_list());
 //   print_r('<br>');
@@ -468,7 +468,7 @@ if (!empty($this->info_warning)) {
         </div>
     </div>
     <br>
-<?php
+    <?php
 }
 
 if (!empty($this->class_error)) {
@@ -488,7 +488,7 @@ if (!empty($this->class_error)) {
         </div>
     </div>
     <br>
-                        <?php } ?>
+<?php } ?>
 <div class="fpbx-container container-fluid">
     <div class="row">
         <div class="container">

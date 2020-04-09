@@ -1,6 +1,6 @@
 <?php
 
-/* 
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -53,28 +53,28 @@ $keynamearray = array('onhook'    => array(sname => 'ONHOOK', name =>'Display On
             <div class="display no-border">
                         <div id="toolbar-all">
                             <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" onclick="load_oncliсk(this,'*new*')" data-target=".edit_new_keyset"><i class="fa fa-bolt"></i> <?php echo _("Add Keyset"); ?></button>
-			</div>
+            </div>
                         <table data-cookie="true" data-cookie-id-table="sccp_keyset-all" data-url="ajax.php?module=sccp_manager&amp;command=getSoftKey&amp;type=active" data-cache="false" data-show-refresh="true" data-toolbar="#toolbar-all" data-maintain-selected="true" data-show-columns="true" data-show-toggle="true" data-toggle="table" data-pagination="true" data-search="true" class="table table-striped ext-list" id="softkey-all" data-unique-id="softkeys">
                             <thead>
                                 <tr>
 <!--                                    <th data-checkbox="true"></th> -->
                                     <th data-sortable="true" data-field="softkeys"><?php echo _('KeySetName')?></th>
-                                    <?php   
+                                    <?php
                                     $i = 0;
                                     foreach ($keynamearray as $key => $value) {
-                                        if ($i < 9 ){
+                                        if ($i < 9) {
                                             echo '<th data-sortable="false" data-field="'.$key.'">'._($value['sname']).'</th>';
                                         }
                                         $i ++;
                                     }
-?>
+                                    ?>
                                     <th data-field="actions" data-formatter="DispayActionsKeyFormatter"><?php echo _('Actions')?></th>
-				</tr>
+                </tr>
                             </thead>
                             <tbody>
                                 
                             </tbody>
-			</table>
+            </table>
             </div>
         </div>
     </div>
@@ -104,48 +104,47 @@ $keynamearray = array('onhook'    => array(sname => 'ONHOOK', name =>'Display On
                 
                 <ul class="nav nav-tabs" role="tablist">
                 
-<?php   
+<?php
                 $i = 0;
-                foreach ($keysetarray as $key => $value) {
-                    if ($i == 0) {
-                        echo '<li role="presentation" data-name="'.$key.'" class="active">';
-                    } else {
-                        echo '<li role="presentation" data-name="'.$key.'" class="change-tab">';
-                    }
-                    echo '<a href="#'.$key.'" aria-controls="'.$key.'" role="tab" data-toggle="tab">'._($key);                        
-                    echo '</a></li>';
-                    $i ++;
-
-                }
+foreach ($keysetarray as $key => $value) {
+    if ($i == 0) {
+        echo '<li role="presentation" data-name="'.$key.'" class="active">';
+    } else {
+        echo '<li role="presentation" data-name="'.$key.'" class="change-tab">';
+    }
+    echo '<a href="#'.$key.'" aria-controls="'.$key.'" role="tab" data-toggle="tab">'._($key);
+    echo '</a></li>';
+    $i ++;
+}
 ?>
-		</ul>
+        </ul>
                 <div class="tab-content display">
-<?php   
+<?php
                 $i = 0;
-                foreach ($keysetarray as $key => $value) {
-                    if ($i == 0) {
-                        echo '<div role="tabpanel" id="'.$key.'" class="tab-pane active">';
-                    } else {
-                        echo '<div role="tabpanel" id="'.$key.'" class="tab-pane">';                        
-                    }
-                    echo '<div class="element-container"><div class="row"><div class="form-group"><div class="col-md-3"><label class="control-label" for="'.$key.'">'._($keynamearray[$key]['name']).'</label>';
-                    echo '<i class="fa fa-question-circle fpbx-help-icon" data-for="'.$key.'"></i></div>';
+foreach ($keysetarray as $key => $value) {
+    if ($i == 0) {
+        echo '<div role="tabpanel" id="'.$key.'" class="tab-pane active">';
+    } else {
+        echo '<div role="tabpanel" id="'.$key.'" class="tab-pane">';
+    }
+    echo '<div class="element-container"><div class="row"><div class="form-group"><div class="col-md-3"><label class="control-label" for="'.$key.'">'._($keynamearray[$key]['name']).'</label>';
+    echo '<i class="fa fa-question-circle fpbx-help-icon" data-for="'.$key.'"></i></div>';
                     
-                        echo '<div class="col-md-4"><select multiple class="form-control sccpmultiselect" name="av_'.$key.'" id="source_'.$key.'">';
-                    $row_dada= explode(',', $value);
-                    foreach ($row_dada as $data) {
-                          echo '<option value="'.$data.'">'.$data.'</option>';
-                    }
-                    echo '</select></div><div class="col-md-1">';                   
-                    foreach ($keymultiselect as $btkey =>$btval) {
-                        echo '<input type="button" class="btnMultiselect" data-id="'.$key.'" data-key="'.$btkey.'" value="'.$btval.'">';
-                    }
-                    echo '</div><div class="col-md-4"><select multiple class="form-control" name="sel_'.$key.'" id="destination_'.$key.'">';
-                    echo '</select></div></div></div><div class="row"><div class="col-md-12">';
-                    echo '<span id="'.$key.'-help" class="help-block fpbx-help-block">'._($keynamearray[$key]['help']).'</span>';                    
-                    echo '</div></div></div></div>';
-                    $i ++;
-                }
+        echo '<div class="col-md-4"><select multiple class="form-control sccpmultiselect" name="av_'.$key.'" id="source_'.$key.'">';
+    $row_dada= explode(',', $value);
+    foreach ($row_dada as $data) {
+          echo '<option value="'.$data.'">'.$data.'</option>';
+    }
+    echo '</select></div><div class="col-md-1">';
+    foreach ($keymultiselect as $btkey => $btval) {
+        echo '<input type="button" class="btnMultiselect" data-id="'.$key.'" data-key="'.$btkey.'" value="'.$btval.'">';
+    }
+    echo '</div><div class="col-md-4"><select multiple class="form-control" name="sel_'.$key.'" id="destination_'.$key.'">';
+    echo '</select></div></div></div><div class="row"><div class="col-md-12">';
+    echo '<span id="'.$key.'-help" class="help-block fpbx-help-block">'._($keynamearray[$key]['help']).'</span>';
+    echo '</div></div></div></div>';
+    $i ++;
+}
 ?>                                        
                 </div>    
                 

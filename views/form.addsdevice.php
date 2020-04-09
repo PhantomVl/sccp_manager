@@ -17,7 +17,7 @@ $def_val['directed_pickup_context'] =  array("keyword" => 'directed_pickup_conte
 if (!empty($_REQUEST['new_id'])) {
     $dev_id = $_REQUEST['new_id'];
     $val = str_replace(array('SEP','ATA','VG'), '', $dev_id);
-    $val = implode('.',sscanf($val, '%4s%4s%4s')); // Convert to Cisco display Format 
+    $val = implode('.', sscanf($val, '%4s%4s%4s')); // Convert to Cisco display Format
     $def_val['mac'] = array("keyword" => 'mac', "data" => $val, "seq" => "99");
     $val = $_REQUEST['type'];
     $def_val['type'] = array("keyword" => 'type', "data" => $val, "seq" => "99");
@@ -34,27 +34,27 @@ if (!empty($_REQUEST['id'])) {
         if (!empty($val)) {
             switch ($key) {
                 case 'type':
-                    $tmp_raw = $this->getSccp_model_information('byid', TRUE, 'all', array('model'=>$val));
+                    $tmp_raw = $this->getSccp_model_information('byid', true, 'all', array('model'=>$val));
                     if (!empty($tmp_raw[0])) {
                         $tmp_raw = $tmp_raw[0];
                     }
                     if (!empty($tmp_raw['validate'])) {
-                        $tmpar =  explode(";",$tmp_raw['validate']);
+                        $tmpar =  explode(";", $tmp_raw['validate']);
                         if ($tmpar[0] != 'yes') {
-                            $device_warning['Image'] = Array('Device firmware not found : '.$tmp_raw['loadimage']);
+                            $device_warning['Image'] = array('Device firmware not found : '.$tmp_raw['loadimage']);
                         }
                         if ($tmpar[1] != 'yes') {
-                            $device_warning['Template'] = Array('Missing device configuration template : '. $tmp_raw['nametemplate']);
+                            $device_warning['Template'] = array('Missing device configuration template : '. $tmp_raw['nametemplate']);
                         }
                     }
                     break;
                 case 'name':
                     $key = 'mac';
                     $val = str_replace(array('SEP','ATA','VG'), '', $val);
-                    $val = implode('.',sscanf($val, '%4s%4s%4s')); // Convert to Cisco display Format 
+                    $val = implode('.', sscanf($val, '%4s%4s%4s')); // Convert to Cisco display Format
                     break;
                 case '_hwlang':
-                    $tmpar =  explode(":",$val);
+                    $tmpar =  explode(":", $val);
                     $def_val['netlang'] =  array("keyword" => 'netlang', "data" => $tmpar[0], "seq" => "99");
                     $def_val['devlang'] =  array("keyword" => 'devlang', "data" => $tmpar[1], "seq" => "99");
                     break;
@@ -79,14 +79,14 @@ if (!empty($device_warning)) {
                 <h2 style="border:2px solid Tomato;color:Tomato;" >Warning in the SCCP Device</h2>
                 <div class="table-responsive">          
                         <?php
-                            foreach ($device_warning as $key => $value) {
-                                echo '<h3>'.$key.'</h3>';
-                                if (is_array($value)) {
-                                    echo '<li>'._(implode('</li><li>', $value)).'</li>';
-                                } else {
-                                    echo '<li>'. _($value).'</li>';
-                                }
+                        foreach ($device_warning as $key => $value) {
+                            echo '<h3>'.$key.'</h3>';
+                            if (is_array($value)) {
+                                echo '<li>'._(implode('</li><li>', $value)).'</li>';
+                            } else {
+                                echo '<li>'. _($value).'</li>';
                             }
+                        }
                         ?>
                     </pre>
                 </div>
@@ -104,15 +104,15 @@ if (!empty($device_warning)) {
     
 
     <?php
-    if (empty($dev_new)){
+    if (empty($dev_new)) {
         echo '<input type="hidden" name="sccp_deviceid" value="new">';
     } else {
         echo '<input type="hidden" name="sccp_deviceid" value="'.$dev_id.'">';
     }
-    if (empty($dev_id)){
+    if (empty($dev_id)) {
         echo $this->ShowGroup('sccp_hw_sip_dev', 1, 'sccp_hw', $def_val);
     } else {
-        echo $this->ShowGroup('sccp_hw_dev_edit', 1, 'sccp_hw', $def_val);       
+        echo $this->ShowGroup('sccp_hw_dev_edit', 1, 'sccp_hw', $def_val);
     }
     echo $this->ShowGroup('sccp_hw_dev2', 1, 'sccp_hw', $def_val);
     echo $this->ShowGroup('sccp_hw_sip_conf', 1, 'sccp_hw', $def_val);

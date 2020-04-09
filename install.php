@@ -3,8 +3,8 @@
  *   Hand DB Change :
  ALTER TABLE `asterisk`.`sccpline` CHANGE COLUMN `transfer` `transfer` ENUM('on','off') NULL DEFAULT NULL ;
  ALTER TABLE `asterisk`.`sccpdevice` CHANGE COLUMN `transfer` `transfer` ENUM('on','off') NULL DEFAULT NULL;
- * 
- * 
+ *
+ *
  */
 
 if (!defined('FREEPBX_IS_AUTH')) {
@@ -27,7 +27,8 @@ if (class_exists($class, false)) {
     $srvinterface = new $class();
 }
 
-function Get_DB_config($sccp_compatible) {
+function Get_DB_config($sccp_compatible)
+{
     global $mobile_hw;
     $db_config_v0 = array(
         'sccpdevmodel' => array(
@@ -98,7 +99,7 @@ function Get_DB_config($sccp_compatible) {
             'useRedialMenu' => array('create' => "VARCHAR(5) NULL DEFAULT 'no' AFTER `_hwlang`"),
             //'dtmfmode' => array('create' => "VARCHAR(10) default 'outofband'", 'modify' => "VARCHAR(10)", 'def_modify'=> 'outofband'),
             'dtmfmode' => array('drop' => "yes"),
-//            'force_dtmfmode' => array('create' => "ENUM('auto','rfc2833','skinny') NOT NULL default 'auto'", 'modify' => "ENUM('auto','rfc2833','skinny')", 'def_modify'=> 'auto'),            
+//            'force_dtmfmode' => array('create' => "ENUM('auto','rfc2833','skinny') NOT NULL default 'auto'", 'modify' => "ENUM('auto','rfc2833','skinny')", 'def_modify'=> 'auto'),
             'deny' => array('create' => 'VARCHAR(100) NULL DEFAULT NULL', 'modify' => "VARCHAR(100)"),
             'permit' => array('create' => 'VARCHAR(100) NULL DEFAULT NULL', 'modify' => "VARCHAR(100)"),
             'backgroundImage' => array('create' => 'VARCHAR(255) NULL DEFAULT NULL', 'modify' => "VARCHAR(255)"),
@@ -185,8 +186,8 @@ function Get_DB_config($sccp_compatible) {
             'trustphoneip' => array('drop' => "yes"),
             'mwilamp' => array('create' => "enum('on','off','wink','flash','blink') NULL  default 'on'", 'modify' => "enum('on','off','wink','flash','blink')"),
             'mwioncall' => array('create' => "enum('on','off') NULL default 'on'", 'modify' => "enum('on','off')"),
-            'private' => array('create' => "enum('on','off') NOT NULL default 'off'", 'modify' => "enum('on','off')"), // Что-то лишенне 
-            'privacy' => array('create' => "enum('full','on','off') NOT NULL default 'full'", 'modify' => "enum('full','on','off')"), // Что-то лишенне 
+            'private' => array('create' => "enum('on','off') NOT NULL default 'off'", 'modify' => "enum('on','off')"), // Что-то лишенне
+            'privacy' => array('create' => "enum('full','on','off') NOT NULL default 'full'", 'modify' => "enum('full','on','off')"), // Что-то лишенне
             'nat' => array('create' => "enum('on','off','auto') NULL default NULL", 'modify' => "enum('on','off','auto')"),
             'conf_allow' => array('create' => "enum('on','off') NOT NULL default 'on'", 'modify' => "enum('on','off')"),
             'conf_play_part_announce' => array('create' => "enum('on','off') NOT NULL default 'on'", 'modify' => "enum('on','off')"),
@@ -222,7 +223,7 @@ function Get_DB_config($sccp_compatible) {
         )
     );
 
-    // Software mobile 
+    // Software mobile
     $db_config_v4 = array(
         'sccpdevmodel' => array(
             'enabled' => array('create' => "INT(2) NULL DEFAULT '0'"),
@@ -260,7 +261,7 @@ function Get_DB_config($sccp_compatible) {
             'cfwdall' => array('create' => "enum('on','off') NULL default 'on'", 'modify' => "enum('on','off')"),
             'cfwdbusy' => array('create' => "enum('on','off') NULL default 'on'", 'modify' => "enum('on','off')"),
             'cfwdnoanswer' => array('create' => "enum('on','off') NULL default 'on'", 'modify' => "enum('on','off')"),
-            'park' => array('create' => "enum('on','off') NULL default 'on'", 'modify' => "enum('on','off')"),            
+            'park' => array('create' => "enum('on','off') NULL default 'on'", 'modify' => "enum('on','off')"),
             'directrtp' => array('create' => "enum('on','off') NULL default NULL", 'modify' => "enum('on','off')"),
             'dndFeature' => array('create' => "enum('on','off') NULL default NULL", 'modify' => "enum('on','off')"),
             'earlyrtp' => array('create' => "ENUM('immediate','offHook','dialing','ringout','progress','none') NULL default NULL", 'modify' => "ENUM('immediate','offHook','dialing','ringout','progress','none')"),
@@ -274,8 +275,8 @@ function Get_DB_config($sccp_compatible) {
             'phonecodepage' => array('create' => 'VARCHAR(50) NULL DEFAULT NULL', 'modify' => "VARCHAR(50)"),
             'mwilamp' => array('create' => "enum('on','off','wink','flash','blink') NULL  default 'on'", 'modify' => "enum('on','off','wink','flash','blink')"),
             'mwioncall' => array('create' => "enum('on','off') NULL default 'on'", 'modify' => "enum('on','off')"),
-            'private' => array('create' => "enum('on','off') NOT NULL default 'off'", 'modify' => "enum('on','off')"), // Что-то лишенне 
-            'privacy' => array('create' => "enum('full','on','off') NOT NULL default 'full'", 'modify' => "enum('full','on','off')"), // Что-то лишенне 
+            'private' => array('create' => "enum('on','off') NOT NULL default 'off'", 'modify' => "enum('on','off')"), // Что-то лишенне
+            'privacy' => array('create' => "enum('full','on','off') NOT NULL default 'full'", 'modify' => "enum('full','on','off')"), // Что-то лишенне
             'nat' => array('create' => "enum('on','off','auto') NULL default NULL", 'modify' => "enum('on','off','auto')"),
             'conf_allow' => array('create' => "enum('on','off') NOT NULL default 'on'", 'modify' => "enum('on','off')"),
             'conf_play_part_announce' => array('create' => "enum('on','off') NOT NULL default 'on'", 'modify' => "enum('on','off')"),
@@ -353,7 +354,7 @@ function Get_DB_config($sccp_compatible) {
         )
     );
     
-    if ($sccp_compatible >= 433 ) {
+    if ($sccp_compatible >= 433) {
         if ($mobile_hw == '1') {
             return $db_config_v4M;
         }
@@ -375,10 +376,11 @@ $sccp_compatible = 0;
 //$db_config = $db_config_v0;
 $db_config = '';
 
-function CheckSCCPManagerDBTables($table_req) {
-global $amp_conf;
-global $astman;
-    global $db;    
+function CheckSCCPManagerDBTables($table_req)
+{
+    global $amp_conf;
+    global $astman;
+    global $db;
     outn("<li>" . _("Checking for Sccp_manager database tables..") . "</li>");
     foreach ($table_req as $value) {
         $check = $db->getRow("SELECT 1 FROM `$value` LIMIT 0", DB_FETCHMODE_ASSOC);
@@ -391,25 +393,27 @@ global $astman;
     }
 }
 
-function CheckSCCPManagerDBVersion() {
+function CheckSCCPManagerDBVersion()
+{
     global $db;
     outn("<li>" . _("Checking for previw version Sccp_manager..") . "</li>");
     $check = $db->getRow("SELECT data FROM `sccpsettings` where keyword ='sccp_compatible'", DB_FETCHMODE_ASSOC);
     if (DB::IsError($check)) {
         outn(_("Can't find previw version : "));
-        return FALSE;
+        return false;
     }
     if (!empty($check['data'])) {
         outn(_("Find DB Schema : " . $check['data']));
         return $check['data'];
     } else {
-        return FALSE;
+        return false;
     }
 }
 
 /* notused */
 
-function CheckPermissions() {
+function CheckPermissions()
+{
     outn("<li>" . _("Checking Filesystem Permissions") . "</li>");
     $dst = $_SERVER['DOCUMENT_ROOT'] . '/admin/modules/sccp_manager/views';
     if (fileowner($_SERVER['DOCUMENT_ROOT']) != fileowner($dst)) {
@@ -417,7 +421,8 @@ function CheckPermissions() {
     }
 }
 
-function CheckAsteriskVersion() {
+function CheckAsteriskVersion()
+{
     outn("<li>" . _("Checking Asterisk Version : ") . $version . "</li>");
     $version = FreePBX::Config()->get('ASTVERSION');
     if (!empty($version)) {
@@ -436,7 +441,8 @@ function CheckAsteriskVersion() {
     return $ver_compatible;
 }
 
-function CheckChanSCCPCompatible() {
+function CheckChanSCCPCompatible()
+{
     global $srvinterface, $astman;
     if (!$astman) {
         ie_freepbx('No asterisk manager connection provided!. Installation Failed');
@@ -446,7 +452,8 @@ function CheckChanSCCPCompatible() {
     return $sccp_compatible;
 }
 
-function InstallDB_Buttons() {
+function InstallDB_Buttons()
+{
     global $db;
     outn("<li>" . _("Creating buttons table...") . "</li>");
 //    $check = $db->getRow("SELECT 1 FROM buttonconfig LIMIT 0", DB_FETCHMODE_ASSOC);
@@ -467,10 +474,10 @@ function InstallDB_Buttons() {
             die_freepbx("Can not create sccpbuttonconfig table, error:$check\n");
     }
     return true;
-    
 }
 
-function InstallDB_sccpsettings() {
+function InstallDB_sccpsettings()
+{
     global $db;
     outn("<li>" . _("Creating sccpsettings table...") . "</li>");
     $sql = "CREATE TABLE IF NOT EXISTS `sccpsettings` (
@@ -487,7 +494,8 @@ function InstallDB_sccpsettings() {
     return true;
 }
 
-function InstallDB_sccpdevmodel() {
+function InstallDB_sccpdevmodel()
+{
     global $db;
     outn("<li>" . _("Creating sccpdevmodel table...") . "</li>");
     $sql = "CREATE TABLE IF NOT EXISTS `sccpdevmodel` (
@@ -509,7 +517,8 @@ function InstallDB_sccpdevmodel() {
     return true;
 }
 
-function InstallDB_sccpuser() {
+function InstallDB_sccpuser()
+{
     global $db;
     outn("<li>" . _("Creating sccpuser table...") . "</li>");
     $sql = "CREATE TABLE IF NOT EXISTS `sccpuser` (
@@ -531,7 +540,8 @@ function InstallDB_sccpuser() {
     return true;
 }
 
-function InstallDB_updateSchema($db_config) {
+function InstallDB_updateSchema($db_config)
+{
     global $db;
     if (!$db_config) {
         die_freepbx("No db_config provided");
@@ -655,7 +665,8 @@ function InstallDB_updateSchema($db_config) {
     return true;
 }
 
-function InstallDB_fillsccpdevmodel() {
+function InstallDB_fillsccpdevmodel()
+{
     global $db;
     outn("<li>" . _("Fill sccpdevmodel") . "</li>");
     $sql = "REPLACE INTO `sccpdevmodel` (`model`, `vendor`, `dns`, `buttons`, `loadimage`, `loadinformationid`, `enabled`, `nametemplate`) VALUES ('12 SP', 'CISCO', 1, 1, '', 'loadInformation3', 0, NULL)," .
@@ -664,7 +675,7 @@ function InstallDB_fillsccpdevmodel() {
             "('7916;7916', 'CISCO', 0, 48, 'B016-1-0-4-2', 'loadInformation230', 1, NULL), ('7920', 'CISCO', 1, 1, 'cmterm_7920.4.0-03-02', 'loadInformation30002', 0, NULL), ('7921', 'CISCO', 1, 1, 'CP7921G-1.4.6.3', 'loadInformation365', 0, NULL),('7925', 'CISCO', 1, 6, 'CP7925G-1.4.1SR1', 'loadInformation484', 0, NULL), ('7926', 'CISCO', 1, 1, 'CP7926G-1.4.1SR1', 'loadInformation557', 0, NULL), ('7931', 'CISCO', 1, 34, 'SCCP31.9-2-1S', 'loadInformation348', 0, NULL), ('7935', 'CISCO', 1, 2, 'P00503021900', 'loadInformation9', 0, NULL), ('7936', 'CISCO', 1, 1, 'cmterm_7936.3-3-21-0', 'loadInformation30019', 0, NULL), ('7937', 'CISCO', 1, 1, 'apps37sccp.1-4-5-7', 'loadInformation431', 0, 'SEP0000000000.cnf.xml_7937_template'), ('7940', 'CISCO', 1, 2, 'P0030801SR02', 'loadInformation8', 1, 'SEP0000000000.cnf.xml_7940_template'), " .
             "('7941', 'CISCO', 1, 2, 'SCCP41.9-4-2SR3-1S', 'loadInformation115', 0, 'SEP0000000000.cnf.xml_796x_template'),('7941G-GE', 'CISCO', 1, 2, 'SCCP41.9-4-2SR3-1S', 'loadInformation309', 0, 'SEP0000000000.cnf.xml_796x_template'), ('7942', 'CISCO', 1, 2, 'SCCP42.9-4-2SR3-1S', 'loadInformation434', 0, 'SEP0000000000.cnf.xml_796x_template'), ('7945', 'CISCO', 1, 2, 'SCCP45.9-3-1SR1-1S', 'loadInformation435', 0, 'SEP0000000000.cnf.xml_796x_template'), ('7960', 'CISCO', 3, 6, 'P0030801SR02', 'loadInformation7', 1, 'SEP0000000000.cnf.xml_796x_template'), ('7961', 'CISCO', 3, 6, 'SCCP41.9-4-2SR3-1S', 'loadInformation30018', 0, 'SEP0000000000.cnf.xml_796x_template'), ('7961G-GE', 'CISCO', 3, 6, 'SCCP41.9-4-2SR3-1S', 'loadInformation308', 0, 'SEP0000000000.cnf.xml_796x_template'), ('7962', 'CISCO', 3, 6, 'SCCP42.9-4-2SR3-1S', 'loadInformation404', 0, 'SEP0000000000.cnf.xml_796x_template'), ('7965', 'CISCO', 3, 6, 'SCCP45.9-3-1SR1-1S', 'loadInformation436', 0, 'SEP0000000000.cnf.xml_796x_template'), ('7970', 'CISCO', 3, 8, 'SCCP70.9-4-2SR3-1S', 'loadInformation30006', 0, NULL), ('7971', 'CISCO', 1, 2, 'SCCP70.9-4-2SR3-1S', 'loadInformation119', 0, NULL), ('7975', 'CISCO', 3, 8, 'SCCP75.9-4-2SR3-1S', 'loadInformation437', 0, NULL), ('7985', 'CISCO', 3, 8, 'cmterm_7985.4-1-7-0', 'loadInformation302', 0, NULL), ('8941', 'CISCO', 1, 0, 'SCCP894x.9-2-2-0', 'loadInformation586', 0, NULL), ('8945', 'CISCO', 1, 0, 'SCCP894x.9-2-2-0', 'loadInformation585', 0, NULL), ('ATA 186', 'CISCO', 1, 1, 'ATA030204SCCP090202A', 'loadInformation12', 0, 'SEP0000000000.cnf.xml_ATA_template'), ('ATA 187', 'CISCO', 1, 1, 'ATA187.9-2-3-1', 'loadInformation550', 0, 'SEP0000000000.cnf.xml_ATA_template'), ('CN622', 'MOTOROLA', 1, 1, '', 'loadInformation335', 0, NULL), ('Digital Access', 'CISCO', 1, 1, 'D001M022', 'loadInformation40', 0, NULL), ('Digital Access+', 'CISCO', 1, 1, 'D00303010033', 'loadInformation42', 0, NULL), ('E-Series', 'NOKIA', 1, 1, '', '', 0, NULL), ('ICC', 'NOKIA', 1, 1, '', '', 0, NULL), " .
             "('Analog Access', 'CISCO', 1, 1, 'A001C030', 'loadInformation30', 0, ''),('WS-X6608', 'CISCO', 1, 1, 'D00404000032', 'loadInformation43', 0, ''), ('WS-X6624', 'CISCO', 1, 1, 'A00204000013', 'loadInformation43', 0, ''), ('WS-X6608', 'CISCO', 1, 1, 'C00104000003', 'loadInformation51', 0, ''), ('H.323 Phone', 'CISCO', 1, 1, '', 'loadInformation61', 0, ''), ('Simulator', 'CISCO', 1, 1, '', 'loadInformation100', 0, ''), ('MTP', 'CISCO', 1, 1, '', 'loadInformation111', 0, ''), ('MGCP Station', 'CISCO', 1, 1, '', 'loadInformation120', 0, ''), ('MGCP Trunk', 'CISCO', 1, 1, '', 'loadInformation121', 0, ''), ('UPC', 'CISCO', 1, 1, '', 'loadInformation358', 0, ''), ".
-            "('TelePresence', 'TELEPRESENCE', 1, 1, '', 'loadInformation375', 0, ''), ('1000', 'TELEPRESENCE', 1, 1, '', 'loadInformation478', 0, ''), ('3000', 'TELEPRESENCE', 1, 1, '', 'loadInformation479', 0, ''), ('3200', 'TELEPRESENCE', 1, 1, '', 'loadInformation480', 0, ''), ('500-37', 'TELEPRESENCE', 1, 1, '', 'loadInformation481', 0, ''), ('1300-65', 'TELEPRESENCE', 1, 1, '', 'loadInformation505', 0, ''), ('1100', 'TELEPRESENCE', 1, 1, '', 'loadInformation520', 0, ''), ('200', 'TELEPRESENCE', 1, 1, '', 'loadInformation557', 0, ''), ('400', 'TELEPRESENCE', 1, 1, '', 'loadInformation558', 0, ''), ('EX90', 'TELEPRESENCE', 1, 1, '', 'loadInformation584', 0, ''), ('500-32', 'TELEPRESENCE', 1, 1, '', 'loadInformation590', 0, ''), ('1300-47', 'TELEPRESENCE', 1, 1, '', 'loadInformation591', 0, ''), ('TX1310-65', 'TELEPRESENCE', 1, 1, '', 'loadInformation596', 0, ''), ('EX60', 'TELEPRESENCE', 1, 1, '', 'loadInformation604', 0, ''), ('C90', 'TELEPRESENCE', 1, 1, '', 'loadInformation606', 0, ''), ('C60', 'TELEPRESENCE', 1, 1, '', 'loadInformation607', 0, ''), ('C40', 'TELEPRESENCE', 1, 1, '', 'loadInformation608', 0, ''), ('C20', 'TELEPRESENCE', 1, 1, '', 'loadInformation609', 0, ''), ('C20-42', 'TELEPRESENCE', 1, 1, '', 'loadInformation610', 0, ''), ('C60-42', 'TELEPRESENCE', 1, 1, '', 'loadInformation611', 0, ''), ('C40-52', 'TELEPRESENCE', 1, 1, '', 'loadInformation612', 0, ''), ('C60-52', 'TELEPRESENCE', 1, 1, '', 'loadInformation613', 0, ''), ('C60-52D', 'TELEPRESENCE', 1, 1, '', 'loadInformation614', 0, ''),('C60-65', 'TELEPRESENCE', 1, 1, '', 'loadInformation615', 0, ''), ('C90-65', 'TELEPRESENCE', 1, 1, '', 'loadInformation616', 0, ''), ('MX200', 'TELEPRESENCE', 1, 1, '', 'loadInformation617', 0, ''), ('TX9000', 'TELEPRESENCE', 1, 1, '', 'loadInformation619', 0, ''), ('TX9200', 'TELEPRESENCE', 1, 1, '', 'loadInformation620', 0, ''), ('SX20', 'TELEPRESENCE', 1, 1, '', 'loadInformation626', 0, ''), ('MX300', 'TELEPRESENCE', 1, 1, '', 'loadInformation627', 0, ''), ('C40-42', 'TELEPRESENCE', 1, 1, '', 'loadInformation633', 0, ''), ('Jabber', 'CISCO', 1, 1, '', 'loadInformation652', 0, ''), ".        
+            "('TelePresence', 'TELEPRESENCE', 1, 1, '', 'loadInformation375', 0, ''), ('1000', 'TELEPRESENCE', 1, 1, '', 'loadInformation478', 0, ''), ('3000', 'TELEPRESENCE', 1, 1, '', 'loadInformation479', 0, ''), ('3200', 'TELEPRESENCE', 1, 1, '', 'loadInformation480', 0, ''), ('500-37', 'TELEPRESENCE', 1, 1, '', 'loadInformation481', 0, ''), ('1300-65', 'TELEPRESENCE', 1, 1, '', 'loadInformation505', 0, ''), ('1100', 'TELEPRESENCE', 1, 1, '', 'loadInformation520', 0, ''), ('200', 'TELEPRESENCE', 1, 1, '', 'loadInformation557', 0, ''), ('400', 'TELEPRESENCE', 1, 1, '', 'loadInformation558', 0, ''), ('EX90', 'TELEPRESENCE', 1, 1, '', 'loadInformation584', 0, ''), ('500-32', 'TELEPRESENCE', 1, 1, '', 'loadInformation590', 0, ''), ('1300-47', 'TELEPRESENCE', 1, 1, '', 'loadInformation591', 0, ''), ('TX1310-65', 'TELEPRESENCE', 1, 1, '', 'loadInformation596', 0, ''), ('EX60', 'TELEPRESENCE', 1, 1, '', 'loadInformation604', 0, ''), ('C90', 'TELEPRESENCE', 1, 1, '', 'loadInformation606', 0, ''), ('C60', 'TELEPRESENCE', 1, 1, '', 'loadInformation607', 0, ''), ('C40', 'TELEPRESENCE', 1, 1, '', 'loadInformation608', 0, ''), ('C20', 'TELEPRESENCE', 1, 1, '', 'loadInformation609', 0, ''), ('C20-42', 'TELEPRESENCE', 1, 1, '', 'loadInformation610', 0, ''), ('C60-42', 'TELEPRESENCE', 1, 1, '', 'loadInformation611', 0, ''), ('C40-52', 'TELEPRESENCE', 1, 1, '', 'loadInformation612', 0, ''), ('C60-52', 'TELEPRESENCE', 1, 1, '', 'loadInformation613', 0, ''), ('C60-52D', 'TELEPRESENCE', 1, 1, '', 'loadInformation614', 0, ''),('C60-65', 'TELEPRESENCE', 1, 1, '', 'loadInformation615', 0, ''), ('C90-65', 'TELEPRESENCE', 1, 1, '', 'loadInformation616', 0, ''), ('MX200', 'TELEPRESENCE', 1, 1, '', 'loadInformation617', 0, ''), ('TX9000', 'TELEPRESENCE', 1, 1, '', 'loadInformation619', 0, ''), ('TX9200', 'TELEPRESENCE', 1, 1, '', 'loadInformation620', 0, ''), ('SX20', 'TELEPRESENCE', 1, 1, '', 'loadInformation626', 0, ''), ('MX300', 'TELEPRESENCE', 1, 1, '', 'loadInformation627', 0, ''), ('C40-42', 'TELEPRESENCE', 1, 1, '', 'loadInformation633', 0, ''), ('Jabber', 'CISCO', 1, 1, '', 'loadInformation652', 0, ''), ".
             "('S60', 'NOKIA', 0, 1, '', 'loadInformation376', 0, ''), ('9971', 'CISCO', 1, 1, '', 'loadInformation493', 0, ''), ('9951', 'CISCO', 1, 1, '', 'loadInformation537', 0, ''), ('8961', 'CISCO', 1, 1, '', 'loadInformation540', 0, ''), ('Iphone', 'APPLE', 0, 1, '', 'loadInformation562', 0, ''), ('Android', 'ANDROID', 0, 1, '', 'loadInformation575', 0, ''), ('7926', 'CISCO', 1, 1, 'CP7926G-1.4.5.3', 'loadInformation577', 0, ''), ('7821', 'CISCO', 1, 1, '', 'loadInformation621', 0, ''), ('7841', 'CISCO', 1, 1, '', 'loadInformation622', 0, ''), ('7861', 'CISCO', 1, 1, '', 'loadInformation623', 0, ''), ('VXC 6215', 'CISCO', 1, 1, '', 'loadInformation634', 0, ''), ('8831', 'CISCO', 1, 1, '', 'loadInformation659', 0, ''), ('8841', 'CISCO', 1, 1, '', 'loadInformation683', 0, ''), ('8851', 'CISCO', 1, 1, '', 'loadInformation684', 0, ''), ('8861', 'CISCO', 1, 1, '', 'loadInformation685', 0, ''), ".
             "('Analog', 'CISCO', 1, 1, '', 'loadInformation30027', 0, ''), ('ISDN', 'CISCO', 1, 1, '', 'loadInformation30028', 0, ''), ('SCCP GW', 'CISCO', 1, 1, '', 'loadInformation30032', 0, ''), ('IP-STE', 'CISCO', 1, 1, '', 'loadInformation30035', 0, ''), ".
             "('SPA 521S', 'CISCO', 1, 1, '', 'loadInformation80000', 0, ''), ('SPA 502G', 'CISCO', 1, 1, '', 'loadInformation80003', 0, ''), ('SPA 504G', 'CISCO', 1, 1, '', 'loadInformation80004', 0, ''), ('SPA 525G', 'CISCO', 1, 1, '', 'loadInformation80005', 0, ''), ('SPA 525G2', 'CISCO', 1, 1, '', 'loadInformation80009', 0, ''), ('SPA 303G', 'CISCO', 1, 1, '', 'loadInformation80011', 0, ''),".
@@ -678,7 +689,8 @@ function InstallDB_fillsccpdevmodel() {
     return true;
 }
 
-function InstallDB_updateSccpDevice() {
+function InstallDB_updateSccpDevice()
+{
     global $db;
     outn("<li>" . _("Update sccpdevice") . "</li>");
     $sql = "UPDATE `sccpdevice` set audio_tos='0xB8',audio_cos='6',video_tos='0x88',video_cos='5' where audio_tos=NULL or audio_tos='';";
@@ -688,7 +700,8 @@ function InstallDB_updateSccpDevice() {
     }
 }
 
-function InstallDB_createButtonConfigTrigger() {
+function InstallDB_createButtonConfigTrigger()
+{
     global $db;
     outn("<li>" . _("(Re)Create buttonconfig trigger") . "</li>");
     $sql = "DROP TRIGGER IF EXISTS sccp_trg_buttonconfig;";
@@ -722,7 +735,8 @@ function InstallDB_createButtonConfigTrigger() {
 //    outn("<li>" . $sql . "</li>");
     return true;
 }
-function InstallDB_updateDBVer($sccp_compatible) {
+function InstallDB_updateDBVer($sccp_compatible)
+{
     global $db;
     outn("<li>" . _("Update DB Ver") . "</li>");
     $sql = "REPLACE INTO `sccpsettings` (`keyword`, `data`, `seq`, `type`), VALUES ('SccpDBmodel', '"+$sccp_compatible+ "','30','0');";
@@ -730,10 +744,11 @@ function InstallDB_updateDBVer($sccp_compatible) {
     if (DB::IsError($check)) {
         die_freepbx(sprintf(_("Error updating sccpdeviceconfig view. Command was: %s; error was: %s "), $sql, $results->getMessage()));
     }
-    return true;                  
+    return true;
 }
 
-function InstallDB_CreateSccpDeviceConfigView($sccp_compatible) {
+function InstallDB_CreateSccpDeviceConfigView($sccp_compatible)
+{
     global $db;
     outn("<li>" . _("(Re)Create sccpdeviceconfig view") . "</li>");
     $sql = "";
@@ -762,11 +777,11 @@ function InstallDB_CreateSccpDeviceConfigView($sccp_compatible) {
         GROUP BY sccpdevice.name;";
     } else {
   /*      $sql = "
-        CREATE OR REPLACE 
+        CREATE OR REPLACE
             ALGORITHM = MERGE
             VIEW sccpdeviceconfig AS
-        SELECT  IF(sccpdevice._profileid = 0, 
-            GROUP_CONCAT(CONCAT_WS( ',', defbutton.buttontype, defbutton.name, defbutton.options )  ORDER BY defbutton.instance ASC SEPARATOR ';' ), 
+        SELECT  IF(sccpdevice._profileid = 0,
+            GROUP_CONCAT(CONCAT_WS( ',', defbutton.buttontype, defbutton.name, defbutton.options )  ORDER BY defbutton.instance ASC SEPARATOR ';' ),
             GROUP_CONCAT( CONCAT_WS( ',', userbutton.buttontype, userbutton.name, userbutton.options )  ORDER BY userbutton.instance ASC SEPARATOR ';' )
             ) AS button,
             sccpdevice.*
@@ -775,28 +790,27 @@ function InstallDB_CreateSccpDeviceConfigView($sccp_compatible) {
            LEFT JOIN sccpbuttonconfig userbutton ON ( userbutton.ref = sccpdevice._loginname )
            LEFT JOIN sccpline ON ( sccpline.name = sccpdevice._loginname)
         GROUP BY sccpdevice.name;";
-*/      
+*/
         $sql = "DROP VIEW IF EXISTS `sccpdeviceconfig`;
                 DROP VIEW IF EXISTS `sccpuserconfig`;";
         ///    global $hw_mobil;
         
         global $mobile_hw;
         if ($mobile_hw == '1') {
-         $sql .= "CREATE OR REPLACE ALGORITHM = MERGE VIEW sccpdeviceconfig AS
+            $sql .= "CREATE OR REPLACE ALGORITHM = MERGE VIEW sccpdeviceconfig AS
             SELECT GROUP_CONCAT( CONCAT_WS( ',', sccpbuttonconfig.buttontype, sccpbuttonconfig.name, sccpbuttonconfig.options )
             ORDER BY instance ASC SEPARATOR ';' ) AS sccpbutton, sccpdevice.*
             FROM sccpdevice
             LEFT JOIN sccpbuttonconfig ON (sccpbuttonconfig.reftype = 'sccpdevice' AND sccpbuttonconfig.ref = sccpdevice.name )
             GROUP BY sccpdevice.name; ";
-        $sql .=  "CREATE OR REPLACE ALGORITHM = MERGE VIEW sccpuserconfig AS
+            $sql .=  "CREATE OR REPLACE ALGORITHM = MERGE VIEW sccpuserconfig AS
             SELECT GROUP_CONCAT( CONCAT_WS( ',', sccpbuttonconfig.buttontype, sccpbuttonconfig.name, sccpbuttonconfig.options )
             ORDER BY instance ASC SEPARATOR ';' ) AS button, sccpuser.*
             FROM sccpuser
             LEFT JOIN sccpbuttonconfig ON ( sccpbuttonconfig.reftype = 'sccpuser' AND sccpbuttonconfig.ref = sccpuser.id)
             GROUP BY sccpuser.name; ";
-         
         } else {
-         $sql .= "CREATE OR REPLACE 
+            $sql .= "CREATE OR REPLACE 
                 ALGORITHM = MERGE
                 VIEW sccpdeviceconfig AS
             SELECT  case sccpdevice._profileid 
@@ -810,7 +824,7 @@ function InstallDB_CreateSccpDeviceConfigView($sccp_compatible) {
             FROM sccpdevice
             LEFT JOIN sccpuser sccpuser ON ( sccpuser.name = sccpdevice._loginname )
             GROUP BY sccpdevice.name;";
-        } 
+        }
     }
     $results = $db->query($sql);
     if (DB::IsError($check)) {
@@ -818,7 +832,8 @@ function InstallDB_CreateSccpDeviceConfigView($sccp_compatible) {
     }
     return true;
 }
-function CreateBackUpConfig() {
+function CreateBackUpConfig()
+{
     global $amp_conf;
     outn("<li>" . _("Create Config BackUp") . "</li>");
     $cnf_int = \FreePBX::Config();
@@ -827,7 +842,7 @@ function CreateBackUpConfig() {
     $dir = $cnf_int->get('ASTETCDIR');
 
     $fsql = $dir.'/sccp_backup_'.date("Ymd").'.sql';
-    $result = exec('mysqldump '.$amp_conf['AMPDBNAME'].' --password='.$amp_conf['AMPDBPASS'].' --user='.$amp_conf['AMPDBUSER'].' --single-transaction >'.$fsql ,$output);
+    $result = exec('mysqldump '.$amp_conf['AMPDBNAME'].' --password='.$amp_conf['AMPDBPASS'].' --user='.$amp_conf['AMPDBUSER'].' --single-transaction >'.$fsql, $output);
     
     $zip = new \ZipArchive();
     $filename = $dir . "/sccp_instal_backup" . date("Ymd"). ".zip";
@@ -850,7 +865,8 @@ function CreateBackUpConfig() {
     outn("<li>" . _("Create Config BackUp: ") . $filename ."</li>");
 }
 
-function RenameConfig() {
+function RenameConfig()
+{
     global $amp_conf;
     outn("<li>" . _("Move Old Config") . "</li>");
     $cnf_int = \FreePBX::Config();
@@ -866,7 +882,8 @@ function RenameConfig() {
     }
 }
 
-function Setup_RealTime() {
+function Setup_RealTime()
+{
     global $amp_conf;
     outn("<li>" . _("Pre config RealTime") . "</li>");
     $cnf_int = \FreePBX::Config();
@@ -945,7 +962,7 @@ CheckSCCPManagerDBTables($table_req);
 #CheckPermissions();
 CheckAsteriskVersion();
 $sccp_compatible = CheckChanSCCPCompatible();
-if ($sccp_compatible == 0)  {
+if ($sccp_compatible == 0) {
 //    die_freepbx('Chan Sccp not Found. Install it before continuing');
     outn("<br>");
     outn("<font color='red'>Chan Sccp not Found. Install it before continuing !</font>");

@@ -1,6 +1,6 @@
 <?php
 
-/* 
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -11,7 +11,7 @@ $def_val = null;
 $dev_id = null;
 $sccp_codec = $this->getCodecs('audio', true);
 $video_codecs = $this->getCodecs('video', true);
-$sccp_disalow_def = $this->extconfigs->getextConfig('sccpDefaults','disallow');
+$sccp_disalow_def = $this->extconfigs->getextConfig('sccpDefaults', 'disallow');
 $sccp_disalow = $sccp_disalow_def;
 
 if (!empty($_REQUEST['id'])) {
@@ -19,7 +19,7 @@ if (!empty($_REQUEST['id'])) {
     $db_res = $this->dbinterface->get_db_SccpTableData('get_sccpdevice_byid', array("id" => $dev_id));
     if (!empty($db_res['allow'])) {
         $i = 1;
-        foreach(explode(';', $db_res['allow']) as $c){
+        foreach (explode(';', $db_res['allow']) as $c) {
             $codec_list[$c] = $i;
             $i ++;
         }
@@ -29,10 +29,9 @@ if (!empty($_REQUEST['id'])) {
             }
         }
     }
-   if (!empty($db_res['disallow'])) {
-       $sccp_disalow = $db_res['disallow'];
-   }
-
+    if (!empty($db_res['disallow'])) {
+        $sccp_disalow = $db_res['disallow'];
+    }
 } else {
     $codec_list = $sccp_codec;
 }

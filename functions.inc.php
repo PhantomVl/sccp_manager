@@ -22,41 +22,52 @@
 
  */
 
-function after($this, $inthat) {
-    if (!is_bool(strpos($inthat, $this)))
+function after($this, $inthat)
+{
+    if (!is_bool(strpos($inthat, $this))) {
         return substr($inthat, strpos($inthat, $this) + strlen($this));
+    }
 }
 
-function after_last($this, $inthat) {
-    if (!is_bool(strrevpos($inthat, $this)))
+function after_last($this, $inthat)
+{
+    if (!is_bool(strrevpos($inthat, $this))) {
         return substr($inthat, strrevpos($inthat, $this) + strlen($this));
+    }
 }
 
-function before($this, $inthat) {
+function before($this, $inthat)
+{
     return substr($inthat, 0, strpos($inthat, $this));
 }
 
-function before_last($this, $inthat) {
+function before_last($this, $inthat)
+{
     return substr($inthat, 0, strrevpos($inthat, $this));
 }
 
-function between($this, $that, $inthat) {
+function between($this, $that, $inthat)
+{
     return before($that, after($this, $inthat));
 }
 
-function between_last($this, $that, $inthat) {
+function between_last($this, $that, $inthat)
+{
     return after_last($this, before_last($that, $inthat));
 }
 
-function strrevpos($instr, $needle) {
+function strrevpos($instr, $needle)
+{
     $rev_pos = strpos(strrev($instr), strrev($needle));
-    if ($rev_pos === false)
+    if ($rev_pos === false) {
         return false;
-    else
+    } else {
         return strlen($instr) - $rev_pos - strlen($needle);
+    }
 }
 
-function strpos_array($haystack, $needles) {
+function strpos_array($haystack, $needles)
+{
     if (is_array($needles)) {
         foreach ($needles as $str) {
             if (is_array($str)) {
@@ -64,14 +75,12 @@ function strpos_array($haystack, $needles) {
             } else {
                 $pos = strpos($haystack, $str);
             }
-            if ($pos !== FALSE) {
+            if ($pos !== false) {
                 return $pos;
             }
         }
     } else {
         return strpos($haystack, $needles);
     }
-    return FALSE;
+    return false;
 }
-
-?>

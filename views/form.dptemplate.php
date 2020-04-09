@@ -1,6 +1,6 @@
 <?php
 
-/* 
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -22,7 +22,7 @@ if ($dev_id != '*new*') {
         foreach ($dialFelds as $fld) {
             if (isset($value[$fld])) {
                 $data_s .=(string)$value[$fld];
-            } 
+            }
             $data_s .= '/';
         }
         $data_s = substr($data_s, 0, -1);
@@ -37,12 +37,12 @@ if ($dev_id != '*new*') {
 
 <form autocomplete="off" name="frm_editdialtemplate" id="frm_editbuttons" class="fpbx-submit" action="" method="post" data-id="dial_template">
     
-    <input type="hidden" name="idtemplate" value="<?php echo str_replace('dial','',$dev_id);?>">
+    <input type="hidden" name="idtemplate" value="<?php echo str_replace('dial', '', $dev_id);?>">
     <input type="hidden" name="Submit" value="Submit">
-    <?php  
-      if ($dev_id == '*new*') {
-        echo $this->ShowGroup('sccp_dp_new_template',0,'sccp_dial',$def_val);
-      }
+    <?php
+    if ($dev_id == '*new*') {
+        echo $this->ShowGroup('sccp_dp_new_template', 0, 'sccp_dial', $def_val);
+    }
     ?>    
     
     <div class="panel panel-default">
@@ -73,8 +73,8 @@ if ($dev_id != '*new*') {
     </div>
     
     
-<?php    
+<?php
 //    echo $this->ShowGroup('sccp_dp_new_template',0,'sccp_dial',$def_val);
-    echo $this->ShowGroup('sccp_dp_template',0,'sccp_dial',$def_val);
+    echo $this->ShowGroup('sccp_dp_template', 0, 'sccp_dial', $def_val);
 ?>    
 </form>

@@ -87,7 +87,7 @@
                         <label class="control-label" for="new_dns"><?php echo _('Expansion Module');?></label>
                         <i class="fa fa-question-circle fpbx-help-icon" data-for="new_dns"></i>
                     </div><div class="col-md-9">
-                	<select name="new_dns" id="new_dns">
+                    <select name="new_dns" id="new_dns">
                             <option value="1">Phone - no sidecars.</option>
                             <option value="2">Phone - one sidecar.</option>
                             <option value="3">Phone - two sidecars.</option>
@@ -204,8 +204,8 @@
 
 <script>
     function StatusIconFormatter(value, row) {
-		return (value === '1') ? '<i class="fa fa-check-square-o" style="color:green" title="<?php echo _("Device is enabled")?>"></i>' : '<i class="fa fa-square-o" title="<?php echo _("Device is disabled")?>"></i>';
-	}
+        return (value === '1') ? '<i class="fa fa-check-square-o" style="color:green" title="<?php echo _("Device is enabled")?>"></i>' : '<i class="fa fa-square-o" title="<?php echo _("Device is disabled")?>"></i>';
+    }
     function DisplayDnsFormatter(value, row, index) {
         var exp_model = ['Expansion Module', 'Not Available', 'One ExpModule', 'Two ExpModule'];
         return  exp_model[value];

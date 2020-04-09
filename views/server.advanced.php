@@ -1,6 +1,6 @@
 <?php
 
-/* 
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -12,7 +12,7 @@
     
 <?php
     
-        echo $this->ShowGroup('sccp_srst',1);
+        echo $this->ShowGroup('sccp_srst', 1);
 //        echo $this->ShowGroup('sccp_dev_time',1);
 
 ?>  

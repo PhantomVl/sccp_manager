@@ -1,31 +1,35 @@
 <?php
 
 /**
- * 
+ *
  */
 
 namespace FreePBX\modules\Sccp_manager;
 
-class sipconfigs {
+class sipconfigs
+{
 //    protected $database;
 //    protected $freepbx;
     
-    public function __construct($parent_class = null) {
+    public function __construct($parent_class = null)
+    {
         $this->paren_class = $parent_class;
 //        $freepbx
 //        $this->database = $freepbx->Database;
     }
 
-    public function info() {
+    public function info()
+    {
         $Ver = '13.0.4';
-        return Array('Version' => $Ver,
+        return array('Version' => $Ver,
             'about' => 'Sip Setings ver: ' . $Ver);
     }
 
-    public function get_db_sip_TableData($dataid, $data = array()) {
+    public function get_db_sip_TableData($dataid, $data = array())
+    {
         global $db;
         if ($dataid == '') {
-            return False;
+            return false;
         }
         switch ($dataid) {
             case "Device":
@@ -40,7 +44,6 @@ class sipconfigs {
                         $tech[$value['id']][$value['keyword']]=$value['data'];
                     }
                 } catch (\Exception $e) {
-            
                 }
                 return $tech;
             case "DeviceById":
@@ -55,14 +58,13 @@ class sipconfigs {
                         $value = $value[0];
                     }
                 } catch (\Exception $e) {
-            
                 }
                 return $tech;
         }
-        
     }
 
-    public function getSipConfig() {
+    public function getSipConfig()
+    {
         $result = array();
 //        $def_sip_proto = 'sip';
 //        $def_proto = 'tcp';
@@ -74,17 +76,17 @@ class sipconfigs {
         $tmp_binds = \FreePBX::Sipsettings()->getBinds();
         $if_list = $this->paren_class ->getIP_information2('ip4');
         
-/*        
+/*
         $tmp_bind_ip = !empty($tmp_sipsetigs['externhost_val']) ? $tmp_sipsetigs['externhost_val'] : '';
         $tmp_bind_ip = !empty($tmp_sipsetigs['externip_val']) ? $tmp_sipsetigs['externip_val'] : $tmp_bind_ip;
         $tmp_bind_ip = !empty($tmp_sipsetigs['bindaddr']) ? $tmp_sipsetigs['bindaddr'] : $tmp_bind_ip;
-  */      
+  */
         $tmp_binds = is_array($tmp_binds) ? $tmp_binds: array();
         $result = array();
-        foreach($tmp_binds as $f_protocol => $f_bind) {            
-            foreach($f_bind as $f_ip => $f_port) {
+        foreach ($tmp_binds as $f_protocol => $f_bind) {
+            foreach ($f_bind as $f_ip => $f_port) {
                 if (($f_ip == '0.0.0.0') || ($f_ip == '[::]')) {
-                    foreach($if_list as $f_if => $f_data) {
+                    foreach ($if_list as $f_if => $f_data) {
                         if ($f_data['ip'] == "127.0.0.1") {
                             continue;
                         }
@@ -104,7 +106,7 @@ class sipconfigs {
             $def_proto = 'pjsip';
         }
         return $result;
-        
+
         foreach ($tmp_sip_binds[$def_sip_proto] as $key => $value) {
             if (empty($value[$def_proto])) {
                 $def_proto = 'udp';
@@ -119,10 +121,10 @@ class sipconfigs {
                 $tmp_bind_ip = $key;
             }
             $result['sipbindport'] = $value[$def_proto];
-        }  
+        }
         $result['sipbind'] = $tmp_bind_ip;
         $result['sipsuportproto'] = $supp_proto;
-        
+
         $binds= array();
         $driver = \FreePBX::Config()->get_conf_setting('ASTSIPDRIVER');
             if ($driver == "both" || $driver == "chan_pjsip") {
@@ -145,13 +147,13 @@ class sipconfigs {
             } else {
                 $binds['pjsip'] = array("0.0.0.0" => array());
             }
-        
+
         $result['nd'] = $driver;
-        
+
         $result['nb'] = $binds;
         $result['nb2'] = $b;
         return $result;
- * 
+ *
  */
     }
 }

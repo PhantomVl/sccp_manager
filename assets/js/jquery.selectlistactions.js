@@ -1,11 +1,4 @@
-﻿/**
- *  jQuery.SelectListActions
- *  https://github.com/esausilva/jquery.selectlistactions.js
- *
- *  (c) http://esausilva.com
- */
-
-(function ($) {
+﻿(function ($) {
     //Moves selected item(s) from sourceList to destinationList
     $.fn.moveToList = function (sourceList, destinationList) {
         var opts = $(sourceList + ' option:selected');

@@ -10,13 +10,15 @@
 
 namespace FreePBX\modules\Sccp_manager;
 
-class srvinterface {
+class srvinterface
+{
 
     var $error;
     var $_info;
     var $ami_mode;
 
-    public function __construct($parent_class = null) {
+    public function __construct($parent_class = null)
+    {
         $this->paren_class = $parent_class;
         if ($this->paren_class == null) {
             $this->paren_class = $this;
@@ -49,17 +51,19 @@ class srvinterface {
         $this->ami_mode = $this->aminterface->status();
     }
 
-    public function info() {
+    public function info()
+    {
         $Ver = '14.0.1';
         $info = '';
         foreach ($this->_info as $key => $value) {
             $info .= $value['about'] . "\n  ";
         }
-        return Array('Version' => $Ver,
+        return array('Version' => $Ver,
             'about' => 'Server interface data ver: ' . $Ver . "\n  " . $info);
     }
 
-    public function sccp_device_reset($id = '') {
+    public function sccp_device_reset($id = '')
+    {
         if ($this->ami_mode) {
             return $this->aminterface->sccp_device_reset($id, 'reset');
         } else {
@@ -67,7 +71,8 @@ class srvinterface {
         }
     }
 
-    public function sccp_device_restart($id = '') {
+    public function sccp_device_restart($id = '')
+    {
         if ($this->ami_mode) {
             return $this->aminterface->sccp_device_reset($id, 'restart');
         } else {
@@ -75,7 +80,8 @@ class srvinterface {
         }
     }
 
-    public function sccp_device_reload($id = '') {
+    public function sccp_device_reload($id = '')
+    {
         if ($this->ami_mode) {
             return $this->aminterface->sccp_device_reset($id, 'full');
         } else {
@@ -83,7 +89,8 @@ class srvinterface {
         }
     }
 
-    public function sccp_reset_token($id = '') {
+    public function sccp_reset_token($id = '')
+    {
         if ($this->ami_mode) {
             return $this->aminterface->sccp_device_reset($id, 'tokenack');
         } else {
@@ -91,16 +98,18 @@ class srvinterface {
         }
     }
 
-    public function sccp_reload() {
+    public function sccp_reload()
+    {
         if ($this->ami_mode) {
             return $this->aminterface->core_sccp_reload();
-//            return  $this->oldinterface->sccp_core_commands(array('cmd' => 'sccp_reload')); // !!!!!!!!!!!!!!!!!!!!!!!!!--------------------------- Remove 
+//            return  $this->oldinterface->sccp_core_commands(array('cmd' => 'sccp_reload')); // !!!!!!!!!!!!!!!!!!!!!!!!!--------------------------- Remove
         } else {
             return $this->oldinterface->sccp_core_commands(array('cmd' => 'sccp_reload'));
         }
     }
 
-    public function sccp_line_reload($id = '') {
+    public function sccp_line_reload($id = '')
+    {
         if ($this->ami_mode) {
             return $this->oldinterface->sccp_core_commands(array('cmd' => 'reload_line', 'name' => $id));
         } else {
@@ -108,7 +117,8 @@ class srvinterface {
         }
     }
 
-    private function sccp_core_commands($params = array()) {
+    private function sccp_core_commands($params = array())
+    {
 
         if ($this->ami_mode) {
             if (!empty($params['cmd'])) {
@@ -133,7 +143,7 @@ class srvinterface {
 //                        break;
 //                    case 'get_realtime_status':
 //                        break;
-//                  case 'phone_call':                    
+//                  case 'phone_call':
 //                  case 'phone_message':
 
                     case 'get_softkey':
@@ -154,7 +164,8 @@ class srvinterface {
         }
     }
 
-    public function sccp_getdevice_info($dev_id) {
+    public function sccp_getdevice_info($dev_id)
+    {
         if (empty($dev_id)) {
             return array();
         }
@@ -165,7 +176,8 @@ class srvinterface {
         }
     }
 
-    public function sccp_list_hints() {
+    public function sccp_list_hints()
+    {
         if ($this->ami_mode) {
             return $this->aminterface->core_list_hints();
         } else {
@@ -173,7 +185,8 @@ class srvinterface {
         }
     }
 
-    public function sccp_list_all_hints() {
+    public function sccp_list_all_hints()
+    {
 
         if ($this->ami_mode) {
             return $this->aminterface->core_list_all_hints();
@@ -182,7 +195,8 @@ class srvinterface {
         }
     }
 
-    public function sccp_realtime_status() {
+    public function sccp_realtime_status()
+    {
         if (!$this->ami_mode) {
             return $this->oldinterface->sccp_realtime_status();
         } else {
@@ -199,7 +213,8 @@ class srvinterface {
         }
     }
 
-    public function get_compatible_sccp() {
+    public function get_compatible_sccp()
+    {
 
         $res = $this->getSCCPVersion();
         if (empty($res)) {
@@ -230,7 +245,8 @@ class srvinterface {
 //        return $res["vCode"];
     }
 
-    public function getSCCPVersion() {
+    public function getSCCPVersion()
+    {
         $res = $this->getChanSCCPVersion();
         if (empty($res)) {
             $res = $this->oldinterface->getCoreSCCPVersion();
@@ -238,7 +254,8 @@ class srvinterface {
         return $res;
     }
 
-    public function sccp_list_keysets() {
+    public function sccp_list_keysets()
+    {
 
         if ($this->ami_mode) {
             return $this->aminterface->sccp_list_keysets();
@@ -247,7 +264,8 @@ class srvinterface {
         }
     }
 
-    public function sccp_get_active_device() {
+    public function sccp_get_active_device()
+    {
         if ($this->ami_mode) {
             return $this->aminterface->sccp_get_active_device();
         } else {
@@ -255,7 +273,8 @@ class srvinterface {
         }
     }
 
-    function getChanSCCPVersion() {
+    function getChanSCCPVersion()
+    {
         if (!$this->ami_mode) {
             return $this->oldinterface->getChanSCCPVersion();
         } else {
@@ -274,7 +293,7 @@ class srvinterface {
                         case "2":
                             $result["vCode"] = 420;
                             break;
-                        case 3. . .5 :
+                        case 3. . .5:
                             $result["vCode"] = 430;
                             break;
                         default:
@@ -318,7 +337,8 @@ class srvinterface {
     }
 
     // ---------------------------- Debug Data -------------------------------------------
-    function t_get_ami_data() {
+    function t_get_ami_data()
+    {
         global $amp_conf;
         $fp = fsockopen("127.0.0.1", "5038", $errno, $errstr, 10);
         if (!$fp) {
@@ -336,12 +356,12 @@ class srvinterface {
 //            fputs($fp,"DeviceName: SEP00070E36555C\r\n");
 
 //        fputs ($fp,"Action: DeviceStateList\r\n");
-        fputs ($fp,"Action: SCCPShowDevices\r\n");
-        fputs($fp,"Segment: general\r\n");
+            fputs($fp, "Action: SCCPShowDevices\r\n");
+            fputs($fp, "Segment: general\r\n");
 
 //        fputs ($fp,"Action: SCCPShowDevice\r\n");
 //        fputs ($fp,"DeviceName: SEP00070E36555C\r\n");
-//        
+//
 //            fputs($fp, "Action: ExtensionStateList\r\n");
 //            fputs($fp, "Action: ExtensionStateList\r\n");
 //            fputs($fp, "Command: sccp show version\r\n");
@@ -391,5 +411,4 @@ class srvinterface {
         fclose($fp);
         return $resp;
     }
-
 }

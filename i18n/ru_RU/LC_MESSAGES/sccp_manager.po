@@ -154,7 +154,7 @@ msgstr "Внешний адрес"
 #: views/sccpgeneral.xml:
 msgid ""
 "External IP Address of the firewall, required in case the PBX is running on "
-"a seperatehost behind it. IP Address that we're going to notify in RTP media "
+"a separatehost behind it. IP Address that we're going to notify in RTP media "
 "stream as the pbx source address."
 msgstr ""
 "Внешнее имя FQDN в системе DNS на внешнем интерфейсе (WAN) роутера, которое "
@@ -504,7 +504,7 @@ msgid "NTP Server name or IP"
 msgstr "Адрес Сервера NTP"
 
 #: views/sccpgeneral.xml:
-msgid "Configure NTP Server protocol time syncronization"
+msgid "Configure NTP Server protocol time synchronization"
 msgstr "Настойка протокола синхронизации времени"
 
 #: views/sccpgeneral.xml:
@@ -1306,7 +1306,7 @@ msgid "Close"
 msgstr "Закрыть"
 
 #: views/server.model:
-msgid "Add New model whithout Enabled"
+msgid "Add New model without Enabled"
 msgstr "Добавить шаблон как неактивный"
 
 #: views/server.model:

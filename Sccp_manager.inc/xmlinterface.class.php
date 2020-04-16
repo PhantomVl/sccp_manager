@@ -36,7 +36,9 @@ class xmlinterface
         if (empty($store_path) || empty($data_path) || empty($data_values)) {
             return;
         }
-        $def_xml_fields = array('authenticationURL', 'informationURL', 'messagesURL', 'servicesURL', 'directoryURL', 'proxyServerURL', 'idleTimeout', 'idleURL');
+        $def_xml_fields = array('authenticationURL',       'informationURL',       'messagesURL',       'servicesURL',       'directoryURL', 
+                                'secureauthenticationURL', 'secureinformationURL', 'securemessagesURL', 'secureservicesURL', 'securedirectoryURL', 'secureidleURL', 
+                                'proxyServerURL', 'idleTimeout', 'idleURL');
         $def_xml_locale = array('userLocale', 'networkLocaleInfo', 'networkLocale');
         $xml_name = $store_path . '/XMLDefault.cnf.xml';
         $xml_template = $data_values['tftp_path'] . '/templates/XMLDefault.cnf.xml_template';
@@ -67,9 +69,10 @@ class xmlinterface
                 if (!empty($data_values['dev_' . $value])) {
                     $xml_work->$value = trim($data_values['dev_' . $value]);
                 } else {
-//                    $xml_work->$value = '';
                     $node = $xml_work->$value;
-                    unset($node[0][0]);
+                    if (!empty($node)) {
+                        unset($node[0][0]);
+                    }
                 }
             }
             foreach ($def_xml_locale as $key) {
@@ -118,11 +121,14 @@ class xmlinterface
 
     function create_SEP_XML($store_path = '', $data_values = array(), $dev_config = array(), $dev_id = '', $lang_info = array())
     {
-
-        $var_xml_general_fields = array('authenticationURL' => 'dev_authenticationURL', 'informationURL' => 'dev_informationURL', 'messagesURL' => 'dev_messagesURL',
-            'servicesURL' => 'dev_servicesURL', 'directoryURL' => 'dev_directoryURL', 'proxyServerURL' => 'dev_proxyServerURL', 'idleTimeout' => 'dev_idleTimeout',
-            'idleURL' => 'dev_idleURL', 'sshUserId' => 'dev_sshUserId', 'sshPassword' => 'dev_sshPassword', 'deviceProtocol' => 'dev_deviceProtocol',
-            'phonePersonalization' => 'phonePersonalization'
+        $var_xml_general_fields = array('authenticationurl' => 'dev_authenticationURL', 'informationurl' => 'dev_informationURL', 'messagesurl' => 'dev_messagesURL',
+            'servicesurl' => 'dev_servicesURL', 'directoryurl' => 'dev_directoryURL', 'idleurl' => 'dev_idleURL', 
+            'secureauthenticationurl' => 'dev_secureauthenticationURL', 
+            'secureinformationurl' => 'dev_secureinformationURL', 'securemessagesurl'=>'dev_securemessagesURL', 
+            'secureservicesurl'=>'dev_secureservicesURL',  'securedirectoryurl'=>'dev_securedirectoryURL', 'secureidleurl' => 'dev_secureidleURL', 
+            'proxyserverurl' => 'dev_proxyServerURL', 'idletimeout' => 'dev_idleTimeout',
+            'sshuserid' => 'dev_sshUserId', 'sshpassword' => 'dev_sshPassword', 'deviceprotocol' => 'dev_deviceProtocol',
+            'phonepersonalization' => 'phonePersonalization'
         );
         $var_xml_general_vars = array('capfAuthMode' => 'null', 'capfList' => 'null', 'mobility' => 'null',
             'phoneServices' => 'null', 'certHash' => 'null',
@@ -161,17 +167,18 @@ class xmlinterface
 
             foreach ($xml_work as $key => $data) {
 //              Set System global Values
-                if (!empty($var_xml_general_fields[$key])) {
-                    $xml_work->$key = $data_values[$var_xml_general_fields[$key]];
+                $key_l = strtolower($key);
+                if (!empty($var_xml_general_fields[$key_l])) {
+                    $xml_work->$key = $data_values[$var_xml_general_fields[$key_l]];
                 }
 //              Set section Values
                 $xml_node = $xml_work->$key;
-                switch ($key) {
-                    case 'devicePool':
+                switch ($key_l) {
+                    case 'devicepool':
                         $xml_node = $xml_work->$key;
                         foreach ($xml_work->$key->children() as $dkey => $ddata) {
-                            switch ($dkey) {
-                                case 'dateTimeSetting':
+                            switch (strtolower($dkey)) {
+                                case 'datetimesetting':
                                     $xnode = &$xml_node->$dkey;
                                     $tz_id = $data_values['ntp_timezone'];
                                     $TZdata = $data_values['ntp_timezone_id'];
@@ -191,7 +198,7 @@ class xmlinterface
                                     }
                                     // Ntp Config
                                     break;
-                                case 'srstInfo':
+                                case 'srstinfo':
                                     if ($data_values['srst_Option'] == 'user') {
                                         break;
                                     }
@@ -224,10 +231,10 @@ class xmlinterface
                                         }
                                     }
                                     break;
-                                case 'connectionMonitorDuration':
+                                case 'connectionmonitorduration':
                                     $xml_node->$dkey = strval(intval(intval($data_values['keepalive']) * 0.75));
                                     break;
-                                case 'callManagerGroup':
+                                case 'callmanagergroup':    
                                     $xnode = &$xml_node->$dkey->members;
                                     $bind_tmp = $this->get_server_sccp_bind($data_values);
                                     $ifc = 0;
@@ -235,8 +242,15 @@ class xmlinterface
                                         $xnode_obj = clone $xnode->member;
                                         $xnode_obj['priority'] = $ifc;
                                         $xnode_obj->callManager->name = $data_values['servername'];
+                                        if (!is_null($xnode_obj->callManager->description)) {
+                                            $xnode_obj->callManager->description = $data_values['servername'];
+                                        }
                                         $xnode_obj->callManager->ports->ethernetPhonePort = $bind_value['port'];
                                         $xnode_obj->callManager->processNodeName = $bind_value['ip'];
+                                        if (!empty($xnode_obj->callManager->ports->mgcpPorts)) {
+                                            unset($xnode_obj->callManager->ports->mgcpPorts);
+                                        }
+
                                         if ($ifc === 0) {
                                             $this->replaceSimpleXmlNode($xnode->member, $xnode_obj);
                                         } else {
@@ -292,10 +306,25 @@ class xmlinterface
                         }
                         $this->replaceSimpleXmlNode($xml_work->$key, $xml_node);
                         break;
-                    case 'versionStamp':
+                    case 'vendorconfig':
+                        $xml_node = $xml_work->$key;
+                        foreach ($xml_work->$key->children() as $dkey => $ddata) {
+                            $dkey_l = strtolower($dkey);
+                            $vtmp_key = $key_l.'_'.$dkey_l;
+                            if (isset($data_values[$vtmp_key])) {
+                                $vtmp_data = $data_values[$vtmp_key];
+                                if ((!empty($vtmp_data)) || ($vtmp_data == "0")) {
+                                    $xml_node->$dkey = $vtmp_data;
+                                }
+                            }
+                        }
+                        $this->replaceSimpleXmlNode($xml_work->$key, $xml_node);
+                        break;
+                        
+                    case 'versionstamp':
                         $xml_work->$key = time();
                         break;
-                    case 'loadInformation':
+                    case 'loadinformation':
 //                      Set Path Image ????
                         if (isset($dev_config["tftp_firmware"])) {
                             $xml_work->$key = (isset($dev_config["loadimage"])) ? $dev_config["tftp_firmware"] . $dev_config["loadimage"] : '';
@@ -320,33 +349,33 @@ class xmlinterface
 //                            $this->appendSimpleXmlNode($xml_work , $xnode_obj);
                         }
                         break;
-                    case 'commonProfile':
+                    case 'commonprofile':
                         $xml_node->phonePassword = $data_values['dev_sshPassword'];
                         $xml_node->backgroundImageAccess = (($data_values['backgroundImageAccess'] == 'on') || ($data_values['backgroundImageAccess'] == 'true') ) ? 'true' : 'false';
                         $xml_node->callLogBlfEnabled = $data_values['callLogBlfEnabled'];
                         break;
 
-                    case 'userLocale':
-                    case 'networkLocaleInfo':
-                    case 'networkLocale':
+                    case 'userlocale':
+                    case 'networklocaleinfo':
+                    case 'networklocale':
                         $hwlang = '';
                         $lang = '';
                         if (!empty($dev_config["_hwlang"])) {
                             $hwlang = explode(':', $dev_config["_hwlang"]);
                         }
-                        if (($key == 'networkLocaleInfo') || ($key == 'networkLocale')) {
+                        if (($key_l == 'networklocaleinfo') || ($key_l == 'networklocale')) {
                             $lang = (empty($hwlang[0])) ? $data_values['netlang'] : $hwlang[0];
                         } else {
                             $lang = (empty($hwlang[1])) ? $data_values['devlang'] : $hwlang[1];
                         }
                         if (($lang != 'null') && (!empty($lang))) {
-                            if ($key == 'networkLocale') {
+                            if ($key_l == 'networklocale') {
                                 $xml_work->$key = $lang;
                             } else {
                                 if (isset($lang_info[$lang])) {
                                     $xml_node->name = $lang_info[$lang]['locale'];
                                     $xml_node->langCode = $lang_info[$lang]['code'];
-                                    if ($key == 'userLocale') {
+                                    if ($key_l == 'userlocale') {
                                         $xml_node->winCharSet = $lang_info[$lang]['codepage'];
                                     }
                                     $this->replaceSimpleXmlNode($xml_work->$key, $xml_node);

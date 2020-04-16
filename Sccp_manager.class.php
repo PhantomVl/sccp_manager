@@ -382,6 +382,10 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
                         "name" => _("SCCP Device"),
                         "page" => 'views/server.device.php'
                     ),
+                    "sccpurl" => array(
+                        "name" => _("SCCP Device URL"),
+                        "page" => 'views/server.url.php'
+                    ),
                     "sccpinfo" => array(
                         "name" => _("SCCP info"),
                         "page" => 'views/server.info.php'
@@ -400,6 +404,10 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
                 "sccpdevice" => array(
                     "name" => _("SCCP Device"),
                     "page" => 'views/server.device.php'
+                ),
+                "sccpurl" => array(
+                    "name" => _("SCCP Device URL"),
+                    "page" => 'views/server.url.php'
                 ),
                 "sccpntp" => array(
                     "name" => _("SCCP Time"),
@@ -1298,7 +1306,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
                         $save_settings[] = array('keyword' => $this->sccpvalues[$key1]['keyword'], 'data' => $value,
                             'seq' => $this->sccpvalues[$key1]['seq'], 'type' => $this->sccpvalues[$key1]['type']);
                     }
-                }
+                } 
             }
             $pos = strpos($key, $hdr_arprefix);
             if ($pos !== false) {
@@ -1512,7 +1520,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
     public function getCodecs($type, $showDefaults = false)
     {
         $allSupported = array();
-        $Sccp_Codec = array('alaw', 'ulaw', 'g722', 'g723', 'g726', 'g729', 'gsm', 'ilbc', 'h264', 'h263', 'h261');
+        $Sccp_Codec = array('alaw', 'ulaw', 'g722', 'g723', 'g726', 'g729', 'gsm', 'h264', 'h263', 'h261'); 
         switch ($type) {
             case 'audio':
                 $lcodecs = $this->getMyConfig('voicecodecs');
@@ -1861,10 +1869,9 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
         global $amp_conf;
 
         $save_settings = array();
-
         if (empty($save_value)) {
             foreach ($this->sccpvalues as $key => $val) {
-                if (!trim($val['data']) == '') {
+                if ((trim($val['data']) !== '') or ($val['data'] == '0') ) {
                     $save_settings[] = array($key, $db->escapeSimple($val['data']), $val['seq'], $val['type']);
                 }
             }

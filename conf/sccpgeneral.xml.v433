@@ -534,8 +534,164 @@ and open the template in the editor. Base Version before all crash :-)
             </select>
             <help>Date Format: Time zone</help>
         </item>
-    </page_group>        
+    </page_group>    
+        
+    <page_group name="sccp_advant">
+        <label>Device Vendor Setting</label>
+        <item type="IE" id="3" seq="98"> 
+            <label>Log Server</label>
+            <input>
+                <name>vendorconfig_logserver</name> 
+                <default></default>
+                <class>sccp-custom</class>
+                <options placeholder="x.x.x.x:9001" />
+            </input>
+            <help>Log server Address: x.x.x.x:9001 </help>
+        </item>
+        <item type="IE" id="3" seq="98"> 
+            <label>Display Not Active</label>
+            <input>
+                <name>vendorconfig_daysdisplaynotactive</name> 
+                <default></default>
+                <class>sccp-custom</class>
+                <options placeholder="1,7" />
+            </input>
+            <help>Comma separated list of days that the phone's display is not active and will be automatically turned off after the time specified by "displayIdleTimeout" has elapsed (1 - Sunday, 7 - Saturday)</help>
+        </item>
+        <item type="IE" id="3" seq="98"> 
+            <label>Display Not Active</label>
+            <input>
+                <name>vendorconfig_displayontime</name> 
+                <default></default>
+                <class>sccp-custom</class>
+                <options placeholder="08:00" />
+            </input>
+            <help>Time in HH:MM format to automatically turn on the phone display.</help>
+        </item>
+        <item type="IE" id="3" seq="98"> 
+            <label>Display On Duration</label>
+            <input>
+                <name>vendorconfig_displayonduration</name> 
+                <default></default>
+                <class>sccp-custom</class>
+                <options placeholder="10:00" />
+            </input>
+            <help>Time duration in HH:MM format to automatically turn off the phone display after it was turned on.</help>
+        </item>
+        <item type="IE" id="3" seq="98"> 
+            <label>Display Idle Timeout</label>
+            <input>
+                <name>vendorconfig_displayidletimeout</name> 
+                <default></default>
+                <class>sccp-custom</class>
+                <options placeholder="00:10" />
+            </input>
+            <help>Timeout in HH:MM format to automatically turn off phone display if outside the time specified by "daysDisplayNotActive", "displayOnTime" and "displayOnTimeout".</help>
+        </item>
+
+        <item type="IS" id="6" seq="98">
+            <name>vendorconfig_settingsaccess</name> 
+            <label>Settings Access</label>
+            <default></default>
+            <button value="">Inherit</button>
+            <button value="0">Disabled</button>
+            <button value="1">Enabled</button>
+            <help>Whether a user can access the phone settings.</help>
+        </item>
+        <item type="IS" id="6" seq="98">
+            <name>vendorconfig_videocapability</name> 
+            <label>Video Capability</label>
+            <default></default>
+            <button value="">Inherit</button>
+            <button value="0">Disabled</button>
+            <button value="1">Enabled</button>
+            <help></help>
+        </item>
+        <item type="IS" id="6" seq="98">
+            <name>vendorconfig_webaccess</name> 
+            <label>Web Access</label>
+            <default></default>
+            <button value="">Inherit</button>
+            <button value="0">Disabled</button>
+            <button value="1">Enabled</button>
+            <help>Enable the phone's HTTP server.</help>
+        </item>
+        <item type="IS" id="6" seq="98">
+            <name>vendorconfig_webadmin</name> 
+            <label>Web Admin</label>
+            <default></default>
+            <button value="">Inherit</button>
+            <button value="0">Disabled</button>
+            <button value="1">Enabled</button>
+            <help>Enable remote administration using the phone's HTTP server. 8821 model only.</help>
+        </item>
+        <item type="IS" id="6" seq="98">
+            <name>vendorconfig_pcport</name> 
+            <label>Pc Port</label>
+            <default></default>
+            <button value="">Inherit</button>
+            <button value="1">Disabled</button>
+            <button value="0">Enabled</button>
+            <help>Disable the PC (computer) port</help>
+        </item>
+        <item type="IS" id="6" seq="98">
+            <name>vendorconfig_spantopcport</name> 
+            <label>Span to PC Port</label>
+            <default></default>
+            <button value="">Inherit</button>
+            <button value="1">Disabled</button>
+            <button value="0">Enabled</button>
+            <help>Forward packets sent and received on the SW (network) port to the PC (computer) port.</help>
+        </item>
+        <item type="IS" id="6" seq="98">
+            <name>vendorconfig_voicevlanaccess</name> 
+            <label>Voice Vlan Access</label>
+            <default></default>
+            <button value="">Inherit</button>
+            <button value="0">Disabled</button>
+            <button value="1">Enabled</button>
+            <help>Allow devices connected to the PC (computer) port to access the voice VLAN.</help>
+        </item>
+        <item type="IS" id="6" seq="98">
+            <name>vendorconfig_enablecdpswport</name> 
+            <label>Cdp Sw Port</label>
+            <default></default>
+            <button value="">Inherit</button>
+            <button value="0">Disabled</button>
+            <button value="1">Enabled</button>
+            <help>Enable Cisco Discovery Protocol on the SW (network) port.</help>
+        </item>
+        <item type="IS" id="6" seq="98">
+            <name>vendorconfig_enablecdppcport</name> 
+            <label>Cdp PC Port</label>
+            <default></default>
+            <button value="">Inherit</button>
+            <button value="0">Disabled</button>
+            <button value="1">Enabled</button>
+            <help>Enable Cisco Discovery Protocol on the PC (computer) port.</help>
+        </item>
+        <item type="IS" id="6" seq="98">
+            <name>vendorconfig_enablelldpswport</name> 
+            <label>Link Layer Discovery Sw</label>
+            <default></default>
+            <button value="">Inherit</button>
+            <button value="0">Disabled</button>
+            <button value="1">Enabled</button>
+            <help>Enable Link Layer Discovery Protocol on the SW (network) port.</help>
+        </item>
+        <item type="IS" id="6" seq="98">
+            <name>vendorconfig_enablelldppcport</name> 
+            <label>Link Layer Discovery PC</label>
+            <default></default>
+            <button value="">Inherit</button>
+            <button value="0">Disabled</button>
+            <button value="1">Enabled</button>
+            <help> Enable Link Layer Discovery Protocol on the PC (computer) port.</help>
+        </item>
       
+      
+    </page_group>        
+    
     <page_group name="sccp_srst">
         <label>SCCP Phone SRST</label>
         <item type="HLP" id="2">
@@ -622,8 +778,17 @@ and open the template in the editor. Base Version before all crash :-)
                 <name>dev_servicesURL</name> 
                 <default></default>
                 <value></value>
-                <options placeholder="http://x.x.x.x/cisco_menu/service.php"></options>
-            
+                <options placeholder="http://x.x.x.x/cisco_menu/service.php"></options>           
+            </input>
+            <help></help>
+        </item>
+        <item type="IE" id="1" seq="10">
+            <label>Phone Secure Service URL</label>
+            <input>
+                <name>dev_secureservicesURL</name> 
+                <default></default>
+                <value></value>
+                <options placeholder="https://x.x.x.x:port/cisco_menu/service.php"></options>           
             </input>
             <help></help>
         </item>
@@ -637,15 +802,15 @@ and open the template in the editor. Base Version before all crash :-)
             </input>
             <help>The above is simply a dummy authentication page.  It literally contains one word: AUTHORIZED (it receives UserId, Password, and devicename in the url - if you truly wish to implement special auth)</help>
         </item>
-        <item type="IE" id="3" seq="10">
-            <label>Phone Idle information URL</label>
+        <item type="IE" id="2" seq="10">
+            <label>Phone Secure authentication URL</label>
             <input>
-                <name>dev_idleURL</name>
-                <options placeholder="http://x.x.x.x/cisco_menu/idle.php"></options>
+                <name>dev_secureauthenticationURL</name> 
+                <options placeholder="https://x.x.x.x:port/cisco_menu/authentication.php"></options>
                 <default></default>
                 <value></value>
             </input>
-            <help>URL of CiscoIPPhoneImage. Requires a non-zero setting in idleTimeout.</help>
+            <help></help>
         </item>
         <item type="IE" id="4" seq="10">
             <label>Phone information URL</label>
@@ -656,11 +821,29 @@ and open the template in the editor. Base Version before all crash :-)
             </input>
             <help></help>
         </item>
+        <item type="IE" id="4" seq="10">
+            <label>Phone Secure information URL</label>
+            <input>
+                <name>dev_secureinformationURL</name>
+                <options placeholder="https://x.x.x.x/cisco_menu/information.php"></options>
+                <default></default>
+            </input>
+            <help></help>
+        </item>
         <item type="IE" id="5" seq="10">
             <label>Phone messages URL</label>
             <input>
                 <name>dev_messagesURL</name>
-                <options placeholder="http://x.x.x.x/cisco_menu/messages.php"></options>
+                <options placeholder="http://x.x.x.x:port/cisco_menu/messages.php"></options>
+                <default></default>
+            </input>
+            <help></help>
+        </item>
+        <item type="IE" id="5" seq="10">
+            <label>Phone Secure messages URL</label>
+            <input>
+                <name>dev_securemessagesURL</name>
+                <options placeholder="https://x.x.x.x:port/cisco_menu/messages.php"></options>
                 <default></default>
             </input>
             <help></help>
@@ -674,6 +857,36 @@ and open the template in the editor. Base Version before all crash :-)
             </input>
             <help>This is the URL for a CiscoIPPhoneMenu which gets appended to the end of the Missed/Received/Placed calls.  I don't use it (I find it makes more sense to put my phone book under services)</help>
         </item>
+        <item type="IE" id="6" seq="10">
+            <label>Phone Secure directory service URL</label>
+            <input>
+                <name>dev_securedirectoryURL</name>
+                <options placeholder="https://x.x.x.x/cisco_menu/directories.php"></options>
+                <default></default>
+            </input>
+            <help></help>
+        </item>
+        <item type="IE" id="3" seq="10">
+            <label>Phone Idle information URL</label>
+            <input>
+                <name>dev_idleURL</name>
+                <options placeholder="http://x.x.x.x/cisco_menu/idle.php"></options>
+                <default></default>
+                <value></value>
+            </input>
+            <help>URL of CiscoIPPhoneImage. Requires a non-zero setting in idleTimeout.</help>
+        </item>
+        <item type="IE" id="3" seq="10">
+            <label>Phone Secure Idle information URL</label>
+            <input>
+                <name>dev_secureidleURL</name>
+                <options placeholder="https://x.x.x.x/cisco_menu/idle.php"></options>
+                <default></default>
+                <value></value>
+            </input>
+            <help></help>
+        </item>
+        
         <item type="IE" id="7" seq="10">
             <label>Phone proxyServer URL</label>
             <input>

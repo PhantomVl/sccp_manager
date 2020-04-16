@@ -250,6 +250,20 @@ class dbinterface
 
         switch ($db_name) {
             case 'sccpsettings':
+                foreach ($save_value as $key_v => $data) {
+                    if (!empty($data)) {
+                        if (isset($data[1])) {
+                            if ($data[1] == $this->val_null) {
+                                unset($save_value[$key_v]);
+                            }
+                        }
+                        if (isset($data['data'])) {
+                            if ($data['data'] == $this->val_null) {
+                                unset($save_value[$key_v]);
+                            }
+                        }
+                    }
+                }
                 if ($mode == 'clear') {
                     $sql = 'truncate `sccpsettings`';
                     $stmt = $db->prepare($sql);

@@ -354,18 +354,17 @@ foreach ($items as $child) {
                           $i = 0;
 //                          $res_v = 'no';
                           $opt_hide = '';
-                        if (empty($child->default)) {
-                            $res_v = 'no';
-                        } else {
+                        $res_v = '';
+                        if (!empty($child->default)) {
                             $res_v = (string)$child->default;
                         }
                         if (!empty($child->value)) {
                              $res_v = (string)$child->value;
                         }
                         if (!empty($fvalues[$res_n])) {
-                            if (!empty($fvalues[$res_n]['data'])) {
+                            if (($fvalues[$res_n]['data'] != '') ) {
                                 $res_v = (string)$fvalues[$res_n]['data'];
-                            }
+                            } 
                         }
                         if (!empty($child->option_hide)) {
                             $opt_hide = ' class="sccp_button_hide" data-vhide="'.$child->option_hide.'" data-clhide="'.$child->option_hide['class'].'" ';
@@ -377,14 +376,18 @@ foreach ($items as $child) {
                             $opt_hide .= ' data-vshow="'.$child->option_show.'" data-clshow="'.$child->option_show['class'].'" ';
                         }
                         foreach ($child->xpath('button') as $value) {
-                            $val_check = (string)$value[@value];
-                            if ($val_check == '' || $val_check == 'NONE' || $val_check == 'none') {
-                                $val_check = (((string)$value[@value] == $res_v) ? " checked" : "");
+                            $val_check = strtolower((string)$value[@value]);
+                            if ($val_check == strtolower($res_v)) {
+                                $val_check = " checked";
                             } else {
-                                $val_check = (strtolower((string)$value[@value]) == strtolower($res_v) ? " checked" : "");
+                                if ($val_check == '' || $val_check == 'none' ) {
+                                   if (strtolower($res_v) == 'none' || $res_v == '' )  {
+                                      $val_check = " checked";
+                                   } else {$val_check = "";}
+                                } else {$val_check = "";}
                             }
                             echo '<input type="radio" name="' . $res_id . '" id="' . $res_id. '_' . $i .'" value="' . $value[@value] . '"' . $val_check . $opt_hide.'>';
-                            echo '<label for="' . $res_id. '_' . $i . '">' . _($value) . '</label>';
+                            echo '<label for="' . $res_id. '_' . $i . '">' . _($value) .  '</label>';
                             $i++;
                         }
                         ?>                        

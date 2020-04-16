@@ -13,6 +13,7 @@
 <?php
     
         echo $this->showGroup('sccp_srst', 1);
+        echo $this->showGroup('sccp_advant', 1);
 //        echo $this->showGroup('sccp_dev_time',1);
 
 ?>  

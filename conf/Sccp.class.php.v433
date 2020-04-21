@@ -30,6 +30,16 @@ class Sccp extends \FreePBX\modules\Core\Driver {
                                       "jsvalidation" => "", "failvalidationmsg" => "", "canbeempty" => true, "maxchars" => 0, "disable" => false, "inputgroup" => false,
                                       "class" => "",  "cblabel" => 'Enable', "disabled_value" => 'DEFAULT', "check_enables" => 'true', "cbdisable" => false, "cbclass" => '') );
  
+/*
+ *      Export Functions
+ *          getInfo
+ *          addDevice
+ *          delDevice
+ *          getDevice
+ *          getDefaultDeviceSettings
+ *          getDeviceDisplay
+ * 
+ */
         
         public function __construct($freepbx) {
                 parent::__construct($freepbx);

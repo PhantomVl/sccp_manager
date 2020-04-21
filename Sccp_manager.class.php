@@ -2272,7 +2272,25 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
         }
         return $interfaces;
     }
-
+    
+    private function strpos_array($haystack, $needles) {
+        if (is_array($needles)) {
+            foreach ($needles as $str) {
+                if (is_array($str)) {
+                    $pos = strpos_array($haystack, $str);
+                } else {
+                    $pos = strpos($haystack, $str);
+                }
+                if ($pos !== FALSE) {
+                    return $pos;
+                }
+            }
+        } else {
+            return strpos($haystack, $needles);
+        }
+        return FALSE;
+    }
+    
     private function findAllFiles($dir, $file_mask = null, $mode = 'full')
     {
         $result = null;

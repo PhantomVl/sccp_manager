@@ -25,7 +25,7 @@ class Sccp extends \FreePBX\modules\Core\Driver {
 			"prettyName" => _("Sccp Custom Driver"),
 			"shortName" => "SCCP",
 			"description" => _("Sccp Device"),
-			"Version" => "11.3",
+			"Version" => "11.4",
 			"about" => "Sccp mysql class Base ver: 11.3, Sccp ver: default"
                     
 		);

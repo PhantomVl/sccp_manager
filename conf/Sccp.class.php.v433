@@ -43,8 +43,9 @@ class Sccp extends \FreePBX\modules\Core\Driver {
 			"prettyName" => _("Sccp Custom Driver"),
 			"shortName" => "SCCP",
 			"description" => _("Sccp Device"),
-			"Version" => "11.4.v434m",
-			"about" => "Sccp mysql class Base ver: 11.4,  Sccp ver: 434"
+//                                    11.4.v434m  => 11.4 - Version;  .v433  - revision (.v431, .v432, .v432, .v433 );
+			"Version" => "11.4.v433m",
+			"about" => "Sccp mysql class Base ver: 11.4,  Sccp ver: 433, branch: m"
 		);
 	}
 	public function addDevice($id, $settings) {
@@ -303,7 +304,8 @@ class Sccp extends \FreePBX\modules\Core\Driver {
 
                 //Fill Codecs Informations
 
-                $Sccp_Codec = array('gsm','slin16','alaw','ulaw','g722','g723','g726','g728','g729','ilibc','opus','h264','h263','h265','h261');
+//                $Sccp_Codec = array('gsm','slin16','alaw','ulaw','g722','g723','g726','g728','g729','ilibc','opus','h264','h263','h265','h261');
+                $Sccp_Codec = array('alaw', 'ulaw', 'g722', 'g723', 'g726', 'g729', 'gsm', 'h264', 'h263', 'h261'); 
                 $allCodecs  = $this->freepbx->Codecs->getAudio(true);
                 $allVCodecs = $this->freepbx->Codecs->getVideo();
                 $ACodec_cur = array('all');

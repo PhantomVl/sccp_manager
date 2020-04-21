@@ -94,8 +94,9 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
 //    private $SCCP_LANG_DICTIONARY = 'SCCP-dictionary.xml'; // CISCO LANG file search in /tftp-path
     private $SCCP_LANG_DICTIONARY = 'be-sccp.jar'; // CISCO LANG file search in /tftp-path
     private $pagedata = null;
-    private $sccp_driver_ver = '11.31';             // Ver fore SCCP.CLASS.PHP
+    private $sccp_driver_ver = '11.4';             // Ver fore SCCP.CLASS.PHP
     public $sccp_manager_ver = '14.0.0.2';
+    public $sccp_branch = 'm';                       // Ver fore SCCP.CLASS.PHP
     private $tftpLang = array();
 //    private $hint_context = '@ext-local'; /// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Get it from Config !!!
     private $hint_context = array('default' => '@ext-local'); /// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Get it from Config !!!
@@ -1707,7 +1708,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
     {
         global $db;
         global $amp_conf;
-        $driver_revision = array('0' => '', '430' => '.v431', '431' => '.v432', '432' => '.v432', '433' => '.v433');
+        $driver_revision = array('0' => '', '430' => '.v431', '431' => '.v432', '432' => '.v432', '433' => '.v433'. $this->sccp_branch);
 
         $confDir = $amp_conf["ASTETCDIR"];
         if (empty($this->sccppath["asterisk"])) {

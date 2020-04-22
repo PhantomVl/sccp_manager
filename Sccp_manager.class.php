@@ -2277,7 +2277,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
         if (is_array($needles)) {
             foreach ($needles as $str) {
                 if (is_array($str)) {
-                    $pos = strpos_array($haystack, $str);
+                    $pos = $this->strpos_array($haystack, $str);
                 } else {
                     $pos = strpos($haystack, $str);
                 }

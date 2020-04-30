@@ -79,8 +79,7 @@
 
 namespace FreePBX\modules;
 
-class Sccp_manager extends \FreePBX_Helpers implements \BMO
-{
+class Sccp_manager extends \FreePBX_Helpers implements \BMO {
     /* Field Values for type  seq */
 
 //  const General - sccp.conf            = '0';
@@ -111,8 +110,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
     public $class_error; //error construct
     public $info_warning;
 
-    public function __construct($freepbx = null)
-    {
+    public function __construct($freepbx = null) {
         if ($freepbx == null) {
             throw new Exception("Not given a FreePBX Object");
         }
@@ -172,8 +170,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
      *   Generate Input elements in Html Code from sccpgeneral.xml
      */
 
-    public function showGroup($grup_name, $heder_show, $form_prefix = 'sccp', $form_values = null)
-    {
+    public function showGroup($grup_name, $heder_show, $form_prefix = 'sccp', $form_values = null) {
         $htmlret = "";
         if (empty($form_values)) {
             $form_values = $this->sccpvalues;
@@ -195,8 +192,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
      *    Load config vars from base array
      */
 
-    public function initVarfromDefs()
-    {
+    public function initVarfromDefs() {
         foreach ($this->extconfigs->getextConfig('sccpDefaults') as $key => $value) {
             if (empty($this->sccpvalues[$key])) {
                 $this->sccpvalues[$key] = array('keyword' => $key, 'data' => $value, 'type' => '0', 'seq' => '0');
@@ -207,8 +203,8 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
     /*
      *    Load config vars from xml
      */
-    public function initVarfromXml()
-    {
+
+    public function initVarfromXml() {
         if ((array) $this->xml_data) {
             foreach ($this->xml_data->xpath('//page_group') as $item) {
                 foreach ($item->children() as $child) {
@@ -260,33 +256,36 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
     }
 
     /* unused but FPBX API requires it */
-    public function doConfigPageInit($page)
-    {
+
+    public function doConfigPageInit($page) {
         $this->doGeneralPost();
     }
 
     /* unused but FPBX API requires it */
-    public function install()
-    {
+
+    public function install() {
+        
     }
 
     /* unused but FPBX API requires it */
-    public function uninstall()
-    {
+
+    public function uninstall() {
+        
     }
 
     /* unused but FPBX API requires it */
-    public function backup()
-    {
+
+    public function backup() {
+        
     }
 
     /* unused but FPBX API requires it */
-    public function restore($backup)
-    {
+
+    public function restore($backup) {
+        
     }
 
-    public function getActionBar($request)
-    {
+    public function getActionBar($request) {
         $buttons = array();
         switch ($request['display']) {
             case 'sccp_adv':
@@ -363,15 +362,15 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
     /*
      *  Show form information - General
      */
-    public function myShowPage()
-    {
+
+    public function myShowPage() {
         $request = $_REQUEST;
         $action = !empty($request['action']) ? $request['action'] : '';
-        /*      
-        if ($this->sccpvalues['sccp_compatible']['data'] >= '433') {
-            $this->sccp_metainfo = $this->srvinterface->getGlobalsFromMetaData('general');
-        }
-        */
+        /*
+          if ($this->sccpvalues['sccp_compatible']['data'] >= '433') {
+          $this->sccp_metainfo = $this->srvinterface->getGlobalsFromMetaData('general');
+          }
+         */
         if (!empty($this->sccpvalues['displayconfig'])) {
             if (!empty($this->sccpvalues['displayconfig']['data']) && ($this->sccpvalues['displayconfig']['data'] == 'sccpsimple')) {
                 $this->pagedata = array(
@@ -439,8 +438,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
         return $this->pagedata;
     }
 
-    public function infoServerShowPage()
-    {
+    public function infoServerShowPage() {
         $request = $_REQUEST;
         $action = !empty($request['action']) ? $request['action'] : '';
         $this->pagedata = array(
@@ -460,8 +458,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
         return $this->pagedata;
     }
 
-    public function advServerShowPage()
-    {
+    public function advServerShowPage() {
         $request = $_REQUEST;
         $action = !empty($request['action']) ? $request['action'] : '';
         $inputform = !empty($request['tech_hardware']) ? $request['tech_hardware'] : '';
@@ -506,16 +503,15 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
         return $this->pagedata;
     }
 
-    public function phoneShowPage()
-    {
+    public function phoneShowPage() {
         $request = $_REQUEST;
         $action = !empty($request['action']) ? $request['action'] : '';
         $inputform = !empty($request['tech_hardware']) ? $request['tech_hardware'] : '';
         /*
-        if ($this->sccpvalues['sccp_compatible']['data'] >= '433') {
-            $this->sccp_metainfo = $this->srvinterface->getGlobalsFromMetaData('device');
-        }
-        */
+          if ($this->sccpvalues['sccp_compatible']['data'] >= '433') {
+          $this->sccp_metainfo = $this->srvinterface->getGlobalsFromMetaData('device');
+          }
+         */
         if (empty($this->pagedata)) {
             switch ($inputform) {
                 case "cisco":
@@ -546,14 +542,14 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
                             "name" => _("Sip device Buttons"),
                             "page" => 'views/form.sbuttons.php'
                     ));
-                    /*                    
-                    if ($this->sccpvalues['sccp_compatible']['data'] < '433') {
-                        $this->pagedata["sccpcodec"] = array(
-                                "name" => _("Device SCCP Codec"),
-                                "page" => 'views/server.codec.php'
-                            );
-                    }
-                    */                    
+                    /*
+                      if ($this->sccpvalues['sccp_compatible']['data'] < '433') {
+                      $this->pagedata["sccpcodec"] = array(
+                      "name" => _("Device SCCP Codec"),
+                      "page" => 'views/server.codec.php'
+                      );
+                      }
+                     */
                     break;
 
                 case "r_user":
@@ -600,8 +596,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
         return $this->pagedata;
     }
 
-    public function formShowPage()
-    {
+    public function formShowPage() {
         $request = $_REQUEST;
         $action = !empty($request['action']) ? $request['action'] : '';
 
@@ -630,15 +625,13 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
         return $this->pagedata;
     }
 
-    public function getRightNav($request)
-    {
+    public function getRightNav($request) {
         if (isset($request['tech_hardware']) && ($request['tech_hardware'] == 'cisco')) {
             return load_view(__DIR__ . "/views/hardware.rnav.php", array('request' => $request));
         }
     }
 
-    public function ajaxRequest($req, &$setting)
-    {
+    public function ajaxRequest($req, &$setting) {
         switch ($req) {
             case 'backupsettings':
             case 'savesettings':
@@ -672,8 +665,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
     }
 
     // !TODO!: this should go into it's only ajam.html.php file (see: dahdiconfig)
-    public function ajaxHandler()
-    {
+    public function ajaxHandler() {
         $request = $_REQUEST;
         $msg = array();
         $cmd_id = $request['command'];
@@ -725,7 +717,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
                     return array('status' => false, 'message' => print_r($res));
                 }
                 break;
-                // -------------------------------   Old device support - In the development---
+            // -------------------------------   Old device support - In the development---
             case 'delete_hardware':
                 if (!empty($request['idn'])) {
                     foreach ($request['idn'] as $idv) {
@@ -810,6 +802,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
                             $hw_list[] = array('name' => $idv);
                         }
                         if ($idv == 'all') {
+                            
                         }
                     }
                 }
@@ -927,19 +920,19 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
                     return array();
                 }
                 /*
-                $res_info = $this->aminterface->core_list_all_exten('exten');
-                if (!empty($res_info)) {
-                    foreach ($result as $key => $value) {
-                        $tpm_info = $res_info[$value['name']];
-                        if (!empty($tpm_info)) {
-                            $result[$key]['line_status'] = $tpm_info['status'];
-                            $result[$key]['line_statustext'] = $tpm_info['statustext'];
-                        } else {
-                            $result[$key]['line_status'] = '';
-                            $result[$key]['line_statustext'] = '';
-                        }
-                    }
-                }
+                  $res_info = $this->aminterface->core_list_all_exten('exten');
+                  if (!empty($res_info)) {
+                  foreach ($result as $key => $value) {
+                  $tpm_info = $res_info[$value['name']];
+                  if (!empty($tpm_info)) {
+                  $result[$key]['line_status'] = $tpm_info['status'];
+                  $result[$key]['line_statustext'] = $tpm_info['statustext'];
+                  } else {
+                  $result[$key]['line_status'] = '';
+                  $result[$key]['line_statustext'] = '';
+                  }
+                  }
+                  }
                  *
                  */
                 return $result;
@@ -1016,8 +1009,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
         }
     }
 
-    public function doGeneralPost()
-    {
+    public function doGeneralPost() {
         // $this->FreePBX->WriteConfig($config);
         if (!isset($_REQUEST['Submit'])) {
             return;
@@ -1029,8 +1021,8 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
      * *  Save Hardware Device Information to Db + ???? Create / update XML Profile
      *
      */
-    function getPhoneButtons($get_settings, $ref_id = '', $ref_type = 'sccpdevice')
-    {
+
+    function getPhoneButtons($get_settings, $ref_id = '', $ref_type = 'sccpdevice') {
         // get Model Buttons info
         $res = array();
         $def_feature = array('parkinglot' => array('name' => 'P.slot', 'value' => 'default'),
@@ -1145,8 +1137,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
         return $res;
     }
 
-    function saveSccpDevice($get_settings, $validateonly = false)
-    {
+    function saveSccpDevice($get_settings, $validateonly = false) {
         $hdr_prefix = 'sccp_hw_';
         $hdr_arprefix = 'sccp_hw-ar_';
 
@@ -1217,13 +1208,13 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
                         $value = $get_settings[$hdr_prefix . 'netlang'] . ':' . $get_settings[$hdr_prefix . 'devlang'];
                     }
                     break;
-                /*                    
-                case '_json':
-                    foreach ($get_settings[$hdr_arprefix . $key.'_sip'] as $vkey => $vval) {
-                    }
-                    break;
+                /*
+                  case '_json':
+                  foreach ($get_settings[$hdr_arprefix . $key.'_sip'] as $vkey => $vval) {
+                  }
+                  break;
 
-                */
+                 */
                 default:
                     if (!empty($get_settings[$hdr_prefix . $key])) {
                         $value = $get_settings[$hdr_prefix . $key];
@@ -1289,8 +1280,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
         return $save_settings;
     }
 
-    function handleSubmit($get_settings, $validateonly = false)
-    {
+    function handleSubmit($get_settings, $validateonly = false) {
         $hdr_prefix = 'sccp_';
         $hdr_arprefix = 'sccp-ar_';
         $save_settings = array();
@@ -1307,7 +1297,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
                         $save_settings[] = array('keyword' => $this->sccpvalues[$key1]['keyword'], 'data' => $value,
                             'seq' => $this->sccpvalues[$key1]['seq'], 'type' => $this->sccpvalues[$key1]['type']);
                     }
-                } 
+                }
             }
             $pos = strpos($key, $hdr_arprefix);
             if ($pos !== false) {
@@ -1381,8 +1371,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
         return $save_settings;
     }
 
-    function handleRoamingUsers($get_settings, $validateonly = false)
-    {
+    function handleRoamingUsers($get_settings, $validateonly = false) {
         $hdr_prefix = 'sccp_ru_';
         $hdr_arprefix = 'sccp_ru-ar_';
 
@@ -1474,8 +1463,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
         return $save_settings;
     }
 
-    public function getSccpSettingFromDB()
-    {
+    public function getSccpSettingFromDB() {
         $raw_data = $this->dbinterface->get_db_SccpSetting();
         foreach ($raw_data as $var) {
             $this->sccpvalues[$var['keyword']] = array('keyword' => $var['keyword'], 'data' => $var['data'], 'seq' => $var['seq'], 'type' => $var['type']);
@@ -1483,8 +1471,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
         return;
     }
 
-    public function getMyConfig($var = null, $id = "noid")
-    {
+    public function getMyConfig($var = null, $id = "noid") {
         switch ($var) {
             case "voicecodecs":
                 $val = explode(";", $this->sccpvalues['allow']['data']);
@@ -1518,10 +1505,9 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
         return $final;
     }
 
-    public function getCodecs($type, $showDefaults = false)
-    {
+    public function getCodecs($type, $showDefaults = false) {
         $allSupported = array();
-        $Sccp_Codec = array('alaw', 'ulaw', 'g722', 'g723', 'g726', 'g729', 'gsm', 'h264', 'h263', 'h261'); 
+        $Sccp_Codec = array('alaw', 'ulaw', 'g722', 'g723', 'g726', 'g729', 'gsm', 'h264', 'h263', 'h261');
         switch ($type) {
             case 'audio':
                 $lcodecs = $this->getMyConfig('voicecodecs');
@@ -1590,8 +1576,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
      * @param {string} $type           Codec Type
      * @param {array} $codecs=array() The codecs with order, if blank set defaults
      */
-    public function setCodecs($type, $codecs = array())
-    {
+    public function setCodecs($type, $codecs = array()) {
         $default = empty($codecs) ? true : false;
         switch ($type) {
             case 'audio':
@@ -1617,47 +1602,43 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
         return true;
     }
 
-    function Sccp_manager_hookGet_config($engine)
-    {
+    function Sccp_manager_hookGet_config($engine) {
         $this->debugdata($engine);
     }
 
-    function Sccp_manager_get_config($engine)
-    {
+    function Sccp_manager_get_config($engine) {
         $this->debugdata($engine);
     }
 
     /*
-    function soundlang_hookGet_config($engine) {
+      function soundlang_hookGet_config($engine) {
 
-    global $core_conf;
-    $this->debugdata($engine);
+      global $core_conf;
+      $this->debugdata($engine);
 
-    switch ($engine) {
-        case "asterisk":
-            if (isset($core_conf) && is_a($core_conf, "core_conf")) {
-                $language = FreePBX::Soundlang()->getLanguage();
-                if ($language != "") {
-                    $core_conf->addSipGeneral('language', $language);
-                    $core_conf->addIaxGeneral('language', $language);
-                }
-            }
-            break;
-        }
-    }
+      switch ($engine) {
+      case "asterisk":
+      if (isset($core_conf) && is_a($core_conf, "core_conf")) {
+      $language = FreePBX::Soundlang()->getLanguage();
+      if ($language != "") {
+      $core_conf->addSipGeneral('language', $language);
+      $core_conf->addIaxGeneral('language', $language);
+      }
+      }
+      break;
+      }
+      }
      */
 
     /**
      * Retrieve Active Codecs
      * return fiends Lag pack
      */
-    public function getTftpLang()
-    {
+    public function getTftpLang() {
         return $this->tftpLang;
     }
 
-    private function initTftpLang()
-    {
+    private function initTftpLang() {
         $result = array();
         if (empty($this->sccppath["tftp_path"]) || empty($this->sccppath["tftp_lang_path"])) {
             return;
@@ -1687,8 +1668,8 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
     /*
      *    Check tftp/xml file path and permissions
      */
-    private function initializeTFtpLanguagePath()
-    {
+
+    private function initializeTFtpLanguagePath() {
         $dir = $this->sccppath["tftp_lang_path"];
         foreach ($this->extconfigs->getextConfig('sccp_lang') as $lang_key => $lang_value) {
             $filename = $dir . DIRECTORY_SEPARATOR . $lang_value['locale'];
@@ -1703,12 +1684,12 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
     /*
      *    Check file paths and permissions
      */
+
     // !TODO!: -TODO-: This function is getting a little big. Might be possible to sperate tftp work into it's own file/class. Initially, you need to remove the not working section and commented out section
-    function initializeSccpPath()
-    {
+    function initializeSccpPath() {
         global $db;
         global $amp_conf;
-        $driver_revision = array('0' => '', '430' => '.v431', '431' => '.v432', '432' => '.v432', '433' => '.v433'. $this->sccp_branch);
+        $driver_revision = array('0' => '', '430' => '.v431', '431' => '.v432', '432' => '.v432', '433' => '.v433' . $this->sccp_branch);
 
         $confDir = $amp_conf["ASTETCDIR"];
         if (empty($this->sccppath["asterisk"])) {
@@ -1762,8 +1743,8 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
     /*
      *      Soft Key
      */
-    function createSccpXmlSoftkey()
-    {
+
+    function createSccpXmlSoftkey() {
         foreach ($this->srvinterface->sccp_list_keysets() as $keyl => $vall) {
             $this->xmlinterface->create_xmlSoftkeyset($this->sccp_conf_init, $this->sccppath, $keyl);
         }
@@ -1772,8 +1753,8 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
     /*
      *      DialPlan
      */
-    function getDialPlanList()
-    {
+
+    function getDialPlanList() {
         $dir = $this->sccppath["tftp_dialplan"] . '/dial*.xml';
         $base_len = strlen($this->sccppath["tftp_dialplan"]) + 1;
         $res = glob($dir);
@@ -1785,8 +1766,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
         return $res;
     }
 
-    function getDialPlan($get_file)
-    {
+    function getDialPlan($get_file) {
         $file = $this->sccppath["tftp_dialplan"] . '/' . $get_file . '.xml';
         if (file_exists($file)) {
 //            $load_xml_data = simplexml_load_file($file);
@@ -1800,8 +1780,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
         return $res;
     }
 
-    function deleteDialPlan($get_file)
-    {
+    function deleteDialPlan($get_file) {
         if (!empty($get_file)) {
             $file = $this->sccppath["tftp_dialplan"] . '/' . $get_file . '.xml';
             if (file_exists($file)) {
@@ -1811,8 +1790,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
         return $res;
     }
 
-    function saveDialPlan($get_settings)
-    {
+    function saveDialPlan($get_settings) {
 
         $confDir = $this->sccppath["tftp_dialplan"];
         return $this->xmlinterface->saveDialPlan($confDir, $get_settings);
@@ -1821,8 +1799,8 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
     /*
      *      Update Butons Labels on mysql DB
      */
-    private function updateSccpButtons($hw_list = array())
-    {
+
+    private function updateSccpButtons($hw_list = array()) {
 
         $save_buttons = array();
         if (!empty($hw_list)) {
@@ -1864,15 +1842,15 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
     /*
      *      Save Config Value to mysql DB
      */
-    private function saveSccpSettings($save_value = array())
-    {
+
+    private function saveSccpSettings($save_value = array()) {
         global $db;
         global $amp_conf;
 
         $save_settings = array();
         if (empty($save_value)) {
             foreach ($this->sccpvalues as $key => $val) {
-                if ((trim($val['data']) !== '') or ($val['data'] == '0') ) {
+                if ((trim($val['data']) !== '') or ($val['data'] == '0')) {
                     $save_settings[] = array($key, $db->escapeSimple($val['data']), $val['seq'], $val['type']);
                 }
             }
@@ -1887,8 +1865,8 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
     /*
      *          Create XMLDefault.cnf.xml
      */
-    function createDefaultSccpXml()
-    {
+
+    function createDefaultSccpXml() {
         $data_value = array();
         foreach ($this->sccpvalues as $key => $value) {
             $data_value[$key] = $value['data'];
@@ -1909,8 +1887,8 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
     /*
      *          Create  (SEP) dev_ID.cnf.xml
      */
-    function createSccpDeviceXML($dev_id = '')
-    {
+
+    function createSccpDeviceXML($dev_id = '') {
 
         if (empty($dev_id)) {
             return false;
@@ -1980,8 +1958,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
         return $this->xmlinterface->create_SEP_XML($this->sccppath["tftp_path_store"], $data_value, $dev_config, $dev_id, $lang_data);
     }
 
-    function deleteSccpDeviceXML($dev_id = '')
-    {
+    function deleteSccpDeviceXML($dev_id = '') {
         if (empty($dev_id)) {
             return false;
         }
@@ -2003,8 +1980,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
         }
     }
 
-    private function createSccpBackup()
-    {
+    private function createSccpBackup() {
         global $amp_conf;
         $dir_info = array();
         $backup_files = array($amp_conf['ASTETCDIR'] . '/sccp', $amp_conf['ASTETCDIR'] . '/extensions', $amp_conf['ASTETCDIR'] . '/extconfig',
@@ -2056,8 +2032,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
         return $filename;
     }
 
-    function createDefaultSccpConfig()
-    {
+    function createDefaultSccpConfig() {
         // Make sccp.conf data
         // [general]
         foreach ($this->sccpvalues as $key => $value) {
@@ -2090,8 +2065,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
         $this->cnf_wr->writeConfig('sccp.conf', $this->sccp_conf_init);
     }
 
-    function getSccpModelInformation($get = "all", $validate = false, $format_list = "all", $filter = array())
-    {
+    function getSccpModelInformation($get = "all", $validate = false, $format_list = "all", $filter = array()) {
         // $file_ext = array('.loads', '.LOADS', '.sbn', '.SBN', '.bin', '.BIN','.zup','.ZUP');
         $file_ext = array('.loads', '.sbn', '.bin', '.zup');
         // $dir = $this->sccppath["tftp_path"];
@@ -2162,8 +2136,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
         return $raw_settings;
     }
 
-    function getHintInformation($sort = true, $filter = array())
-    {
+    function getHintInformation($sort = true, $filter = array()) {
         $res = array();
         $default_hint = '@ext-local';
 
@@ -2174,7 +2147,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
             // Old Req get all hints
             $tmp_data = $this->srvinterface->sccp_list_all_hints();
             foreach ($tmp_data as $value) {
-                $res[$value] = array('key' => $value, 'exten' => before('@', $value), 'label' => $value);
+                $res[$value] = array('key' => $value, 'exten' => $this-> before('@', $value), 'label' => $value);
             }
         }
 
@@ -2207,8 +2180,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
         return $res_sort;
     }
 
-    function getIpInformation($type = '')
-    {
+    function getIpInformation($type = '') {
         $interfaces = array();
         switch ($type) {
             case 'ip4':
@@ -2240,8 +2212,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
         return $interfaces;
     }
 
-    function getIpInformationOld()
-    {
+    function getIpInformationOld() {
         $interfaces['auto'] = array('0.0.0.0', 'All', '0');
 
         exec("/sbin/ip -4 -o addr", $result, $ret);
@@ -2272,7 +2243,11 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
         }
         return $interfaces;
     }
-    
+
+    private function before($thing, $inthat) {
+        return substr($inthat, 0, strpos($inthat, $thing));
+    }
+
     private function strpos_array($haystack, $needles) {
         if (is_array($needles)) {
             foreach ($needles as $str) {
@@ -2290,14 +2265,13 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
         }
         return FALSE;
     }
-    
-    private function findAllFiles($dir, $file_mask = null, $mode = 'full')
-    {
+
+    private function findAllFiles($dir, $file_mask = null, $mode = 'full') {
         $result = null;
         if (empty($dir) || (!file_exists($dir))) {
             return $result;
         }
-    
+
         $root = scandir($dir);
         foreach ($root as $value) {
             if ($value === '.' || $value === '..') {
@@ -2341,5 +2315,6 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO
             }
         }
         return $result;
-    }    
+    }
+
 }

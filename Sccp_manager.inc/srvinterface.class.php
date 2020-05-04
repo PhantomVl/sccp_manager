@@ -224,17 +224,6 @@ class srvinterface {
             default:
                 return 430;
         }
-        /*        if ($res["vCode"] >= 433) {
-
-          }
-          if ($res["vCode"] >= 431) {
-          return 431;
-          } else {
-          return 430;
-          }
-         *
-         */
-//        return $res["vCode"];
     }
 
     public function getSCCPVersion() {

@@ -741,7 +741,7 @@ function InstallDB_updateDBVer($sccp_compatible)
 {
     global $db;
     outn("<li>" . _("Update DB Ver") . "</li>");
-    $sql = "REPLACE INTO `sccpsettings` (`keyword`, `data`, `seq`, `type`), VALUES ('SccpDBmodel', '"+$sccp_compatible+ "','30','0');";
+    $sql = "REPLACE INTO `sccpsettings` (`keyword`, `data`, `seq`, `type`), VALUES ('SccpDBmodel', '". $sccp_compatible. "','30','0');";
     $results = $db->query($sql);
     if (DB::IsError($check)) {
         die_freepbx(sprintf(_("Error updating sccpdeviceconfig view. Command was: %s; error was: %s "), $sql, $results->getMessage()));

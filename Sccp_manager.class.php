@@ -465,7 +465,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
 
         if (empty($this->pagedata)) {
             switch ($inputform) {
-                case dialplan:
+                case 'dialplan':
                     $this->pagedata = array(
                         "general" => array(
                             "name" => _("SCCP Dial Plan information"),

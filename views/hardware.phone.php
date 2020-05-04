@@ -54,7 +54,12 @@
     function DispayTypeFormatter(value, row, index) {
         var exp_model = value;
         if (row['addon'] !== null ) {
-            exp_model += ' + ' + row['addon'];
+            var posd = row['addon'].indexOf(';');
+            if (posd >0) {
+                exp_model += ' + 2x ' + row['addon'].substring(0, posd);
+            } else {
+                exp_model += ' + ' + row['addon'];
+            }
         }
         return  exp_model;
         

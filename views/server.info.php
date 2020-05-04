@@ -422,7 +422,7 @@ if ($test_ami == 1) {
 //  print_r($this->aminterface->close());
 //
 //
-//print_r($this->dbinterface->get_db_SccpTableData('SccpExtension'));
+//print_r($this->dbinterface->HWextension_db_SccpTableData('SccpExtension'));
 //  print_r($this->srvinterface->getеtestChanSCC());
 //  $test_data = $this->srvinterface-> astman_GetRaw('ExtensionStateList');
 //  print_r($test_data);

@@ -134,7 +134,7 @@ class xmlinterface
             'phoneServices' => 'null', 'certHash' => 'null',
             'deviceSecurityMode' => '1');
 
-//        $var_hw_config = $this->dbinterface->get_db_SccpTableData("get_sccpdevice_byid", array('id' => $dev_id));
+//        $var_hw_config = $this->dbinterface->HWextension_db_SccpTableData("get_sccpdevice_byid", array('id' => $dev_id));
 
         if (empty($dev_config)) {
             return false;
@@ -506,7 +506,7 @@ class xmlinterface
             'phoneServices' => 'null', 'certHash' => 'null', 'deviceProtocol' => 'SIP',
             'deviceSecurityMode' => '1');
 
-//        $var_hw_config = $this->dbinterface->get_db_SccpTableData("get_sccpdevice_byid", array('id' => $dev_id));
+//        $var_hw_config = $this->dbinterface->HWextension_db_SccpTableData("get_sccpdevice_byid", array('id' => $dev_id));
 
         if (empty($dev_config)) {
             return false;

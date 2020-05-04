@@ -26,20 +26,20 @@ $keysetarray =  $this->extconfigs->getextConfig('keyset');
                     'uriaction'  => array('default'));
 */
 //   ------------------------------------- Key Set Display information  ---------------------------------------------------------
-$keynamearray = array('onhook'    => array(sname => 'ONHOOK', name =>'Display Onhook',help =>'help.'),
-                    'connected'  => array(sname => 'CONNECTED', name =>'Display Connected',help =>'help.'),
-                    'onhold'     => array(sname => 'ONHOLD', name =>'Display onhold',help =>'help.'),
-                    'ringin'     => array(sname => 'RINGIN', name =>'Display ringin',help =>'help.'),
-                    'offhook'    => array(sname => 'OFFHOOK', name =>'Display offhook',help =>'help.'),
-                    'conntrans'  => array(sname => 'CONNTRANS', name =>'Display conntrans',help =>'help.'),
-                    'digitsfoll' => array(sname => 'DIGITSFOLL', name =>'Display digitsfoll',help =>'help.'),
-                    'connconf'   => array(sname => 'CONNCONF', name =>'Display connconf',help =>'help.'),
-                    'ringout'    => array(sname => 'RINGOUT', name =>'Display ringout',help =>'help.'),
-                    'offhookfeat'=> array(sname => 'OFFHOOKFEAT', name =>'Display offhookfeat',help =>'help.'),
-                    'onhint'     => array(sname => 'ONHINT', name =>'Display onhint',help =>'help.'),
-                    'onstealable'=> array(sname => 'onstealable', name =>'Display onstealable',help =>'help.'),
-                    'holdconf'   => array(sname => 'HOLDCONF', name =>'Display holdconf',help =>'help.'),
-                    'uriaction'  => array(sname => '', name =>'Display uriaction',help =>'help.')
+$keynamearray = array('onhook'    => array('sname' => 'ONHOOK', 'name' =>'Display Onhook', 'help' =>'help.'),
+                    'connected'  => array('sname' => 'CONNECTED', 'name' =>'Display Connected', 'help' =>'help.'),
+                    'onhold'     => array('sname' => 'ONHOLD', 'name' =>'Display onhold', 'help' =>'help.'),
+                    'ringin'     => array('sname' => 'RINGIN', 'name' =>'Display ringin', 'help' =>'help.'),
+                    'offhook'    => array('sname' => 'OFFHOOK', 'name' =>'Display offhook', 'help' =>'help.'),
+                    'conntrans'  => array('sname' => 'CONNTRANS', 'name' =>'Display conntrans', 'help' =>'help.'),
+                    'digitsfoll' => array('sname' => 'DIGITSFOLL', 'name' =>'Display digitsfoll', 'help' =>'help.'),
+                    'connconf'   => array('sname' => 'CONNCONF', 'name' =>'Display connconf', 'help' =>'help.'),
+                    'ringout'    => array('sname' => 'RINGOUT', 'name' =>'Display ringout', 'help' =>'help.'),
+                    'offhookfeat'=> array('sname' => 'OFFHOOKFEAT', 'name' =>'Display offhookfeat', 'help' =>'help.'),
+                    'onhint'     => array('sname' => 'ONHINT', 'name' =>'Display onhint', 'help' =>'help.'),
+                    'onstealable'=> array('sname' => 'onstealable', 'name' =>'Display onstealable', 'help' =>'help.'),
+                    'holdconf'   => array('sname' => 'HOLDCONF', 'name' =>'Display holdconf', 'help' =>'help.'),
+                    'uriaction'  => array('sname' => '', 'name' =>'Display uriaction', 'help' =>'help.')
     );
 
 ?>

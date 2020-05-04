@@ -29,7 +29,7 @@ if (!empty($_REQUEST['new_id'])) {
 if (!empty($_REQUEST['id'])) {
     $dev_id = $_REQUEST['id'];
     $dev_new = $dev_id;
-    $db_res = $this->dbinterface->get_db_SccpTableData('get_sccpdevice_byid', array("id" => $dev_id));
+    $db_res = $this->dbinterface->HWextension_db_SccpTableData('get_sccpdevice_byid', array("id" => $dev_id));
     foreach ($db_res as $key => $val) {
         if (!empty($val)) {
             switch ($key) {

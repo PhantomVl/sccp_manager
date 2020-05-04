@@ -19,8 +19,8 @@ $feature_list=  array('parkinglot'=>'Park Slots','monitor'=> "Record Calls",'dev
 
  */
 
-$lines_list = $this->dbinterface->get_db_SccpTableData('SccpExtension');
-//$hint_list  = $this->dbinterface->get_db_SccpTableData('SccpExtension');
+$lines_list = $this->dbinterface->HWextension_db_SccpTableData('SccpExtension');
+//$hint_list  = $this->dbinterface->HWextension_db_SccpTableData('SccpExtension');
 $hint_list  = $this->getHintInformation(true, array('context'=>'park-hints')) ;
 
 // print_r($hint_list);
@@ -30,8 +30,8 @@ $show_buttons =1;
 //print_r($hint_list);
 if (!empty($_REQUEST['id'])) {
     $dev_id = $_REQUEST['id'];
-    $db_buttons = $this->dbinterface->get_db_SccpTableData('get_sccpdevice_buttons', array("id" => $dev_id));
-    $db_device = $this->dbinterface->get_db_SccpTableData('get_sccpdevice_byid', array("id" => $dev_id));
+    $db_buttons = $this->dbinterface->HWextension_db_SccpTableData('get_sccpdevice_buttons', array("id" => $dev_id));
+    $db_device = $this->dbinterface->HWextension_db_SccpTableData('get_sccpdevice_byid', array("id" => $dev_id));
     $max_buttons = $db_device['buttons'];
     if (!empty($db_device['addon_buttons'])) {
         $max_buttons += $db_device['addon_buttons'];
@@ -41,7 +41,7 @@ if (!empty($_REQUEST['id'])) {
 if (!empty($_REQUEST['new_id'])) {
     $val = $_REQUEST['type'];
     $dev_schema =  $this-> getSccpModelInformation('byid', false, "all", array('model' =>$val));
-//   $db_device = $this->dbinterface->get_db_SccpTableData('get_sccpdevice_byid', array("id" => $val));
+//   $db_device = $this->dbinterface->HWextension_db_SccpTableData('get_sccpdevice_byid', array("id" => $val));
     $max_buttons = $dev_schema[0]['buttons'];
     if (!empty($_REQUEST['addon'])) {
         $val = $_REQUEST['addon'];
@@ -52,7 +52,7 @@ if (!empty($_REQUEST['new_id'])) {
 }
 if (!empty($_REQUEST['ru_id'])) {
     $dev_id = $_REQUEST['ru_id'];
-    $db_buttons = $this->dbinterface->get_db_SccpTableData('get_sccpdevice_buttons', array("id" => $dev_id));
+    $db_buttons = $this->dbinterface->HWextension_db_SccpTableData('get_sccpdevice_buttons', array("id" => $dev_id));
     $show_buttons = $max_buttons;
 }
 

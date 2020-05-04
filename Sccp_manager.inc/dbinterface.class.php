@@ -32,7 +32,7 @@ class dbinterface
     public function get_db_SccpTableByID($dataid, $data = array(), $indexField = '')
     {
         $resut = array();
-        $raw = $this->get_db_SccpTableData($dataid, $data);
+        $raw = $this->HWextension_db_SccpTableData($dataid, $data);
         if (empty($raw) || empty($indexField)) {
             return $raw;
         }
@@ -43,7 +43,7 @@ class dbinterface
         return $resut;
     }
 
-    public function get_db_SccpTableData($dataid, $data = array())
+    public function HWextension_db_SccpTableData($dataid, $data = array())
     {
         if ($dataid == '') {
             return false;
@@ -216,7 +216,7 @@ class dbinterface
                 }
                 break;
             case "extension":
-                $sql = "SELECT " . $sel_inf . " FROM sccpdevmodel WHERE (dns = 0)ORDER BY model ";
+                $sql = "SELECT " . $sel_inf . " FROM sccpdevmodel WHERE (dns = 0) and (enabled > 0) ORDER BY model ";
                 break;
             case "enabled":
             case "phones":

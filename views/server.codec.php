@@ -16,7 +16,7 @@ $sccp_disalow = $sccp_disalow_def;
 
 if (!empty($_REQUEST['id'])) {
     $dev_id = $_REQUEST['id'];
-    $db_res = $this->dbinterface->get_db_SccpTableData('get_sccpdevice_byid', array("id" => $dev_id));
+    $db_res = $this->dbinterface->HWextension_db_SccpTableData('get_sccpdevice_byid', array("id" => $dev_id));
     if (!empty($db_res['allow'])) {
         $i = 1;
         foreach (explode(';', $db_res['allow']) as $c) {

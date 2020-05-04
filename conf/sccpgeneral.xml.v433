@@ -1284,7 +1284,7 @@ and open the template in the editor. Base Version before all crash :-)
             <label>Addon</label>
             <name>addon</name> 
             <default>NONE</default>
-            <select name="model" dataval="buttons">model</select>
+            <select name="model" dataval="buttons">description</select>
             <class>hw_select sccp-custom</class>
             <help>Addon: Addons are model specific and only work with certain base phones. This phone model is identified as being a phone that does not accept sidecars. Update devmodel if this is not correct.</help>
         </item>

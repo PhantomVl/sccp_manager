@@ -6,8 +6,8 @@
  * and open the template in the editor.
  */
 $forminfo =array(
-                array("name"=>"dev_buttons",label=>"Buttons Configuration"),
-                array("name"=>"button",label=>"Buttons ",help=>"help.")
+                array("name" => "dev_buttons", 'label' =>"Buttons Configuration"),
+                array("name" => "button", 'label'=>"Buttons ", 'help' => "help.")
     );
 //$buttons_type=  array("empty","line","service","feature","speeddial");
 //   "feature","service" -- Add leter !

@@ -672,7 +672,7 @@ foreach ($items as $child) {
         if ($child['type'] == 'SDE') {
             if (empty($extension_list)) {
                 $extension_list = \FreePBX::Sccp_manager()->dbinterface->HWextension_db_SccpTableData("HWextension");
-                $extension_list[]=array( model => 'NONE', vendor => 'CISCO', dns => '0');
+                $extension_list[]=array( 'model' => 'NONE', 'vendor' => 'CISCO', dns => '0');
                 foreach ($extension_list as &$data) {
                     $d_name = explode(';', $data['model']);
                     if (is_array($d_name) && (count($d_name) > 1)) {
@@ -688,7 +688,7 @@ foreach ($items as $child) {
         if ($child['type'] == 'SDD') {
             if (empty($device_list)) {
                 $device_list = \FreePBX::Sccp_manager()->dbinterface->HWextension_db_SccpTableData("SccpDevice");
-                $device_list[]=array(name=>'NONE', description=>'No Device');
+                $device_list[]=array('name' => 'NONE', 'description' => 'No Device');
             }
             $select_opt = $device_list;
         }

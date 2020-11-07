@@ -2063,7 +2063,9 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                     case "sccp_compatible":
                         break;
                     default:
-                        $this->sccp_conf_init['general'][$key] = $value['data'];
+                        if (!empty($value['data'])) {
+                            $this->sccp_conf_init['general'][$key] = $value['data'];
+                        }
                 }
             }
         }

@@ -102,23 +102,23 @@ and open the template in the editor. Base Version before all crash :-)
     </page_group>
     <page_group name="sccp_net"><label>SCCP Networks</label>
       <item type="IED" id="1" seq="0">
-        <label>Allow Networks / Mask</label>
-        <name>permit</name>
-        <default>0.0.0.0/0.0.0.0</default>
-        <input value="NONE" field="net" nameseparator="/"><options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/></input>
-        <input value="NONE" field="mask"><options placeholder="255.255.255.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/> </input>
-        <addbutton>Add Allow network</addbutton>
-        <help>Allow network settings. Blank fields will be ignored, use Network 0.0.0.0.</help>
-      </item>
-
-      <item type="IED" id="2" seq="0">
         <label>Deny Networks / Mask</label>
         <name>deny</name>
         <default>0.0.0.0/0.0.0.0</default>
         <input value="NONE" field="net" nameseparator="/"><options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/><class></class></input>
         <input value="NONE" field="mask"><options placeholder="255.255.255.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/><class></class></input>
-        <addbutton>Add Deny network</addbutton>
+        <addbutton>Deny a network</addbutton>
         <help>All RFC 1918 addresses are local networks. Should always be at least '0.0.0.0/0.0.0.0'.</help>
+      </item>
+
+      <item type="IED" id="2" seq="0">
+        <label>Permit Networks / Mask</label>
+        <name>permit</name>
+        <default>0.0.0.0/0.0.0.0</default>
+        <input value="NONE" field="net" nameseparator="/"><options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/></input>
+        <input value="NONE" field="mask"><options placeholder="255.255.255.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/> </input>
+        <addbutton>Permit a network</addbutton>
+        <help>Permit devices from this network to connect to the server. Blank fields will be ignored, use Network 0.0.0.0.</help>
       </item>
 
       <item type="IED" id="3" seq="0">
@@ -127,7 +127,7 @@ and open the template in the editor. Base Version before all crash :-)
         <default>0.0.0.0/0.0.0.0</default>
         <input value="NONE" field="net" nameseparator="/"><options placeholder="0.0.0.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$" /><class></class></input>
         <input value="NONE" field="mask"><options placeholder="255.255.255.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$"/> <class></class></input>
-        <addbutton>Add local networks</addbutton>
+        <addbutton>Add a local network</addbutton>
         <help>Local network settings. Blank fields will be ignored used Network 0.0.0.0.</help>
       </item>
 

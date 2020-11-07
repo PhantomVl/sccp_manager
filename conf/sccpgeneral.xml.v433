@@ -169,7 +169,7 @@ and open the template in the editor. Base Version before all crash :-)
     <page_group name="sccp_net">
         <label>SCCP Networks</label>
 
-        <item type="IED" id="1" seq="0">
+        <item type="IED" id="1" seq="1">
             <label>Deny Networks / Mask</label>
             <name>deny</name>
             <default>0.0.0.0/0.0.0.0</default>
@@ -186,7 +186,7 @@ and open the template in the editor. Base Version before all crash :-)
             <help>All RFC 1918 addresses are local networks. Should always be at least '0.0.0.0/0.0.0.0'.</help>
         </item>
 
-        <item type="IED" id="2" seq="0">
+        <item type="IED" id="2" seq="2">
             <label>Permit Networks / Mask</label>
             <name>permit</name>
             <cbutton field="internal" value="internal">Internal</cbutton>
@@ -204,7 +204,7 @@ and open the template in the editor. Base Version before all crash :-)
             You can use the 'internal' which will be interpreted as the 3 IANA private network classes (192.168, 172 and 10). </help>
         </item>
 
-        <item type="IED" id="3" seq="0">
+        <item type="IED" id="3" seq="3">
             <label>Local Networks / Mask</label>
             <name>localnet</name>
             <cbutton field="internal" value="internal">Internal</cbutton>

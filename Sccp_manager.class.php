@@ -2036,14 +2036,21 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         // Make sccp.conf data
         // [general]
         foreach ($this->sccpvalues as $key => $value) {
-            if ($value['seq'] == 0) {
+            if ($value['seq'] <= 3) {
                 switch ($key) {
-                    case "allow":
-                    case "disallow":
                     case "deny":
-                    case "localnet":
-                    case "permit":
+                    case "disallow":
+                    case "allow":
                         $this->sccp_conf_init['general'][$key] = explode(';', $value['data']);
+                        break;
+                    case "permit":
+                    case "localnet":
+                        $content = explode(';', $value['data']);
+                        if (in_array('internal', $content)) {
+                            $this->sccp_conf_init['general'][$key] = "internal";
+                        } else {
+                            $this->sccp_conf_init['general'][$key] = $content;
+                        }
                         break;
                     case "devlang":
                         $lang_data = $this->extconfigs->getextConfig('sccp_lang', $value['data']);

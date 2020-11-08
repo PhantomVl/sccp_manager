@@ -1530,11 +1530,10 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 break;
         }
         foreach ($allCodecs as $c => $v) {
-            if (array_search($c, $Sccp_Codec) != null) {
+            if (in_array($c, $Sccp_Codec)) {
                 $allSupported[$c] = $v;
             }
         }
-
         if (empty($lcodecs) || (!is_array($lcodecs))) {
             if (empty($allSupported)) {
                 $lcodecs = $allCodecs;
@@ -1555,7 +1554,6 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                     $codecs[$c] = false;
                 }
             }
-
             return $codecs;
         } else {
             //Remove non digits

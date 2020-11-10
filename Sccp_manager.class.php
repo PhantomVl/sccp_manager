@@ -2062,6 +2062,13 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         }
         // [Namesoftkeyset]
         // type=softkeyset
+        
+        // create sccp_custom.conf if necessary and append include statement
+        if (!file_exists($this->sccppath["asterisk"] . "/sccp_custom.conf")) {
+            touch($this->sccppath["asterisk"] . "/sccp_custom.conf");
+        }
+        array_push($this->sccp_conf_init, "#include sccp_custom.conf");
+        
         $this->cnf_wr->writeConfig('sccp.conf', $this->sccp_conf_init);
     }
 

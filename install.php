@@ -683,6 +683,7 @@ function InstallDB_fillsccpdevmodel()
             "('SPA 521S', 'CISCO', 1, 1, '', 'loadInformation80000', 0, ''), ('SPA 502G', 'CISCO', 1, 1, '', 'loadInformation80003', 0, ''), ('SPA 504G', 'CISCO', 1, 1, '', 'loadInformation80004', 0, ''), ('SPA 525G', 'CISCO', 1, 1, '', 'loadInformation80005', 0, ''), ('SPA 525G2', 'CISCO', 1, 1, '', 'loadInformation80009', 0, ''), ('SPA 303G', 'CISCO', 1, 1, '', 'loadInformation80011', 0, ''),".
             "('IP Communicator', 'CISCO', 1, 1, '', 'loadInformation30016', 0, NULL), ('Nokia E', 'Nokia', 1, 28, '', 'loadInformation275', 0, NULL), ('VGC Phone', 'CISCO', 1, 1, '', 'loadInformation10', 0, NULL),".
             "('7911-sip', 'CISCO-SIP', 1, 1, 'SIP11.9-2-1S', 'loadInformation307', 1, 'SEP0000000000.cnf.xml_791x_sip_template'),".
+            "('9951-sip', 'CISCO-SIP', 1, 1, 'sip9951.9-2-2SR1-9', 'loadinformation537', 1, 'SEP0000000000.cnf.xml_99xx_sip_template'),".
             "('VGC Virtual', 'CISCO', 1, 1, '', 'loadInformation11', 0, NULL);";
     $check = $db->query($sql);
     if (db::IsError($check)) {

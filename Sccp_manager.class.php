@@ -75,6 +75,11 @@
  *  - Add Warning Information on Server Info Page
  *  - ADD Reload Line
  *  - Add Call Map (show Current call Information)
+ * ---TODO ---
+ * <vendorConfig>
+ *  <autoSelectLineEnable>0</autoSelectLineEnable>
+ * <autoCallSelect>0</autoCallSelect>
+ * </vendorConfig>
  */
 
 namespace FreePBX\modules;
@@ -530,7 +535,12 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                             "page" => 'views/server.codec.php'
                         );
                     }
-
+                    if ($this->sccpvalues['sccp_compatible']['data'] >= '433') {
+                        $this->pagedata["advanced"] = array(
+                            "name" => _("Device SCCP Advanced"),
+                            "page" => 'views/form.devadvanced.php'
+                        );
+                    }
                     break;
                 case "cisco-sip":
                     $this->pagedata = array(
@@ -974,6 +984,9 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                                     $dev_addon = null;
                                 }
                                 $dev_schema = $this->getSccpModelInformation('byciscoid', false, "all", array('model' => $dev_data['SCCP_Vendor']['model_id']));
+                                if (empty($dev_schema)) {
+                                    $dev_schema[0]['model'] = "ERROR in Model Schema";
+                                }
                                 $result[] = array('name' => $id_name, 'mac' => $id_name, 'button' => '---', 'type' => $dev_schema[0]['model'], 'new_hw' => 'Y',
                                     'description' => '*NEW* ' . $dev_ids['descr'], 'status' => '*NEW* ' . $dev_ids['status'], 'address' => $dev_ids['address'],
                                     'addon' => $dev_addon);
@@ -1530,11 +1543,10 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 break;
         }
         foreach ($allCodecs as $c => $v) {
-            if (array_search($c, $Sccp_Codec) != null) {
+            if (in_array($c, $Sccp_Codec)) {
                 $allSupported[$c] = $v;
             }
         }
-
         if (empty($lcodecs) || (!is_array($lcodecs))) {
             if (empty($allSupported)) {
                 $lcodecs = $allCodecs;
@@ -1548,7 +1560,6 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 }
             }
         }
-
         if ($showDefaults) {
             foreach ($allSupported as $c => $v) {
                 if (!isset($codecs[$c])) {
@@ -2041,9 +2052,15 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                     case "allow":
                     case "disallow":
                     case "deny":
+                        $this->sccp_conf_init['general'][$key] = explode(';', $value['data']);
+                        break;
                     case "localnet":
                     case "permit":
-                        $this->sccp_conf_init['general'][$key] = explode(';', $value['data']);
+                        $content =$value['data'];
+                        if (strpos($content, 'internal') !== false) {
+                           $content = str_replace(';0.0.0.0/0.0.0.0','',$value['data']);
+                        }
+                        $this->sccp_conf_init['general'][$key] = explode(';', $content);
                         break;
                     case "devlang":
                         $lang_data = $this->extconfigs->getextConfig('sccp_lang', $value['data']);
@@ -2056,12 +2073,30 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                     case "sccp_compatible":
                         break;
                     default:
-                        $this->sccp_conf_init['general'][$key] = $value['data'];
+                        if (!empty($value['data'])) {
+                            $this->sccp_conf_init['general'][$key] = $value['data'];
+                        }
                 }
             }
         }
         // [Namesoftkeyset]
         // type=softkeyset
+        // 
+        // ----- It is a very bad idea to add an external configuration file "sccp_custom.conf" !!!!
+        // This will add problems when solving problems caused by unexpected solutions from users.
+        //
+        if (file_exists($this->sccppath["asterisk"] . "/sccp_custom.conf")) {
+            $this->sccp_conf_init['HEADER'] = array(
+                ";                                                                                ;",
+                ";  It is a very bad idea to add an external configuration file !!!!              ;",
+                ";  This will add problems when solving problems caused by unexpected solutions   ;",
+                ";  from users.                                                                   ;",
+                ";--------------------------------------------------------------------------------;",
+                "#include sccp_custom.conf"
+            );
+        }
+        // ----- It is a very bad idea to add an external configuration file "sccp_custom.conf" !!!!
+        
         $this->cnf_wr->writeConfig('sccp.conf', $this->sccp_conf_init);
     }
 

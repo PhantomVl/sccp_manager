@@ -1961,5 +1961,20 @@ and open the template in the editor. Base Version before all crash :-)
         </item>
         
     </page_group>
+
+    <page_group name="sccp_hw_addv_device">
+        <label>SIP Device config</label> 
+        <item type="IED" id="1" seq="0">
+            <label>Set Vars</label>
+            <name>setvar</name>
+            <input value="NONE" field="setvar">
+                <options placeholder="inventoryNumber=AB123443" />
+                <class>col-md-9</class>
+            </input>
+            <add_pluss>+</add_pluss>
+            <help></help>
+        </item>
+        
+    </page_group>
     
 </root>

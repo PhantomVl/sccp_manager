@@ -54,7 +54,7 @@ if (!empty($_REQUEST['id'])) {
                     <div class="row">
                         <div class="form-group">
                             <div class="col-md-3">
-                                <label class="control-label" for="codecw"><?php echo _("Audio (allow)") ?></label>
+                                <label class="control-label" for="codecw"><?php echo _("Allow (audio)") ?></label>
                             </div>
                             <div class="col-md-9">
                                 <div>
@@ -104,7 +104,7 @@ if (!empty($_REQUEST['id'])) {
                     <div class="row">
                         <div class="form-group">
                             <div class="col-md-3">
-                                <label class="control-label" for="codecw"><?php echo _("Video (allow)") ?></label>
+                                <label class="control-label" for="codecw"><?php echo _("Allow (video)") ?></label>
                             </div>
                             <div class="col-md-9">
                                 <div>
@@ -154,7 +154,7 @@ if (!empty($_REQUEST['id'])) {
                     <div class="row">
                         <div class="form-group">
                             <div class="col-md-3">
-                                <label class="control-label" for="sccp_disallow"><?php echo _("Codec Disallow") ?></label>
+                                <label class="control-label" for="sccp_disallow"><?php echo _("Disallow") ?></label>
                                 <i class="fa fa-question-circle fpbx-help-icon" data-for="sccp_disallow"></i>
                             </div>
                             <div class="col-md-9 radioset">

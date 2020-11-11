@@ -80,7 +80,7 @@
                         <input type="text" class="form-control" id="new_vendor" name="new_vendor" value="CISCO">
                     </div> </div></div>
                     <div class="row"><div class="col-md-12">
-                        <span id="new_vendor-help" class="help-block fpbx-help-block">Help.</span>
+                        <span id="new_vendor-help" class="help-block fpbx-help-block">Use "CISCO" for the Skinny Client Control Protocol and "CISCO-SIP" for the CISCO Sip Protocol</span>
                 </div></div></div>
 
                 <div class="element-container"><div class="row"> <div class="form-group"><div class="col-md-3">
@@ -88,10 +88,10 @@
                         <i class="fa fa-question-circle fpbx-help-icon" data-for="new_dns"></i>
                     </div><div class="col-md-9">
                     <select name="new_dns" id="new_dns">
-                            <option value="1">Phone - no sidecars.</option>
+                        <option value="1"  selected='selected'>Phone - no sidecars.</option>
                             <option value="2">Phone - one sidecar.</option>
                             <option value="3">Phone - two sidecars.</option>
-                            <option value="0" selected='selected'>Sidecar</option>
+                            <option value="0">Sidecar</option>
                         </select>
                     </div> </div></div>
                     <div class="row"><div class="col-md-12">

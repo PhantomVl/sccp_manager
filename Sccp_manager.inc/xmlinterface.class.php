@@ -536,7 +536,6 @@ class xmlinterface
                 $bind_proto = (isset($value['tcp'])) ? 'tcp' : 'udp';
             }
         }
-
         if (file_exists($xml_template)) {
             $xml_work = simplexml_load_file($xml_template);
 

@@ -758,6 +758,9 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 $ver_id = ' on found active model !';
                 foreach ($models as $data) {
                     $ver_id = $this->createSccpDeviceXML($data['name']);
+                    if ($ver_id == -1) {
+                        return array('status' => false, 'message' => 'Error Create Configuration Divice :' . $data['name']);
+                    }
                 };
 
                 if ($this->sccpvalues['siptftp']['data'] == 'on') { // Check SIP Support Enabled
@@ -1283,7 +1286,6 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         $save_buttons = $this->getPhoneButtons($get_settings, $name_dev, $hw_type);
         $this->dbinterface->write("sccpbuttons", $save_buttons, $update_hw, '', $name_dev);
         $this->createSccpDeviceXML($name_dev);
-
         if ($hw_id == 'new') {
             $this->srvinterface->sccpDeviceReset($name_dev);
         } else {
@@ -1925,6 +1927,10 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                             $dev_line_data = $this->sipconfigs->get_db_sip_TableData('DeviceById', array('id' => $tmp_line[1]));
                             $f_linetype = ($dev_line_data['dial'] == 'PJSIP') ? 'pjsip' : 'sip';
                             $dev_line_data['sbind'] = $tmp_bind[$f_linetype];
+                            if ((!$this->array_key_exists_recursive('udp', $tmp_bind[$f_linetype])) && (!$this->array_key_exists_recursive('tcp', $tmp_bind[$f_linetype]))) {
+                                return -1;
+                            }
+
                             if (!empty($dev_line_data)) {
                                 $data_value['siplines'][] = $dev_line_data;
                             }
@@ -2056,9 +2062,9 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                         break;
                     case "localnet":
                     case "permit":
-                        $content =$value['data'];
+                        $content = $value['data'];
                         if (strpos($content, 'internal') !== false) {
-                           $content = str_replace(';0.0.0.0/0.0.0.0','',$value['data']);
+                            $content = str_replace(';0.0.0.0/0.0.0.0', '', $value['data']);
                         }
                         $this->sccp_conf_init['general'][$key] = explode(';', $content);
                         break;
@@ -2096,7 +2102,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
             );
         }
         // ----- It is a very bad idea to add an external configuration file "sccp_custom.conf" !!!!
-        
+
         $this->cnf_wr->writeConfig('sccp.conf', $this->sccp_conf_init);
     }
 
@@ -2182,7 +2188,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
             // Old Req get all hints
             $tmp_data = $this->srvinterface->sccp_list_all_hints();
             foreach ($tmp_data as $value) {
-                $res[$value] = array('key' => $value, 'exten' => $this-> before('@', $value), 'label' => $value);
+                $res[$value] = array('key' => $value, 'exten' => $this->before('@', $value), 'label' => $value);
             }
         }
 
@@ -2281,6 +2287,18 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
 
     private function before($thing, $inthat) {
         return substr($inthat, 0, strpos($inthat, $thing));
+    }
+
+    private function array_key_exists_recursive($key, $arr) {
+        if (array_key_exists($key, $arr)) {
+            return true;
+        }
+        foreach ($arr as $currentKey => $value) {
+            if (is_array($value)) {
+                return $this->array_key_exists_recursive($key, $value);
+            }
+        }
+        return false;
     }
 
     private function strpos_array($haystack, $needles) {

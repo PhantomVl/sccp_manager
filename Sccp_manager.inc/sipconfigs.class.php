@@ -90,7 +90,11 @@ class sipconfigs
                         if ($f_data['ip'] == "127.0.0.1") {
                             continue;
                         }
-                        $result[$f_protocol][$f_data['ip']]=$f_port;
+                        if (empty($result[$f_protocol][$f_data['ip']])) {
+                            $result[$f_protocol][$f_data['ip']]= $f_port;
+                        } else {
+                            $result[$f_protocol][$f_data['ip']]= array_merge($result[$f_protocol][$f_data['ip']],$f_port);
+                        }
                         $result[$f_protocol][$f_data['ip']]['ip']=$f_data['ip'];
                     }
                 } else {

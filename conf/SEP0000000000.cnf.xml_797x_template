@@ -95,7 +95,7 @@
   </networkLocaleInfo>
   <informationURL>http://x.x.x.x/shiftkey/handle_shift.php</informationURL>
   <authenticationURL>http://x.x.x.x/authenticate.php</authenticationURL>
-  <!--<servicesURL>http://x.x.x.x/cisco/service.php?emcc=#EMCC#</servicesURL>-->
+  <servicesURL>http://x.x.x.x/cisco/service.php?emcc=#EMCC#</servicesURL>
   <directoryURL>http://x.x.x.x/CiscoDirectory/phonebook.php</directoryURL>
   <messagesURL/>
   <proxyServerURL/>

@@ -686,7 +686,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                     $this->initializeTFtpLanguagePath();
                 }
                 $this->handleSubmit($request);
-                $this->saveSccpSettings();
+                // $this->saveSccpSettings();
                 //$this->createDefaultSccpConfig();
                 $this->createDefaultSccpXml();
 
@@ -1369,13 +1369,17 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                     $tz_id = $value;
                     $TZdata = $this->extconfigs->getextConfig('sccp_timezone_offset', $tz_id);
                     if (!empty($TZdata)) {
-                        $save_settings[] = array('keyword' => 'tzoffset', 'data' => ($TZdata / 60),
-                            'seq' => '98',
-                            'type' => '2');
+                        $value = ($TZdata / 60);
+                        if (!($this->sccpvalues['tzoffset']['data'] == $value)) {
+                            $save_settings[] = array('keyword' => 'tzoffset', 'data' => $value,
+                                'seq' => '98',
+                                'type' => '2');
+                        }
                     }
                     break;
             }
         }
+
         if (!empty($save_settings)) {
             $this->saveSccpSettings($save_settings);
             $this->getSccpSettingFromDB();
@@ -1857,8 +1861,8 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
      */
 
     private function saveSccpSettings($save_value = array()) {
-        global $db;
-        global $amp_conf;
+//        global $db;
+//        global $amp_conf;
 
         $save_settings = array();
         if (empty($save_value)) {
@@ -1928,6 +1932,8 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                             $f_linetype = ($dev_line_data['dial'] == 'PJSIP') ? 'pjsip' : 'sip';
                             $dev_line_data['sbind'] = $tmp_bind[$f_linetype];
                             if ((!$this->array_key_exists_recursive('udp', $tmp_bind[$f_linetype])) && (!$this->array_key_exists_recursive('tcp', $tmp_bind[$f_linetype]))) {
+                                print_r("Wrong sip server Config ! Not enabled UDP or TCP protocol");
+                                die();
                                 return -1;
                             }
 

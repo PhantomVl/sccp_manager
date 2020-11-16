@@ -247,18 +247,20 @@ class dbinterface
         global $db;
 //        global $amp_conf;
         $result = "Error";
-
+        $delete_value = array();
         switch ($db_name) {
             case 'sccpsettings':
                 foreach ($save_value as $key_v => $data) {
                     if (!empty($data)) {
                         if (isset($data[1])) {
                             if ($data[1] == $this->val_null) {
+                                $delete_value[] = $save_value[$key_v]['keyword'];
                                 unset($save_value[$key_v]);
                             }
                         }
                         if (isset($data['data'])) {
                             if ($data['data'] == $this->val_null) {
+                                $delete_value[] = $save_value[$key_v]['keyword'];
                                 unset($save_value[$key_v]);
                             }
                         }
@@ -271,8 +273,14 @@ class dbinterface
                     $stmt = $db->prepare('INSERT INTO `sccpsettings` (`keyword`, `data`, `seq`, `type`) VALUES (?,?,?,?)');
                     $result = $db->executeMultiple($stmt, $save_value);
                 } else {
-                    $stmt = $db->prepare('REPLACE INTO `sccpsettings` (`keyword`, `data`, `seq`, `type`) VALUES (?,?,?,?)');
-                    $result = $db->executeMultiple($stmt, $save_value);
+                    if (!empty($delete_value)) {
+                        $stmt = $db->prepare('DELETE FROM `sccpsettings` WHERE `keyword`=?');
+                        $result = $db->executeMultiple($stmt, $delete_value);
+                    }
+                    if (!empty($save_value)) {
+                        $stmt = $db->prepare('REPLACE INTO `sccpsettings` (`keyword`, `data`, `seq`, `type`) VALUES (?,?,?,?)');
+                        $result = $db->executeMultiple($stmt, $save_value);
+                    }
                 }
                 break;
             case 'sccpdevmodel':

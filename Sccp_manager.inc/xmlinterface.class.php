@@ -211,7 +211,11 @@ class xmlinterface
                                     $srst_fld = array('srst_ip' => array('ipAddr', 'port'));
 //                                    $srst_fld = array('srst_ip' => array('ipAddr','port') , 'srst_sip' => array('sipIpAddr','sipPort') );
                                     foreach ($srst_fld as $srst_pro => $srs_put) {
-                                        $srst_data = explode(';', $data_values[$srst_pro]);
+                                        if (empty($data_values[$srst_pro]) || ($data_values['srst_Option'] == 'disable') ) {
+                                            $srst_data =array();
+                                        } else  {
+                                            $srst_data = explode(';', $data_values[$srst_pro]);
+                                        }
                                         $si = 1;
 //                                        $xnode['test'] = $srst_data[0];
                                         foreach ($srst_data as $value) {
@@ -219,7 +223,8 @@ class xmlinterface
                                             $nod = $srs_put[0] . $si;
                                             $xnode->$nod = $srs_val[0];
                                             $nod = $srs_put[1] . $si;
-                                            $xnode->$nod = $srs_val[1];
+                                            $xnode->$nod = ((empty($srs_val[1])) ? "2000": $srs_val[1]);
+//                                            $xnode->$nod = $srs_val[1];
                                             $si++;
                                         }
                                         while ($si < 4) {

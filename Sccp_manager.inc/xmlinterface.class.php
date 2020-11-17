@@ -190,7 +190,7 @@ class xmlinterface
                                     $xnode->timeZone = $TZdata['cisco_code'];
 //                                    $xnode->timeZone = $tz_id.' Standard'.((empty($TZdata['daylight']))? '': '/'.$TZdata['daylight']).' Time';
 
-                                    if ($data_values['ntp_config_enabled'] == 'yes') {
+                                    if ($data_values['ntp_config_enabled'] == 'on') {
                                         $xnode->ntps->ntp->name = $data_values['ntp_server'];
                                         $xnode->ntps->ntp->ntpMode = $data_values['ntp_server_mode'];
                                     } else {
@@ -579,7 +579,7 @@ class xmlinterface
                                     $xnode->timeZone = $TZdata['cisco_code'];
 //                                    $xnode->timeZone = $tz_id.' Standard'.((empty($TZdata['daylight']))? '': '/'.$TZdata['daylight']).' Time';
 
-                                    if ($data_values['ntp_config_enabled'] == 'yes') {
+                                    if ($data_values['ntp_config_enabled'] == 'on') {
                                         $xnode->ntps->ntp->name = $data_values['ntp_server'];
                                         $xnode->ntps->ntp->ntpMode = $data_values['ntp_server_mode'];
                                     } else {

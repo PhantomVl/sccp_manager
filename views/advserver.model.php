@@ -55,12 +55,12 @@
 </div>
 
 <!-- Begin Form Input New  -->
-<div class="modal fade add_new_model" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+<div class="modal fade add_new_model" tabindex="-1" role="dialog" aria-labelledby="myLargeModelLabel">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="gridSystemModalLabel"><?php echo _('Modal title');?></h4>
+                <h4 class="modal-title" id="gridSystemModelLabel"><?php echo _('Model');?></h4>
             </div>
             <div class="modal-body">
                 <div class="element-container"><div class="row"> <div class="form-group"><div class="col-md-3">
@@ -98,7 +98,6 @@
                         <span id="new_dns-help" class="help-block fpbx-help-block">Help.</span>
                 </div></div></div>
 
-
                 <div class="element-container"><div class="row"> <div class="form-group"><div class="col-md-3">
                         <label class="control-label" for="new_buttons"><?php echo _('Model Line Buttons');?></label>
                         <i class="fa fa-question-circle fpbx-help-icon" data-for="new_buttons"></i>
@@ -108,7 +107,6 @@
                     <div class="row"><div class="col-md-12">
                         <span id="new_buttons-help" class="help-block fpbx-help-block">Help.</span>
                 </div></div></div>
-                
                 
                 <div class="element-container"><div class="row"> <div class="form-group"><div class="col-md-3">
                         <label class="control-label" for="new_loadimage"><?php echo _('Load Image');?></label>
@@ -148,17 +146,14 @@
     </div>
 </div>
 
-
-
-<div class="modal fade" id="edit_model" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+<div class="modal fade" id="edit_model" tabindex="-1" role="dialog" aria-labelledby="myLargeModelLabel">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="gridSystemModalLabel"><?php echo _('Modal title');?></h4>
+                <h4 class="modal-title" id="gridSystemModelLabel"><?php echo _('Model');?></h4>
             </div>
             <div class="modal-body">
-
                 <div class="element-container"><div class="row"> <div class="form-group"><div class="col-md-3">
                         <label class="control-label" for="editd_model"><?php echo _('Device Model');?></label>
                         <i class="fa fa-question-circle fpbx-help-icon" data-for="editd_model"></i>
@@ -168,16 +163,60 @@
                     <div class="row"><div class="col-md-12">
                         <span id="editd_model-help" class="help-block fpbx-help-block">Help.</span>
                 </div></div></div>
-
                 
                 <div class="element-container"><div class="row"> <div class="form-group"><div class="col-md-3">
+                        <label class="control-label" for="editd_vendor"><?php echo _('Vendor name');?></label>
+                        <i class="fa fa-question-circle fpbx-help-icon" data-for="editd_vendor"></i>
+                    </div><div class="col-md-9">
+                        <input type="text" class="form-control" id="editd_vendor" name="editd_vendor" value="CISCO">
+                    </div> </div></div>
+                    <div class="row"><div class="col-md-12">
+                        <span id="editd_vendor-help" class="help-block fpbx-help-block">Use "CISCO" for the Skinny Client Control Protocol and "CISCO-SIP" for the CISCO Sip Protocol</span>
+                </div></div></div>
+
+                <div class="element-container"><div class="row"> <div class="form-group"><div class="col-md-3">
+                        <label class="control-label" for="editd_dns"><?php echo _('Expansion Module');?></label>
+                        <i class="fa fa-question-circle fpbx-help-icon" data-for="editd_dns"></i>
+                    </div><div class="col-md-9">
+                    <select name="editd_dns" id="editd_dns">
+                        <option value="1"  selected='selected'>Phone - no sidecars.</option>
+                            <option value="2">Phone - one sidecar.</option>
+                            <option value="3">Phone - two sidecars.</option>
+                            <option value="0">Sidecar</option>
+                        </select>
+                    </div> </div></div>
+                    <div class="row"><div class="col-md-12">
+                        <span id="editd_dns-help" class="help-block fpbx-help-block">Help.</span>
+                </div></div></div>
+
+                <div class="element-container"><div class="row"> <div class="form-group"><div class="col-md-3">
+                        <label class="control-label" for="editd_buttons"><?php echo _('Model Line Buttons');?></label>
+                        <i class="fa fa-question-circle fpbx-help-icon" data-for="editd_buttons"></i>
+                    </div><div class="col-md-9">
+                        <input type="number" min="1" min="96" class="form-control" id="editd_buttons" name="editd_buttons" value="1">
+                    </div> </div></div>
+                    <div class="row"><div class="col-md-12">
+                        <span id="editd_buttons-help" class="help-block fpbx-help-block">Help.</span>
+                </div></div></div>
+
+                <div class="element-container"><div class="row"> <div class="form-group"><div class="col-md-3">
                         <label class="control-label" for="editd_loadimage"><?php echo _('Load Image');?></label>
-                        <i class="fa fa-question-circle fpbx-help-icon" data-for="edit_devimage"></i>
+                        <i class="fa fa-question-circle fpbx-help-icon" data-for="editd_loadimage"></i>
                     </div><div class="col-md-9">
                         <input type="text" class="form-control" id="editd_loadimage" name="editd_loadimage" value="">
                     </div> </div></div>
                     <div class="row"><div class="col-md-12">
                         <span id="editd_loadimage-help" class="help-block fpbx-help-block">Help.</span>
+                </div></div></div>
+
+                <div class="element-container"><div class="row"> <div class="form-group"><div class="col-md-3">
+                        <label class="control-label" for="editd_loadinformationid"><?php echo _('Load Information ID');?></label>
+                        <i class="fa fa-question-circle fpbx-help-icon" data-for="editd_loadinformationid"></i>
+                    </div><div class="col-md-9">
+                        <input type="text" class="form-control" id="editd_loadinformationid" name="editd_loadinformationid" value="">
+                    </div> </div></div>
+                    <div class="row"><div class="col-md-12">
+                        <span id="editd_loadinformationid-help" class="help-block fpbx-help-block">Help.</span>
                 </div></div></div>
 
                 <div class="element-container"><div class="row"> <div class="form-group"><div class="col-md-3">
@@ -189,8 +228,6 @@
                     <div class="row"><div class="col-md-12">
                         <span id="editd_nametemplate-help" class="help-block fpbx-help-block">Help.</span>
                 </div></div></div>
-
-                
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo _('Close');?></button>
@@ -259,6 +296,10 @@
             document.getElementById("editd_model").value = clr;
             document.getElementById("editd_loadimage").value = drow['loadimage'];
             document.getElementById("editd_nametemplate").value = drow['nametemplate'];
+            document.getElementById("editd_loadinformationid").value = drow['loadinformationid'];
+            document.getElementById("editd_dns").value = drow['dns'];
+            document.getElementById("editd_vendor").value = drow['vendor'];
+            document.getElementById("editd_buttons").value = drow['buttons'];
         }
     }
 </script>

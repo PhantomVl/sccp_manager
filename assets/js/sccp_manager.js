@@ -550,7 +550,8 @@ $(document).ready(function () {
         }
         if ($(this).data('id') === 'model_apply') {
             var dev_cmd = 'model_update';
-            var dev_fld = ["model", "loadimage", "nametemplate"];
+            //var dev_fld = ["model", "loadimage", "nametemplate"];
+            var dev_fld = ["model", "vendor", "dns", "buttons", "loadimage", "loadinformationid", "nametemplate"];
             datas = '';
             for (var i = 0; i < dev_fld.length; i++) {
                 datas = datas + dev_fld[i] + '=' + $('#editd_' + dev_fld[i]).val() + '&';

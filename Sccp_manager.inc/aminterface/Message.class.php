@@ -12,7 +12,7 @@ namespace FreePBX\modules\Sccp_manager\aminterface;
 
 class AMIException extends \Exception
 {
-    
+
 }
 
 abstract class Message

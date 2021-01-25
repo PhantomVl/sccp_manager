@@ -193,8 +193,8 @@ class srvinterface {
         if (!$this->ami_mode) {
             return $this->oldinterface->sccp_realtime_status();
         } else {
-            $ast_out = $this->aminterface->getRealTimeStatus();
-            if (is_array($ast_out)) {
+            return $this->aminterface->getRealTimeStatus();
+/*            if (is_array($ast_out)) {
                 foreach ($ast_out as $aline) {
                     if (strlen($aline) > 3) {
                         $ast_key = strstr(trim($aline), ' ', true);
@@ -203,7 +203,7 @@ class srvinterface {
                 }
             }
             return $ast_res;
-        }
+*/        }
     }
 
     public function get_compatible_sccp() {
@@ -236,11 +236,11 @@ class srvinterface {
 
     public function sccp_list_keysets() {
 
-        if ($this->ami_mode) {
+/*        if ($this->ami_mode) {
             return $this->aminterface->sccp_list_keysets();
         } else {
-            return $this->oldinterface->sccp_list_keysets();
-        }
+*/            return $this->oldinterface->sccp_list_keysets();
+//        }
     }
 
     public function sccp_get_active_device() {

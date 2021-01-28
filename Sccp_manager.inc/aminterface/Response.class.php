@@ -130,39 +130,47 @@ class Command_Response extends Response
             $content = explode(':', $line);
             if (is_array($content)) {
                 switch (strtolower($content[0])) {
+                    case 'actionid':
+                        $this->_temptable['ActionID'] = trim($content[1]);
+                        break;
+                    case 'response':
+                        $this->_temptable['Response'] = trim($content[1]);
+                        break;
+                    case 'privilege':
+                        $this->_temptable['Privilege'] = trim($content[1]);
+                        break;
                     case 'output':
-                        $_tmp_str = trim(substr($line, 7));
-                        if (!empty($_tmp_str)) {
-                            $this->_temptable['output'][]=  trim(substr($line, 7));
-                        }
+                        // included for backward compatibility with earlier versions of chan_sccp_b. AMI api does not precede command output with Output
+                        $this->_temptable['Output'] = explode(PHP_EOL,str_replace(PHP_EOL.'--END COMMAND--', '',trim($content[1])));
                         break;
                     default:
-                        $this->_temptable[$content[0]][]=  trim(substr($line, strlen($content[0])+1));
+                        $this->_temptable['Output'] = explode(PHP_EOL,str_replace(PHP_EOL.'--END COMMAND--', '', trim($line)));
                         break;
                 }
             }
         }
+/*      Not required $_temptable cannot be empty as has at least an actionID - see also getResult
         if (!empty($this->_temptable)) {
             $this->setKey('output', 'array');
         }
-
+*/
         $this->_completed = $this->isSuccess();
 //        return $this->isSuccess();
     }
     public function getResult()
     {
+/*      Below test no longer valid as key no longer set
         if (stristr($this->getKey('output'), 'array') !== false) {
             $result = $this->_temptable;
         } else {
             $result = $this->getMessage();
         }
-        return $result;
+*/      return $this->_temptable;
     }
 }
 
 class SCCPGeneric_Response extends Response
 {
-
     protected $_tables;
     private $_temptable;
 
@@ -210,6 +218,8 @@ class SCCPGeneric_Response extends Response
     {
         $_rawtable = $this->Table2Array($_tablename);
         $result = array();
+        // Check that there is actually data to be converted
+        if (empty($_rawtable)) { return $result;}
         foreach ($_rawtable as $_row) {
             $all_key_ok = true;
             if (is_array($_fkey)) {

@@ -180,6 +180,8 @@ class oldinterface
     public function sccp_realtime_status()
     {
         $ast_res = array();
+        // Below added for compatibility with AMI result and modified server.info
+        $ast_res = ['sccp' => ['message' => 'default value', 'realm' => '', 'status' => 'ERROR']];
         $ast_out = $this->sccp_core_commands(array('cmd' => 'get_realtime_status'));
         $ast_out = preg_split("/[\n]/", $ast_out['data']);
         if (strpos($ast_out[0], 'Privilege') !== false) {

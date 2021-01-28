@@ -12,7 +12,7 @@ $driver = $this->FreePBX->Core->getAllDriversInfo();
 $core = $this->srvinterface->getSCCPVersion();
 $ast_realtime = $this->srvinterface->sccp_realtime_status();
 
-$ast_realm = (empty($ast_realtime['sccp']) ? '' : 'sccp');
+//$ast_realm = (empty($ast_realtime['sccp']) ? '' : 'sccp');
 
 // if there are multiple connections, this will only return the first.
 foreach ($ast_realtime as $key => $value) {
@@ -70,13 +70,15 @@ if (empty($ast_realtime)) {
         if ($key == $ast_realm) {
             if ($value['status'] == 'OK') {
                 $rt_sccp = 'TEST OK';
-                $rt_info .= 'SCCP Connections found';
+                $rt_info .= '<div> Using SCCP connection found to database: '.$value['realm'] . ' with connector: ['. $key .']</div>';
             } else {
                 $rt_sccp = 'SCCP ERROR';
                 $rt_info .= '<div class="alert signature alert-danger"> Error : ' . $value['message'] . '</div>';
             }
         } elseif ($value['status'] == 'ERROR') {
-            $rt_info .= '<div> Found error in realtime sectoin [' . $key . '] : ' . $value['message'] . '</div>';
+            $rt_info .= '<div> No connector found for [' . $key . '] : ' . $value['message'] . '</div>';
+        } elseif ($value['status'] == 'OK') {
+            $rt_info .= '<div> Alternative connector found to database '.$value['realm'] . ' with connector: ['. $key . '] </div>';
         }
     }
     $info['RealTime'] = array('Version' => $rt_sccp, 'about' => $rt_info);

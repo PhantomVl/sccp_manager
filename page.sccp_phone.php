@@ -22,7 +22,6 @@ if (empty($spage->class_error)) {
     $display_page = $spage->infoServerShowPage();
     $display_info = _("SCCP Server Configuration");
 }
+// standardise code to reduce base
 include('page.html.php');
 ?>
-
-<!-- End Modal alerts-->

@@ -55,8 +55,8 @@ class aminterface
         $this->_connect_state = false;
         $this->_error = array();
         $this->_config = array('host' => 'localhost', 'user' => '', 'pass' => '', 'port' => '5038', 'tsoket' => 'tcp://', 'timeout' => 30, 'enabled' => false);
-        
-        
+
+
         $this->_eventListeners = array();
 //  $this->_eventFactory = new EventFactoryImpl(\Logger::getLogger('EventFactory'));
 //  $this->_responseFactory = new ResponseFactoryImpl(\Logger::getLogger('ResponseFactory'));
@@ -259,7 +259,7 @@ class aminterface
                     $response = $this->findResponse($event);
 //                    print_r($response);
 //                    print_r('<br>--- E2 Response Type 2 ----------<br>');
-                    
+
                     if ($response === false || $response->isComplete()) {
                         $this->dispatch($event);  // не работает
                     } else {
@@ -409,7 +409,7 @@ class aminterface
             $listener = $data[0];
             $predicate = $data[1];
             print_r($data);
-            
+
             if (is_callable($predicate) && !call_user_func($predicate, $message)) {
                 continue;
             }

@@ -72,7 +72,6 @@ abstract class Response extends IncomingMessage
         $this->setKey('ActionId', $actionId);
     }
 
-    
     public function getVariable($_rawContent, $_fields = '')
     {
         $lines = explode(Message::EOL, $_rawContent);
@@ -119,7 +118,6 @@ class Login_Response extends Response
 class Command_Response extends Response
 {
     private $_temptable;
-    
     public function __construct($rawContent)
     {
 //        print_r('<br>---- r --<br>');
@@ -127,7 +125,6 @@ class Command_Response extends Response
 //        print_r('<br>---- re --<br>');
         $this->_temptable = array();
         parent::__construct($rawContent);
-
         $lines = explode(Message::EOL, $rawContent);
         foreach ($lines as $line) {
             $content = explode(':', $line);
@@ -148,7 +145,7 @@ class Command_Response extends Response
         if (!empty($this->_temptable)) {
             $this->setKey('output', 'array');
         }
-            
+
         $this->_completed = $this->isSuccess();
 //        return $this->isSuccess();
     }
@@ -165,7 +162,7 @@ class Command_Response extends Response
 
 class SCCPGeneric_Response extends Response
 {
-    
+
     protected $_tables;
     private $_temptable;
 
@@ -208,7 +205,7 @@ class SCCPGeneric_Response extends Response
             $this->_completed = true;
         }
     }
-    
+
     protected function ConvertTableData($_tablename, $_fkey, $_fields)
     {
         $_rawtable = $this->Table2Array($_tablename);
@@ -278,8 +275,8 @@ class SCCPGeneric_Response extends Response
         }
         return $result;
     }
-    
-    
+
+
     public function hasTable()
     {
         if (is_array($this->_tables)) {
@@ -291,7 +288,7 @@ class SCCPGeneric_Response extends Response
     {
         return (is_array($this->_tables)) ? array_keys($this->_tables) : null;
     }
-    
+
     public function Table2Array($tablename = '')
     {
         $result =array();
@@ -324,7 +321,7 @@ class SCCPGeneric_Response extends Response
             return false;
         }
     }
-    
+
     public function getTable($tablename)
     {
         if ($this->hasTable() && array_key_exists($tablename, $this->_tables)) {
@@ -349,7 +346,7 @@ class SCCPGeneric_Response extends Response
 //        $this->getVariable($rawContent, $_fields);
         $this->_completed = !$this->isList();
     }
-    
+
     public function getResult()
     {
         if ($this->getKey('JSON') != null) {

@@ -45,11 +45,11 @@ class extconfigs
                 $tmp_dt = new \DateTime(null, new \DateTimeZone($index));
                 $tmp_ofset = $tmp_dt->getOffset();
                 return $tmp_ofset / 60;
-                
+
                 break;
             case 'sccp_timezone': // Sccp manafer: 1400 (+ Id) :2007 (+ Id)
                 $result = array();
-                
+
                 if (empty($index)) {
                     return array('offset' => '00', 'daylight' => '', 'cisco_code' => 'Greenwich');
                 }
@@ -57,7 +57,7 @@ class extconfigs
                     return  $this->get_cisco_time_zone($index);
                 } else {
                     $timezone_abbreviations = \DateTimeZone::listAbbreviations();
-                    
+
                     $tz_tmp = array();
                     foreach ($timezone_abbreviations as $subArray) {
                         $tf_idt = array_search($index, array_column($subArray, 'timezone_id'));
@@ -109,7 +109,7 @@ class extconfigs
 
     private function get_cisco_time_zone($tzc)
     {
-    
+
         if ((empty($tzc)) or (!array_key_exists($tzc, $this->cisco_timezone))) {
 //            return array('offset' => '00', 'daylight' => '', 'cisco_code' => 'Greenwich');
             return array();
@@ -464,14 +464,14 @@ class extconfigs
         $res['extconfig'] = 'OK';
 
         if (empty($res['sccpdevice'])) {
-            $res['extconfig'] = ' Options "Sccpdevice" not config ';
+            $res['extconfig'] = ' Option "Sccpdevice" is not configured ';
         }
         if (empty($res['sccpline'])) {
-            $res['extconfig'] = ' Options "Sccpline" not config ';
+            $res['extconfig'] = ' Option "Sccpline" is not configured ';
         }
 
         if (empty($res['extconfigfile'])) {
-            $res['extconfig'] = 'File extconfig.conf not exist';
+            $res['extconfig'] = 'File extconfig.conf does not exist';
         }
 
 
@@ -483,10 +483,10 @@ class extconfigs
         if (file_exists($dir . '/res_mysql.conf')) {
             $res_conf = $cnf_read->getConfig('res_mysql.conf');
             if (empty($res_conf[$realm])) {
-                $res['mysqlconfig'] = 'Not Config in file: res_mysql.conf';
+                $res['mysqlconfig'] = 'Config not found in file: res_mysql.conf';
             } else {
                 if ($res_conf[$realm]['dbsock'] != $def_bd_config['dbsock']) {
-                    $res['mysqlconfig'] = 'Mysql Soket Error in file: res_mysql.conf';
+                    $res['mysqlconfig'] = 'Mysql Socket Error in file: res_mysql.conf';
                 }
             }
             if (empty($res['mysqlconfig'])) {
@@ -500,7 +500,7 @@ class extconfigs
                 $res['mysqlconfig'] = 'Not Config in file: res_config_mysql.conf';
             } else {
                 if ($res_conf[$realm]['dbsock'] != $def_bd_config['dbsock']) {
-                    $res['mysqlconfig'] = 'Mysql Soket Error in file: res_config_mysql.conf';
+                    $res['mysqlconfig'] = 'Mysql Socket Error in file: res_config_mysql.conf';
                 }
             }
             if (empty($res['mysqlconfig'])) {

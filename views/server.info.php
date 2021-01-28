@@ -14,6 +14,7 @@ $ast_realtime = $this->srvinterface->sccp_realtime_status();
 
 $ast_realm = (empty($ast_realtime['sccp']) ? '' : 'sccp');
 
+// if there are multiple connections, this will only return the first.
 foreach ($ast_realtime as $key => $value) {
     if (empty($ast_realm)) {
         if ($value['status'] == 'OK') {
@@ -61,7 +62,7 @@ if ($db_Schema == 0) {
 }
 
 if (empty($ast_realtime)) {
-    $info['RealTime'] = array('Version' => 'Error', 'about' => '<div class="alert signature alert-danger"> No found Real Time connections</div>');
+    $info['RealTime'] = array('Version' => 'Error', 'about' => '<div class="alert signature alert-danger"> No RealTime connections found</div>');
 } else {
     $rt_info = '';
     $rt_sccp = 'Failed';
@@ -82,7 +83,7 @@ if (empty($ast_realtime)) {
 }
 
 if (empty($conf_realtime)) {
-    $info['ConfigsRealTime'] = array('Version' => 'Error', 'about' => '<div class="alert signature alert-danger"> No found Real Time Configs</div>');
+    $info['ConfigsRealTime'] = array('Version' => 'Error', 'about' => '<div class="alert signature alert-danger"> Realtime configuration was not found</div>');
 } else {
     $rt_info = '';
     foreach ($conf_realtime as $key => $value) {
@@ -135,7 +136,7 @@ if ($test_any == 1) {
 //print_r(array_column($timezone_abbreviations, 'timezone_id'));
     print_r($Ts_set);
     $tz_tmp = array();
-        
+
     foreach ($timezone_abbreviations as $subArray) {
         $dddd  = array_search($Ts_set, array_column($subArray, 'timezone_id'));
         if (!empty($dddd)) {
@@ -157,7 +158,7 @@ if ($test_any == 1) {
             }
         }
     }
-    
+
     print_r("<br>");
 //print_r($time_set);
     print_r($this->sccpvalues['ntp_timezone']);
@@ -443,12 +444,12 @@ print(" ");
 //print_r($this->dbinterface->info());
 
 if (!empty($this->info_warning)) {
-    ?>    
+    ?>
     <div class="fpbx-container container-fluid">
         <div class="row">
             <div class="container">
                 <h2 style="border:2px solid Tomato;color:Tomato;" >Sccp Manager Warning</h2>
-                <div class="table-responsive">          
+                <div class="table-responsive">
                     <br> There are Warning in the SCCP Module:<br><pre>
                         <?php
                         foreach ($this->info_warning as $key => $value) {
@@ -472,12 +473,12 @@ if (!empty($this->info_warning)) {
 }
 
 if (!empty($this->class_error)) {
-    ?>    
+    ?>
     <div class="fpbx-container container-fluid">
         <div class="row">
             <div class="container">
                 <h2 style="border:2px solid Tomato;color:Tomato;" >Diagnostic information about SCCP Manager errors</h2>
-                <div class="table-responsive">          
+                <div class="table-responsive">
                     <br> There is an error in the :<br><pre>
     <?php print_r($this->class_error); ?>
                     </pre>
@@ -493,7 +494,7 @@ if (!empty($this->class_error)) {
     <div class="row">
         <div class="container">
             <h2>Sccp Manager V.<?php print_r($this->sccp_manager_ver); ?> Info </h2>
-            <div class="table-responsive">          
+            <div class="table-responsive">
                 <table class="table">
                     <thead>
                         <tr>
@@ -517,4 +518,3 @@ foreach ($info as $key => $value) {
     </div>
 </div>
 <?php echo $this->showGroup('sccp_info', 0); ?>
-

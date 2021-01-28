@@ -177,40 +177,65 @@ class SCCPGeneric_Response extends Response
     public function addEvent($event)
     {
         // not eventlist (start/complete)
-//        print_r('<br>---- addEvent --<br>');
-//        print_r($event);
-//        print_r('<br>---- Event List--<br>');
-//        print_r($event->getEventList());
-        if (stristr($event->getEventList(), 'start') === false && stristr($event->getEventList(), 'complete') === false && stristr($event->getName(), 'complete') === false
-        ) {
-            $unknownevent = "FreePBX\\modules\\Sccp_manager\\aminterface\\UnknownEvent";
-            if (!($event instanceof $unknownevent)) {
-                // Handle TableStart/TableEnd Differently
-                if (stristr($event->getName(), 'TableStart') != false) {
+        //        print_r('<br>---- addEvent --<br>');
+        //        print_r($event);
+        //        print_r('<br>---- Event List--<br>');
+        //        print_r($event->getEventList());
+
+        // Nothing to do with this - we need a table start
+        if (stristr($event->getEventList(), 'start')) { return; }
+
+
+        // This is empty as soon as we have received a TableStart.
+        // The next message is the first of the data sets
+        // We use this variable in the switch to add set entries
+        if ( empty($thisSetEventEntryType)) {
+            if (strpos($event->getName(), 'Entry')) {
+                $thisSetEventEntryType = $event->getName();
+            } else {
+                $thisSetEventEntryType = 'undefinedAsThisIsNotASet';
+            }
+        }
+        $unknownevent = "FreePBX\\modules\\Sccp_manager\\aminterface\\UnknownEvent";
+        if (!($event instanceof $unknownevent)) {
+            switch ( $event->getName()) {
+                case $thisSetEventEntryType :
+                    $this->_temptable['Entries'][] = $event;
+                    break;
+                case 'TableStart':
+                    //initialise
                     $this->_temptable = array();
                     $this->_temptable['Name'] = $event->getTableName();
                     $this->_temptable['Entries'] = array();
-                } elseif (stristr($event->getName(), 'TableEnd') != false) {
+                    $thisSetEventEntryType = '';
+                    break;
+                case 'TableEnd':
+                    //Close
                     if (!is_array($this->_tables)) {
                         $this->_tables = array();
                     }
                     $this->_tables[$event->getTableName()] = $this->_temptable;
                     unset($this->_temptable);
-                } elseif (is_array($this->_temptable)) {
-                    $this->_temptable['Entries'][] = $event;
-                } else {
+                    $thisSetEventEntryType = '';
+
+                    // Finished the table. Now check to see if everything was received
+                    // If counts do not match return false and table will not be
+                    //loaded
+                    if ($event->getKey('TableEntries') != count($this->_tables[$event->getTableName()]['Entries'])) {
+                        return $this->_completed = false;
+                    }
+                    break;
+                default:
                     // add regular event
                     $this->_events[] = $event;
                 }
             } else {
-                // add regular event
+                // add unknown event
                 $this->_events[] = $event;
             }
-        }
-        // finish eventlist
-        if (stristr($event->getEventList(), 'complete') != false || stristr($event->getName(), 'complete') != false
-        ) {
-            $this->_completed = true;
+        // Received a complete eventList outside of a table.
+        if (stristr($event->getEventList(), 'complete') || stristr($event->getName(), 'complete')) {
+              return $this->_completed = true;
         }
     }
 

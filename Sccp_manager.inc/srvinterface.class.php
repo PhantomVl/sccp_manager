@@ -236,11 +236,11 @@ class srvinterface {
 
     public function sccp_list_keysets() {
 
-/*        if ($this->ami_mode) {
+        if ($this->ami_mode) {
             return $this->aminterface->sccp_list_keysets();
         } else {
-*/            return $this->oldinterface->sccp_list_keysets();
-//        }
+            return $this->oldinterface->sccp_list_keysets();
+        }
 
     }
 

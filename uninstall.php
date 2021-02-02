@@ -37,7 +37,7 @@ if (!defined('FREEPBX_IS_AUTH')) {
     global $db;
     $version = FreePBX::Config()->get('ASTVERSION');
 
-    out('Remove all SCCP tables');
+    out('Removing all Sccp_manager tables');
     $tables = array('sccpdevmodel', 'sccpsettings');
 foreach ($tables as $table) {
     $sql = "DROP TABLE IF EXISTS {$table}";
@@ -52,13 +52,13 @@ if (!empty($version)) {
     $check = $db->getRow("SELECT 1 FROM `kvstore` LIMIT 0", DB_FETCHMODE_ASSOC);
     if (!(DB::IsError($check))) {
         //print_r("none, creating table :". $value);
-        echo "Deleting key FROM kvstore..";
+        echo "Deleting keys FROM kvstore..";
         sql("DELETE FROM kvstore WHERE module = 'sccpsettings'");
         sql("DELETE FROM kvstore WHERE module = 'Sccp_manager'");
     }
 
 /* Comment: Maybe save in sccpsettings, if the chan_sccp tables already existed in the database or if they were created by install.php */
-/* So that you know if it is save to drop/delete them */
+/* So that you know if it is safe to drop/delete them */
 
 /*      DROP VIEW  IF EXISTS`sccpdeviceconfig`;
     DROP TABLE IF EXISTS `sccpbuttonconfig`;

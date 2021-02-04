@@ -163,7 +163,7 @@ function Get_DB_config($sccp_compatible)
             '_hwlang' => array('create' => 'varchar(12) NULL DEFAULT NULL'),
             '_loginname' => array('create' => 'varchar(20) NULL DEFAULT NULL AFTER `_hwlang`'),
             '_profileid' => array('create' => "INT(11) NOT NULL DEFAULT '0' AFTER `_loginname`"),
-            
+
             'useRedialMenu' => array('create' => "VARCHAR(5) NULL DEFAULT 'no' AFTER `_profileid`"),
             //'dtmfmode' => array('create' => "VARCHAR(10) default 'outofband'", 'modify' => "VARCHAR(10)", 'def_modify'=> 'outofband'),
             'dtmfmode' => array('drop' => "yes"),
@@ -240,14 +240,14 @@ function Get_DB_config($sccp_compatible)
             'disallow' => array('drop' => "yes"),
             'disallow' => array('drop' => "yes"),
             'callhistory_answered_elsewhere' => array('create' => "enum('Ignore','Missed Calls','Received Calls', 'Placed Calls') NULL default NULL", 'modify' => "enum('Ignore','Missed Calls','Received Calls','Placed Calls')"),
-            
+
             'description' => array('rename' => "_description"),
             'hwlang' => array('rename' => "_hwlang"),
             '_hwlang' => array('create' => 'varchar(12) NULL DEFAULT NULL'),
             '_loginname' => array('create' => 'varchar(20) NULL DEFAULT NULL AFTER `_hwlang`'),
             '_profileid' => array('create' => "INT(11) NOT NULL DEFAULT '0' AFTER `_loginname`"),
             '_dialrules' => array('create' => "VARCHAR(255) NULL DEFAULT NULL AFTER `_profileid`"),
-            
+
             'useRedialMenu' => array('create' => "VARCHAR(5) NULL DEFAULT 'no' AFTER `_dialrules`"),
             //'dtmfmode' => array('create' => "VARCHAR(10) default 'outofband'", 'modify' => "VARCHAR(10)", 'def_modify'=> 'outofband'),
             'dtmfmode' => array('drop' => "yes"),
@@ -355,7 +355,7 @@ function Get_DB_config($sccp_compatible)
             'name' => array('create' => "varchar(45) NOT NULL", 'modify' => "VARCHAR(45)" ),
         )
     );
-    
+
     if ($sccp_compatible >= 433) {
         if ($mobile_hw == '1') {
             return $db_config_v4M;
@@ -398,14 +398,14 @@ function CheckSCCPManagerDBTables($table_req)
 function CheckSCCPManagerDBVersion()
 {
     global $db;
-    outn("<li>" . _("Checking for previw version Sccp_manager..") . "</li>");
+    outn("<li>" . _("Checking for previous version of Sccp_manager.") . "</li>");
     $check = $db->getRow("SELECT data FROM `sccpsettings` where keyword ='sccp_compatible'", DB_FETCHMODE_ASSOC);
     if (DB::IsError($check)) {
-        outn(_("Can't find previw version : "));
+        outn(_("No previous version found "));
         return false;
     }
     if (!empty($check['data'])) {
-        outn(_("Find DB Schema : " . $check['data']));
+        outn(_("Found DB Schema : " . $check['data']));
         return $check['data'];
     } else {
         return false;
@@ -472,7 +472,7 @@ function InstallDB_Buttons()
             KEY `ref` (`ref`,`reftype`)
             ) ENGINE=MyISAM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;";
     $check = $db->query($sql);
-    if (db::IsError($check)) {
+    if (DB::IsError($check)) {
             die_freepbx("Can not create sccpbuttonconfig table, error:$check\n");
     }
     return true;
@@ -490,7 +490,7 @@ function InstallDB_sccpsettings()
             PRIMARY KEY (`keyword`,`seq`,`type`)
     );";
     $check = $db->query($sql);
-    if (db::IsError($check)) {
+    if (DB::IsError($check)) {
         die_freepbx("Can not create sccpsettings table, error:$check\n");
     }
     return true;
@@ -513,7 +513,7 @@ function InstallDB_sccpdevmodel()
         KEY `model` (`model`)
     ) ENGINE=MyISAM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;";
     $check = $db->query($sql);
-    if (db::IsError($check)) {
+    if (DB::IsError($check)) {
         die_freepbx("Can not create sccpdevmodel table, error:$check\n");
     }
     return true;
@@ -536,7 +536,7 @@ function InstallDB_sccpuser()
 	PRIMARY KEY (`name`)
     ) ENGINE=MyISAM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;";
     $check = $db->query($sql);
-    if (db::IsError($check)) {
+    if (DB::IsError($check)) {
         die_freepbx("Can not create sccpdevmodel table, error:$check\n");
     }
     return true;
@@ -629,7 +629,7 @@ function InstallDB_updateSchema($db_config)
 //        out("<li>" . print_r($sql_update, 1) . "</li>");
 //        out("<li>" . print_r($sql_modify, 1) . "</li>");
 //       die("Can not modify Е" . $tabl_name . " table sql: " . $sql_modify . "n");
-        
+
         if (!empty($sql_update)) {
             $sql_update = 'BEGIN; ' . $sql_update . ' COMMIT;';
             sql($sql_update);
@@ -647,7 +647,7 @@ function InstallDB_updateSchema($db_config)
             outn("<li>" . _("Create New table") . "</li>");
             $sql_create = "ALTER TABLE `" . $tabl_name . "` " . substr($sql_create, 0, -2);
             $check = $db->query($sql_create);
-            if (db::IsError($check)) {
+            if (DB::IsError($check)) {
                 die_freepbx("Can not create " . $tabl_name . " table sql: " . $sql_create . "n");
             }
         }
@@ -656,7 +656,7 @@ function InstallDB_updateSchema($db_config)
 
             $sql_modify = "ALTER TABLE `" . $tabl_name . "` " . substr($sql_modify, 0, -2) . ';';
             $check = $db->query($sql_modify);
-            if (db::IsError($check)) {
+            if (DB::IsError($check)) {
                 out("<li>" . print_r($check, 1) . "</li>");
                 die("Can not modify " . $tabl_name . " table sql: " . $sql_modify . "n");
                 die_freepbx("Can not modify " . $tabl_name . " table sql: " . $sql_modify . "n");
@@ -686,7 +686,7 @@ function InstallDB_fillsccpdevmodel()
             "('9951-sip', 'CISCO-SIP', 1, 1, 'sip9951.9-2-2SR1-9', 'loadinformation537', 1, 'SEP0000000000.cnf.xml_99xx_sip_template'),".
             "('VGC Virtual', 'CISCO', 1, 1, '', 'loadInformation11', 0, NULL);";
     $check = $db->query($sql);
-    if (db::IsError($check)) {
+    if (DB::IsError($check)) {
         die_freepbx("Can not create sccpdevmodel table, error:$check\n");
     }
     return true;
@@ -708,7 +708,7 @@ function InstallDB_createButtonConfigTrigger()
     global $db;
     outn("<li>" . _("(Re)Create buttonconfig trigger") . "</li>");
     $sql = "DROP TRIGGER IF EXISTS sccp_trg_buttonconfig;";
-    
+
     $sql .= "CREATE TRIGGER `sccp_trg_buttonconfig` BEFORE INSERT ON `sccpbuttonconfig` FOR EACH ROW BEGIN
         IF NEW.`reftype` = 'sccpdevice' THEN
             IF (SELECT COUNT(*) FROM `sccpdevice` WHERE `sccpdevice`.`name` = NEW.`ref` ) = 0 THEN
@@ -742,10 +742,10 @@ function InstallDB_updateDBVer($sccp_compatible)
 {
     global $db;
     outn("<li>" . _("Update DB Ver") . "</li>");
-    $sql = "REPLACE INTO `sccpsettings` (`keyword`, `data`, `seq`, `type`), VALUES ('SccpDBmodel', '". $sccp_compatible. "','30','0');";
+    $sql = "REPLACE INTO `sccpsettings` (`keyword`, `data`, `seq`, `type`) VALUES ('SccpDBmodel', '". $sccp_compatible. "','30','0');";
     $results = $db->query($sql);
-    if (DB::IsError($check)) {
-        die_freepbx(sprintf(_("Error updating sccpdeviceconfig view. Command was: %s; error was: %s "), $sql, $results->getMessage()));
+    if (DB::IsError($results)) {
+        die_freepbx(sprintf(_("Error updating sccpsettings. Command was: %s; error was: %s "), $sql, $results->getMessage()));
     }
     return true;
 }
@@ -797,7 +797,7 @@ function InstallDB_CreateSccpDeviceConfigView($sccp_compatible)
         $sql = "DROP VIEW IF EXISTS `sccpdeviceconfig`;
                 DROP VIEW IF EXISTS `sccpuserconfig`;";
         ///    global $hw_mobil;
-        
+
         global $mobile_hw;
         if ($mobile_hw == '1') {
             $sql .= "CREATE OR REPLACE ALGORITHM = MERGE VIEW sccpdeviceconfig AS
@@ -813,16 +813,16 @@ function InstallDB_CreateSccpDeviceConfigView($sccp_compatible)
             LEFT JOIN sccpbuttonconfig ON ( sccpbuttonconfig.reftype = 'sccpuser' AND sccpbuttonconfig.ref = sccpuser.id)
             GROUP BY sccpuser.name; ";
         } else {
-            $sql .= "CREATE OR REPLACE 
+            $sql .= "CREATE OR REPLACE
                 ALGORITHM = MERGE
                 VIEW sccpdeviceconfig AS
-            SELECT  case sccpdevice._profileid 
-                    when 0 then 
+            SELECT  case sccpdevice._profileid
+                    when 0 then
             		(select GROUP_CONCAT(CONCAT_WS( ',', defbutton.buttontype, defbutton.name, defbutton.options ) SEPARATOR ';') from `sccpbuttonconfig` as defbutton where defbutton.ref = sccpdevice.name ORDER BY defbutton.instance )
-            	when 1 then 			
-            		(select GROUP_CONCAT(CONCAT_WS( ',', userbutton.buttontype, userbutton.name, userbutton.options ) SEPARATOR ';') from `sccpbuttonconfig` as userbutton where userbutton.ref = sccpdevice._loginname ORDER BY userbutton.instance ) 
-            	when 2 then 			
-			(select GROUP_CONCAT(CONCAT_WS( ',', homebutton.buttontype, homebutton.name, homebutton.options ) SEPARATOR ';') from `sccpbuttonconfig` as homebutton where homebutton.ref = sccpuser.homedevice  ORDER BY homebutton.instance ) 
+            	when 1 then
+            		(select GROUP_CONCAT(CONCAT_WS( ',', userbutton.buttontype, userbutton.name, userbutton.options ) SEPARATOR ';') from `sccpbuttonconfig` as userbutton where userbutton.ref = sccpdevice._loginname ORDER BY userbutton.instance )
+            	when 2 then
+			(select GROUP_CONCAT(CONCAT_WS( ',', homebutton.buttontype, homebutton.name, homebutton.options ) SEPARATOR ';') from `sccpbuttonconfig` as homebutton where homebutton.ref = sccpuser.homedevice  ORDER BY homebutton.instance )
                     end as button,  if(sccpdevice._profileid = 0, sccpdevice._description, sccpuser.description) as description, sccpdevice.*
             FROM sccpdevice
             LEFT JOIN sccpuser sccpuser ON ( sccpuser.name = sccpdevice._loginname )
@@ -830,7 +830,7 @@ function InstallDB_CreateSccpDeviceConfigView($sccp_compatible)
         }
     }
     $results = $db->query($sql);
-    if (DB::IsError($check)) {
+    if (DB::IsError($results)) {
         die_freepbx(sprintf(_("Error updating sccpdeviceconfig view. Command was: %s; error was: %s "), $sql, $results->getMessage()));
     }
     return true;
@@ -846,7 +846,7 @@ function CreateBackUpConfig()
 
     $fsql = $dir.'/sccp_backup_'.date("Ymd").'.sql';
     $result = exec('mysqldump '.$amp_conf['AMPDBNAME'].' --password='.$amp_conf['AMPDBPASS'].' --user='.$amp_conf['AMPDBUSER'].' --single-transaction >'.$fsql, $output);
-    
+
     $zip = new \ZipArchive();
     $filename = $dir . "/sccp_instal_backup" . date("Ymd"). ".zip";
     if ($zip->open($filename, \ZIPARCHIVE::CREATE)) {
@@ -893,7 +893,7 @@ function Setup_RealTime()
     $cnf_wr = \FreePBX::WriteConfig();
     $cnf_read = \FreePBX::LoadConfig();
     $backup_ext = array('_custom.conf', '_additional.conf','.conf');
-    
+
     $def_config = array('sccpdevice' => 'mysql,sccp,sccpdeviceconfig', 'sccpline' => ' mysql,sccp,sccpline');
     $def_bd_config = array('dbhost' => $amp_conf['AMPDBHOST'], 'dbname' => $amp_conf['AMPDBNAME'],
         'dbuser' => $amp_conf['AMPDBUSER'], 'dbpass' => $amp_conf['AMPDBPASS'],
@@ -998,10 +998,10 @@ InstallDB_updateDBVer($sccp_compatible);
 if (!$sccp_db_ver) {
     Setup_RealTime();
     outn("<br>");
-    outn("Install Complite !");
+    outn("Install Complete !");
 } else {
     outn("<br>");
-    outn("Update Complite !");
+    outn("Update Complete !");
 }
 outn("<br>");
 

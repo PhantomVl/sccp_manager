@@ -302,7 +302,11 @@ class oldinterface
                 } elseif ($version_parts[1] == "2") {
                     $result["vCode"] = 420;
                 } elseif ($version_parts[1] >= "3") {
-                    $result["vCode"] = 430;
+                    if ($version_parts[2] == "3"){
+                        $result["vCode"] = 433;
+                    } else {
+                        $result["vCode"] = 430;
+                    }          
                 }
             }
 

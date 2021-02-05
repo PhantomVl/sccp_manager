@@ -272,7 +272,11 @@ class srvinterface {
                             $result["vCode"] = 420;
                             break;
                         case 3. . .5:
-                            $result["vCode"] = 430;
+                            if($version_parts[2] == "3"){
+                                $result["vCode"] = 433;
+                            } else {
+                                $result["vCode"] = 430;
+                            }
                             break;
                         default:
                             $result["vCode"] = 400;

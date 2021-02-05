@@ -54,15 +54,13 @@ class aminterface
         $this->_socket = false;
         $this->_connect_state = false;
         $this->_error = array();
-        $this->_config = array('host' => 'localhost', 'user' => '', 'pass' => '', 'port' => '5038', 'tsoket' => 'tcp://', 'timeout' => 30, 'enabled' => false);
-        
-        
+        $this->_config = array('host' => 'localhost', 'user' => '', 'pass' => '', 'port' => '5038', 'tsoket' => 'tcp://', 'timeout' => 30, 'enabled' => true);
         $this->_eventListeners = array();
 //  $this->_eventFactory = new EventFactoryImpl(\Logger::getLogger('EventFactory'));
 //  $this->_responseFactory = new ResponseFactoryImpl(\Logger::getLogger('ResponseFactory'));
         $this->_incomingQueue = array();
         $this->_lastActionId = false;
-        
+
         $fld_conf = array('user' => 'AMPMGRUSER', 'pass' => 'AMPMGRPASS');
         if (isset($amp_conf['AMPMGRUSER'])) {
             foreach ($fld_conf as $key => $value) {
@@ -259,7 +257,6 @@ class aminterface
                     $response = $this->findResponse($event);
 //                    print_r($response);
 //                    print_r('<br>--- E2 Response Type 2 ----------<br>');
-                    
                     if ($response === false || $response->isComplete()) {
                         $this->dispatch($event);  // не работает
                     } else {
@@ -267,8 +264,8 @@ class aminterface
                     }
                 }
             } else {
-                // broken ami.. sending a response with events without
-                // Event and ActionId
+                // broken ami most probably through changes in chan_sccp_b.
+                //sending a response with events without Event and ActionId
                 $this->_msgToDebug(1, 'resp broken ami');
                 $bMsg = 'Event: ResponseEvent' . "\r\n";
                 $bMsg .= 'ActionId: ' . $this->_lastActionId . "\r\n" . $aMsg;
@@ -409,7 +406,7 @@ class aminterface
             $listener = $data[0];
             $predicate = $data[1];
             print_r($data);
-            
+
             if (is_callable($predicate) && !call_user_func($predicate, $message)) {
                 continue;
             }
@@ -543,17 +540,29 @@ class aminterface
 
     function getRealTimeStatus()
     {
+        // Initialise array with default values to eliminate testing later
         $result = array();
+        $cmd_res = array();
+        $cmd_res = ['sccp' => ['message' => 'default value', 'realm' => '', 'status' => 'ERROR']];
         if ($this->_connect_state) {
             $_action = new \FreePBX\modules\Sccp_manager\aminterface\CommandAction('realtime mysql status');
-            $_response = $this->send($_action);
-            $res = $_response->getResult();
-            if (!empty($res['output'])) {
-                $result = $res['output'];
-            } else {
-                $result = $_response->getMessage();
+            $result = $this->send($_action)->getResult();
+         }
+         if (is_array($result['Output'])) {
+             foreach ($result['Output'] as $aline) {
+                 if (strlen($aline) > 3) {
+                     $temp_strings = explode(' ', $aline);
+                     $cmd_res_key = $temp_strings[0];
+                     foreach ($temp_strings as $test_string) {
+                          if (strpos($test_string, '@')) {
+                            $this_realm = $test_string;
+                            break;
+                          }
+                     }
+                     $cmd_res[$cmd_res_key] = array('message' => $aline, 'realm' => $this_realm, 'status' => strpos($aline, 'connected') ? 'OK' : 'ERROR');
+                 }
             }
         }
-        return $result;
+        return $cmd_res;
     }
 }

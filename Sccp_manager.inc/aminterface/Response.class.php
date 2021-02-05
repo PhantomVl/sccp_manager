@@ -72,7 +72,6 @@ abstract class Response extends IncomingMessage
         $this->setKey('ActionId', $actionId);
     }
 
-    
     public function getVariable($_rawContent, $_fields = '')
     {
         $lines = explode(Message::EOL, $_rawContent);
@@ -119,7 +118,6 @@ class Login_Response extends Response
 class Command_Response extends Response
 {
     private $_temptable;
-    
     public function __construct($rawContent)
     {
 //        print_r('<br>---- r --<br>');
@@ -127,45 +125,52 @@ class Command_Response extends Response
 //        print_r('<br>---- re --<br>');
         $this->_temptable = array();
         parent::__construct($rawContent);
-
         $lines = explode(Message::EOL, $rawContent);
         foreach ($lines as $line) {
             $content = explode(':', $line);
             if (is_array($content)) {
                 switch (strtolower($content[0])) {
+                    case 'actionid':
+                        $this->_temptable['ActionID'] = trim($content[1]);
+                        break;
+                    case 'response':
+                        $this->_temptable['Response'] = trim($content[1]);
+                        break;
+                    case 'privilege':
+                        $this->_temptable['Privilege'] = trim($content[1]);
+                        break;
                     case 'output':
-                        $_tmp_str = trim(substr($line, 7));
-                        if (!empty($_tmp_str)) {
-                            $this->_temptable['output'][]=  trim(substr($line, 7));
-                        }
+                        // included for backward compatibility with earlier versions of chan_sccp_b. AMI api does not precede command output with Output
+                        $this->_temptable['Output'] = explode(PHP_EOL,str_replace(PHP_EOL.'--END COMMAND--', '',trim($content[1])));
                         break;
                     default:
-                        $this->_temptable[$content[0]][]=  trim(substr($line, strlen($content[0])+1));
+                        $this->_temptable['Output'] = explode(PHP_EOL,str_replace(PHP_EOL.'--END COMMAND--', '', trim($line)));
                         break;
                 }
             }
         }
+/*      Not required $_temptable cannot be empty as has at least an actionID - see also getResult
         if (!empty($this->_temptable)) {
             $this->setKey('output', 'array');
         }
-            
+*/
         $this->_completed = $this->isSuccess();
 //        return $this->isSuccess();
     }
     public function getResult()
     {
+/*      Below test no longer valid as key no longer set
         if (stristr($this->getKey('output'), 'array') !== false) {
             $result = $this->_temptable;
         } else {
             $result = $this->getMessage();
         }
-        return $result;
+*/      return $this->_temptable;
     }
 }
 
 class SCCPGeneric_Response extends Response
 {
-    
     protected $_tables;
     private $_temptable;
 
@@ -208,11 +213,13 @@ class SCCPGeneric_Response extends Response
             $this->_completed = true;
         }
     }
-    
+
     protected function ConvertTableData($_tablename, $_fkey, $_fields)
     {
         $_rawtable = $this->Table2Array($_tablename);
         $result = array();
+        // Check that there is actually data to be converted
+        if (empty($_rawtable)) { return $result;}
         foreach ($_rawtable as $_row) {
             $all_key_ok = true;
             if (is_array($_fkey)) {
@@ -278,8 +285,8 @@ class SCCPGeneric_Response extends Response
         }
         return $result;
     }
-    
-    
+
+
     public function hasTable()
     {
         if (is_array($this->_tables)) {
@@ -291,7 +298,7 @@ class SCCPGeneric_Response extends Response
     {
         return (is_array($this->_tables)) ? array_keys($this->_tables) : null;
     }
-    
+
     public function Table2Array($tablename = '')
     {
         $result =array();
@@ -324,7 +331,7 @@ class SCCPGeneric_Response extends Response
             return false;
         }
     }
-    
+
     public function getTable($tablename)
     {
         if ($this->hasTable() && array_key_exists($tablename, $this->_tables)) {
@@ -349,7 +356,7 @@ class SCCPGeneric_Response extends Response
 //        $this->getVariable($rawContent, $_fields);
         $this->_completed = !$this->isList();
     }
-    
+
     public function getResult()
     {
         if ($this->getKey('JSON') != null) {

@@ -169,6 +169,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
             $this->xml_data = simplexml_load_file($xml_vars);
             $this->initVarfromXml(); // Overwrite Exist
         }
+        $this->saveSccpSettings();
     }
 
     /*
@@ -1483,10 +1484,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
     }
 
     public function getSccpSettingFromDB() {
-        $raw_data = $this->dbinterface->get_db_SccpSetting();
-        foreach ($raw_data as $var) {
-            $this->sccpvalues[$var['keyword']] = array('keyword' => $var['keyword'], 'data' => $var['data'], 'seq' => $var['seq'], 'type' => $var['type']);
-        }
+        $this->sccpvalues = $this->dbinterface->get_db_SccpSetting();
         return;
     }
 
@@ -1864,19 +1862,25 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
 //        global $db;
 //        global $amp_conf;
 
-        $save_settings = array();
+//        $save_settings = array();
         if (empty($save_value)) {
-            foreach ($this->sccpvalues as $key => $val) {
+            $this->dbinterface->write('sccpsettings', $this->sccpvalues, 'clear');
+
+/*            foreach ($this->sccpvalues as $key => $val) {
                 if ((trim($val['data']) !== '') or ($val['data'] == '0')) {
-                    $save_settings[] = array($key, $db->escapeSimple($val['data']), $val['seq'], $val['type']);
+                    $save_settings[] = array($key, $val['data'], $val['seq'], $val['type']);
+                } else {
+                    $unsaved_settings[] = array($key, $val['data'], $val['seq'], $val['type']);
                 }
             }
             $this->dbinterface->write('sccpsettings', $save_settings, 'clear');
+*/
         } else {
             $this->dbinterface->write('sccpsettings', $save_value, 'update');
-            return true;
         }
         return true;
+//        }
+//        return true;
     }
 
     /*

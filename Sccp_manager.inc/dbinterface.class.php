@@ -21,7 +21,7 @@ class dbinterface
 
     public function info()
     {
-        $Ver = '13.0.2';
+        $Ver = '13.0.2';    // This should be updated
         return array('Version' => $Ver,
             'about' => 'Data access interface ver: ' . $Ver);
     }
@@ -45,25 +45,25 @@ class dbinterface
 
     public function HWextension_db_SccpTableData($dataid, $data = array())
     {
+        global $db;
+        $stmt = '';
+        $stmts = '';
         if ($dataid == '') {
             return false;
         }
         switch ($dataid) {
             case "SccpExtension":
                 if (empty($data['name'])) {
-                    $sql = "SELECT * FROM `sccpline` ORDER BY `name`";
-                    $raw_settings = sql($sql, "getAll", DB_FETCHMODE_ASSOC);
+                    $stmts = $db->prepare('SELECT * FROM sccpline ORDER BY name');
                 } else {
-                    $sql = "SELECT * FROM `sccpline` WHERE `name`='" . $data['name']. "'";
-                    ;
-                    $raw_settings = sql($sql, "getAll", DB_FETCHMODE_ASSOC);
+                    $stmts = $db->prepare('SELECT * FROM sccpline WHERE name = $data[name]');
                 }
                 break;
             case "SccpDevice":
-                $filtred ='';
-                $singlrow = false;
+                $filtered ='';
+                $singlerow = false;
                 if (empty($data['fields'])) {
-                    $fld = '`name`,`name` as `mac`, `type`, `button`, `addon`, `_description` as description';
+                    $fld = 'name, name as mac, type, button, addon, _description as description';
                 } else {
                     switch ($data['fields']) {
                         case "all":
@@ -78,30 +78,29 @@ class dbinterface
                     }
                 }
                 if (!empty($data['name'])) {
-                    $filtred = "`name`='" . $data['name']. "'";
-                    ;
-                    $singlrow = true;
+                    $filtered = 'name =' . $data['name']. '';
+                    $singlerow = true;
                 }
                 if (!empty($data['type'])) {
                     switch ($data['type']) {
                         case "cisco-sip":
-                            $filtred = "`TYPE` LIKE '%-sip'";
+                            $filtered = 'TYPE LIKE \'%-sip\'';
                             break;
                         case "cisco":
                         default:
-                            $filtred = "`TYPE` not LIKE '%-sip'";
+                            $filtered = 'TYPE not LIKE \'%-sip\'';
                             break;
                     }
                 }
-                if (empty($filtred)) {
-                    $sql = "SELECT ". $fld ." FROM `sccpdeviceconfig` ORDER BY `name`";
+                if (empty($filtered)) {
+                    $sql = 'SELECT ' . $fld . ' FROM sccpdeviceconfig ORDER BY name';
                 } else {
-                    $sql = "SELECT ". $fld ." FROM `sccpdeviceconfig` WHERE ".$filtred." ORDER BY `name`";
+                    $sql = 'SELECT ' . $fld . ' FROM sccpdeviceconfig WHERE '. $filtered . ' ORDER BY name';
                 }
-                if ($singlrow) {
-                    $raw_settings = sql($sql, "getRow", DB_FETCHMODE_ASSOC);
+                if ($singlerow) {
+                    $stmt = $db->prepare($sql);
                 } else {
-                    $raw_settings = sql($sql, "getAll", DB_FETCHMODE_ASSOC);
+                    $stmts = $db->prepare($sql);
                 }
                 break;
             case "HWSipDevice":
@@ -115,26 +114,26 @@ class dbinterface
                 break;
             case "get_colums_sccpdevice":
                 $sql = "DESCRIBE sccpdevice";
-                $raw_settings = sql($sql, "getAll", DB_FETCHMODE_ASSOC);
+                $stmt = $db->prepare($sql);
                 break;
             case "get_colums_sccpuser":
                 $sql = "DESCRIBE sccpuser";
-                $raw_settings = sql($sql, "getAll", DB_FETCHMODE_ASSOC);
+                $stmts = $db->prepare($sql);
                 break;
             case "get_sccpdevice_byid":
                 $sql = 'SELECT t1.*, types.dns,  types.buttons, types.loadimage, types.nametemplate as nametemplate, '
                         . 'addon.buttons as addon_buttons FROM sccpdevice AS t1 '
                         . 'LEFT JOIN sccpdevmodel as types ON t1.type=types.model '
-                        . 'LEFT JOIN sccpdevmodel as addon ON t1.addon=addon.model WHERE name="' . $data['id'] . '";';
-                $raw_settings = sql($sql, "getRow", DB_FETCHMODE_ASSOC);
+                        . 'LEFT JOIN sccpdevmodel as addon ON t1.addon=addon.model WHERE name="' . $data['id'] . '';
+                $stmt = $db->prepare($sql);
                 break;
             case "get_sccpuser":
-                $sql = "SELECT * FROM `sccpuser` ";
+                $sql = 'SELECT * FROM sccpuser ';
                 if (!empty($data['id'])) {
-                    $sql .= 'WHERE name="' . $data['id'] . '" ';
+                    $sql .= 'WHERE name= ' . $data['id'] . '';
                 }
-                $sql .= "ORDER BY `name`;";
-                $raw_settings = sql($sql, "getRow", DB_FETCHMODE_ASSOC);
+                $sql .= ' ORDER BY name';
+                $stmt = $db->prepare($sql);
                 break;
             case "get_sccpdevice_buttons":
                 $sql = '';
@@ -145,29 +144,40 @@ class dbinterface
                     $sql .= (empty($sql)) ? 'ref="' . $data['id'] . '" ' : 'and ref="' . $data['id'] . '" ';
                 }
                 if (!empty($sql)) {
-                    $sql = 'SELECT * FROM sccpbuttonconfig WHERE ' .$sql. 'ORDER BY `instance`;';
-                    $raw_settings = sql($sql, "getAll", DB_FETCHMODE_ASSOC);
+                    $sql = 'SELECT * FROM sccpbuttonconfig WHERE ' .$sql. ' ORDER BY `instance`;';
+                    $stmts = $db->prepare($sql);
                 } else {
                     $raw_settings = array();
                 }
                 break;
         }
-
+        if (!empty($stmt)) {
+            $stmt->execute();
+            $raw_settings = $stmt->fetch(\PDO::FETCH_ASSOC);
+        } elseif (!empty($stmts)) {
+            $stmts->execute();
+            $raw_settings = $stmts->fetchAll(\PDO::FETCH_ASSOC);
+        }
         return $raw_settings;
     }
 
     public function get_db_SccpSetting()
     {
-        $sql = "SELECT `keyword`, `data`, `type`, `seq` FROM `sccpsettings` ORDER BY `type`, `seq`";
-        $raw_settings = sql($sql, "getAll", DB_FETCHMODE_ASSOC);
-        return $raw_settings;
+        global $db;
+        $stmt = $db->prepare('SELECT keyword, data, type, seq FROM sccpsettings ORDER BY type, seq');
+        $stmt->execute();
+        foreach ($stmt->fetchAll() as $var) {
+            $mysccpvalues[$var['keyword']] = array('keyword' => $var['keyword'], 'data' => $var['data'], 'seq' => $var['seq'], 'type' => $var['type']);
+        }
+        return $mysccpvalues;
     }
 
     public function get_db_sysvalues()
     {
-        $sql = "SHOW VARIABLES LIKE '%group_concat%'";
-        $raw_settings = sql($sql, "getRow", DB_FETCHMODE_ASSOC);
-        return $raw_settings;
+        global $db;
+        $stmt = $db->prepare('SHOW VARIABLES LIKE \'%group_concat%\'');
+        $stmt->execute();
+        return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
 
     /*
@@ -186,20 +196,19 @@ class dbinterface
                 $sel_inf = "*";
                 break;
         }
-
         $sel_inf .= ", '0' as 'validate'";
         switch ($get) {
             case "byciscoid":
                 if (!empty($filter)) {
                     if (!empty($filter['model'])) {
                         if (strpos($filter['model'], 'loadInformation')) {
-                            $sql = "SELECT " . $sel_inf . " FROM sccpdevmodel WHERE (`loadinformationid` ='" . $filter['model'] . "') ORDER BY model ";
+                            $sql = 'SELECT ' . $sel_inf . ' FROM sccpdevmodel WHERE (loadinformationid =' . $filter['model'] . ') ORDER BY model';
                         } else {
-                            $sql = "SELECT " . $sel_inf . " FROM sccpdevmodel WHERE (`loadinformationid` ='loadInformation" . $filter['model'] . "') ORDER BY model ";
+                            $sql = 'SELECT ' . $sel_inf . ' FROM sccpdevmodel WHERE (loadinformationid =loadInformation' . $filter['model'] . ') ORDER BY model';
                         }
                     } else {
 //                          $sql = "SELECT ".$filter['model'];
-                        $sql = "SELECT " . $sel_inf . " FROM sccpdevmodel ORDER BY model ";
+                        $sql = 'SELECT ' . $sel_inf . ' FROM sccpdevmodel ORDER BY model';
                     }
                     break;
                 }
@@ -207,86 +216,87 @@ class dbinterface
             case "byid":
                 if (!empty($filter)) {
                     if (!empty($filter['model'])) {
-                        $sql = "SELECT " . $sel_inf . " FROM sccpdevmodel WHERE (`model` ='" . $filter['model'] . "') ORDER BY model ";
+                        $sql = 'SELECT ' . $sel_inf . ' FROM sccpdevmodel WHERE (model =' . $filter['model'] . ') ORDER BY model';
                     } else {
 //                          $sql = "SELECT ".$filter['model'];
-                        $sql = "SELECT " . $sel_inf . " FROM sccpdevmodel ORDER BY model ";
+                        $sql = 'SELECT ' . $sel_inf . ' FROM sccpdevmodel ORDER BY model';
                     }
                     break;
                 }
                 break;
             case "extension":
-                $sql = "SELECT " . $sel_inf . " FROM sccpdevmodel WHERE (dns = 0) and (enabled > 0) ORDER BY model ";
+                $sql = 'SELECT ' . $sel_inf . ' FROM sccpdevmodel WHERE (dns = 0) and (enabled > 0) ORDER BY model'; //check table
                 break;
             case "enabled":
+                $sql = 'SELECT ' . $sel_inf . ' FROM sccpdevmodel WHERE enabled > 0 ORDER BY model ';
+                break;
             case "phones":
-                $sql = "SELECT " . $sel_inf . " FROM sccpdevmodel WHERE (dns > 0) and (enabled > 0) ORDER BY model ";
-//                $sql = "SELECT " . $sel_inf . " FROM sccpdevmodel WHERE (enabled > 0) ORDER BY model ";
+                $sql = 'SELECT ' . $sel_inf . ' FROM sccpdevmodel WHERE (dns > 0) and (enabled > 0) ORDER BY model '; //check table
                 break;
             case "ciscophones":
-                $sql = "SELECT " . $sel_inf . " FROM sccpdevmodel WHERE (dns > 0) and (enabled > 0) AND `vendor` not LIKE '%-sip' ORDER BY model ";
-//                $sql = "SELECT " . $sel_inf . " FROM sccpdevmodel WHERE (enabled > 0) ORDER BY model ";
+                $sql = 'SELECT ' . $sel_inf . ' FROM sccpdevmodel WHERE (dns > 0) and (enabled > 0) AND vendor NOT LIKE \'%-sip\' ORDER BY model';
                 break;
             case "sipphones":
-                $sql = "SELECT " . $sel_inf . " FROM sccpdevmodel WHERE (dns > 0) and (enabled > 0) AND `vendor` LIKE '%-sip' ORDER BY model ";
-//                $sql = "SELECT " . $sel_inf . " FROM sccpdevmodel WHERE (enabled > 0) ORDER BY model ";
+                $sql = 'SELECT ' . $sel_inf . ' FROM sccpdevmodel WHERE (dns > 0) and (enabled > 0) AND `vendor` LIKE \'%-sip\' ORDER BY model';
                 break;
             case "all":
+                $sql = 'SELECT ' . $sel_inf . ' FROM sccpdevmodel ORDER BY model';
+                break;
             default:
-                $sql = "SELECT " . $sel_inf . " FROM sccpdevmodel ORDER BY model ";
+                $sql = 'SELECT ' . $sel_inf . ' FROM sccpdevmodel ORDER BY model';
                 break;
         }
-        $raw_settings = sql($sql, "getAll", DB_FETCHMODE_ASSOC);
-        return $raw_settings;
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll();
     }
 
-    function write($db_name = "", $save_value = array(), $mode = 'update', $key_fld = "", $hwid = "")
+    function write($table_name = "", $save_value = array(), $mode = 'update', $key_fld = "", $hwid = "")
     {
-        // mode clear  - Empty tabele before update
+        // mode clear  - Empty table before update
         // mode update - update / replace record
         global $db;
 //        global $amp_conf;
-        $result = "Error";
+        $result = false;
         $delete_value = array();
-        switch ($db_name) {
+        switch ($table_name) {
             case 'sccpsettings':
                 foreach ($save_value as $key_v => $data) {
-                    if (!empty($data)) {
-                        if (isset($data[1])) {
-                            if ($data[1] == $this->val_null) {
+                    if (!empty($data) && isset($data['data'])) {
+                            if ($data['data'] == $this->val_null) {
                                 $delete_value[] = $save_value[$key_v]['keyword'];
                                 unset($save_value[$key_v]);
                             }
-                        }
-                        if (isset($data['data'])) {
+/*                      if (isset($data['data'])) {
                             if ($data['data'] == $this->val_null) {
                                 $delete_value[] = $save_value[$key_v]['keyword'];
                                 unset($save_value[$key_v]);
                             }
                         }
-                    }
+*/                    }
                 }
                 if ($mode == 'clear') {
-                    $sql = 'truncate `sccpsettings`';
-                    $stmt = $db->prepare($sql);
-                    $stmt->execute();
-                    $stmt = $db->prepare('INSERT INTO `sccpsettings` (`keyword`, `data`, `seq`, `type`) VALUES (?,?,?,?)');
+//                    $sql = 'truncate `sccpsettings`';
+                    $db->prepare('TRUNCATE sccpsettings')->execute();
+                    $stmt = $db->prepare('INSERT INTO sccpsettings (`keyword`, `data`, `seq`, `type`) VALUES (?,?,?,?)');
                     $result = $db->executeMultiple($stmt, $save_value);
                 } else {
                     if (!empty($delete_value)) {
-                        $stmt = $db->prepare('DELETE FROM `sccpsettings` WHERE `keyword`=?');
+                        $stmt = $db->prepare('DELETE FROM sccpsettings WHERE `keyword`=?');
                         $result = $db->executeMultiple($stmt, $delete_value);
                     }
                     if (!empty($save_value)) {
-                        $stmt = $db->prepare('REPLACE INTO `sccpsettings` (`keyword`, `data`, `seq`, `type`) VALUES (?,?,?,?)');
+                        $stmt = $db->prepare('REPLACE INTO sccpsettings (`keyword`, `data`, `seq`, `type`) VALUES (?,?,?,?)');
                         $result = $db->executeMultiple($stmt, $save_value);
                     }
                 }
                 break;
             case 'sccpdevmodel':
+                break;
             case 'sccpdevice':
+                break;
             case 'sccpuser':
-                $sql_db = $db_name;
+                $sql_db = $table_name;
                 $sql_key = "";
                 $sql_var = "";
                 foreach ($save_value as $key_v => $data) {
@@ -304,23 +314,21 @@ class dbinterface
                 }
                 if (!empty($sql_var)) {
                     if ($mode == 'delete') {
-                        $req = 'DELETE FROM `' . $sql_db . '` WHERE ' . $sql_key . ';';
+                        $req = 'DELETE FROM sccpuser WHERE ' . $sql_key . '';
                     } else {
                         if ($mode == 'update') {
-                            $req = 'UPDATE `' . $sql_db . '` SET ' . $sql_var . ' WHERE ' . $sql_key . ';';
+                            $req = 'UPDATE sccpuser SET ' . $sql_var .  WHERE  . $sql_key . '';
                         } else {
-                            $req = 'REPLACE INTO `' . $sql_db . '` SET ' . $sql_var . ';';
+                            $req = 'REPLACE INTO sccpuser SET ' . $sql_var . '';
                         }
                     }
                 }
-                $stmt = $db->prepare($req);
-                $result = $stmt->execute();
+                $result = $db->prepare($req)->execute();
                 break;
             case 'sccpbuttons':
                 if (($mode == 'clear') || ($mode == 'delete')) {
-                    $sql = 'DELETE FROM `sccpbuttonconfig` WHERE ref="' . $hwid . '";';
-                    $stmt = $db->prepare($sql);
-                    $stmt->execute();
+                    $sql = 'DELETE FROM sccpbuttonconfig WHERE ref=' . $hwid . '';
+                    $result = $db->prepare($sql)->execute();
                 }
                 if ($mode == 'delete') {
                     break;
@@ -329,13 +337,13 @@ class dbinterface
                     break;
                 }
                 if ($mode == 'replace') {
-                    $sql = 'UPDATE `sccpbuttonconfig` SET `name`=? WHERE  `ref`= ? AND `reftype`=? AND `instance`=?  AND `buttontype`=?;';
+                    $sql = 'UPDATE sccpbuttonconfig SET `name`=? WHERE  `ref`= ? AND `reftype`=? AND `instance`=?  AND `buttontype`=?';
 //                    $sql = 'INSERT INTO `sccpbuttonconfig` (`ref`, `reftype`,`instance`, `buttontype`, `name`, `options`) VALUES (?,?,?,?,?,?);';
 //                    die(print_r($save_value,1));
                     $stmt = $db->prepare($sql);
                     $result= $db->executeMultiple($stmt, $save_value);
                 } else {
-                    $sql = 'INSERT INTO `sccpbuttonconfig` (`ref`, `reftype`,`instance`, `buttontype`, `name`, `options`) VALUES (?,?,?,?,?,?);';
+                    $sql = 'INSERT INTO sccpbuttonconfig (`ref`, `reftype`,`instance`, `buttontype`, `name`, `options`) VALUES (?,?,?,?,?,?)';
 //                    die(print_r($save_value,1));
                     $stmt = $db->prepare($sql);
                     $result = $db->executeMultiple($stmt, $save_value);
@@ -356,18 +364,18 @@ class dbinterface
         $result = exec('mysqldump '.$database.' --password='.$pass.' --user='.$user.' --single-transaction >'.$filename, $output);
         return $filename;
     }
-    
+
 /*
  *  Check Table structure
  */
     public function validate()
     {
         global $db;
+        $result = false;
         $check_fields = array('430' => array('_hwlang' => "varchar(12)"), '431' => array('private'=> "enum('on','off')"), '433' => array('directed_pickup'=>'') );
-        $sql = "DESCRIBE `sccpdevice`;";
-        $raw_result = sql($sql, "getAll", DB_FETCHMODE_ASSOC);
-        $result = 0;
-        foreach ($raw_result as $value) {
+        $stmt = $db->prepare('DESCRIBE sccpdevice');
+        $stmt->execute();
+        foreach ($stmt->fetchAll() as $value) {
             $id_result[$value['Field']] = $value['Type'];
         }
         foreach ($check_fields as $key => $value) {
@@ -393,7 +401,7 @@ class dbinterface
                 break;
             }
         }
-        
+
         return $result;
     }
 }

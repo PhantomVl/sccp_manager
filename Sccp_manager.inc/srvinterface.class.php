@@ -15,6 +15,7 @@ class srvinterface {
     var $error;
     var $_info;
     var $ami_mode;
+    var $useAmiForSoftKeys = true;
 
     public function __construct($parent_class = null) {
         $this->paren_class = $parent_class;
@@ -206,24 +207,35 @@ class srvinterface {
 */        }
     }
 
-    public function get_compatible_sccp() {
-
+    public function get_compatible_sccp($revNumComp=false) {
+        // only called with args from installer to get revision and compatibility
         $res = $this->getSCCPVersion();
         if (empty($res)) {
             return 0;
         }
         switch ($res["vCode"]) {
             case 0:
-                return 0;
+                $retval = 0;
+                break;
             case 433:
-                return 433;
-
+                $retval = 433;
+                break;
             case 432:
+                $retval = 430;
+                break;
             case 431:
-                return 431;
+                $retval = 431;
+                break;
             default:
-                return 430;
+                $retval = 430;
         }
+        if ($res['RevisionNum'] < 11048) {
+            $this->useAmiForSoftKeys = false;
+        }
+        if ($revNumComp) {
+            return array($retval, $this->useAmiForSoftKeys);
+        }
+        return $retval;
     }
 
     public function getSCCPVersion() {
@@ -236,7 +248,7 @@ class srvinterface {
 
     public function sccp_list_keysets() {
 
-        if ($this->ami_mode) {
+        if (($this->ami_mode) && ($this->useAmiForSoftKeys)){
             return $this->aminterface->sccp_list_keysets();
         } else {
             return $this->oldinterface->sccp_list_keysets();

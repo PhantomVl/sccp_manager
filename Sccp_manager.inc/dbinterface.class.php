@@ -121,7 +121,7 @@ class dbinterface
                 $sql = "DESCRIBE sccpuser";
                 $stmts = $db->prepare($sql);
                 break;
-            case "get_sccpdevice_byid":
+            case 'get_sccpdevice_byid':
                 $sql = 'SELECT t1.*, types.dns,  types.buttons, types.loadimage, types.nametemplate as nametemplate, '
                         . 'addon.buttons as addon_buttons FROM sccpdevice AS t1 '
                         . 'LEFT JOIN sccpdevmodel as types ON t1.type=types.model '
@@ -185,21 +185,15 @@ class dbinterface
      *      Get Sccp Device Model information
      */
 
-    function getDb_model_info($get = "all", $format_list = "all", $filter = array())
+    function getDb_model_info($get = 'all', $format_list = 'all', $filter = array())
     {
         global $db;
-        switch ($format_list) {
-            case "model":
-                $sel_inf = "model, vendor, dns, buttons";
-                break;
-            case "all":
-            default:
-                $sel_inf = "*";
-                break;
+        $sel_inf = '*, 0 as validate';
+        if ($format_list === 'model') {
+            $sel_inf = 'model, vendor, dns, buttons, 0 as validate';
         }
-        $sel_inf .= ", '0' as 'validate'";
         switch ($get) {
-            case "byciscoid":
+            case 'byciscoid':
                 if (!empty($filter)) {
                     if (!empty($filter['model'])) {
                         if (strpos($filter['model'], 'loadInformation')) {
@@ -214,7 +208,7 @@ class dbinterface
                     break;
                 }
                 break;
-            case "byid":
+            case 'byid':
                 if (!empty($filter)) {
                     if (!empty($filter['model'])) {
                         $sql = 'SELECT ' . $sel_inf . ' FROM sccpdevmodel WHERE (model =' . $filter['model'] . ') ORDER BY model';
@@ -225,31 +219,29 @@ class dbinterface
                     break;
                 }
                 break;
-            case "extension":
+            case 'extension':
                 $sql = 'SELECT ' . $sel_inf . ' FROM sccpdevmodel WHERE (dns = 0) and (enabled > 0) ORDER BY model'; //check table
                 break;
-            case "enabled":
-                $sql = 'SELECT ' . $sel_inf . ' FROM sccpdevmodel WHERE enabled > 0 ORDER BY model ';
+            case 'enabled':
+                $sql = 'SELECT ' . $sel_inf . ' FROM sccpdevmodel WHERE enabled > 0 ORDER BY model '; //previously this fell through to phones.
                 break;
-            case "phones":
+            case 'phones':
                 $sql = 'SELECT ' . $sel_inf . ' FROM sccpdevmodel WHERE (dns > 0) and (enabled > 0) ORDER BY model '; //check table
                 break;
-            case "ciscophones":
+            case 'ciscophones':
                 $sql = 'SELECT ' . $sel_inf . ' FROM sccpdevmodel WHERE (dns > 0) and (enabled > 0) AND vendor NOT LIKE \'%-sip\' ORDER BY model';
                 break;
-            case "sipphones":
+            case 'sipphones':
                 $sql = 'SELECT ' . $sel_inf . ' FROM sccpdevmodel WHERE (dns > 0) and (enabled > 0) AND `vendor` LIKE \'%-sip\' ORDER BY model';
                 break;
-            case "all":
-                $sql = 'SELECT ' . $sel_inf . ' FROM sccpdevmodel ORDER BY model';
-                break;
+            case 'all':     // Fall through to default
             default:
                 $sql = 'SELECT ' . $sel_inf . ' FROM sccpdevmodel ORDER BY model';
                 break;
         }
         $stmt = $db->prepare($sql);
         $stmt->execute();
-        return $stmt->fetchAll();
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     function write($table_name = "", $save_value = array(), $mode = 'update', $key_fld = "", $hwid = "")
@@ -318,7 +310,7 @@ class dbinterface
                         $req = 'DELETE FROM sccpuser WHERE ' . $sql_key . '';
                     } else {
                         if ($mode == 'update') {
-                            $req = 'UPDATE sccpuser SET ' . $sql_var .  WHERE  . $sql_key . '';
+                            $req = 'UPDATE sccpuser SET ' . $sql_var .  'WHERE ' . $sql_key . '';
                         } else {
                             $req = 'REPLACE INTO sccpuser SET ' . $sql_var . '';
                         }
@@ -368,37 +360,29 @@ class dbinterface
     public function validate()
     {
         global $db;
-        $result = false;
-        $check_fields = array('430' => array('_hwlang' => "varchar(12)"), '431' => array('private'=> "enum('on','off')"), '433' => array('directed_pickup'=>'') );
+        $result = 0;
+        $check_fields = [
+                        '430' => ['_hwlang' => "varchar(12)"],
+                        '431' => ['private'=> "enum('on','off')"],
+                        '433' => ['directed_pickup'=>'']
+                        ];
         $stmt = $db->prepare('DESCRIBE sccpdevice');
         $stmt->execute();
-        foreach ($stmt->fetchAll() as $value) {
+        foreach ($stmt->fetchAll(\PDO::FETCH_ASSOC) as $value) {
             $id_result[$value['Field']] = $value['Type'];
         }
         foreach ($check_fields as $key => $value) {
-            $sub_result = true;
-            foreach ($value as $skey => $svalue) {
-                if (!empty($svalue)) {
-                    if (empty($id_result[$skey])) {
-                        $sub_result = false;
-                    } else {
-                        if (strtolower($id_result[$skey]) != strtolower($svalue)) {
-                            $sub_result = false;
-                        }
-                    }
-                } else {
-                    if (!empty($id_result[$skey])) {
-                        $sub_result = false;
+            if (!empty(array_intersect_assoc($value, $id_result))) {
+                  $result = $key;
+            } else {
+                // no match but maybe checking against an empty string so just need to check key does not exist
+                foreach ($value as $skey => $svalue) {
+                    if (empty($svalue) && (!isset($id_result[$skey]))) {
+                        $result = $key;
                     }
                 }
             }
-            if ($sub_result) {
-                $result = $key;
-            } else {
-                break;
-            }
         }
-
         return $result;
     }
 }

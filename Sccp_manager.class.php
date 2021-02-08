@@ -1165,7 +1165,7 @@ dbug('getting Phone Grid');
         $save_settings = array();
         $save_codec = array();
         $name_dev = '';
-        $db_field = $this->dbinterface->HWextension_db_SccpTableData("get_colums_sccpdevice");
+        $db_field = $this->dbinterface->HWextension_db_SccpTableData("get_columns_sccpdevice");
         $hw_id = (empty($get_settings['sccp_deviceid'])) ? 'new' : $get_settings['sccp_deviceid'];
         $hw_type = (empty($get_settings['sccp_device_typeid'])) ? 'sccpdevice' : $get_settings['sccp_device_typeid'];
         $update_hw = ($hw_id == 'new') ? 'update' : 'clear';
@@ -1407,7 +1407,7 @@ dbug('getting Phone Grid');
           );
          */
         $name_dev = '';
-        $db_field = $this->dbinterface->HWextension_db_SccpTableData("get_colums_sccpuser");
+        $db_field = $this->dbinterface->HWextension_db_SccpTableData("get_columns_sccpuser");
         // $hw_id = (empty($get_settings['sccp_deviceid'])) ? 'new' : $get_settings['sccp_deviceid'];
         // $update_hw = ($hw_id == 'new') ? 'update' : 'clear';
         $hw_prefix = 'SEP';

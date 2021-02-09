@@ -869,7 +869,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 }
                 break;
             case 'getDeviceModel':
-dbug('getting Device model');
+//dbug('getting Device model');
                 switch ($request['type']) {
                     case 'all':
                     case 'extension':
@@ -930,7 +930,7 @@ dbug('getting Device model');
                 return $result;
                 break;
             case 'getExtensionGrid':
-dbug('getting Extension Grid');
+//dbug('getting Extension Grid');
                 $result = $this->dbinterface->HWextension_db_SccpTableData('SccpExtension');
                 if (empty($result)) {
                     return array();
@@ -954,7 +954,7 @@ dbug('getting Extension Grid');
                 return $result;
                 break;
             case 'getPhoneGrid':
-dbug('getting Phone Grid');
+//dbug('getting Phone Grid');
                 $cmd_type = !empty($request['type']) ? $request['type'] : '';
 
                 $result = $this->dbinterface->HWextension_db_SccpTableData('SccpDevice', array('type' => $cmd_type));
@@ -1736,7 +1736,7 @@ dbug('getting Phone Grid');
             }
         }
 
-        $this->sccpvalues['sccp_compatible'] = array('keyword' => 'compatible', 'data' => $ver_id, 'type' => '1', 'seq' => '99');
+        $this->sccpvalues['sccp_compatible'] = array('keyword' => 'sccp_compatible', 'data' => $ver_id, 'type' => '1', 'seq' => '99');
         $this->sccppath = $this->extconfigs->validate_init_path($confDir, $this->sccpvalues, $sccp_driver_replace);
         $driver = $this->FreePBX->Core->getAllDriversInfo(); // ??????
 
@@ -2132,7 +2132,7 @@ dbug('getting Phone Grid');
             $dir_list = $this->findAllFiles($dir, $file_ext, 'fileonly');
         }
         $raw_settings = $this->dbinterface->getDb_model_info($get, $format_list, $filter);
-dbug('reloading table');
+//dbug('reloading table');
         if ($validate) {
             for ($i = 0; $i < count($raw_settings); $i++) {
                 $raw_settings[$i]['validate'] = '-;-';

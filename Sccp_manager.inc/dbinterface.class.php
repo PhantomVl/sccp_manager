@@ -246,48 +246,38 @@ class dbinterface
 
     function write($table_name = "", $save_value = array(), $mode = 'update', $key_fld = "", $hwid = "")
     {
-//dbug('entering write for table', $table_name);
-if ($table_name === 'sccpdevmodel'){
-dbug('entering write with save_value', $save_value);
-dbug('entering write with mode', $mode);
-dbug('entering write with key_fld', $key_fld);
-dbug('entering write with hwid', $hwid);
-}
         // mode clear  - Empty table before update
         // mode update - update / replace record
         global $db;
-//        global $amp_conf;
         $result = false;
         $delete_value = array();
         switch ($table_name) {
             case 'sccpsettings':
-                foreach ($save_value as $key_v => $data) {
-                    if (!empty($data) && isset($data['data'])) {
-                            if ($data['data'] == $this->val_null) {
-                                $delete_value[] = $save_value[$key_v]['keyword'];
-                                unset($save_value[$key_v]);
-                            }
-/*                      if (isset($data['data'])) {
-                            if ($data['data'] == $this->val_null) {
-                                $delete_value[] = $save_value[$key_v]['keyword'];
-                                unset($save_value[$key_v]);
-                            }
-                        }
-*/                    }
-                }
+                $time = -microtime(true);
                 if ($mode == 'clear') {
-//                    $sql = 'truncate `sccpsettings`';
                     $db->prepare('TRUNCATE sccpsettings')->execute();
-                    $stmt = $db->prepare('INSERT INTO sccpsettings (keyword, data, seq, type) VALUES (?,?,?,?)');
-                    $result = $db->executeMultiple($stmt, $save_value);
+                    $stmt = $db->prepare('INSERT INTO sccpsettings (keyword, data, seq, type) VALUES (:keyword,:data,:seq,:type)');
                 } else {
-                    if (!empty($delete_value)) {
-                        $stmt = $db->prepare('DELETE FROM sccpsettings WHERE keyword = ?');
-                        $result = $db->executeMultiple($stmt, $delete_value);
+                    $stmt = $db->prepare('REPLACE INTO sccpsettings (keyword, data, seq, type) VALUES (:keyword,:data,:seq,:type)');
+                }
+                foreach ($save_value as $key => $dataArr) {
+                    if (!empty($dataArr) && isset($dataArr['data'])) {
+                        if ($dataArr['data'] == $this->val_null) {
+                              $delete_value[] = $save_value[$key]['keyword'];
+                              break;
+                        }
                     }
-                    if (!empty($save_value)) {
-                        $stmt = $db->prepare('REPLACE INTO sccpsettings (keyword, data, seq, type) VALUES (?,?,?,?)');
-                        $result = $db->executeMultiple($stmt, $save_value);
+                    $stmt->bindParam(':keyword',$dataArr['keyword'],\PDO::PARAM_STR);
+                    $stmt->bindParam(':data',$dataArr['data'],\PDO::PARAM_STR);
+                    $stmt->bindParam(':seq',$dataArr['seq'],\PDO::PARAM_INT);
+                    $stmt->bindParam(':type',$dataArr['type'],\PDO::PARAM_INT);
+                    $result = $stmt->execute();
+                }
+                if (!empty($delete_value)) {
+                    $stmt = $db->prepare('DELETE FROM sccpsettings WHERE keyword = :keyword');
+                    foreach ($delete_value as $del_key) {
+                        $stmt->bindParam(':keyword',$del_key,\PDO::PARAM_STR);
+                        $result = $stmt->execute();
                     }
                 }
                 break;

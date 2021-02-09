@@ -269,25 +269,25 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
     /* unused but FPBX API requires it */
 
     public function install() {
-        
+
     }
 
     /* unused but FPBX API requires it */
 
     public function uninstall() {
-        
+
     }
 
     /* unused but FPBX API requires it */
 
     public function backup() {
-        
+
     }
 
     /* unused but FPBX API requires it */
 
     public function restore($backup) {
-        
+
     }
 
     public function getActionBar($request) {
@@ -815,7 +815,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                             $hw_list[] = array('name' => $idv);
                         }
                         if ($idv == 'all') {
-                            
+
                         }
                     }
                 }
@@ -1735,7 +1735,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
             }
         }
 
-        $this->sccpvalues['sccp_compatible'] = array('keyword' => 'compatible', 'data' => $ver_id, 'type' => '1', 'seq' => '99');
+        $this->sccpvalues['sccp_compatible'] = array('keyword' => 'sccp_compatible', 'data' => $ver_id, 'type' => '1', 'seq' => '99');
         $this->sccppath = $this->extconfigs->validate_init_path($confDir, $this->sccpvalues, $sccp_driver_replace);
         $driver = $this->FreePBX->Core->getAllDriversInfo(); // ??????
 
@@ -2093,7 +2093,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         }
         // [Namesoftkeyset]
         // type=softkeyset
-        // 
+        //
         // ----- It is a very bad idea to add an external configuration file "sccp_custom.conf" !!!!
         // This will add problems when solving problems caused by unexpected solutions from users.
         //

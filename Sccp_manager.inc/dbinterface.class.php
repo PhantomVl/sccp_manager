@@ -40,7 +40,7 @@ class dbinterface
             $id = $value[$indexField];
             $result[$id] = $value;
         }
-        return $resut;
+        return $result;
     }
 
     public function HWextension_db_SccpTableData($dataid, $data = array())

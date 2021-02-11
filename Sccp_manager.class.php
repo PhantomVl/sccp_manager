@@ -169,7 +169,11 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
             $this->xml_data = simplexml_load_file($xml_vars);
             $this->initVarfromXml(); // Overwrite Exist
         }
-        $this->saveSccpSettings();
+
+        if (get_class($freepbx) === 'FreePBX') {
+            // only save settings when building a new FreePBX object
+            $this->saveSccpSettings();
+        }
     }
 
     /*
@@ -643,6 +647,8 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
     }
 
     public function ajaxRequest($req, &$setting) {
+        // Called first by BMO. Must return true or request will be aborted.
+        // See https://wiki.freepbx.org/display/FOP/BMO+Ajax+Calls
         switch ($req) {
             case 'backupsettings':
             case 'savesettings':
@@ -671,11 +677,13 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
             case 'delete_dialplan':
                 return true;
                 break;
+            default:
+                return false;
         }
-        return false;
     }
 
-    // !TODO!: this should go into it's only ajam.html.php file (see: dahdiconfig)
+    // !TODO!: this should go into it's only ajax.html.php file (see: dahdiconfig)
+    // ajaxHandler is called after ajaxRequest returns true
     public function ajaxHandler() {
         $request = $_REQUEST;
         $msg = array();
@@ -823,7 +831,6 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 $res = $this->updateSccpButtons($hw_list);
                 $msg .= $res['Response'] . ' raw: ' . $res['data'] . ' ';
                 return array('status' => true, 'message' => 'Update Butons Labels Complite ' . $msg, 'reload' => true);
-
             case 'model_add':
                 $save_settings = array();
                 $key_name = array('model', 'vendor', 'dns', 'buttons', 'loadimage', 'loadinformationid', 'nametemplate');
@@ -847,7 +854,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 return $save_settings;
                 break;
             case 'model_enabled':
-                $model_set = '1';
+                $model_set = '1';     // fall through intentionally
             case 'model_disabled':
                 if ($request['command'] == 'model_disabled') {
                     $model_set = '0';
@@ -860,7 +867,6 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                     }
                 }
                 return array('status' => true, 'table_reload' => true);
-
                 break;
             case 'model_delete':
                 if (!empty($request['model'])) {
@@ -1288,7 +1294,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         }
         $this->dbinterface->write("sccpdevice", $save_settings, 'replace');
         $save_buttons = $this->getPhoneButtons($get_settings, $name_dev, $hw_type);
-        $this->dbinterface->write("sccpbuttons", $save_buttons, $update_hw, '', $name_dev);
+        $this->dbinterface->write("sccpbuttons", $save_buttons, $update_hw, 'add', $name_dev); //was empty so would fall through to INSERT
         $this->createSccpDeviceXML($name_dev);
         if ($hw_id == 'new') {
             $this->srvinterface->sccpDeviceReset($name_dev);
@@ -1480,9 +1486,9 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
             }
         }
         $this->dbinterface->write("sccpuser", $save_settings, 'replace', 'name');
-        $this->dbinterface->write("sccpbuttons", $save_buttons, 'clear', '', $name_dev);
+        $this->dbinterface->write("sccpbuttons", $save_buttons, 'delete', '', $name_dev); //standardise to delete
         return $save_buttons;
-
+        // Why is there a second return here???????
         return $save_settings;
     }
 
@@ -1867,7 +1873,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
 
 //        $save_settings = array();
         if (empty($save_value)) {
-            $this->dbinterface->write('sccpsettings', $this->sccpvalues, 'clear');
+            $this->dbinterface->write('sccpsettings', $this->sccpvalues, 'replace');
         } else {
             $this->dbinterface->write('sccpsettings', $save_value, 'update');
         }

@@ -115,7 +115,7 @@ class xmlinterface
                     $node->addAttribute('model', $var['vendor'] . ' ' . $var['model']);
                 }
             }
-            $xml_work->asXml($xml_name);  // Save  XMLDefault1.cnf.xml
+            $this->saveXml($xml_work, $xml_name);
         }
     }
 
@@ -330,28 +330,23 @@ class xmlinterface
                         $xml_work->$key = time();
                         break;
                     case 'loadinformation':
-//                      Set Path Image ????
                         if (isset($dev_config["tftp_firmware"])) {
                             $xml_work->$key = (isset($dev_config["loadimage"])) ? $dev_config["tftp_firmware"] . $dev_config["loadimage"] : '';
                         } else {
                             $xml_work->$key = (isset($dev_config["loadimage"])) ? $dev_config["loadimage"] : '';
                         }
-//                        $xml_work->$key = $dev_config["loadimage"];
                         if (!empty($dev_config['addon'])) {
                             $xnode = $xml_work->addChild('addOnModules');
-                            $ti = 1;
-                            $hw_addon = explode(',', $dev_config['addon']);
-                            foreach ($hw_addon as $add_key) {
-//                            foreach ($dev_config['addon_info'] as $add_key => $add_val) {
-                                if (!empty($dev_config['addon_info'][$add_key])) {
-                                    $add_val = $dev_config['addon_info'][$add_key];
-                                    $xnode_obj = $xnode->addChild('addOnModule');
-                                    $xnode_obj->addAttribute('idx', $ti);
-                                    $xnode_obj->addChild('loadInformation', $add_val);
-                                    $ti++;
+                            $hw_addon = explode(';', $dev_config['addon']);
+                            foreach ($hw_addon as $inst => $key) {
+                                $xnode_obj = $xnode->addChild('addOnModule');
+                                $xnode_obj->addAttribute('idx', $inst + 1);
+                                $loadinfo_key = $dev_config['addon'];
+                                $loadinfo = $dev_config['addon_info'][$loadinfo_key];
+                                if (!empty($loadinfo)) {
+                                    $xnode_obj->addChild('loadInformation', $loadinfo);
                                 }
                             }
-//                            $this->appendSimpleXmlNode($xml_work , $xnode_obj);
                         }
                         break;
                     case 'commonprofile':
@@ -401,9 +396,7 @@ class xmlinterface
                         break;
                 }
             }
-
-//            print_r($xml_work);
-            $xml_work->asXml($xml_name);  // Save
+            $this->saveXml($xml_work, $xml_name);
         } else {
             die('Error Hardware template :' . $xml_template . ' not found');
         }
@@ -743,17 +736,13 @@ class xmlinterface
                         } else {
                             $xml_work->$key = (isset($dev_config["loadimage"])) ? $dev_config["loadimage"] : '';
                         }
-//                        $xml_work->$key = $dev_config["loadimage"];
                         if (!empty($dev_config['addon'])) {
                             $xnode = $xml_work->addChild('addOnModules');
-                            $ti = 1;
                             foreach ($dev_config['addon_info'] as $add_key => $add_val) {
                                 $xnode_obj = $xnode->addChild('addOnModule');
-                                $xnode_obj->addAttribute('idx', $ti);
+                                $xnode_obj->addAttribute('idx', $add_key + 1);
                                 $xnode_obj->addChild('loadInformation', $add_val);
-                                $ti++;
                             }
-//                            $this->appendSimpleXmlNode($xml_work , $xnode_obj);
                         }
                         break;
                     case 'commonProfile':
@@ -803,9 +792,7 @@ class xmlinterface
                         break;
                 }
             }
-
-//            print_r($xml_work);
-            $xml_work->asXml($xml_name);  // Save
+            $this->saveXml($xml_work, $xml_name);
         } else {
             die('Error Hardware template :' . $xml_template . ' not found');
         }
@@ -936,5 +923,14 @@ class xmlinterface
         );
 //        $dom->parentNode->appendChild($import, $dom);
         $dom->parentNode->appendChild($import->cloneNode(true));
+    }
+    
+    // temporary helper function to save xml with proper indentation
+    private function saveXml($xml, $filename) {
+            $dom = new \DOMDocument("1.0");
+            $dom->preserveWhiteSpace = false;
+            $dom->formatOutput = true;
+            $dom->loadXML($xml->asXML());
+            $dom->save($filename);
     }
 }

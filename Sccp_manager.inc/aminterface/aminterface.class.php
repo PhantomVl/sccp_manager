@@ -54,7 +54,7 @@ class aminterface
         $this->_socket = false;
         $this->_connect_state = false;
         $this->_error = array();
-        $this->_config = array('host' => 'localhost', 'user' => '', 'pass' => '', 'port' => '5038', 'tsoket' => 'tcp://', 'timeout' => 30, 'enabled' => true);
+        $this->_config = array('host' => 'localhost', 'user' => '', 'pass' => '', 'port' => '5038', 'tsoket' => 'tcp://', 'timeout' => 30, 'enabled' => false);
         $this->_eventListeners = array();
 //  $this->_eventFactory = new EventFactoryImpl(\Logger::getLogger('EventFactory'));
 //  $this->_responseFactory = new ResponseFactoryImpl(\Logger::getLogger('ResponseFactory'));

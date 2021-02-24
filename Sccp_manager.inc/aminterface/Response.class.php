@@ -21,6 +21,14 @@ abstract class Response extends IncomingMessage
     protected $_completed;
     protected $keys;
 
+    public function __construct($rawContent)
+    {
+        parent::__construct($rawContent);
+        $this->_events = array();
+        $this->_eventsCount = 0;
+        $this->_completed = !$this->isList();
+    }
+
     public function isComplete()
     {
         return $this->_completed;
@@ -51,6 +59,7 @@ abstract class Response extends IncomingMessage
 
     public function isSuccess()
     {
+        // returns true if response message does not contain error
         return stristr($this->getKey('Response'), 'Error') === false;
     }
 
@@ -83,14 +92,6 @@ abstract class Response extends IncomingMessage
                 }
             }
         }
-    }
-
-    public function __construct($rawContent)
-    {
-        parent::__construct($rawContent);
-        $this->_events = array();
-        $this->_eventsCount = 0;
-        $this->_completed = !$this->isList();
     }
 }
 //****************************************************************************
@@ -174,6 +175,13 @@ class SCCPGeneric_Response extends Response
     protected $_tables;
     private $_temptable;
 
+    public function __construct($rawContent)
+    {
+        parent::__construct($rawContent);
+        $_fields = array("EventList" => "EventList:", "Message" => "Message:");
+        $this->_completed = !$this->isList();
+    }
+
     public function addEvent($event)
     {
         // not eventlist (start/complete)
@@ -184,7 +192,6 @@ class SCCPGeneric_Response extends Response
 
         // Nothing to do with this - we need a table start
         if (stristr($event->getEventList(), 'start')) { return; }
-
 
         // This is empty as soon as we have received a TableStart.
         // The next message is the first of the data sets
@@ -239,27 +246,21 @@ class SCCPGeneric_Response extends Response
         }
     }
 
-    protected function ConvertTableData($_tablename, $_fkey, $_fields)
+    protected function ConvertTableData(String $_tablename, Array $_fkey, Array $_fields)
     {
-        $_rawtable = $this->Table2Array($_tablename);
         $result = array();
+        $_rawtable = $this->Table2Array($_tablename);
         // Check that there is actually data to be converted
         if (empty($_rawtable)) { return $result;}
+
         foreach ($_rawtable as $_row) {
             $all_key_ok = true;
-            if (is_array($_fkey)) {
-                foreach ($_fkey as $_fid) {
-                    if (empty($_row[$_fid])) {
-                        $all_key_ok = false;
-                    } else {
-                        $set_name[$_fid] = $_row[$_fid];
-                    }
-                }
-            } else {
-                if (empty($_row[$_fkey])) {
+            // No need to test if $_fkey is arrray as array required
+            foreach ($_fkey as $_fid) {
+                if (empty($_row[$_fid])) {
                     $all_key_ok = false;
                 } else {
-                    $set_name[$_fkey] = $_row[$_fkey];
+                    $set_name[$_fid] = $_row[$_fid];
                 }
             }
             $Data = &$result;
@@ -267,6 +268,7 @@ class SCCPGeneric_Response extends Response
                 foreach ($set_name as $value_id) {
                     $Data = &$Data[$value_id];
                 }
+                // Label converter in case labels and keys are different - not actually required.
                 foreach ($_fields as $value_key => $value_id) {
                     $Data[$value_id] = $_row[$value_key];
                 }
@@ -275,7 +277,7 @@ class SCCPGeneric_Response extends Response
         return $result;
     }
 
-    protected function ConvertEventData($_fkey, $_fields)
+    protected function ConvertEventData(Array $_fkey, Array $_fields)
     {
         $result = array();
 
@@ -283,19 +285,12 @@ class SCCPGeneric_Response extends Response
             $all_key_ok = true;
             $tmp_result = $_row->getKeys();
             $set_name = array();
-            if (is_array($_fkey)) {
-                foreach ($_fkey as $_fid) {
-                    if (empty($tmp_result[$_fid])) {
-                        $all_key_ok = false;
-                    } else {
-                        $set_name[$_fid] = $tmp_result[$_fid];
-                    }
-                }
-            } else {
-                if (empty($tmp_result[$_fkey])) {
+            // No need to test if $_fkey is arrray as array required
+            foreach ($_fkey as $_fid) {
+                if (empty($tmp_result[$_fid])) {
                     $all_key_ok = false;
                 } else {
-                    $set_name[$_fkey] = $tmp_result[$_fkey];
+                    $set_name[$_fid] = $tmp_result[$_fid];
                 }
             }
             $Data = &$result;
@@ -303,6 +298,7 @@ class SCCPGeneric_Response extends Response
                 foreach ($set_name as $value_id) {
                     $Data = &$Data[$value_id];
                 }
+                // Label converter in case labels and keys are different - not actually required.
                 foreach ($_fields as $value_id) {
                     $Data[$value_id] = $tmp_result[$value_id];
                 }
@@ -311,59 +307,53 @@ class SCCPGeneric_Response extends Response
         return $result;
     }
 
-
-    public function hasTable()
+/*    public function hasTable()
     {
         if (is_array($this->_tables)) {
             return true;
         }
         return false;
     }
+
     public function getTableNames()
     {
         return (is_array($this->_tables)) ? array_keys($this->_tables) : null;
     }
-
-    public function Table2Array($tablename = '')
+*/
+    public function Table2Array( String $tablename )
     {
         $result =array();
-        if (!is_string($tablename) || empty($tablename)) {
-            return false;
-        }
-        if ($this->hasTable()) {
-            foreach ($this->_tables[$tablename]['Entries'] as $trow) {
-                $result[]= $trow->getKeys();
-            }
+        if (empty($tablename) || !is_array($this->_tables)) {
             return $result;
-        } else {
-            return false;
         }
+        foreach ($this->_tables[$tablename]['Entries'] as $trow) {
+            $result[]= $trow->getKeys();
+        }
+        return $result;
     }
-    public function Events2Array()
+
+/*    public function Events2Array()
     {
         $result =array();
-        if (is_array($this->_events)) {
-            foreach ($this->_events as $trow) {
-                $tmp_result = $trow->getKeys();
-                if (is_array($tmp_result)) {
-                    $result = array_merge($result, $tmp_result);
-                } else {
-                    $result [] = $tmp_result;
-                }
-            }
-            return $result;
-        } else {
-            return false;
+        foreach ($this->_events as $trow) {
+          //  $tmp_result = $trow->getKeys();
+          //  if (is_array($tmp_result)) {
+                $result = array_merge($result, $trow->getKeys());
+            //} else {
+            //    $result [] = $tmp_result;
+          //  }
         }
+        return $result;
     }
 
     public function getTable($tablename)
     {
-        if ($this->hasTable() && array_key_exists($tablename, $this->_tables)) {
+        if (is_array($this->_tables) && array_key_exists($tablename, $this->_tables)) {
             return $this->_tables[$tablename];
         }
         throw new PAMIException("No such table.");
     }
+
     public function getJSON()
     {
         if (strlen($this->getKey('JSON')) > 0) {
@@ -373,23 +363,16 @@ class SCCPGeneric_Response extends Response
         }
         throw new AMIException("No JSON Key found to return.");
     }
-
-    public function __construct($rawContent)
-    {
-        parent::__construct($rawContent);
-        $_fields = array("EventList" => "EventList:", "Message" => "Message:");
-//        $this->getVariable($rawContent, $_fields);
-        $this->_completed = !$this->isList();
-    }
-
+*/
     public function getResult()
     {
-        if ($this->getKey('JSON') != null) {
-            $result = $this->getJSON();
+        if ($this->getKey('JSON') !== null && !empty($this->getKey('JSON'))) {
+            if (($json = json_decode($this->getKey('JSON'), true)) != false) {
+                return $json;
+            }
         } else {
-            $result = $this->getMessage();
+            return $this->getMessage();
         }
-        return $result;
     }
 }
 
@@ -399,10 +382,8 @@ class SCCPJSON_Response extends Response
     public function __construct($rawContent)
     {
         parent::__construct($rawContent);
-        $_fields = array("DataType" => "DataType:", "JSONRAW" => "JSON:");
-        $this->getVariable($rawContent, $_fields);
-        $js_res = $this->getKey('JSONRAW');
-        if (isset($js_res)) {
+        $this->getVariable($rawContent, array("DataType" => "DataType:", "JSONRAW" => "JSON:"));
+        if (null !== $this->getKey('JSONRAW')) {
             $this->setKey('Response', 'Success');
         }
         return $this->isSuccess();
@@ -417,9 +398,13 @@ class SCCPShowSoftkeySets_Response extends SCCPGeneric_Response
     }
     public function getResult()
     {
-        $_fields = array('description'=>'description','label'=>'label','lblid'=>'lblid');
-        $result = $this->ConvertTableData('SoftKeySets', array('set','mode'), $_fields);
-        return $result;
+  //      $_fields = array('description'=>'description','label'=>'label','lblid'=>'lblid');
+        return $this->ConvertTableData(
+            'SoftKeySets',
+            array('set','mode'),
+            array('description'=>'description','label'=>'label','lblid'=>'lblid')
+            );
+  //      return $result;
     }
 }
 
@@ -431,10 +416,15 @@ class SCCPShowDevices_Response extends SCCPGeneric_Response
     }
     public function getResult()
     {
-        $_fields = array('mac'=>'mac','address'=>'address','descr'=>'descr','regstate'=>'status',
-                         'token'=>'token','act'=>'act', 'lines'=>'lines','nat'=>'nat','regtime'=>'regtime');
-        $result = $this->ConvertTableData('Devices', array('mac'), $_fields);
-        return $result;
+//        $_fields = array('mac'=>'mac','address'=>'address','descr'=>'descr','regstate'=>'status',
+//                         'token'=>'token','act'=>'act', 'lines'=>'lines','nat'=>'nat','regtime'=>'regtime');
+        return $this->ConvertTableData(
+            'Devices',
+            array('mac'),
+            array('mac'=>'mac','address'=>'address','descr'=>'descr','regstate'=>'status',
+                  'token'=>'token','act'=>'act', 'lines'=>'lines','nat'=>'nat','regtime'=>'regtime')
+            );
+//        return $result;
     }
 }
 
@@ -447,16 +437,15 @@ class SCCPShowDevice_Response extends SCCPGeneric_Response
     public function getResult()
     {
         $result = array();
-        $result = $this->Events2Array();
+        foreach ($this->_events as $trow) {
+                $result = array_merge($result, $trow->getKeys());
+        }
         $result['Buttons'] = $this->ConvertTableData(
             'Buttons',
             array('id'),
             array('id'=>'id','channelobjecttype'=>'channelobjecttype','inst'=>'inst',
-            'typestr'=>'typestr',
-            'type'=>'type',
-            'pendupdt'=>'pendupdt',
-            'penddel'=>'penddel',
-            'default'=>'default')
+                  'typestr'=>'typestr', 'type'=>'type', 'pendupdt'=>'pendupdt', 'penddel'=>'penddel', 'default'=>'default'
+                  )
         );
         $result['SpeeddialButtons'] = $this->ConvertTableData(
             'Buttons',
@@ -467,18 +456,18 @@ class SCCPShowDevice_Response extends SCCPGeneric_Response
             'CallStatistics',
             array('type'),
             array('type'=>'type','channelobjecttype'=>'channelobjecttype','calls'=>'calls','pcktsnt'=>'pcktsnt','pcktrcvd'=>'pcktrcvd',
-                                  'lost'=>'lost','jitter'=>'jitter','latency'=>'latency', 'quality'=>'quality','avgqual'=>'avgqual','meanqual'=>'meanqual',
-            'maxqual'=>'maxqual',
-            'rconceal'=>'rconceal',
-            'sconceal'=>'sconceal')
+                  'lost'=>'lost','jitter'=>'jitter','latency'=>'latency', 'quality'=>'quality','avgqual'=>'avgqual','meanqual'=>'meanqual',
+                  'maxqual'=>'maxqual', 'rconceal'=>'rconceal', 'sconceal'=>'sconceal'
+                  )
         );
         $result['SCCP_Vendor'] = array('vendor' => strtok($result['skinnyphonetype'], ' '), 'model' => strtok('('),
                                        'model_id' => strtok(')'), 'vendor_addon' => strtok($result['configphonetype'], ' '),
                                        'model_addon' => strtok(' '));
         if (empty($result['SCCP_Vendor']['vendor']) || $result['SCCP_Vendor']['vendor'] == 'Undefined') {
-                $result['SCCP_Vendor'] = array('vendor' => 'Undefined', 'model' => $result['configphonetype'],
-                                               'model_id' => '', 'vendor_addon' => $result['SCCP_Vendor']['vendor_addon'],
-                                               'model_addon' => $result['SCCP_Vendor']['model_addon']);
+            $result['SCCP_Vendor'] = array('vendor' => 'Undefined', 'model' => $result['configphonetype'],
+                                          'model_id' => '', 'vendor_addon' => $result['SCCP_Vendor']['vendor_addon'],
+                                          'model_addon' => $result['SCCP_Vendor']['model_addon']
+                                          );
         }
         $result['MAC_Address'] =$result['macaddress'];
         return $result;

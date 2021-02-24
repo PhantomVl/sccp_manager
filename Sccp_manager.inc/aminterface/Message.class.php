@@ -27,6 +27,14 @@ abstract class Message
     protected $createdDate;
     private $_responseHandler;
 
+    public function __construct()
+    {
+        $this->lines = array();
+        $this->variables = array();
+        $this->keys = array();
+        $this->createdDate = time();
+    }
+
     public function _ToDebug($level, $msg)
     {
     }
@@ -216,14 +224,6 @@ abstract class Message
     public function __sleep()
     {
         return array('lines', 'variables', 'keys', 'createdDate');
-    }
-
-    public function __construct()
-    {
-        $this->lines = array();
-        $this->variables = array();
-        $this->keys = array();
-        $this->createdDate = time();
     }
 }
 

@@ -521,9 +521,7 @@ class aminterface
         $result = array();
         if ($this->_connect_state) {
             $_action = new \FreePBX\modules\Sccp_manager\aminterface\ReloadAction('chan_sccp');
-//            $_action = new \FreePBX\modules\Sccp_manager\aminterface\CommandAction('sccp reload force'); // No Response Result !!
-            $_response = $this->send($_action);
-            $result = $_response->getMessage();
+            $result = ['Response' => $this->send($_action)->getMessage(), 'data' => ''];
         }
         return $result;
     }

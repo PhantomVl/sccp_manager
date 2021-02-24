@@ -17,7 +17,7 @@ $ast_realtime = $this->srvinterface->sccp_realtime_status();
 // if there are multiple connections, this will only return the first.
 foreach ($ast_realtime as $key => $value) {
     if (empty($ast_realm)) {
-        if ($value['status'] == 'OK') {
+        if ($value['status'] === 'OK') {
             $ast_realm = $key;
         }
     }

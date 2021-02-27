@@ -530,8 +530,59 @@ class aminterface
         $result = array();
         if ($this->_connect_state) {
             $_action = new \FreePBX\modules\Sccp_manager\aminterface\SCCPConfigMetaDataAction();
-            $_response = $this->send($_action);
-            $result = $_response->getResult();
+            $metadata = $this->send($_action)->getResult();
+        }
+        //return $result;
+        if ($metadata && array_key_exists("Version", $metadata)) {
+            $result["Version"] = $metadata["Version"];
+            $version_parts = explode(".", $metadata["Version"]);
+            $result["vCode"] = 0;
+            if ($version_parts[0] == "4") {
+                switch ($version_parts[1]) {
+                    case "1":
+                        $result["vCode"] = 410;
+                        break;
+                    case "2":
+                        $result["vCode"] = 420;
+                        break;
+                    case 3. . .5:
+                        if($version_parts[2] == "3"){
+                            $result["vCode"] = 433;
+                        } else {
+                            $result["vCode"] = 430;
+                        }
+                        break;
+                    default:
+                        $result["vCode"] = 400;
+                        break;
+                }
+            }
+            /* Revision got replaced by RevisionHash in 10404 (using the hash does not work) */
+            if (array_key_exists("Revision", $metadata)) {
+                if (base_convert($metadata["Revision"], 16, 10) == base_convert('702487a', 16, 10)) {
+                    $result["vCode"] = 431;
+                }
+                if (base_convert($metadata["Revision"], 16, 10) >= "10403") {
+                    $result["vCode"] = 431;
+                }
+            }
+            if (array_key_exists("RevisionHash", $metadata)) {
+                $result["RevisionHash"] = $metadata["RevisionHash"];
+            } else {
+                $result["RevisionHash"] = '';
+            }
+            if (array_key_exists("RevisionNum", $metadata)) {
+                $result["RevisionNum"] = $metadata["RevisionNum"];
+                if ($metadata["RevisionNum"] >= "10403") { // new method, RevisionNum is incremental
+                    $result["vCode"] = 432;
+                }
+                if ($metadata["RevisionNum"] >= "10491") { // new method, RevisionNum is incremental
+                    $result["vCode"] = 433;
+                }
+            }
+            if (array_key_exists("ConfigureEnabled", $metadata)) {
+                $result["futures"] = implode(';', $metadata["ConfigureEnabled"]);
+            }
         }
         return $result;
     }

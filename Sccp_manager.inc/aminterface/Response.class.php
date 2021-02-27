@@ -184,19 +184,17 @@ class SCCPGeneric_Response extends Response
 
     public function addEvent($event)
     {
-        // not eventlist (start/complete)
-        //        print_r('<br>---- addEvent --<br>');
-        //        print_r($event);
-        //        print_r('<br>---- Event List--<br>');
-        //        print_r($event->getEventList());
+        if ($event->getEventList() === 'start') {
+            // Have started a list of events; this may include tables
+            // Nothing to do with this event, only need to handle
+            // the events that follow
+            return;
+        }
 
-        // Nothing to do with this - we need a table start
-        if (stristr($event->getEventList(), 'start')) { return; }
-
-        // This is empty as soon as we have received a TableStart.
-        // The next message is the first of the data sets
-        // We use this variable in the switch to add set entries
         if ( empty($thisSetEventEntryType)) {
+            // This is empty as soon as we have received a TableStart.
+            // The next message is the first of the data sets
+            // We use this variable in the switch to add set entries
             if (strpos($event->getName(), 'Entry')) {
                 $thisSetEventEntryType = $event->getName();
             } else {
@@ -204,44 +202,44 @@ class SCCPGeneric_Response extends Response
             }
         }
         $unknownevent = "FreePBX\\modules\\Sccp_manager\\aminterface\\UnknownEvent";
-        if (!($event instanceof $unknownevent)) {
-            switch ( $event->getName()) {
-                case $thisSetEventEntryType :
-                    $this->_temptable['Entries'][] = $event;
-                    break;
-                case 'TableStart':
-                    //initialise
-                    $this->_temptable = array();
-                    $this->_temptable['Name'] = $event->getTableName();
-                    $this->_temptable['Entries'] = array();
-                    $thisSetEventEntryType = '';
-                    break;
-                case 'TableEnd':
-                    //Close
-                    if (!is_array($this->_tables)) {
-                        $this->_tables = array();
-                    }
-                    $this->_tables[$event->getTableName()] = $this->_temptable;
-                    unset($this->_temptable);
-                    $thisSetEventEntryType = '';
-
-                    // Finished the table. Now check to see if everything was received
-                    // If counts do not match return false and table will not be
-                    //loaded
-                    if ($event->getKey('TableEntries') != count($this->_tables[$event->getTableName()]['Entries'])) {
-                        return $this->_completed = false;
-                    }
-                    break;
-                default:
-                    // add regular event
-                    $this->_events[] = $event;
+        if ($event instanceof $unknownevent) {
+            $this->_events[] = $event;
+            return;
+        }
+        switch ( $event->getName()) {
+            case $thisSetEventEntryType :
+                $this->_temptable['Entries'][] = $event;
+                break;
+            case 'TableStart':
+                //initialise
+                $this->_temptable = array();
+                $this->_temptable['Name'] = $event->getTableName();
+                $this->_temptable['Entries'] = array();
+                $thisSetEventEntryType = '';
+                break;
+            case 'TableEnd':
+                //Close
+                if (!is_array($this->_tables)) {
+                    $this->_tables = array();
                 }
-            } else {
-                // add unknown event
+                $this->_tables[$event->getTableName()] = $this->_temptable;
+                $this->_temptable = array();
+                $thisSetEventEntryType = 'undefinedAsThisIsNotASet';
+
+                // Finished the table. Now check to see if everything was received
+                // If counts do not match return false and table will not be
+                //loaded
+                if ($event->getKey('TableEntries') != count($this->_tables[$event->getTableName()]['Entries'])) {
+                    return $this->_completed = false;
+                }
+                break;
+            default:
+                // add regular list event
                 $this->_events[] = $event;
-            }
-        // Received a complete eventList outside of a table.
-        if (stristr($event->getEventList(), 'complete') || stristr($event->getName(), 'complete')) {
+        }
+
+        if ($event->getEventList() === 'Complete')  {
+              // Received a complete eventList.
               return $this->_completed = true;
         }
     }
@@ -252,7 +250,6 @@ class SCCPGeneric_Response extends Response
         $_rawtable = $this->Table2Array($_tablename);
         // Check that there is actually data to be converted
         if (empty($_rawtable)) { return $result;}
-
         foreach ($_rawtable as $_row) {
             $all_key_ok = true;
             // No need to test if $_fkey is arrray as array required
@@ -264,11 +261,12 @@ class SCCPGeneric_Response extends Response
                 }
             }
             $Data = &$result;
+
             if ($all_key_ok) {
                 foreach ($set_name as $value_id) {
                     $Data = &$Data[$value_id];
                 }
-                // Label converter in case labels and keys are different - not actually required.
+                // Label converter in case labels and keys are different
                 foreach ($_fields as $value_key => $value_id) {
                     $Data[$value_id] = $_row[$value_key];
                 }
@@ -421,7 +419,7 @@ class SCCPShowDevices_Response extends SCCPGeneric_Response
         return $this->ConvertTableData(
             'Devices',
             array('mac'),
-            array('mac'=>'mac','address'=>'address','descr'=>'descr','regstate'=>'status',
+            array('mac'=>'name','address'=>'address','descr'=>'descr','regstate'=>'status',
                   'token'=>'token','act'=>'act', 'lines'=>'lines','nat'=>'nat','regtime'=>'regtime')
             );
 //        return $result;
@@ -437,7 +435,9 @@ class SCCPShowDevice_Response extends SCCPGeneric_Response
     public function getResult()
     {
         $result = array();
+
         foreach ($this->_events as $trow) {
+          dbug('keys are',$trow->getKeys());
                 $result = array_merge($result, $trow->getKeys());
         }
         $result['Buttons'] = $this->ConvertTableData(

@@ -35,7 +35,7 @@ class UnknownEvent extends Event
 {
     public function __construct($rawContent = '')
     {
-        print_r($rawContent);
+//        print_r($rawContent);
 //        die();
     }
 }
@@ -110,7 +110,7 @@ class ExtensionStatus_Event extends Event
 
 class SCCPDeviceEntry_Event extends Event
 {
-    
+
 }
 
 class SCCPShowDeviceComplete_Event extends Event
@@ -165,7 +165,14 @@ class SCCPShowDevicesComplete_Event extends Event
 class SCCPDeviceButtonEntry_Event extends Event
 {
 }
-
+class SCCPDeviceFeatureEntry_Event extends Event
+{
+// Returned by SCCPShowDevice
+}
+class SCCPVariableEntry_Event extends Event
+{
+// Returned by SCCPShowDevice
+}
 class SCCPDeviceLineEntry_Event extends Event
 {
 }
@@ -177,5 +184,5 @@ class SCCPDeviceSpeeddialEntry_Event extends Event
 }
 class ExtensionStateListComplete_Event extends Event
 {
-    
+
 }

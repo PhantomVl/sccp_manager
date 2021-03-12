@@ -176,7 +176,7 @@ abstract class Message
                         return (double) $value;
                     }
                 default:
-                    throw new PAMIException("Don't know how to convert: '" . $value . "'\n");
+                    throw new AMIException("Don't know how to convert: '" . $value . "'\n");
                     break;
             }
         }
@@ -240,6 +240,11 @@ abstract class IncomingMessage extends Message
     public function getRawContent()
     {
         return $this->rawContent;
+    }
+
+    public function isComplete()
+    {
+        return $this->_completed;
     }
 
     public function __sleep()
@@ -418,6 +423,6 @@ class SCCPConfigMetaDataAction extends ActionMessage
         if ($segment != false) {
             $this->setKey('Segment', $segment);
         }
-        $this->setResponseHandler("SCCPGeneric");
+        $this->setResponseHandler("SCCPJSON");
     }
 }

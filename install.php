@@ -18,6 +18,7 @@ global $version;
 global $srvinterface;
 global $mobile_hw;
 $mobile_hw = '0';
+global $useAmiInterface;
 
 $class = "\\FreePBX\\Modules\\Sccp_manager\\srvinterface";
 if (!class_exists($class, false)) {
@@ -375,6 +376,7 @@ $table_req = array('sccpdevice', 'sccpline');
 $ss = FreePBX::create()->Sccp_manager;
 $astman = FreePBX::create()->astman;
 $sccp_compatible = 0;
+$chanSCCPWarning = true;
 //$db_config = $db_config_v0;
 $db_config = '';
 
@@ -445,13 +447,13 @@ function CheckAsteriskVersion()
 
 function CheckChanSCCPCompatible()
 {
+    global $chanSCCPWarning;
     global $srvinterface, $astman;
     if (!$astman) {
         ie_freepbx('No asterisk manager connection provided!. Installation Failed');
     }
-    $sccp_compatible = $srvinterface->get_compatible_sccp();
-    outn("<li>" . _("Sccp model Compatible code : ") . $sccp_compatible . "</li>");
-    return $sccp_compatible;
+    // calling with true returns array with compatibility and RevisionNumber
+    return $srvinterface->get_compatible_sccp(true);
 }
 
 function InstallDB_Buttons()
@@ -964,7 +966,11 @@ function Setup_RealTime()
 CheckSCCPManagerDBTables($table_req);
 #CheckPermissions();
 CheckAsteriskVersion();
-$sccp_compatible = CheckChanSCCPCompatible();
+$sccp_version = array();
+$sccp_version = CheckChanSCCPCompatible();
+$sccp_compatible = $sccp_version[0];
+$chanSCCPWarning = $sccp_version[1] ^= 1;
+outn("<li>" . _("Sccp model Compatible code : ") . $resultReturned[0] . "</li>");
 if ($sccp_compatible == 0) {
 //    die_freepbx('Chan Sccp not Found. Install it before continuing');
     outn("<br>");
@@ -995,6 +1001,10 @@ if (!$sccp_db_ver) {
 InstallDB_createButtonConfigTrigger();
 InstallDB_CreateSccpDeviceConfigView($sccp_compatible);
 InstallDB_updateDBVer($sccp_compatible);
+if ($chanSCCPWarning) {
+     outn("<br>");
+     outn("<font color='red'>Warning: Upgrade chan_sccp_b to use full ami functionality</font>");
+}
 if (!$sccp_db_ver) {
     Setup_RealTime();
     outn("<br>");

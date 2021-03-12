@@ -18,7 +18,6 @@ global $version;
 global $srvinterface;
 global $mobile_hw;
 $mobile_hw = '0';
-global $useAmiInterface;
 
 $class = "\\FreePBX\\Modules\\Sccp_manager\\srvinterface";
 if (!class_exists($class, false)) {

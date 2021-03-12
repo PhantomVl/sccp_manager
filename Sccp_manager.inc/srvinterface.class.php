@@ -52,11 +52,17 @@ class srvinterface {
             }
         }
         if ($this->aminterface->status()) {
-            // Ami is not hard disabled in Amiinterface __construct 54.
+            // Ami is not hard disabled in Amiinterface __construct line 54.
             if ($this->aminterface->open()) {
                 // Can open a connection. Now check compatibility with chan-sccp.
                 // will return true if compatible.
-                $this->ami_mode = $this->get_compatible_sccp(true)[1];
+                if (!$this->get_compatible_sccp(true)[1]) {
+                    // Close the open socket as will not use
+                    $this->aminterface->close();
+                } else {
+                    // is compatible so enable AMI mode
+                    $this->ami_mode = true;
+                }
             }
         }
     }

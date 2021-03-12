@@ -23,7 +23,6 @@ abstract class Response extends IncomingMessage
     {
         parent::__construct($rawContent);
         $this->_events = array();
-        $this->_eventsCount = 0;
         $this->_completed = $this->isSuccess();
     }
 

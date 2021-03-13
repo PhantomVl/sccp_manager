@@ -990,8 +990,14 @@ if ($sccp_compatible > 431) {
 InstallDB_sccpsettings();
 InstallDB_sccpdevmodel();
 InstallDB_updateSchema($db_config);
-if (!$sccp_db_ver) {
+$stmt = $db->prepare('SELECT CASE WHEN EXISTS(SELECT 1 FROM sccpdevmodel) THEN 0 ELSE 1 END AS IsEmpty;');
+$stmt->execute();
+$result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+if ($result[0]['IsEmpty']) {
+    outn("Populating sccpdevmodel...");
     InstallDB_fillsccpdevmodel();
+}
+if (!$sccp_db_ver) {
     InstallDB_updateSccpDevice();
 } else {
     outn("Skip update Device model");

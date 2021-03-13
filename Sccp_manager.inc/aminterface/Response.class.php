@@ -244,7 +244,7 @@ class SCCPGeneric_Response extends Response
         }
     }
 
-    protected function ConvertTableData(String $_tablename, Array $_fkey, Array $_fields)
+    protected function ConvertTableData(string $_tablename, array $_fkey, array $_fields)
     {
         $result = array();
         $_rawtable = $this->Table2Array($_tablename);
@@ -275,7 +275,7 @@ class SCCPGeneric_Response extends Response
         return $result;
     }
 
-    protected function ConvertEventData(Array $_fkey, Array $_fields)
+    protected function ConvertEventData(array $_fkey, array $_fields)
     {
         $result = array();
 
@@ -305,7 +305,7 @@ class SCCPGeneric_Response extends Response
         return $result;
     }
 
-    public function Table2Array( String $tablename )
+    public function Table2Array( string $tablename )
     {
         $result =array();
         if (empty($tablename) || !is_array($this->_tables)) {

@@ -415,7 +415,7 @@ class extconfigs
         return $base_config;
     }
 
-    public function validate_RealTime( String $connector )
+    public function validate_RealTime( string $connector )
     {
         // This method only checks that asterisk is correctly configured for Realtime
         // It is preventative and does not change anything for Sccp_manager

@@ -17,7 +17,6 @@ global $astman;
 global $version;
 global $srvinterface;
 global $mobile_hw;
-global $useAmiForSoftKeys;
 $mobile_hw = '0';
 
 $class = "\\FreePBX\\Modules\\Sccp_manager\\srvinterface";

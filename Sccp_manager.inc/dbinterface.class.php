@@ -150,12 +150,30 @@ class dbinterface
     public function get_db_SccpSetting()
     {
         global $db;
-        $stmt = $db->prepare('SELECT keyword, data, type, seq FROM sccpsettings ORDER BY type, seq');
-        $stmt->execute();
-        foreach ($stmt->fetchAll() as $var) {
-            $mysccpvalues[$var['keyword']] = array('keyword' => $var['keyword'], 'data' => $var['data'], 'seq' => $var['seq'], 'type' => $var['type']);
+        try {
+            $stmt = $db->prepare('SELECT keyword, data, type, seq FROM sccpsettings ORDER BY type, seq');
+            $stmt->execute();
+            foreach ($stmt->fetchAll() as $var) {
+                $mysccpvalues[$var['keyword']] = array('keyword' => $var['keyword'], 'data' => $var['data'], 'seq' => $var['seq'], 'type' => $var['type']);
+            }
+            return $mysccpvalues;
+        } catch(\PDOException $e) {
+            // sccpsettings table does not yet exist. FreePBX is instantiating
+            // a SCCP_Manager object from the Installer before the installer can
+            // create the table so will create here.
+            $stmt = $db-> prepare('CREATE TABLE IF NOT EXISTS sccpsettings (
+                    keyword VARCHAR (50) NOT NULL,
+                    data    VARCHAR (255) NOT NULL,
+                    seq     TINYINT (1),
+                    type    TINYINT (1) NOT NULL default 0,
+                    PRIMARY KEY (keyword, seq, type )
+                    );');
+            $check = $stmt->execute();
+            if (\DB::IsError($check)) {
+                die_freepbx("Can not create sccpsettings table, error: $check\n");
+            }
+            return array();
         }
-        return $mysccpvalues;
     }
 
     public function get_db_sysvalues()

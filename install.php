@@ -27,7 +27,6 @@ if (!class_exists($class, false)) {
 if (class_exists($class, false)) {
     $srvinterface = new $class();
 }
-
 function Get_DB_config($sccp_compatible)
 {
     global $mobile_hw;
@@ -484,16 +483,16 @@ function InstallDB_sccpsettings()
 {
     global $db;
     outn("<li>" . _("Creating sccpsettings table...") . "</li>");
-    $sql = "CREATE TABLE IF NOT EXISTS `sccpsettings` (
-            `keyword` VARCHAR (50) NOT NULL default '',
-            `data`    VARCHAR (255) NOT NULL default '',
-            `seq`     TINYINT (1),
-            `type`    TINYINT (1) NOT NULL default '0',
-            PRIMARY KEY (`keyword`,`seq`,`type`)
-    );";
-    $check = $db->query($sql);
+    $stmt = $db-> prepare('CREATE TABLE IF NOT EXISTS sccpsettings (
+            keyword VARCHAR (50) NOT NULL,
+            data    VARCHAR (255) NOT NULL,
+            seq     TINYINT (1),
+            type    TINYINT (1) NOT NULL,
+            PRIMARY KEY (keyword, seq, type )
+          );');
+    $check = $stmt->execute();
     if (DB::IsError($check)) {
-        die_freepbx("Can not create sccpsettings table, error:$check\n");
+        die_freepbx("Can not create sccpsettings table, error: $check\n");
     }
     return true;
 }

@@ -1735,7 +1735,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
             }
         }
 
-        $this->sccpvalues['sccp_compatible'] = array('keyword' => 'compatible', 'data' => $ver_id, 'type' => '1', 'seq' => '99');
+        $this->sccpvalues['sccp_compatible'] = array('keyword' => 'sccp_compatible', 'data' => $ver_id, 'type' => '1', 'seq' => '99');
         $this->sccppath = $this->extconfigs->validate_init_path($confDir, $this->sccpvalues, $sccp_driver_replace);
         $driver = $this->FreePBX->Core->getAllDriversInfo(); // ??????
 

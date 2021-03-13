@@ -10,8 +10,6 @@ namespace FreePBX\modules\Sccp_manager\aminterface;
 
 // ************************************************************************** Response *********************************************
 
-namespace FreePBX\modules\Sccp_manager\aminterface;
-
 abstract class Response extends IncomingMessage
 {
 

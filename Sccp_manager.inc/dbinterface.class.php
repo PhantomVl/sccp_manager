@@ -356,7 +356,7 @@ class dbinterface
         $result = exec('mysqldump '.$database.' --password='.$pass.' --user='.$user.' --single-transaction >'.$filename, $output);
         return $filename;
     }
-    
+
 /*
  *  Check Table structure
  */
@@ -393,7 +393,7 @@ class dbinterface
                 break;
             }
         }
-        
+
         return $result;
     }
 }

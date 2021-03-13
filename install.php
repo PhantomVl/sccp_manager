@@ -17,6 +17,7 @@ global $astman;
 global $version;
 global $srvinterface;
 global $mobile_hw;
+global $useAmiForSoftKeys;
 $mobile_hw = '0';
 
 $class = "\\FreePBX\\Modules\\Sccp_manager\\srvinterface";
@@ -26,7 +27,6 @@ if (!class_exists($class, false)) {
 if (class_exists($class, false)) {
     $srvinterface = new $class();
 }
-
 function Get_DB_config($sccp_compatible)
 {
     global $mobile_hw;
@@ -483,16 +483,16 @@ function InstallDB_sccpsettings()
 {
     global $db;
     outn("<li>" . _("Creating sccpsettings table...") . "</li>");
-    $sql = "CREATE TABLE IF NOT EXISTS `sccpsettings` (
-            `keyword` VARCHAR (50) NOT NULL default '',
-            `data`    VARCHAR (255) NOT NULL default '',
-            `seq`     TINYINT (1),
-            `type`    TINYINT (1) NOT NULL default '0',
-            PRIMARY KEY (`keyword`,`seq`,`type`)
-    );";
-    $check = $db->query($sql);
+    $stmt = $db-> prepare('CREATE TABLE IF NOT EXISTS sccpsettings (
+            keyword VARCHAR (50) NOT NULL,
+            data    VARCHAR (255) NOT NULL,
+            seq     TINYINT (1),
+            type    TINYINT (1) NOT NULL,
+            PRIMARY KEY (keyword, seq, type )
+          );');
+    $check = $stmt->execute();
     if (DB::IsError($check)) {
-        die_freepbx("Can not create sccpsettings table, error:$check\n");
+        die_freepbx("Can not create sccpsettings table, error: $check\n");
     }
     return true;
 }
@@ -1001,8 +1001,8 @@ InstallDB_createButtonConfigTrigger();
 InstallDB_CreateSccpDeviceConfigView($sccp_compatible);
 InstallDB_updateDBVer($sccp_compatible);
 if ($chanSCCPWarning) {
-     outn("<br>");
-     outn("<font color='red'>Warning: Upgrade chan_sccp_b to use full ami functionality</font>");
+    outn("<br>");
+    outn("<font color='red'>Warning: Upgrade chan_sccp_b to use full ami functionality</font>");
 }
 if (!$sccp_db_ver) {
     Setup_RealTime();

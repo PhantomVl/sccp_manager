@@ -13,12 +13,13 @@
 
             <div class="display no-border">
                 <div id="toolbar-model">
-                    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target=".add_new_model"><i class="fa fa-bolt"></i> <?php echo _("Add model"); ?></button>
+                    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target=".add_new_model"><i class="fa fa-bolt"></i> <?php echo _("Add model"); ?>
+                    </button>
                     <button data-id="model_disabled" class="btn btn-danger sccp_update btn-tab-select" data-type="sccp_model" data-table="table-models" disabled data-section="all">
-                        <i class="glyphicon glyphicon-remove"></i> <span><?php echo _('Disabled') ?></span>
+                        <i class="glyphicon glyphicon-remove"></i> <span><?php echo _('Disable') ?></span>
                     </button>
                     <button data-id="model_enabled" class="btn btn-danger sccp_update btn-tab-select" data-table="table-models" data-type="sccp_model" disabled data-section="all">
-                        <i class="glyphicon glyphicon-active"></i> <span><?php echo _('Enabled') ?></span>
+                        <i class="glyphicon glyphicon-active"></i> <span><?php echo _('Enable') ?></span>
                     </button>
                     <div class="btn-group">
                         <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
@@ -27,8 +28,8 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropitem" data-id="enabled" tabindex="-1" href="#"><span><?php echo _('Show Enabled') ?></span></a></li>
-                            <li><a class="dropitem" data-id="extension" tabindex="-1" href="#"><span><?php echo _('Expansion Module')?></span></a></li>                            
-                            <li><a class="dropitem" data-id="all" tabindex="-1" href="#"><span><?php echo _('Show All') ?></span></a></li>                            
+                            <li><a class="dropitem" data-id="extension" tabindex="-1" href="#"><span><?php echo _('Expansion Module')?></span></a></li>
+                            <li><a class="dropitem" data-id="all" tabindex="-1" href="#"><span><?php echo _('Show All') ?></span></a></li>
                         </ul>
                     </div>
                 </div>
@@ -108,8 +109,8 @@
                     <div class="row"><div class="col-md-12">
                         <span id="new_buttons-help" class="help-block fpbx-help-block">Help.</span>
                 </div></div></div>
-                
-                
+
+
                 <div class="element-container"><div class="row"> <div class="form-group"><div class="col-md-3">
                         <label class="control-label" for="new_loadimage"><?php echo _('Load Image');?></label>
                         <i class="fa fa-question-circle fpbx-help-icon" data-for="new_loadimage"></i>
@@ -129,7 +130,7 @@
                     <div class="row"><div class="col-md-12">
                         <span id="new_loadinformationid-help" class="help-block fpbx-help-block">Help.</span>
                 </div></div></div>
-                
+
                 <div class="element-container"><div class="row"> <div class="form-group"><div class="col-md-3">
                         <label class="control-label" for="new_nametemplate"><?php echo _('Model template XML');?></label>
                         <i class="fa fa-question-circle fpbx-help-icon" data-for="new_nametemplate"></i>
@@ -143,7 +144,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo _('Close');?></button>
                 <button type="button" class="btn btn-primary sccp_update" data-id="model_add" id="add_new_model" data-dismiss="modal"><?php echo _('Add New model without Enabled');?></button>
-            </div>            
+            </div>
         </div>
     </div>
 </div>
@@ -169,7 +170,7 @@
                         <span id="editd_model-help" class="help-block fpbx-help-block">Help.</span>
                 </div></div></div>
 
-                
+
                 <div class="element-container"><div class="row"> <div class="form-group"><div class="col-md-3">
                         <label class="control-label" for="editd_loadimage"><?php echo _('Load Image');?></label>
                         <i class="fa fa-question-circle fpbx-help-icon" data-for="edit_devimage"></i>
@@ -190,12 +191,12 @@
                         <span id="editd_nametemplate-help" class="help-block fpbx-help-block">Help.</span>
                 </div></div></div>
 
-                
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo _('Close');?></button>
                 <button type="button" class="btn btn-primary sccp_update" data-id="model_apply" data-dismiss="modal"><?php echo _('apply');?></button>
-            </div>            
+            </div>
         </div>
     </div>
 </div>
@@ -214,7 +215,7 @@
 //    function DispayInputFormatter(value, row, index) {
 //        return  (value == null) ?  '<input class="tabl-edit form-control" name="' + row['model'] + '_template" type="text" value="">'  : '<input class="tabl-edit form-control" name="' + row['model'] + '_template" type="text" value="' + value + '">';
 //    }
-    
+
     function DispayActionsModelFormatter(value, row, index) {
         var exp_model = '';
 //        exp_model += '<a href="#edit_model"   class="btn btn-info"   onclick="load_model(this, &quot;'+row['model']+'&quot;)" data-toggle="modal"><i class="fa fa-pencil"></i></a>';
@@ -236,12 +237,12 @@
         return value;
 
     }
-    
+
     function SetRowColor(row, index) {
         var tclass = "active";
         if (row['enabled'] === 1) {
             tclass = (index % 2 === 0) ? "info" : "info";
-        }    
+        }
         if ((row['validate'] === 'yes;yes') || (row['validate'] === 'yes;-')) {
 //            tclass = (row['enabled'] === '1') ?  "danger" : "warning";
         } else {
@@ -249,7 +250,7 @@
         }
         return {classes: tclass};
     }
-    
+
     function load_model(elmnt,clr) {
 //        $("#edit_devmodel").text(clr);
         var drow = $("#table-models").bootstrapTable('getRowByUniqueId',clr);

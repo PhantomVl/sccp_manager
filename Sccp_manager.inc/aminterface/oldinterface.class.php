@@ -306,7 +306,7 @@ class oldinterface
                         $result["vCode"] = 433;
                     } else {
                         $result["vCode"] = 430;
-                    }          
+                    }
                 }
             }
 

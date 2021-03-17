@@ -747,7 +747,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                             $this->srvinterface->sccpDeviceReset($idv);
                         }
                     }
-                    return array('status' => true, 'table_reload' => true, 'message' => 'HW is Delete ! ');
+                    return array('status' => true, 'table_reload' => true, 'message' => 'Hardware device has been deleted! ');
                 }
                 break;
             case 'create_hw_tftp':

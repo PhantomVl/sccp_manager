@@ -87,6 +87,8 @@ if (empty($ast_realtime)) {
     }
     $info['RealTime'] = array('Version' => $rt_sccp, 'about' => $rt_info);
 }
+// There are potential issues with string Type Declarations in PHP 5.
+$info['PHP'] = array('Version' => phpversion(), 'about' => version_compare(phpversion(), '7.0.0', '>' ) ? 'OK' : 'PHP 7 Preferred - Please upgrade if possible');
 
 if (empty($conf_realtime)) {
     $info['ConfigsRealTime'] = array('Version' => 'Error', 'about' => '<div class="alert signature alert-danger"> Realtime configuration was not found</div>');

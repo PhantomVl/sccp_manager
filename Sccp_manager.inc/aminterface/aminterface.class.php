@@ -387,10 +387,7 @@ class aminterface
         $result = array();
         if ($this->_connect_state) {
             $_action = new \FreePBX\modules\Sccp_manager\aminterface\SCCPShowDevicesAction();
-            $_res = $this->send($_action)->getResult();
-            foreach ($_res as $key => $value) {
-                $result[$key]['name'] = $key;
-            }
+            $result = $this->send($_action)->getResult();
         }
         return $result;
     }

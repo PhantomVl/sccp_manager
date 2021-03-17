@@ -19,8 +19,10 @@ abstract class Response extends IncomingMessage
 
     public function __construct($rawContent)
     {
+
         parent::__construct($rawContent);
         $this->_events = array();
+// this logic is false - even if we have an error, we will not get anymore data, so is completed.
         $this->_completed = $this->isSuccess();
     }
 
@@ -98,9 +100,13 @@ class Generic_Response extends Response
 {
     public function __construct($rawContent)
     {
+        // Only used for self contained responses.
         parent::__construct($rawContent);
         // add dummy closing event
         $this->_events['ClosingEvent'] = new ResponseComplete_Event($rawContent);
+        $this->_completed = true;
+        $this->eventListIsCompleted = true;
+
     }
 }
 
@@ -250,7 +256,7 @@ class SCCPGeneric_Response extends Response
         if (empty($_rawtable)) { return $result;}
         foreach ($_rawtable as $_row) {
             $all_key_ok = true;
-            // No need to test if $_fkey is arrray as array required
+            // No need to test if $_fkey is array as array required
             foreach ($_fkey as $_fid) {
                 if (empty($_row[$_fid])) {
                     $all_key_ok = false;

@@ -402,7 +402,7 @@ class SCCPDeviceRestartAction extends ActionMessage
     public function __construct($DeviceName, $Type = "restart")
     {
         parent::__construct('SCCPDeviceRestart');
-        $this->setResponseHandler("SCCPGeneric");
+        $this->setResponseHandler("Generic");
         if (empty($Type)) {
             $Type = "restart";
         }

@@ -308,7 +308,7 @@ class dbinterface
                             $stmt = $dbh->prepare('UPDATE ' . $table_name . ' SET ' . $sql_var . ' WHERE ' . $sql_key);
                             break;
                         case 'replace':
-                            $stmt = $dbh->prepare('REPLACE INTO ' . $table_name . ' VALUES ' . $sql_var);
+                            $stmt = $dbh->prepare('REPLACE INTO ' . $table_name . ' SET ' . $sql_var);
                             break;
                         // no default mode - must be explicit.
                     }

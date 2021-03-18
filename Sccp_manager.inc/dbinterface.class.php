@@ -58,7 +58,7 @@ class dbinterface
                     $stmts = $dbh->prepare('SELECT * FROM sccpline ORDER BY name');
                 } else {
                     $stmts = $dbh->prepare('SELECT * FROM sccpline WHERE name = :name');
-                    $stmt->bindParam(':name', $data['name'],\PDO::PARAM_STR);
+                    $stmts->bindParam(':name', $data['name'],\PDO::PARAM_STR);
                 }
                 break;
             case 'SccpDevice':

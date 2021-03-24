@@ -129,9 +129,15 @@ class dbinterface
                     $sql .= (empty($sql)) ? 'ref = :ref' : ' and ref = :ref';
                 }
                 if (!empty($sql)) {
-                    $stmts = $dbh->prepare('SELECT * FROM sccpbuttonconfig WHERE ' .$sql. ' ORDER BY instance');
-                    $stmts->bindParam(':buttontype', $data['buttontype'],\PDO::PARAM_STR);
-                    $stmts->bindParam(':ref', $data['id'],\PDO::PARAM_STR);
+                    $stmts = $dbh->prepare("SELECT * FROM sccpbuttonconfig WHERE {$sql} ORDER BY instance");
+                    // Now bind labels - only bind label if it exists or bind will create exception.
+                    // can only bind once have prepared, so need to test again.
+                    if (!empty($data['buttontype'])) {
+                        $stmts->bindParam(':buttontype', $data['buttontype'],\PDO::PARAM_STR);
+                    }
+                    if (!empty($data['id'])) {
+                        $stmts->bindParam(':ref', $data['id'],\PDO::PARAM_STR);
+                    }
                 } else {
                     $raw_settings = array();
                 }
@@ -141,6 +147,7 @@ class dbinterface
             $stmt->execute();
             $raw_settings = $stmt->fetch(\PDO::FETCH_ASSOC);
         } elseif (!empty($stmts)) {
+dbug('statement is before execute', $stmts);
             $stmts->execute();
             $raw_settings = $stmts->fetchAll(\PDO::FETCH_ASSOC);
         }

@@ -742,7 +742,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                     foreach ($request['idn'] as $idv) {
                         if ($this->strpos_array($idv, array('SEP', 'ATA', 'VG')) !== false) {
                             $this->dbinterface->write('sccpdevice', array('name' => $idv), 'delete', "name");
-                            $this->dbinterface->write("sccpbuttons", array(), 'delete', '', $idv);
+                            $this->dbinterface->write('sccpbuttons', array(), 'delete', '', $idv);
                             $this->deleteSccpDeviceXML($idv); // Концы в вводу !!
                             $this->srvinterface->sccpDeviceReset($idv);
                         }
@@ -1289,9 +1289,9 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 $save_settings[$key] = $value;
             }
         }
-        $this->dbinterface->write("sccpdevice", $save_settings, 'replace');
+        $this->dbinterface->write('sccpdevice', $save_settings, 'replace');
         $save_buttons = $this->getPhoneButtons($get_settings, $name_dev, $hw_type);
-        $this->dbinterface->write("sccpbuttons", $save_buttons, $update_hw, 'add', $name_dev); //was empty so would fall through to INSERT
+        $this->dbinterface->write('sccpbuttons', $save_buttons, $update_hw, '', $name_dev);
         $this->createSccpDeviceXML($name_dev);
         if ($hw_id == 'new') {
             $this->srvinterface->sccpDeviceReset($name_dev);
@@ -1482,8 +1482,8 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 $save_settings[$key] = $value;
             }
         }
-        $this->dbinterface->write("sccpuser", $save_settings, 'replace', 'name');
-        $this->dbinterface->write("sccpbuttons", $save_buttons, 'delete', '', $name_dev); //standardise to delete
+        $this->dbinterface->write('sccpuser', $save_settings, 'replace', 'name');
+        $this->dbinterface->write('sccpbuttons', $save_buttons, 'delete', '', $name_dev); //standardise to delete
         return $save_buttons;
         // Why is there a second return here???????
         return $save_settings;
@@ -1856,7 +1856,7 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
         if (empty($save_buttons)) {
             return array('Response' => 'No update required', 'data' => ' 0 - records ');
         }
-        $res = $this->dbinterface->write("sccpbuttons", $save_buttons, 'replace', '', '');
+        $res = $this->dbinterface->write('sccpbuttons', $save_buttons, 'replace', '', '');
         return array('Response' => 'Update records :' . count($save_buttons), 'data' => $res);
     }
 

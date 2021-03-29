@@ -147,7 +147,6 @@ class dbinterface
             $stmt->execute();
             $raw_settings = $stmt->fetch(\PDO::FETCH_ASSOC);
         } elseif (!empty($stmts)) {
-dbug('statement is before execute', $stmts);
             $stmts->execute();
             $raw_settings = $stmts->fetchAll(\PDO::FETCH_ASSOC);
         }
@@ -331,18 +330,34 @@ dbug('statement is before execute', $stmts);
                         $result = $stmt->execute();
                         break;
                     case 'replace':
-                        if (!empty($save_value)) {
-                            $stmt = $dbh->prepare('UPDATE sccpbuttonconfig SET name =? WHERE  ref = ? AND reftype =? AND instance =?  AND buttontype =?');
-                            $result= $dbh->executeMultiple($stmt, $save_value);
+                        foreach ($save_value as $button_array) {
+                            $stmt = $dbh->prepare('UPDATE sccpbuttonconfig SET name =:name WHERE  ref = :ref AND reftype =:reftype AND instance = :instance  AND buttontype = :buttontype');
+                            $stmt->bindParam(':ref', $button_array['ref'],\PDO::PARAM_STR);
+                            $stmt->bindParam(':reftype', $button_array['reftype'],\PDO::PARAM_STR);
+                            $stmt->bindParam(':instance', $button_array['instance'],\PDO::PARAM_INT);
+                            $stmt->bindParam(':buttontype', $button_array['type'],\PDO::PARAM_STR);
+                            $stmt->bindParam(':name', $button_array['name'],\PDO::PARAM_STR);
+                            $result= $dbh->execute();
                         }
                         break;
                     case 'add':
-                        if (!empty($save_value)) {
-                            $stmt = $dbh->prepare('INSERT INTO sccpbuttonconfig (ref, reftype, instance, buttontype, name, options) VALUES (?,?,?,?,?,?)');
-                            $result = $dbh->executeMultiple($stmt, $save_value);
+                        foreach ($save_value as $button_array) {
+                            $stmt = $dbh->prepare('INSERT INTO sccpbuttonconfig (ref, reftype, instance, buttontype, name, options) VALUES (:ref, :reftype, :instance, :buttontype, :name, :options)');
+                            $stmt->bindParam(':ref', $button_array['ref'],\PDO::PARAM_STR);
+                            $stmt->bindParam(':reftype', $button_array['reftype'],\PDO::PARAM_STR);
+                            $stmt->bindParam(':instance', $button_array['instance'],\PDO::PARAM_INT);
+                            $stmt->bindParam(':buttontype', $button_array['type'],\PDO::PARAM_STR);
+                            $stmt->bindParam(':name', $button_array['name'],\PDO::PARAM_STR);
+                            $stmt->bindParam(':options', $button_array['options'],\PDO::PARAM_STR);
+                            $result = $stmt->execute();
                         }
                         break;
-                        // No default case - must be specific in request.
+                    case 'clear';
+                        // Clear is equivalent of delete + insert.
+                        $this->write('sccpbuttons', '', $mode = 'delete','', $hwid);
+                        $this->write('sccpbuttons', $save_value, $mode = 'add','', $hwid);
+                        break;
+                    // No default case - must be specific in request.
                 }
         }
         return $result;

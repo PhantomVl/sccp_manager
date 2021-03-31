@@ -91,7 +91,7 @@ class dbinterface
                             break;
                     }
                 } else {      //no filter and no name provided - return all
-                    $stmts = $dbh->prepare('SELECT ' . $fld . ' FROM sccpdeviceconfig WHERE ORDER BY name');
+                    $stmts = $dbh->prepare("SELECT  {$fld}  FROM sccpdeviceconfig ORDER BY name");
                 }
                 break;
             case 'HWSipDevice':

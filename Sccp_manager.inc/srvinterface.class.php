@@ -14,7 +14,8 @@ class srvinterface {
 
     var $error;
     var $_info;
-    var $ami_mode;
+    var $ami_mode = false;
+    var $useAmiInterface = true;
 
     public function __construct($parent_class = null) {
         $this->paren_class = $parent_class;
@@ -51,9 +52,19 @@ class srvinterface {
             }
         }
         if ($this->aminterface->status()) {
-            $this->aminterface->open();
+            // Ami is not hard disabled in Amiinterface __construct line 54.
+            if ($this->aminterface->open()) {
+                // Can open a connection. Now check compatibility with chan-sccp.
+                // will return true if compatible.
+                if (!$this->get_compatible_sccp(true)[1]) {
+                    // Close the open socket as will not use
+                    $this->aminterface->close();
+                } else {
+                    // is compatible so enable AMI mode
+                    $this->ami_mode = true;
+                }
+            }
         }
-        $this->ami_mode = $this->aminterface->status();
     }
 
     public function info() {
@@ -117,24 +128,27 @@ class srvinterface {
 
     private function sccp_core_commands($params = array()) {
 
-        if ($this->ami_mode) {
-            if (!empty($params['cmd'])) {
-                switch ($params['cmd']) {
-                    case 'reset_phone':
-                        return $this->aminterface->sccpDeviceReset($params['name'], 'reset');
-                        break;
-                    case 'restart_phone':
-                        return $this->aminterface->sccpDeviceReset($params['name'], 'restart');
-                        break;
-                    case 'reload_phone':
-                        return $this->aminterface->sccpDeviceReset($params['name'], 'full');
-                        break;
-                    case 'reset_token':
-                        return $this->aminterface->sccpDeviceReset($params['name'], 'tokenack');
-                        break;
-                    case 'reload_line':
+        if (!$this->ami_mode) {
+            return $this->oldinterface->sccp_core_commands($params);
+        }
+
+        if (!empty($params['cmd'])) {
+            switch ($params['cmd']) {
+                case 'reset_phone':
+                    return $this->aminterface->sccpDeviceReset($params['name'], 'reset');
+                    break;
+                case 'restart_phone':
+                    return $this->aminterface->sccpDeviceReset($params['name'], 'restart');
+                    break;
+                case 'reload_phone':
+                    return $this->aminterface->sccpDeviceReset($params['name'], 'full');
+                    break;
+                case 'reset_token':
+                    return $this->aminterface->sccpDeviceReset($params['name'], 'tokenack');
+                    break;
+                case 'reload_line':
 //                        return $this->aminterface->sccpDeviceReset($params['name'], 'full');
-                        break;
+                    break;
 //                    case 'get_version':
 //                    case 'sccp_reload':
 //                        break;
@@ -143,22 +157,20 @@ class srvinterface {
 //                  case 'phone_call':
 //                  case 'phone_message':
 
-                    case 'get_softkey':
-                    case 'get_device':
-                    case 'get_hints':
-                    case 'get_dev_info':
-                        print_r($params);
-                        throw new \Exception("Invalid Class inside in the include folder" . $params['cmd']);
-                        die();
-                        break;
-                    default:
-                        return $this->oldinterface->sccp_core_commands($params);
-                        break;
-                }
+                case 'get_softkey':
+                case 'get_device':
+                case 'get_hints':
+                case 'get_dev_info':
+                    print_r($params);
+                    throw new \Exception("Invalid Class inside in the include folder" . $params['cmd']);
+                    die();
+                    break;
+                default:
+                    return $this->oldinterface->sccp_core_commands($params);
+                    break;
             }
-        } else {
-            return $this->oldinterface->sccp_core_commands($params);
         }
+
     }
 
     public function sccp_getdevice_info($dev_id) {
@@ -190,40 +202,42 @@ class srvinterface {
     }
 
     public function sccp_realtime_status() {
-        if (!$this->ami_mode) {
-            return $this->oldinterface->sccp_realtime_status();
-        } else {
+        if ($this->ami_mode) {
             return $this->aminterface->getRealTimeStatus();
-/*            if (is_array($ast_out)) {
-                foreach ($ast_out as $aline) {
-                    if (strlen($aline) > 3) {
-                        $ast_key = strstr(trim($aline), ' ', true);
-                        $ast_res[$ast_key] = array('message' => $aline, 'status' => strpos($aline, 'connected') ? 'OK' : 'ERROR');
-                    }
-                }
-            }
-            return $ast_res;
-*/        }
+        } else {
+            return $this->oldinterface->sccp_realtime_status();
+        }
     }
 
-    public function get_compatible_sccp() {
-
+    public function get_compatible_sccp($revNumComp=false) {
+        // only called with args from installer to get revision and compatibility
         $res = $this->getSCCPVersion();
         if (empty($res)) {
             return 0;
         }
         switch ($res["vCode"]) {
             case 0:
-                return 0;
+                $retval = 0;
+                break;
             case 433:
-                return 433;
-
+                $retval = 433;
+                break;
             case 432:
+                $retval = 430;
+                break;
             case 431:
-                return 431;
+                $retval = 431;
+                break;
             default:
-                return 430;
+                $retval = 430;
         }
+        if ($res['RevisionNum'] < 11063) {
+            $this->useAmiInterface = false;
+        }
+        if ($revNumComp) {
+            return array($retval, $this->useAmiInterface);
+        }
+        return $retval;
     }
 
     public function getSCCPVersion() {
@@ -235,7 +249,6 @@ class srvinterface {
     }
 
     public function sccp_list_keysets() {
-
         if ($this->ami_mode) {
             return $this->aminterface->sccp_list_keysets();
         } else {
@@ -253,68 +266,10 @@ class srvinterface {
     }
 
     function getChanSCCPVersion() {
-        if (!$this->ami_mode) {
-            return $this->oldinterface->getChanSCCPVersion();
+        if ($this->ami_mode) {
+            return $this->aminterface->getSCCPVersion();
         } else {
-            $result = array();
-            $metadata = $this->aminterface->getSCCPVersion();
-
-            if ($metadata && array_key_exists("Version", $metadata)) {
-                $result["Version"] = $metadata["Version"];
-                $version_parts = explode(".", $metadata["Version"]);
-                $result["vCode"] = 0;
-                if ($version_parts[0] == "4") {
-                    switch ($version_parts[1]) {
-                        case "1":
-                            $result["vCode"] = 410;
-                            break;
-                        case "2":
-                            $result["vCode"] = 420;
-                            break;
-                        case 3. . .5:
-                            if($version_parts[2] == "3"){
-                                $result["vCode"] = 433;
-                            } else {
-                                $result["vCode"] = 430;
-                            }
-                            break;
-                        default:
-                            $result["vCode"] = 400;
-                            break;
-                    }
-                }
-
-                /* Revision got replaced by RevisionHash in 10404 (using the hash does not work) */
-                if (array_key_exists("Revision", $metadata)) {
-                    if (base_convert($metadata["Revision"], 16, 10) == base_convert('702487a', 16, 10)) {
-                        $result["vCode"] = 431;
-                    }
-                    if (base_convert($metadata["Revision"], 16, 10) >= "10403") {
-                        $result["vCode"] = 431;
-                    }
-                }
-                if (array_key_exists("RevisionHash", $metadata)) {
-                    $result["RevisionHash"] = $metadata["RevisionHash"];
-                } else {
-                    $result["RevisionHash"] = '';
-                }
-                if (array_key_exists("RevisionNum", $metadata)) {
-                    $result["RevisionNum"] = $metadata["RevisionNum"];
-                    if ($metadata["RevisionNum"] >= "10403") { // new method, RevisionNum is incremental
-                        $result["vCode"] = 432;
-                    }
-                    if ($metadata["RevisionNum"] >= "10491") { // new method, RevisionNum is incremental
-                        $result["vCode"] = 433;
-                    }
-                }
-                if (array_key_exists("ConfigureEnabled", $metadata)) {
-                    $result["futures"] = implode(';', $metadata["ConfigureEnabled"]);
-                }
-            } else {
-                return null;
-                die_freepbx("Version information could not be retrieved from chan-sccp, via astman::SCCPConfigMetaData");
-            }
-            return $result;
+            return $this->oldinterface->getChanSCCPVersion();
         }
     }
 

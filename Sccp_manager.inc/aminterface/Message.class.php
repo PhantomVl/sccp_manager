@@ -27,6 +27,14 @@ abstract class Message
     protected $createdDate;
     private $_responseHandler;
 
+    public function __construct()
+    {
+        $this->lines = array();
+        $this->variables = array();
+        $this->keys = array();
+        $this->createdDate = time();
+    }
+
     public function _ToDebug($level, $msg)
     {
     }
@@ -168,7 +176,7 @@ abstract class Message
                         return (double) $value;
                     }
                 default:
-                    throw new PAMIException("Don't know how to convert: '" . $value . "'\n");
+                    throw new AMIException("Don't know how to convert: '" . $value . "'\n");
                     break;
             }
         }
@@ -217,14 +225,6 @@ abstract class Message
     {
         return array('lines', 'variables', 'keys', 'createdDate');
     }
-
-    public function __construct()
-    {
-        $this->lines = array();
-        $this->variables = array();
-        $this->keys = array();
-        $this->createdDate = time();
-    }
 }
 
 abstract class IncomingMessage extends Message
@@ -240,6 +240,11 @@ abstract class IncomingMessage extends Message
     public function getRawContent()
     {
         return $this->rawContent;
+    }
+
+    public function isComplete()
+    {
+        return $this->_completed;
     }
 
     public function __sleep()
@@ -397,7 +402,7 @@ class SCCPDeviceRestartAction extends ActionMessage
     public function __construct($DeviceName, $Type = "restart")
     {
         parent::__construct('SCCPDeviceRestart');
-        $this->setResponseHandler("SCCPGeneric");
+        $this->setResponseHandler("Generic");
         if (empty($Type)) {
             $Type = "restart";
         }
@@ -418,6 +423,6 @@ class SCCPConfigMetaDataAction extends ActionMessage
         if ($segment != false) {
             $this->setKey('Segment', $segment);
         }
-        $this->setResponseHandler("SCCPGeneric");
+        $this->setResponseHandler("SCCPJSON");
     }
 }

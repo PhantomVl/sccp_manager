@@ -1,18 +1,14 @@
 <?php
 
-/**
+/*
  *
- * Core Comsnd Interface
+ * Response class definitions
  *
- *  https://www.voip-info.org/asterisk-manager-example-php/
  */
-/* !TODO!: Re-Indent this file.  -TODO-: What do you mean? coreaccessinterface  ??  */
 
 namespace FreePBX\modules\Sccp_manager\aminterface;
 
 // ************************************************************************** Response *********************************************
-
-namespace FreePBX\modules\Sccp_manager\aminterface;
 
 abstract class Response extends IncomingMessage
 {
@@ -21,9 +17,13 @@ abstract class Response extends IncomingMessage
     protected $_completed;
     protected $keys;
 
-    public function isComplete()
+    public function __construct($rawContent)
     {
-        return $this->_completed;
+
+        parent::__construct($rawContent);
+        $this->_events = array();
+// this logic is false - even if we have an error, we will not get anymore data, so is completed.
+        $this->_completed = $this->isSuccess();
     }
 
     public function __sleep()
@@ -34,32 +34,31 @@ abstract class Response extends IncomingMessage
         return $ret;
     }
 
-    public function addEvent($event)
-    {
-        $this->_events[] = $event;
-        if (stristr($event->getEventList(), 'complete') !== false
-            || stristr($event->getName(), 'complete') !== false
-            || stristr($event->getName(), 'DBGetResponse') !== false
-        ) {
-            $this->_completed = true;
-        }
-    }
     public function getEvents()
     {
         return $this->_events;
     }
+    public function getClosingEvent() {
+        return $this->_events['ClosingEvent'];
+    }
+    public function removeClosingEvent() {
+        unset($this->_events['ClosingEvent']);
+    }
+    public function getCountOfEvents() {
+        return count($this->_events);
+    }
 
     public function isSuccess()
     {
+        // returns true if response message does not contain error
         return stristr($this->getKey('Response'), 'Error') === false;
     }
 
     public function isList()
     {
-        return
-            stristr($this->getKey('EventList'), 'start') !== false
-            || stristr($this->getMessage(), 'follow') !== false
-        ;
+        if ($this->getKey('EventList') === 'start' ) {
+            return true;
+        }
     }
 
     public function getMessage()
@@ -84,45 +83,42 @@ abstract class Response extends IncomingMessage
             }
         }
     }
-
-    public function __construct($rawContent)
-    {
-        parent::__construct($rawContent);
-        $this->_events = array();
-        $this->_eventsCount = 0;
-        $this->_completed = !$this->isList();
-    }
 }
+class GenericResponse extends Response
+{
+}
+
 //****************************************************************************
+// There are two types of Response messages returned by AMI
+// Self contained responses which include any data requested;
+// List Responses which contain the data in event messages that follow
+// the response message.Response and Event
+// Following are the self contained Response classes.
+//****************************************************************************
+
 class Generic_Response extends Response
 {
-
     public function __construct($rawContent)
     {
+        // Only used for self contained responses.
         parent::__construct($rawContent);
-//        print_r('<br>---- r --<br>');
-//        print_r($rawContent);
+        // add dummy closing event
+        $this->_events['ClosingEvent'] = new ResponseComplete_Event($rawContent);
+        $this->_completed = true;
+        $this->eventListIsCompleted = true;
+
     }
 }
 
-class Login_Response extends Response
+class Login_Response extends Generic_Response
 {
-
-    public function __construct($rawContent)
-    {
-        parent::__construct($rawContent);
-        return $this->isSuccess();
-    }
 }
 
-class Command_Response extends Response
+class Command_Response extends Generic_Response
 {
     private $_temptable;
     public function __construct($rawContent)
     {
-//        print_r('<br>---- r --<br>');
-//        print_r($rawContent);
-//        print_r('<br>---- re --<br>');
         $this->_temptable = array();
         parent::__construct($rawContent);
         $lines = explode(Message::EOL, $rawContent);
@@ -149,124 +145,132 @@ class Command_Response extends Response
                 }
             }
         }
-/*      Not required $_temptable cannot be empty as has at least an actionID - see also getResult
-        if (!empty($this->_temptable)) {
-            $this->setKey('output', 'array');
-        }
-*/
-        $this->_completed = $this->isSuccess();
-//        return $this->isSuccess();
     }
     public function getResult()
     {
-/*      Below test no longer valid as key no longer set
-        if (stristr($this->getKey('output'), 'array') !== false) {
-            $result = $this->_temptable;
-        } else {
-            $result = $this->getMessage();
-        }
-*/      return $this->_temptable;
+        return $this->_temptable;
     }
 }
+
+class SCCPJSON_Response extends Generic_Response
+{
+    public function __construct($rawContent)
+    {
+        parent::__construct($rawContent);
+        $this->getVariable($rawContent, array("DataType" => "DataType:", "JSONRAW" => "JSON:"));
+        if (null !== $this->getKey('JSONRAW')) {
+            $this->setKey('Response', 'Success');
+        }
+    }
+    public function getResult()
+    {
+        if (($json = json_decode($this->getKey('JSON'), true)) != false) {
+            return $json;
+        }
+    }
+}
+
+//***************************************************************************//
+// Following are the Response classes where the data is contained in a series.
+// of event messages.
 
 class SCCPGeneric_Response extends Response
 {
     protected $_tables;
     private $_temptable;
 
+    public function __construct($rawContent)
+    {
+        parent::__construct($rawContent);
+        // Confirm that there is a list following. This overrides any setting
+        // made in one of the parent constructs.
+        $this->_completed = !$this->isList();
+    }
+
     public function addEvent($event)
     {
-        // not eventlist (start/complete)
-        //        print_r('<br>---- addEvent --<br>');
-        //        print_r($event);
-        //        print_r('<br>---- Event List--<br>');
-        //        print_r($event->getEventList());
+        // Start of list is handled by the isList function in the Constructor
+        // which also defines the list end event
 
-        // Nothing to do with this - we need a table start
-        if (stristr($event->getEventList(), 'start')) { return; }
-
-
-        // This is empty as soon as we have received a TableStart.
-        // The next message is the first of the data sets
-        // We use this variable in the switch to add set entries
         if ( empty($thisSetEventEntryType)) {
+            // This is empty as soon as we have received a TableStart.
+            // The next message is the first of the data sets
+            // We use this variable in the switch to add set entries
             if (strpos($event->getName(), 'Entry')) {
                 $thisSetEventEntryType = $event->getName();
             } else {
                 $thisSetEventEntryType = 'undefinedAsThisIsNotASet';
             }
         }
-        $unknownevent = "FreePBX\\modules\\Sccp_manager\\aminterface\\UnknownEvent";
-        if (!($event instanceof $unknownevent)) {
-            switch ( $event->getName()) {
-                case $thisSetEventEntryType :
-                    $this->_temptable['Entries'][] = $event;
-                    break;
-                case 'TableStart':
-                    //initialise
-                    $this->_temptable = array();
-                    $this->_temptable['Name'] = $event->getTableName();
-                    $this->_temptable['Entries'] = array();
-                    $thisSetEventEntryType = '';
-                    break;
-                case 'TableEnd':
-                    //Close
-                    if (!is_array($this->_tables)) {
-                        $this->_tables = array();
-                    }
-                    $this->_tables[$event->getTableName()] = $this->_temptable;
-                    unset($this->_temptable);
-                    $thisSetEventEntryType = '';
-
-                    // Finished the table. Now check to see if everything was received
-                    // If counts do not match return false and table will not be
-                    //loaded
-                    if ($event->getKey('TableEntries') != count($this->_tables[$event->getTableName()]['Entries'])) {
-                        return $this->_completed = false;
-                    }
-                    break;
-                default:
-                    // add regular event
-                    $this->_events[] = $event;
+        // Unknown events will cause an exception.
+        // All event classes must be defined within Event.class.
+        if (get_class($event) === 'FreePBX\modules\Sccp_manager\aminterface\UnknownEvent') {
+            $this->_events[] = $event;
+            return;
+        }
+        switch ( $event->getName()) {
+            case $thisSetEventEntryType :
+                $this->_temptable['Entries'][] = $event;
+                break;
+            case 'TableStart':
+                //initialise
+                $this->_temptable = array();
+                $this->_temptable['Name'] = $event->getTableName();
+                $this->_temptable['Entries'] = array();
+                $thisSetEventEntryType = '';
+                break;
+            case 'TableEnd':
+                //Close
+                if (!is_array($this->_tables)) {
+                    $this->_tables = array();
                 }
-            } else {
-                // add unknown event
+                $this->_tables[$event->getTableName()] = $this->_temptable;
+                $this->_temptable = array();
+                $thisSetEventEntryType = 'undefinedAsThisIsNotASet';
+
+                // Finished the table. Now check to see if everything was received
+                // If counts do not match return false and table will not be
+                //loaded
+                if ($event->getKey('TableEntries') != count($this->_tables[$event->getTableName()]['Entries'])) {
+                    return false;
+                }
+                break;
+            //case $eventListEndEvent;
+            case $this->getKey('eventListEndEvent');
+                // Have the list end event. The correct number of entries is verified in the event constructor
+                $this->_events['ClosingEvent'] = $event;
+                $this->eventListEndEvent = null;
+                //return $this->_completed = true;
+                break;
+            default:
+                // add regular list event
                 $this->_events[] = $event;
-            }
-        // Received a complete eventList outside of a table.
-        if (stristr($event->getEventList(), 'complete') || stristr($event->getName(), 'complete')) {
-              return $this->_completed = true;
         }
     }
 
-    protected function ConvertTableData($_tablename, $_fkey, $_fields)
+    protected function ConvertTableData( $_tablename, array $_fkey, array $_fields)
     {
-        $_rawtable = $this->Table2Array($_tablename);
         $result = array();
+        $_rawtable = $this->Table2Array($_tablename);
         // Check that there is actually data to be converted
         if (empty($_rawtable)) { return $result;}
         foreach ($_rawtable as $_row) {
             $all_key_ok = true;
-            if (is_array($_fkey)) {
-                foreach ($_fkey as $_fid) {
-                    if (empty($_row[$_fid])) {
-                        $all_key_ok = false;
-                    } else {
-                        $set_name[$_fid] = $_row[$_fid];
-                    }
-                }
-            } else {
-                if (empty($_row[$_fkey])) {
+            // No need to test if $_fkey is array as array required
+            foreach ($_fkey as $_fid) {
+                if (empty($_row[$_fid])) {
                     $all_key_ok = false;
                 } else {
-                    $set_name[$_fkey] = $_row[$_fkey];
+                    $set_name[$_fid] = $_row[$_fid];
                 }
             }
             $Data = &$result;
+
             if ($all_key_ok) {
                 foreach ($set_name as $value_id) {
                     $Data = &$Data[$value_id];
                 }
+                // Label converter in case labels and keys are different
                 foreach ($_fields as $value_key => $value_id) {
                     $Data[$value_id] = $_row[$value_key];
                 }
@@ -275,7 +279,7 @@ class SCCPGeneric_Response extends Response
         return $result;
     }
 
-    protected function ConvertEventData($_fkey, $_fields)
+    protected function ConvertEventData(array $_fkey, array $_fields)
     {
         $result = array();
 
@@ -283,19 +287,12 @@ class SCCPGeneric_Response extends Response
             $all_key_ok = true;
             $tmp_result = $_row->getKeys();
             $set_name = array();
-            if (is_array($_fkey)) {
-                foreach ($_fkey as $_fid) {
-                    if (empty($tmp_result[$_fid])) {
-                        $all_key_ok = false;
-                    } else {
-                        $set_name[$_fid] = $tmp_result[$_fid];
-                    }
-                }
-            } else {
-                if (empty($tmp_result[$_fkey])) {
+            // No need to test if $_fkey is arrray as array required
+            foreach ($_fkey as $_fid) {
+                if (empty($tmp_result[$_fid])) {
                     $all_key_ok = false;
                 } else {
-                    $set_name[$_fkey] = $tmp_result[$_fkey];
+                    $set_name[$_fid] = $tmp_result[$_fid];
                 }
             }
             $Data = &$result;
@@ -303,6 +300,7 @@ class SCCPGeneric_Response extends Response
                 foreach ($set_name as $value_id) {
                     $Data = &$Data[$value_id];
                 }
+                // Label converter in case labels and keys are different - not actually required.
                 foreach ($_fields as $value_id) {
                     $Data[$value_id] = $tmp_result[$value_id];
                 }
@@ -311,115 +309,40 @@ class SCCPGeneric_Response extends Response
         return $result;
     }
 
-
-    public function hasTable()
-    {
-        if (is_array($this->_tables)) {
-            return true;
-        }
-        return false;
-    }
-    public function getTableNames()
-    {
-        return (is_array($this->_tables)) ? array_keys($this->_tables) : null;
-    }
-
-    public function Table2Array($tablename = '')
+    public function Table2Array( $tablename )
     {
         $result =array();
-        if (!is_string($tablename) || empty($tablename)) {
-            return false;
-        }
-        if ($this->hasTable()) {
-            foreach ($this->_tables[$tablename]['Entries'] as $trow) {
-                $result[]= $trow->getKeys();
-            }
+        if (empty($tablename) || !is_array($this->_tables)) {
             return $result;
-        } else {
-            return false;
         }
-    }
-    public function Events2Array()
-    {
-        $result =array();
-        if (is_array($this->_events)) {
-            foreach ($this->_events as $trow) {
-                $tmp_result = $trow->getKeys();
-                if (is_array($tmp_result)) {
-                    $result = array_merge($result, $tmp_result);
-                } else {
-                    $result [] = $tmp_result;
-                }
-            }
-            return $result;
-        } else {
-            return false;
+        foreach ($this->_tables[$tablename]['Entries'] as $trow) {
+            $result[]= $trow->getKeys();
         }
-    }
-
-    public function getTable($tablename)
-    {
-        if ($this->hasTable() && array_key_exists($tablename, $this->_tables)) {
-            return $this->_tables[$tablename];
-        }
-        throw new PAMIException("No such table.");
-    }
-    public function getJSON()
-    {
-        if (strlen($this->getKey('JSON')) > 0) {
-            if (($json = json_decode($this->getKey('JSON'), true)) != false) {
-                return $json;
-            }
-        }
-        throw new AMIException("No JSON Key found to return.");
-    }
-
-    public function __construct($rawContent)
-    {
-        parent::__construct($rawContent);
-        $_fields = array("EventList" => "EventList:", "Message" => "Message:");
-//        $this->getVariable($rawContent, $_fields);
-        $this->_completed = !$this->isList();
+        return $result;
     }
 
     public function getResult()
     {
-        if ($this->getKey('JSON') != null) {
-            $result = $this->getJSON();
-        } else {
-            $result = $this->getMessage();
-        }
-        return $result;
+            return $this->getMessage();
     }
 }
 
-class SCCPJSON_Response extends Response
-{
 
-    public function __construct($rawContent)
-    {
-        parent::__construct($rawContent);
-        $_fields = array("DataType" => "DataType:", "JSONRAW" => "JSON:");
-        $this->getVariable($rawContent, $_fields);
-        $js_res = $this->getKey('JSONRAW');
-        if (isset($js_res)) {
-            $this->setKey('Response', 'Success');
-        }
-        return $this->isSuccess();
-    }
-}
 
 class SCCPShowSoftkeySets_Response extends SCCPGeneric_Response
 {
     public function __construct($rawContent)
     {
         parent::__construct($rawContent);
+        $this->setKey('eventlistendevent', 'SCCPShowSoftKeySetsComplete');
     }
     public function getResult()
     {
-        $_fields = array('description'=>'description','label'=>'label','lblid'=>'lblid');
-        $result = $this->ConvertTableData('SoftKeySets', array('set','mode'), $_fields);
-        return $result;
+        return $this->ConvertTableData(
+            'SoftKeySets',
+            array('set','mode'),
+            array('description'=>'description','label'=>'label','lblid'=>'lblid')
+            );
     }
 }
 
@@ -428,13 +351,16 @@ class SCCPShowDevices_Response extends SCCPGeneric_Response
     public function __construct($rawContent)
     {
         parent::__construct($rawContent);
+        $this->setKey('eventlistendevent', 'SCCPShowDevicesComplete');
     }
     public function getResult()
     {
-        $_fields = array('mac'=>'mac','address'=>'address','descr'=>'descr','regstate'=>'status',
-                         'token'=>'token','act'=>'act', 'lines'=>'lines','nat'=>'nat','regtime'=>'regtime');
-        $result = $this->ConvertTableData('Devices', array('mac'), $_fields);
-        return $result;
+        return $this->ConvertTableData(
+            'Devices',
+            array('mac'),
+            array('mac'=>'name','address'=>'address','descr'=>'descr','regstate'=>'status',
+                  'token'=>'token','act'=>'act', 'lines'=>'lines','nat'=>'nat','regtime'=>'regtime')
+            );
     }
 }
 
@@ -443,23 +369,26 @@ class SCCPShowDevice_Response extends SCCPGeneric_Response
     public function __construct($rawContent)
     {
         parent::__construct($rawContent);
+        $this->setKey('eventlistendevent', 'SCCPShowDeviceComplete');
     }
     public function getResult()
     {
+        // This object has a list of events _events, and a list of tables _tables.
         $result = array();
-        $result = $this->Events2Array();
+
+        foreach ($this->_events as $trow) {
+                $result = array_merge($result, $trow->getKeys());
+        }
+        // Now handle label changes so that keys from AMI correspond to db keys in _tables
         $result['Buttons'] = $this->ConvertTableData(
             'Buttons',
             array('id'),
             array('id'=>'id','channelobjecttype'=>'channelobjecttype','inst'=>'inst',
-            'typestr'=>'typestr',
-            'type'=>'type',
-            'pendupdt'=>'pendupdt',
-            'penddel'=>'penddel',
-            'default'=>'default')
+                  'typestr'=>'typestr', 'type'=>'type', 'pendupdt'=>'pendupdt', 'penddel'=>'penddel', 'default'=>'default'
+                  )
         );
         $result['SpeeddialButtons'] = $this->ConvertTableData(
-            'Buttons',
+            'SpeeddialButtons',
             array('id'),
             array('id'=>'id','channelobjecttype'=>'channelobjecttype','name'=>'name','number'=>'number','hint'=>'hint')
         );
@@ -467,18 +396,18 @@ class SCCPShowDevice_Response extends SCCPGeneric_Response
             'CallStatistics',
             array('type'),
             array('type'=>'type','channelobjecttype'=>'channelobjecttype','calls'=>'calls','pcktsnt'=>'pcktsnt','pcktrcvd'=>'pcktrcvd',
-                                  'lost'=>'lost','jitter'=>'jitter','latency'=>'latency', 'quality'=>'quality','avgqual'=>'avgqual','meanqual'=>'meanqual',
-            'maxqual'=>'maxqual',
-            'rconceal'=>'rconceal',
-            'sconceal'=>'sconceal')
+                  'lost'=>'lost','jitter'=>'jitter','latency'=>'latency', 'quality'=>'quality','avgqual'=>'avgqual','meanqual'=>'meanqual',
+                  'maxqual'=>'maxqual', 'rconceal'=>'rconceal', 'sconceal'=>'sconceal'
+                  )
         );
         $result['SCCP_Vendor'] = array('vendor' => strtok($result['skinnyphonetype'], ' '), 'model' => strtok('('),
                                        'model_id' => strtok(')'), 'vendor_addon' => strtok($result['configphonetype'], ' '),
                                        'model_addon' => strtok(' '));
         if (empty($result['SCCP_Vendor']['vendor']) || $result['SCCP_Vendor']['vendor'] == 'Undefined') {
-                $result['SCCP_Vendor'] = array('vendor' => 'Undefined', 'model' => $result['configphonetype'],
-                                               'model_id' => '', 'vendor_addon' => $result['SCCP_Vendor']['vendor_addon'],
-                                               'model_addon' => $result['SCCP_Vendor']['model_addon']);
+            $result['SCCP_Vendor'] = array('vendor' => 'Undefined', 'model' => $result['configphonetype'],
+                                          'model_id' => '', 'vendor_addon' => $result['SCCP_Vendor']['vendor_addon'],
+                                          'model_addon' => $result['SCCP_Vendor']['model_addon']
+                                          );
         }
         $result['MAC_Address'] =$result['macaddress'];
         return $result;
@@ -490,6 +419,7 @@ class ExtensionStateList_Response extends SCCPGeneric_Response
     public function __construct($rawContent)
     {
         parent::__construct($rawContent);
+        $this->setKey('eventlistendevent', 'ExtensionStateListComplete');
     }
     public function getResult()
     {

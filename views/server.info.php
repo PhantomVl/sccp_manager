@@ -17,7 +17,7 @@ $ast_realtime = $this->srvinterface->sccp_realtime_status();
 // if there are multiple connections, this will only return the first.
 foreach ($ast_realtime as $key => $value) {
     if (empty($ast_realm)) {
-        if ($value['status'] == 'OK') {
+        if ($value['status'] === 'OK') {
             $ast_realm = $key;
         }
     }
@@ -36,6 +36,10 @@ $info['aminterface'] = $this->aminterface->info();
 $info['XML'] = $this->xmlinterface->info();
 $info['sccp_class'] = $driver['sccp'];
 $info['Core_sccp'] = array('Version' => $core['Version'], 'about' => 'Sccp ver.' . $core['Version'] . ' r' . $core['vCode'] . ' Revision :' . $core['RevisionNum'] . ' Hash :' . $core['RevisionHash']);
+if (!$this->srvinterface->useAmiInterface) {
+    $info['aminterface']['about'] .= ' -- Disabled';
+    $info['Core_sccp'] = array('Version' => $core['Version'], 'about' => 'Sccp ver.' . $core['Version'] . ' r' . $core['vCode'] . ' Revision :' . $core['RevisionNum'] . ' Hash :' . $core['RevisionHash'] . ' ----Warning: Upgrade chan_sccp to use full ami functionality');
+}
 $info['Asterisk'] = array('Version' => FreePBX::Config()->get('ASTVERSION'), 'about' => 'Asterisk.');
 
 
@@ -83,6 +87,8 @@ if (empty($ast_realtime)) {
     }
     $info['RealTime'] = array('Version' => $rt_sccp, 'about' => $rt_info);
 }
+// There are potential issues with string Type Declarations in PHP 5.
+$info['PHP'] = array('Version' => phpversion(), 'about' => version_compare(phpversion(), '7.0.0', '>' ) ? 'OK' : 'PHP 7 Preferred - Please upgrade if possible');
 
 if (empty($conf_realtime)) {
     $info['ConfigsRealTime'] = array('Version' => 'Error', 'about' => '<div class="alert signature alert-danger"> Realtime configuration was not found</div>');

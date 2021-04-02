@@ -17,6 +17,7 @@ global $astman;
 global $version;
 global $srvinterface;
 global $mobile_hw;
+global $useAmiForSoftKeys;
 $mobile_hw = '0';
 
 $class = "\\FreePBX\\Modules\\Sccp_manager\\srvinterface";
@@ -26,7 +27,6 @@ if (!class_exists($class, false)) {
 if (class_exists($class, false)) {
     $srvinterface = new $class();
 }
-
 function Get_DB_config($sccp_compatible)
 {
     global $mobile_hw;
@@ -375,6 +375,7 @@ $table_req = array('sccpdevice', 'sccpline');
 $ss = FreePBX::create()->Sccp_manager;
 $astman = FreePBX::create()->astman;
 $sccp_compatible = 0;
+$chanSCCPWarning = true;
 //$db_config = $db_config_v0;
 $db_config = '';
 
@@ -445,13 +446,13 @@ function CheckAsteriskVersion()
 
 function CheckChanSCCPCompatible()
 {
+    global $chanSCCPWarning;
     global $srvinterface, $astman;
     if (!$astman) {
         ie_freepbx('No asterisk manager connection provided!. Installation Failed');
     }
-    $sccp_compatible = $srvinterface->get_compatible_sccp();
-    outn("<li>" . _("Sccp model Compatible code : ") . $sccp_compatible . "</li>");
-    return $sccp_compatible;
+    // calling with true returns array with compatibility and RevisionNumber
+    return $srvinterface->get_compatible_sccp(true);
 }
 
 function InstallDB_Buttons()
@@ -482,16 +483,16 @@ function InstallDB_sccpsettings()
 {
     global $db;
     outn("<li>" . _("Creating sccpsettings table...") . "</li>");
-    $sql = "CREATE TABLE IF NOT EXISTS `sccpsettings` (
-            `keyword` VARCHAR (50) NOT NULL default '',
-            `data`    VARCHAR (255) NOT NULL default '',
-            `seq`     TINYINT (1),
-            `type`    TINYINT (1) NOT NULL default '0',
-            PRIMARY KEY (`keyword`,`seq`,`type`)
-    );";
-    $check = $db->query($sql);
+    $stmt = $db-> prepare('CREATE TABLE IF NOT EXISTS sccpsettings (
+            keyword VARCHAR (50) NOT NULL,
+            data    VARCHAR (255) NOT NULL,
+            seq     TINYINT (1),
+            type    TINYINT (1) NOT NULL,
+            PRIMARY KEY (keyword, seq, type )
+          );');
+    $check = $stmt->execute();
     if (DB::IsError($check)) {
-        die_freepbx("Can not create sccpsettings table, error:$check\n");
+        die_freepbx("Can not create sccpsettings table, error: $check\n");
     }
     return true;
 }
@@ -964,7 +965,11 @@ function Setup_RealTime()
 CheckSCCPManagerDBTables($table_req);
 #CheckPermissions();
 CheckAsteriskVersion();
-$sccp_compatible = CheckChanSCCPCompatible();
+$sccp_version = array();
+$sccp_version = CheckChanSCCPCompatible();
+$sccp_compatible = $sccp_version[0];
+$chanSCCPWarning = $sccp_version[1] ^= 1;
+outn("<li>" . _("Sccp model Compatible code : ") . $resultReturned[0] . "</li>");
 if ($sccp_compatible == 0) {
 //    die_freepbx('Chan Sccp not Found. Install it before continuing');
     outn("<br>");
@@ -985,8 +990,14 @@ if ($sccp_compatible > 431) {
 InstallDB_sccpsettings();
 InstallDB_sccpdevmodel();
 InstallDB_updateSchema($db_config);
-if (!$sccp_db_ver) {
+$stmt = $db->prepare('SELECT CASE WHEN EXISTS(SELECT 1 FROM sccpdevmodel) THEN 0 ELSE 1 END AS IsEmpty;');
+$stmt->execute();
+$result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+if ($result[0]['IsEmpty']) {
+    outn("Populating sccpdevmodel...");
     InstallDB_fillsccpdevmodel();
+}
+if (!$sccp_db_ver) {
     InstallDB_updateSccpDevice();
 } else {
     outn("Skip update Device model");
@@ -995,6 +1006,10 @@ if (!$sccp_db_ver) {
 InstallDB_createButtonConfigTrigger();
 InstallDB_CreateSccpDeviceConfigView($sccp_compatible);
 InstallDB_updateDBVer($sccp_compatible);
+if ($chanSCCPWarning) {
+    outn("<br>");
+    outn("<font color='red'>Warning: Upgrade chan_sccp_b to use full ami functionality</font>");
+}
 if (!$sccp_db_ver) {
     Setup_RealTime();
     outn("<br>");

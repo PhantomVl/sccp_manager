@@ -56,6 +56,14 @@ if (!empty($version)) {
         sql("DELETE FROM kvstore WHERE module = 'sccpsettings'");
         sql("DELETE FROM kvstore WHERE module = 'Sccp_manager'");
     }
+    // By accessing the database, we have recreated sccpsettings table so now delete
+    // Need to rewrite this uninstaller.
+    $sql = "DROP TABLE IF EXISTS sccpsettings";
+    $result = $db->query($sql);
+    if (DB::IsError($result)) {
+        die_freepbx($result->getDebugInfo());
+    }
+    unset($result);
 
 /* Comment: Maybe save in sccpsettings, if the chan_sccp tables already existed in the database or if they were created by install.php */
 /* So that you know if it is safe to drop/delete them */

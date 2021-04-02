@@ -241,7 +241,7 @@ $(document).ready(function () {
         }
         e.preventDefault();
     });
-    
+
 // Form.buttons - Form.adddevice
     $('.futuretype').change(function (e) {
         var kid = $(this).data('id');
@@ -256,7 +256,7 @@ $(document).ready(function () {
                 }
             }
         });
-        
+
     });
 
     $('.buttontype').change(function (e) {
@@ -627,7 +627,7 @@ $(document).ready(function () {
                     i++;
                 });
             }
-            
+
             if (datas === '') {
                 if (confirm(conf_msg)) {
                     datas = 'name[0]=all';
@@ -692,7 +692,7 @@ $(document).ready(function () {
 //});
 
 
-//    Bootstrap table Enabled / Disabled buttons ( class="btn-tab-select")
+//    Bootstrap table Enable / Disable buttons ( class="btn-tab-select")
 $("table").on('check-all.bs.table', function (rows) {
     var id_fld = $(this).data('id');
     $(".btn-tab-select").each(function () {
@@ -1011,7 +1011,7 @@ function bs_page_reload()
 }
 function bs_alert(data, status, reload)
 {
-    
+
     if (document.getElementById('hwalert') === null) {
         if (Array.isArray(data)) {
             data.forEach(function (entry) {
@@ -1027,7 +1027,7 @@ function bs_alert(data, status, reload)
             if (status === true) {
                 modal.find('.modal-title').text('Operation result');
             } else {
-                 modal.find('.modal-title').text('Erroe operation ');
+                 modal.find('.modal-title').text('Error operation ');
             }
         } else {
             modal.find('.modal-title').text('Operation result');
@@ -1075,4 +1075,3 @@ function sleep(milliseconds)
         }
     }
 }
-

@@ -248,7 +248,7 @@ class SCCPGeneric_Response extends Response
         }
     }
 
-    protected function ConvertTableData(string $_tablename, array $_fkey, array $_fields)
+    protected function ConvertTableData( $_tablename, array $_fkey, array $_fields)
     {
         $result = array();
         $_rawtable = $this->Table2Array($_tablename);
@@ -309,7 +309,7 @@ class SCCPGeneric_Response extends Response
         return $result;
     }
 
-    public function Table2Array( string $tablename )
+    public function Table2Array( $tablename )
     {
         $result =array();
         if (empty($tablename) || !is_array($this->_tables)) {

@@ -415,7 +415,7 @@ class extconfigs
         return $base_config;
     }
     // Type declaration in below function is incompatible with PHP 5
-    public function validate_RealTime( string $connector )
+    public function validate_RealTime( $connector )
     {
         // This method only checks that asterisk is correctly configured for Realtime
         // It is preventative and does not change anything for Sccp_manager

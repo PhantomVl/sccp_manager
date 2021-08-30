@@ -306,6 +306,9 @@ class srvinterface {
                     if ($metadata["RevisionNum"] >= "10491") { // new method, RevisionNum is incremental
                         $result["vCode"] = 433;
                     }
+                    if ($metadata["RevisionNum"] >= "11048") { // new method, RevisionNum is incremental
+                        $result["vCode"] = 433; // 434 ?
+                    }
                 }
                 if (array_key_exists("ConfigureEnabled", $metadata)) {
                     $result["futures"] = implode(';', $metadata["ConfigureEnabled"]);

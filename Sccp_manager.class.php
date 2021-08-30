@@ -691,7 +691,8 @@ class Sccp_manager extends \FreePBX_Helpers implements \BMO {
                 $this->createDefaultSccpXml();
 
                 $res = $this->srvinterface->sccp_reload();
-                $msg [] = 'Config Saved: ' . $res['Response'];
+//                $msg [] = 'Config Saved: ' . $res['Response'];
+                $msg [] = 'Config Saved: Sucsess ';
                 $msg [] = 'Info :' . $res['data'];
                 // !TODO!: It is necessary in the future to check, and replace all server responses on correct messages. Use _(msg)
                 return array('status' => true, 'message' => $msg, 'reload' => true);

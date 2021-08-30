@@ -39,6 +39,7 @@ $info['Core_sccp'] = array('Version' => $core['Version'], 'about' => 'Sccp ver.'
 $info['Asterisk'] = array('Version' => FreePBX::Config()->get('ASTVERSION'), 'about' => 'Asterisk.');
 
 
+
 if (!empty($this->sccpvalues['SccpDBmodel'])) {
     $info['DB Model'] = array('Version' => $this->sccpvalues['SccpDBmodel']['data'], 'about' => 'SCCP DB Configure');
 }
@@ -117,6 +118,13 @@ if ($cisco_tz['offset'] == 0) {
         }
     }
 }
+
+ $tftp_lang = $this->getTftpLang();
+ if (empty($tftp_lang)) {
+     $this->info_warning['TFTP'] = array('No language packs were found for devices.','Check for the required files in the /tftpboot/languages directory ');
+}
+ 
+
 
 global $amp_conf;
 
@@ -252,6 +260,7 @@ if ($test_any == 1) {
  *
  *
  */
+   
 if ($test_ami == 1) {
     $time_ami = 0;
     $time_old = 0;

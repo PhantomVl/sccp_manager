@@ -41,7 +41,8 @@ Make sure you have the following installed on your system:
 - gui:
   - freepbx >= 13.0.192
 - standard posix compatible applications like sed, awk, tr
-
+- php ver 5.6 or 5.7
+   
 ### Requirements
 - Chan_SCCP module 4.3.1 (or later) channel driver for Asterisk: [See our WIKI] (https://github.com/chan-sccp/chan-sccp/wiki/Building-and-Installation-Guide)
   - expected configure flags: 
